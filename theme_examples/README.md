@@ -25,12 +25,12 @@ Use [htmlpreview.github.io](https://htmlpreview.github.io/) to render any HTML f
 
 | Theme | Preview Link |
 |-------|--------------|
-| **Velocity** | [▶️ Preview](https://htmlpreview.github.io/?https://github.com/bertalan/motoclubsite_prj/blob/main/docs/rebuild/theme_examples/velocity/index.html) |
-| **Heritage** | [▶️ Preview](https://htmlpreview.github.io/?https://github.com/bertalan/motoclubsite_prj/blob/main/docs/rebuild/theme_examples/heritage/index.html) |
-| **Terra** | [▶️ Preview](https://htmlpreview.github.io/?https://github.com/bertalan/motoclubsite_prj/blob/main/docs/rebuild/theme_examples/terra/index.html) |
-| **Zen** | [▶️ Preview](https://htmlpreview.github.io/?https://github.com/bertalan/motoclubsite_prj/blob/main/docs/rebuild/theme_examples/zen/index.html) |
-| **Clubs** | [▶️ Preview](https://htmlpreview.github.io/?https://github.com/bertalan/motoclubsite_prj/blob/main/docs/rebuild/theme_examples/clubs/index.html) |
-| **Tricolore** 🇮🇹 | [▶️ Preview](https://htmlpreview.github.io/?https://github.com/bertalan/motoclubsite_prj/blob/main/docs/rebuild/theme_examples/tricolore/index.html) |
+| **Velocity** | [▶️ Preview](https://htmlpreview.github.io/?https://github.com/bertalan/©ƒ/velocity/index.html) |
+| **Heritage** | [▶️ Preview](https://htmlpreview.github.io/?https://github.com/bertalan/motoclubsite_prj/blob/main/theme_examples/heritage/index.html) |
+| **Terra** | [▶️ Preview](https://htmlpreview.github.io/?https://github.com/bertalan/motoclubsite_prj/blob/main/theme_examples/terra/index.html) |
+| **Zen** | [▶️ Preview](https://htmlpreview.github.io/?https://github.com/bertalan/motoclubsite_prj/blob/main/theme_examples/zen/index.html) |
+| **Clubs** | [▶️ Preview](https://htmlpreview.github.io/?https://github.com/bertalan/motoclubsite_prj/blob/main/theme_examples/clubs/index.html) |
+| **Tricolore** 🇮🇹 | [▶️ Preview](https://htmlpreview.github.io/?https://github.com/bertalan/motoclubsite_prj/blob/main/theme_examples/tricolore/index.html) |
 
 ---
 
