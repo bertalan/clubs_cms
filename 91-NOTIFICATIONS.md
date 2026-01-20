@@ -21,6 +21,12 @@ Unified notification system for delivering site updates to users via email and P
 | Membership Expiring | 30/7 days before expiry | Member |
 | Partner News | Partner updates discount | Members who used that partner |
 | Aid Request | Mutual aid request in area | Helpers in radius |
+| Partner Events | New events from federated clubs | Subscribed users |
+| Partner Event Interest | Interest milestone reached | Users interested in event |
+| Partner Event Comment | New comment on partner event | Users interested in event |
+| Partner Event Cancelled | Partner event cancelled | Users interested in event |
+| Mutual Aid Request | Help request from partner club member | Helpers in area |
+| Mutual Aid Access Request | External user requests full access | Admins |
 
 ### Delivery Channels
 
@@ -48,6 +54,8 @@ Each user has notification preferences stored in their profile:
 | membership_alerts | Boolean | True | Expiry and renewal notices |
 | partner_updates | Boolean | False | Partner discount changes |
 | aid_requests | Boolean | True | Mutual aid requests (if helper) |
+| partner_events | Boolean | True | New events from partner clubs |
+| partner_event_comments | Boolean | True | Comments on partner events you're interested in |
 
 ### Digest Frequency
 
@@ -514,3 +522,4 @@ Admin can:
 - [84-PWA.md](84-PWA.md) - PWA and service worker setup
 - [41-MULTILANG.md](41-MULTILANG.md) - Template translation
 - [82-EVENT-REGISTRATIONS.md](82-EVENT-REGISTRATIONS.md) - Event registration triggers
+- [92-EVENT-FEDERATION.md](92-EVENT-FEDERATION.md) - Partner event notifications

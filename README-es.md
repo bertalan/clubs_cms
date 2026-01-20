@@ -24,6 +24,7 @@ El sitio web del Moto Club es el hogar digital de nuestro club. Aquí encontrar�
 | 10 | [🤝 Socios](#10--socios-y-descuentos) | Descuentos exclusivos de nuestros socios |
 | 11 | [🛠️ Ayuda](#11-️-red-de-ayuda-mutua) | Red de asistencia entre miembros en la carretera |
 | 12 | [📬 Newsletter](#12--newsletter-y-notificaciones) | Recibir actualizaciones por email o notificación push |
+| 13 | [🌐 Eventos de Socios](#13--eventos-de-clubes-socios) | Eventos de los clubes socios de la red |
 
 ---
 
@@ -324,6 +325,8 @@ El sitio web del Moto Club es el hogar digital de nuestro club. Aquí encontrar�
 
 **Privacidad total:** Cada campo está controlado por ti. Incluso puedes usar solo el formulario de contacto, para que nadie vea tus datos privados.
 
+**¿Vienes de un club socio?** Puedes ver nuestros helpers y usar el formulario de contacto. Para ver los contactos directos (teléfono, WhatsApp), tienes 3 desbloqueos gratuitos. Después, solicita acceso completo y un admin revisará tu solicitud.
+
 ---
 
 ### 12. 📬 Newsletter y notificaciones
@@ -361,6 +364,44 @@ El sitio web del Moto Club es el hogar digital de nuestro club. Aquí encontrar�
 
 **¿Por qué recibo este email?**
 Cada email explica claramente por qué lo recibes (ej: "Recibes este email porque estás suscrito a Noticias").
+
+---
+
+### 13. 🌐 Eventos de Clubes Socios
+
+**Qué es:** Eventos organizados por clubes socios de nuestra red. Nuestro club intercambia eventos con socios de confianza para que puedas descubrir más actividades.
+
+**Cómo funciona:**
+
+1. Ve a "Eventos" → "Eventos de Socios" (o integrado en la página principal de eventos).
+2. Explora los eventos de los clubes socios.
+3. Haz clic en un evento para ver los detalles.
+4. Muestra tu interés: "Interesado", "Quizás" o "¡Voy!".
+5. Usa los comentarios para organizarte con otros miembros ("¿Quién sale desde Madrid?").
+
+**Lo que puedes hacer:**
+
+| Acción | Descripción |
+|--------|-------------|
+| Mostrar interés | Expresa si vas, quizás o estás interesado |
+| Organizarse | Comenta para coordinarte con otros miembros |
+| Ver en el mapa | Visualiza la ubicación del evento |
+| Visitar el original | Enlace a la página del evento del club socio |
+
+**Privacidad:**
+
+* Tu nombre **nunca se comparte** con los clubes socios.
+* Solo se comparten conteos anónimos (ej: "3 miembros de Nuestro Club interesados").
+* Los comentarios son visibles solo para nuestros miembros.
+
+**Notificaciones:**
+
+Puedes recibir alertas sobre:
+* Nuevos eventos de socios añadidos
+* Comentarios en eventos que te interesan
+* Actualizaciones o cancelaciones de eventos
+
+Gestiónalas en Perfil → Notificaciones → "Eventos de Socios".
 
 ---
 

@@ -20,7 +20,7 @@ clubcms/
 │   │   ├── context_processors.py
 │   │   └── wagtail_hooks.py
 │   │
-│   └── website/             # Main app
+│   ├── website/             # Main app
 │       ├── models/
 │       │   ├── __init__.py
 │       │   ├── pages.py     # All Page models
@@ -33,6 +33,25 @@ clubcms/
 │       │   └── media.py     # Gallery, Video
 │       └── templatetags/
 │           └── website_tags.py
+│   │
+│   └── federation/          # Event Federation (see 92-EVENT-FEDERATION.md)
+│       ├── __init__.py
+│       ├── apps.py
+│       ├── models.py        # FederatedClub, ExternalEvent, Interest, Comment
+│       ├── admin.py
+│       ├── wagtail_hooks.py
+│       ├── api/
+│       │   ├── __init__.py
+│       │   ├── views.py     # API endpoints
+│       │   └── security.py  # Signing/verification
+│       ├── sync/
+│       │   └── tasks.py     # Sync logic
+│       ├── management/
+│       │   └── commands/
+│       │       └── sync_federation.py
+│       ├── urls_api.py
+│       ├── urls_frontend.py
+│       └── views.py         # Frontend views
 │
 ├── templates/
 │   ├── base.html            # Base template
@@ -43,6 +62,18 @@ clubcms/
 │       ├── navbar.html
 │       ├── footer.html
 │       └── lightbox.html
+│
+├── templates/federation/        # Federation templates
+│   ├── external_events_list.jinja2
+│   ├── external_event_detail.jinja2
+│   ├── includes/
+│   │   ├── event_card.jinja2
+│   │   ├── interest_buttons.jinja2
+│   │   └── comments_section.jinja2
+│   └── emails/
+│       ├── new_partner_events.html
+│       ├── interest_milestone.html
+│       └── new_comment.html
 │
 ├── static/
 │   ├── css/
@@ -78,6 +109,8 @@ clubcms/
 | `apps/website/models/pages.py` | All page models |
 | `apps/website/blocks/__init__.py` | Blocks export |
 | `apps/core/seo.py` | JsonLdMixin for schema.org |
+| `apps/federation/models.py` | Federation models |
+| `apps/federation/api/views.py` | Federation API |
 | `templates/base.html` | Master template |
 
 ## Naming Conventions

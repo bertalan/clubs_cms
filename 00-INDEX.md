@@ -65,8 +65,9 @@
 - [87-ROUTE-MAPS.md](87-ROUTE-MAPS.md) - RouteBlock: OSM + OSRM for StreamField
 - [88-UFFICIO-STAMPA.md](88-UFFICIO-STAMPA.md) - Press Office + Brand Kit + Media Assets
 - [89-PARTNERS.md](89-PARTNERS.md) - Partners, Sponsors, Affiliates + Owner system + Member Verification
-- [90-MUTUAL-AID.md](90-MUTUAL-AID.md) - Mutual Aid Network + Map + Per-field Privacy controls
+- [90-MUTUAL-AID.md](90-MUTUAL-AID.md) - Mutual Aid Network + Map + Per-field Privacy + Federated Access
 - [91-NOTIFICATIONS.md](91-NOTIFICATIONS.md) - Notification & Newsletter System + API + PWA Push + Weekend Reminder
+- [92-EVENT-FEDERATION.md](92-EVENT-FEDERATION.md) - Event Federation: Partner clubs + API key exchange + Anonymous interest + Comments
 
 ### Examples
 - [EXAMPLE-THEME-VELOCITY.html](examples/EXAMPLE-THEME-VELOCITY.html) - Modern demo

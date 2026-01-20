@@ -24,6 +24,7 @@ Le site web du Moto Club est la maison numérique de notre club. Vous y trouvere
 | 10 | [🤝 Partenaires](#10--partenaires-et-réductions) | Réductions exclusives de nos partenaires |
 | 11 | [🛠️ Entraide](#11-️-réseau-dentraide) | Réseau d'assistance entre membres sur la route |
 | 12 | [📬 Newsletter](#12--newsletter-et-notifications) | Recevoir des mises à jour par email ou notification push |
+| 13 | [🌐 Événements Partenaires](#13--événements-partenaires) | Événements des clubs partenaires du réseau |
 
 ---
 
@@ -324,6 +325,8 @@ Le site web du Moto Club est la maison numérique de notre club. Vous y trouvere
 
 **Confidentialité totale :** Chaque champ est contrôlé par vous. Vous pouvez même utiliser uniquement le formulaire de contact, pour que personne ne voie vos détails privés.
 
+**Vous venez d'un club partenaire ?** Vous pouvez voir nos helpers et utiliser le formulaire de contact. Pour voir les contacts directs (téléphone, WhatsApp), vous avez 3 déblocages gratuits. Ensuite, demandez l'accès complet et un admin examinera votre demande.
+
 ---
 
 ### 12. 📬 Newsletter et notifications
@@ -361,6 +364,44 @@ Le site web du Moto Club est la maison numérique de notre club. Vous y trouvere
 
 **Pourquoi je reçois cet email ?**
 Chaque email explique clairement pourquoi vous le recevez (ex: "Vous recevez cet email car vous êtes abonné aux Actualités").
+
+---
+
+### 13. 🌐 Événements Partenaires
+
+**Ce que c'est :** Événements organisés par les clubs partenaires de notre réseau. Notre club échange des événements avec des partenaires de confiance pour que vous puissiez découvrir plus d'activités.
+
+**Comment ça marche :**
+
+1. Allez dans "Événements" → "Événements Partenaires" (ou intégré dans la page principale des événements).
+2. Parcourez les événements des clubs partenaires.
+3. Cliquez sur un événement pour les détails.
+4. Montrez votre intérêt : "Intéressé", "Peut-être" ou "J'y vais !".
+5. Utilisez les commentaires pour vous organiser avec d'autres membres ("Qui part de Lyon ?").
+
+**Ce que vous pouvez faire :**
+
+| Action | Description |
+|--------|-------------|
+| Montrer son intérêt | Exprimez si vous y allez, peut-être ou êtes intéressé |
+| S'organiser | Commentez pour vous coordonner avec d'autres membres |
+| Voir sur la carte | Visualisez l'emplacement de l'événement |
+| Visiter l'original | Lien vers la page de l'événement du club partenaire |
+
+**Confidentialité :**
+
+* Votre nom n'est **jamais partagé** avec les clubs partenaires.
+* Seuls des comptages anonymes sont partagés (ex: "3 membres de Notre Club intéressés").
+* Les commentaires sont visibles uniquement par nos membres.
+
+**Notifications :**
+
+Vous pouvez recevoir des alertes sur :
+* Nouveaux événements partenaires ajoutés
+* Commentaires sur les événements qui vous intéressent
+* Mises à jour ou annulations d'événements
+
+Gérez cela dans Profil → Notifications → "Événements Partenaires".
 
 ---
 

@@ -53,7 +53,7 @@ Se GitHub Pages non è abilitato, puoi comunque vedere i file HTML:
 | **Temi** | 30-39 | Sistema template e 6 temi |
 | **SEO & i18n** | 40-42 | JSON-LD, multilingua, snippets |
 | **Deploy** | 50-70 | Docker, produzione, checklist, migrazione |
-| **Funzionalità Soci** | 80-91 | Tesseramento, eventi, galleria, PWA, notifiche |
+| **Funzionalità Soci** | 80-92 | Tesseramento, eventi, galleria, PWA, notifiche, federazione |
 
 Vedi [00-INDEX.md](00-INDEX.md) per la lista completa dei file con descrizioni.
 
@@ -81,6 +81,7 @@ Il sito del Motoclub è la casa digitale del nostro club. Qui trovi tutto ciò c
 | 10 | [🤝 Partner](#10--partner-e-sconti) | Sconti esclusivi dai nostri partner |
 | 11 | [🛠️ Soccorso](#11-️-rete-di-mutuo-soccorso) | Rete di aiuto tra soci in viaggio |
 | 12 | [📬 Newsletter](#12--newsletter-e-notifiche) | Ricevi le novità via email o push |
+| 13 | [🌐 Eventi Partner](#13--eventi-dai-club-partner) | Eventi dai club partner della rete |
 
 ---
 
@@ -358,6 +359,8 @@ Il sito del Motoclub è la casa digitale del nostro club. Qui trovi tutto ciò c
 
 **Privacy totale:** Ogni campo è controllato da te. Puoi anche usare solo il modulo di contatto, così nessuno vede i tuoi dati.
 
+**Vieni da un club partner?** Puoi vedere i nostri helpers e usare il modulo di contatto. Per vedere i contatti diretti (telefono, WhatsApp), hai 3 sblocchi gratuiti. Dopo, richiedi l'accesso completo e un admin valuterà la richiesta.
+
 ---
 
 ### 12. 📬 Newsletter e Notifiche
@@ -391,6 +394,44 @@ Il sito del Motoclub è la casa digitale del nostro club. Qui trovi tutto ciò c
 
 **Perché ricevo questa email?**
 Ogni email spiega chiaramente perché la ricevi (es. "Ricevi questa email perché sei iscritto alle News").
+
+---
+
+### 13. 🌐 Eventi dai Club Partner
+
+**Cos'è:** Eventi organizzati dai club partner della nostra rete. Il nostro club scambia eventi con partner fidati così puoi scoprire più attività.
+
+**Come funziona:**
+
+1. Vai in "Eventi" → "Eventi Partner" (o integrato nella pagina eventi principale).
+2. Sfoglia gli eventi dei club partner.
+3. Clicca su un evento per i dettagli.
+4. Mostra il tuo interesse: "Interessato", "Forse", o "Ci vado!".
+5. Usa i commenti per organizzarti con altri soci ("Chi parte da Milano?").
+
+**Cosa puoi fare:**
+
+| Azione | Descrizione |
+|--------|-------------|
+| Mostrare interesse | Esprimi se vai, forse, o sei interessato |
+| Organizzarsi | Commenta per coordinarti con altri soci |
+| Vedere sulla mappa | Visualizza la posizione dell'evento |
+| Visitare l'originale | Link alla pagina evento del club partner |
+
+**Privacy:**
+
+* Il tuo nome **non viene mai condiviso** con i club partner.
+* Solo conteggi anonimi vengono condivisi (es. "3 soci del Nostro Club interessati").
+* I commenti sono visibili solo ai nostri soci.
+
+**Notifiche:**
+
+Puoi ricevere avvisi su:
+* Nuovi eventi partner aggiunti
+* Commenti sugli eventi a cui sei interessato
+* Aggiornamenti o cancellazioni eventi
+
+Gestisci queste opzioni in Profilo → Notifiche → "Eventi Partner".
 
 ---
 

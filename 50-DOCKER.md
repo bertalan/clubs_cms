@@ -44,6 +44,9 @@ Docker is used exclusively for **local development**. Production deployment uses
 | POSTGRES_DB | clubcms | Database name |
 | POSTGRES_USER | postgres | Database user |
 | POSTGRES_PASSWORD | postgres | Database password |
+| FEDERATION_ENABLED | False | Enable event federation |
+| FEDERATION_OUR_CLUB_CODE | myclubcode | Our club identifier |
+| FEDERATION_OUR_CLUB_NAME | My Motoclub | Our club display name |
 
 ---
 
@@ -186,6 +189,9 @@ Create `.env` file with:
 | DEBUG | True |
 | SECRET_KEY | your-dev-secret-key |
 | DATABASE_URL | postgres://postgres:postgres@db:5432/clubcms |
+| FEDERATION_ENABLED | False |
+| FEDERATION_OUR_CLUB_CODE | myclubcode |
+| FEDERATION_OUR_CLUB_NAME | My Motoclub |
 
 ---
 

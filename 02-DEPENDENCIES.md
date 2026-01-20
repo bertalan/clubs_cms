@@ -38,6 +38,16 @@ notifications = [
 ]
 ```
 
+## Event Federation
+
+```toml
+[project.optional-dependencies]
+federation = [
+    "httpx>=0.27",           # Async HTTP client for API calls
+    "django-ratelimit>=4.1", # Rate limiting for API endpoints
+]
+```
+
 ## Production
 
 ```toml
@@ -68,7 +78,7 @@ dev = [
 ```toml
 [project.optional-dependencies]
 all = [
-    "clubcms[members,notifications,prod]",
+    "clubcms[members,notifications,federation,prod]",
 ]
 ```
 
@@ -82,6 +92,8 @@ all = [
 | - | pywebpush | Push notifications |
 | - | qrcode | Member cards |
 | - | python-barcode | Member cards |
+| - | httpx | Federation API calls |
+| - | django-ratelimit | Federation rate limiting |
 
 ## Install
 

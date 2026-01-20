@@ -53,7 +53,7 @@ If GitHub Pages is not enabled, you can still view the HTML source:
 | **Themes** | 30-39 | Template system and 6 themes |
 | **SEO & i18n** | 40-42 | JSON-LD, multilingual, snippets |
 | **Deploy** | 50-70 | Docker, production, checklist, migration |
-| **Member Features** | 80-91 | Membership, events, gallery, PWA, notifications |
+| **Member Features** | 80-92 | Membership, events, gallery, PWA, notifications, federation |
 
 See [00-INDEX.md](00-INDEX.md) for the complete file list with descriptions.
 
@@ -81,6 +81,7 @@ The Motorcycle Club website is the digital home of our club. Here you will find 
 | 10 | [🤝 Partners](#10--partners-and-discounts) | Exclusive discounts from our partners |
 | 11 | [🛠️ Support](#11-️-mutual-aid-network) | Assistance network among members on the road |
 | 12 | [📬 Newsletter](#12--newsletter-and-notifications) | Receive updates via email or push notification |
+| 13 | [🌐 Partner Events](#13--partner-events) | Events from partner clubs in the network |
 
 ---
 
@@ -381,6 +382,8 @@ The Motorcycle Club website is the digital home of our club. Here you will find 
 
 **Total Privacy:** Every field is controlled by you. You can even use just the contact form, so no one sees your private details.
 
+**Visiting from a partner club?** You can view our helpers and use the contact form. To see direct contact details (phone, WhatsApp), you have 3 free unlocks. After that, request full access and our admin will review it.
+
 ---
 
 ### 12. 📬 Newsletter and Notifications
@@ -418,6 +421,44 @@ The Motorcycle Club website is the digital home of our club. Here you will find 
 
 **Why am I receiving this email?**
 Every email clearly explains why you are receiving it (e.g., "You are receiving this email because you are subscribed to News").
+
+---
+
+### 13. 🌐 Partner Events
+
+**What it is:** Events organized by partner clubs in our network. Our club exchanges events with trusted partners so you can discover more activities.
+
+**How it works:**
+
+1. Go to "Events" → "Partner Events" (or integrated in main events page).
+2. Browse events from partner clubs.
+3. Click on an event for details.
+4. Show your interest: "Interested", "Maybe", or "Going!".
+5. Use comments to organize with other members ("Who's driving from Milan?").
+
+**What you can do:**
+
+| Action | Description |
+|--------|-------------|
+| Show interest | Express if you're going, maybe, or interested |
+| Organize | Comment to coordinate with other members |
+| View on map | See event location |
+| Visit original | Link to partner club's event page |
+
+**Privacy:**
+
+* Your name is **never shared** with partner clubs.
+* Only anonymous counts are shared (e.g., "3 members from Our Club interested").
+* Comments are visible only to our members.
+
+**Notifications:**
+
+You can receive alerts about:
+* New partner events added
+* Comments on events you're interested in
+* Event updates or cancellations
+
+Manage these in Profile → Notifications → "Partner Events".
 
 ---
 

@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     # Utils
     "taggit", "modelcluster",
     # Project
-    "apps.core", "apps.website",
+    "apps.core", "apps.website", "apps.federation",
 ]
 ```
 
@@ -141,6 +141,42 @@ Q_CLUSTER = {
 | send_weekend_reminder | 09:00 Thursday | Weekend favorites email |
 | check_expiring_memberships | 09:00 daily | Queue expiry reminders |
 | cleanup_old_notifications | 03:00 daily | Delete old notifications |
+| sync_federation | Every 2 hours | Fetch events from partners |
+| sync_interest_counts | Every 15 min | Send interest counts to partners |
+
+---
+
+## Event Federation
+
+```python
+FEDERATION_SETTINGS = {
+    # Sync frequency in seconds (default 2 hours)
+    "SYNC_INTERVAL": 60 * 60 * 2,
+    
+    # How long before request expires (seconds)
+    "REQUEST_MAX_AGE": 300,
+    
+    # Max events to fetch per partner
+    "MAX_EVENTS_PER_SYNC": 100,
+    
+    # Enable interest sync back to partners
+    "SHARE_INTEREST_COUNTS": True,
+    
+    # Batch interest updates interval (seconds)
+    "INTEREST_SYNC_INTERVAL": 60 * 15,
+    
+    # Days of future events to fetch
+    "FETCH_FUTURE_DAYS": 365,
+    
+    # Rate limit per partner per hour
+    "RATE_LIMIT_REQUESTS": 60,
+}
+
+# Federation identity (from environment)
+FEDERATION_ENABLED = env.bool("FEDERATION_ENABLED", False)
+FEDERATION_OUR_CLUB_CODE = env("FEDERATION_OUR_CLUB_CODE", "")
+FEDERATION_OUR_CLUB_NAME = env("FEDERATION_OUR_CLUB_NAME", "")
+```
 
 ---
 

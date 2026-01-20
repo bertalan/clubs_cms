@@ -130,6 +130,9 @@ Activities are logged automatically when:
 | NewsPage | Optional (per page setting) |
 | EventDetailPage | Optional (per page setting) |
 | GalleryImage | No |
+| ExternalEvent | Yes (local organization only) |
+
+**Note:** ExternalEvent comments use `ExternalEventComment` model and are visible only to local members. See [92-EVENT-FEDERATION.md](92-EVENT-FEDERATION.md).
 
 ### Moderation
 
@@ -189,3 +192,4 @@ Settings → Comments
 
 - [85-MODERATION.md](85-MODERATION.md) - Content moderation
 - [80-MEMBERSHIP-SYSTEM.md](80-MEMBERSHIP-SYSTEM.md) - Member system
+- [92-EVENT-FEDERATION.md](92-EVENT-FEDERATION.md) - Federation models (FederatedClub, ExternalEvent, ExternalEventInterest, ExternalEventComment)

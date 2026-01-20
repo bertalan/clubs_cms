@@ -372,6 +372,12 @@ Complete checklist for building the CMS using native Wagtail features. No custom
 | Contact form (privacy fallback) | ☐ |
 | Notification system | ☐ |
 | Admin dashboard | ☐ |
+| FederatedAidAccess model | ☐ |
+| FederatedAidAccessRequest model | ☐ |
+| External user detection | ☐ |
+| Contact unlock counter (3 limit) | ☐ |
+| Full access request flow | ☐ |
+| Admin approval panel | ☐ |
 
 ### Notifications & Newsletter
 
@@ -393,6 +399,29 @@ Complete checklist for building the CMS using native Wagtail features. No custom
 | API endpoints | ☐ |
 | Background task runner (Django-Q) | ☐ |
 
+### Event Federation
+
+| Task | Status |
+|------|--------|
+| FederatedClub model | ☐ |
+| ExternalEvent model (read-only) | ☐ |
+| ExternalEventInterest model | ☐ |
+| ExternalEventComment model | ☐ |
+| API key generation utility | ☐ |
+| Partner management (Wagtail admin) | ☐ |
+| API endpoints (events + interest) | ☐ |
+| Request signing & verification | ☐ |
+| Rate limiting | ☐ |
+| Sync management command | ☐ |
+| Cron/Celery sync task | ☐ |
+| Partner events list template | ☐ |
+| Partner event detail template | ☐ |
+| Interest buttons (HTMX) | ☐ |
+| Comments section | ☐ |
+| Map integration | ☐ |
+| Email notifications (partner events) | ☐ |
+| Translations (IT, EN, FR, ES, DE) | ☐ |
+
 ### References
 - [80-MEMBERSHIP-SYSTEM.md](80-MEMBERSHIP-SYSTEM.md)
 - [81-GALLERY-UPLOAD.md](81-GALLERY-UPLOAD.md)
@@ -401,6 +430,7 @@ Complete checklist for building the CMS using native Wagtail features. No custom
 - [89-PARTNERS.md](89-PARTNERS.md)
 - [90-MUTUAL-AID.md](90-MUTUAL-AID.md)
 - [91-NOTIFICATIONS.md](91-NOTIFICATIONS.md)
+- [92-EVENT-FEDERATION.md](92-EVENT-FEDERATION.md)
 
 ---
 
@@ -516,4 +546,5 @@ Complete checklist for building the CMS using native Wagtail features. No custom
 | Partners & Sponsors | ✅ |
 | Mutual Aid Network | ✅ |
 | Notifications & Newsletter | ✅ |
+| Event Federation | ✅ |
 | Full SEO + Feeds | ✅ |

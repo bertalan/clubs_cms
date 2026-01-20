@@ -24,6 +24,7 @@ Die Website des Motorradclubs ist das digitale Zuhause unseres Clubs. Hier finde
 | 10 | [🤝 Partner](#10--partner-und-rabatte) | Exklusive Rabatte von unseren Partnern |
 | 11 | [🛠️ Hilfe](#11-️-gegenseitiges-hilfsnetzwerk) | Hilfsnetzwerk unter Mitgliedern unterwegs |
 | 12 | [📬 Newsletter](#12--newsletter-und-benachrichtigungen) | Updates per E-Mail oder Push-Benachrichtigung erhalten |
+| 13 | [🌐 Partnerveranstaltungen](#13--partnerveranstaltungen) | Veranstaltungen von Partnerclubs im Netzwerk |
 
 ---
 
@@ -324,6 +325,8 @@ Die Website des Motorradclubs ist das digitale Zuhause unseres Clubs. Hier finde
 
 **Totale Privatsphäre:** Jedes Feld wird von Ihnen kontrolliert. Sie können sogar nur das Kontaktformular verwenden, sodass niemand Ihre privaten Daten sieht.
 
+**Besuchen Sie uns von einem Partnerclub?** Sie können unsere Helfer sehen und das Kontaktformular nutzen. Um direkte Kontaktdaten (Telefon, WhatsApp) zu sehen, haben Sie 3 kostenlose Freischaltungen. Danach können Sie vollen Zugang beantragen.
+
 ---
 
 ### 12. 📬 Newsletter und Benachrichtigungen
@@ -361,6 +364,44 @@ Die Website des Motorradclubs ist das digitale Zuhause unseres Clubs. Hier finde
 
 **Warum erhalte ich diese E-Mail?**
 Jede E-Mail erklärt deutlich, warum Sie sie erhalten (z.B. "Sie erhalten diese E-Mail, weil Sie Nachrichten abonniert haben").
+
+---
+
+### 13. 🌐 Partnerveranstaltungen
+
+**Was es ist:** Veranstaltungen, die von Partnerclubs in unserem Netzwerk organisiert werden. Unser Club tauscht Veranstaltungen mit vertrauenswürdigen Partnern aus, damit Sie mehr Aktivitäten entdecken können.
+
+**Wie es funktioniert:**
+
+1. Gehen Sie zu "Veranstaltungen" → "Partnerveranstaltungen" (oder integriert in der Hauptveranstaltungsseite).
+2. Durchsuchen Sie Veranstaltungen von Partnerclubs.
+3. Klicken Sie auf eine Veranstaltung für Details.
+4. Zeigen Sie Ihr Interesse: "Interessiert", "Vielleicht" oder "Dabei!".
+5. Nutzen Sie Kommentare, um sich mit anderen Mitgliedern zu organisieren ("Wer fährt von München?").
+
+**Was Sie tun können:**
+
+| Aktion | Beschreibung |
+|--------|-------------|
+| Interesse zeigen | Drücken Sie aus, ob Sie teilnehmen, vielleicht oder interessiert sind |
+| Organisieren | Kommentieren Sie, um sich mit anderen Mitgliedern abzustimmen |
+| Auf Karte ansehen | Sehen Sie den Veranstaltungsort |
+| Original besuchen | Link zur Veranstaltungsseite des Partnerclubs |
+
+**Datenschutz:**
+
+* Ihr Name wird **niemals** an Partnerclubs weitergegeben.
+* Nur anonyme Zählungen werden geteilt (z.B. "3 Mitglieder von Unserem Club interessiert").
+* Kommentare sind nur für unsere Mitglieder sichtbar.
+
+**Benachrichtigungen:**
+
+Sie können Benachrichtigungen erhalten über:
+* Neue Partnerveranstaltungen
+* Kommentare zu Veranstaltungen, an denen Sie interessiert sind
+* Veranstaltungsaktualisierungen oder -stornierungen
+
+Verwalten Sie diese unter Profil → Benachrichtigungen → "Partnerveranstaltungen".
 
 ---
 
