@@ -40,6 +40,9 @@ The body section supports these blocks:
 | Gallery Preview | Photo gallery snippet |
 | Sponsors/Partners | Logo grid |
 | Testimonials | Member quotes |
+| Newsletter Signup | Email subscription inline form |
+| Mutual Aid CTA | "Need help? Offer help?" banner |
+| Member Benefits | Why join - benefits grid |
 
 ## Featured Content
 
@@ -74,8 +77,54 @@ Typical homepage layout:
 | Upcoming Events | Featured Events block |
 | Latest News | Featured News block |
 | Gallery Preview | Gallery Preview block |
+| Mutual Aid | Mutual Aid CTA block |
+| Newsletter | Newsletter Signup block |
+| Member Benefits | Member Benefits block |
 | CTA/Membership | CTA block |
 | Partners | Sponsors block |
+
+### Newsletter Signup Block
+
+Inline subscription form for homepage:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| Heading | Text | e.g., "Stay updated" |
+| Description | Text | Brief explanation |
+| Button Text | Text | e.g., "Subscribe" |
+| Background Style | Dropdown | Light, dark, accent |
+
+Form fields:
+- Email (required)
+- Privacy consent checkbox
+
+On submit: Creates notification subscription, shows confirmation.
+
+### Mutual Aid CTA Block
+
+Promotes the mutual aid network:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| Heading | Text | e.g., "Our mutual aid network" |
+| Description | Text | Brief explanation |
+| Need Help Text | Text | Button for seekers |
+| Offer Help Text | Text | Button for helpers |
+| Show Map Preview | Boolean | Mini map thumbnail |
+
+### Member Benefits Block
+
+Grid of membership benefits:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| Heading | Text | e.g., "Why join us?" |
+| Benefits | Repeater | List of benefits |
+
+Each benefit:
+- Icon (emoji or image)
+- Title
+- Description
 
 ## Schema.org
 

@@ -20,8 +20,22 @@ Root (Site)
 ├── GalleryPage (max 1)
 ├── ContactPage (max 1)
 ├── PrivacyPage (max 1)
-└── TransparencyPage
+├── TransparencyPage
+├── PressPage (max 1)
+├── PartnersPage (max 1)
+└── MutualAidPage (max 1)
 ```
+
+### Member-Only Pages (authenticated)
+
+```
+/my-events/     → MyEventsPage (favorites, registrations)
+/my-profile/    → ProfilePage (member profile)
+/my-card/       → MemberCardPage (digital card)
+/my-photos/     → MyPhotosPage (upload history)
+```
+
+These are not Wagtail pages but Django views with authentication required.
 
 ## Base Page Structure
 
@@ -95,6 +109,9 @@ Configure in admin which child pages each type allows:
 | GalleryPage | 1 | Single gallery hub |
 | ContactPage | 1 | Single contact page |
 | PrivacyPage | 1 | Single privacy policy |
+| PressPage | 1 | Single press office |
+| PartnersPage | 1 | Single partners hub |
+| MutualAidPage | 1 | Single aid network page |
 
 ### Template Assignment
 
@@ -110,6 +127,9 @@ Templates are located in `templates/website/pages/`:
 | EventDetailPage | `event_detail_page.html` |
 | GalleryPage | `gallery_page.html` |
 | ContactPage | `contact_page.html` |
+| PressPage | `press_page.html` |
+| PartnersPage | `partners_page.html` |
+| MutualAidPage | `mutual_aid_page.html` |
 
 All templates extend `templates/base.html` which loads the active theme.
 
@@ -134,6 +154,9 @@ Schema.org structured data is generated automatically:
 | NewsPage | Article |
 | EventDetailPage | Event |
 | ContactPage | ContactPage |
+| PressPage | WebPage + Organization |
+| PartnersPage | ItemList (LocalBusiness) |
+| MutualAidPage | WebPage |
 | Other pages | WebPage |
 
 See [40-SEO-JSONLD.md](40-SEO-JSONLD.md) for schema details.

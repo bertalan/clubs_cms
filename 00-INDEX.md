@@ -53,18 +53,20 @@
 - [70-MIGRATION-SCRIPT.md](70-MIGRATION-SCRIPT.md) - Export/Import
 
 ### Member Features (80-91)
-- [80-MEMBERSHIP-SYSTEM.md](80-MEMBERSHIP-SYSTEM.md) - User + Products + QR/Barcode + Public Profile
-- [81-GALLERY-UPLOAD.md](81-GALLERY-UPLOAD.md) - Member photo upload + Batch upload
-- [82-EVENT-REGISTRATIONS.md](82-EVENT-REGISTRATIONS.md) - EventAttendance + Early Booking + Passenger
-- [83-TRANSACTIONAL-MODELS.md](83-TRANSACTIONAL-MODELS.md) - Activity, Reaction, Comment
-- [84-PWA-BASE.md](84-PWA-BASE.md) + [84-PWA-PUSH.md](84-PWA-PUSH.md) - PWA
-- [85-CONTRIBUTION-BASE.md](85-CONTRIBUTION-BASE.md) + [85-MODERATION.md](85-MODERATION.md)
-- [86-FAVORITE-EVENTS.md](86-FAVORITE-EVENTS.md) - Event Favorites + Map + ICS
-- [87-ROUTE-MAPS.md](87-ROUTE-MAPS.md) - RouteBlock for StreamField
-- [88-PRESS-OFFICE.md](88-PRESS-OFFICE.md) - Press Office + Brand Kit
-- [89-PARTNERS.md](89-PARTNERS.md) - Partners, Sponsors, Affiliates + Owner system
-- [90-MUTUAL-AID.md](90-MUTUAL-AID.md) - Mutual Aid Network + Map + Privacy controls
-- [91-NOTIFICATIONS.md](91-NOTIFICATIONS.md) - Notification & Newsletter System + API + PWA Push
+- [80-SISTEMA-SOCI.md](80-SISTEMA-SOCI.md) - Member System: User + Products + QR/Barcode + Display Name + Public Profile
+- [81-GALLERY-UPLOAD.md](81-GALLERY-UPLOAD.md) - Member photo upload + Batch upload + Moderation
+- [82-EVENTI-ISCRIZIONI.md](82-EVENTI-ISCRIZIONI.md) - Event Registration: Open to all + Unified Pricing Tiers + Passenger
+- [83-MODELS-TRANSAZIONALI.md](83-MODELS-TRANSAZIONALI.md) - Transactional Models: Activity, Reaction, Comment
+- [84-PWA-BASE.md](84-PWA-BASE.md) - PWA: Manifest + Service Worker + Offline
+- [84-PWA-PUSH.md](84-PWA-PUSH.md) - PWA Push (see also 91-NOTIFICATIONS)
+- [85-CONTRIBUZIONE-BASE.md](85-CONTRIBUZIONE-BASE.md) - Contribution System
+- [85-MODERAZIONE.md](85-MODERAZIONE.md) - Moderation Queue
+- [86-EVENTI-PREFERITI.md](86-EVENTI-PREFERITI.md) - Event Favorites + Map + ICS Export
+- [87-ROUTE-MAPS.md](87-ROUTE-MAPS.md) - RouteBlock: OSM + OSRM for StreamField
+- [88-UFFICIO-STAMPA.md](88-UFFICIO-STAMPA.md) - Press Office + Brand Kit + Media Assets
+- [89-PARTNERS.md](89-PARTNERS.md) - Partners, Sponsors, Affiliates + Owner system + Member Verification
+- [90-MUTUAL-AID.md](90-MUTUAL-AID.md) - Mutual Aid Network + Map + Per-field Privacy controls
+- [91-NOTIFICATIONS.md](91-NOTIFICATIONS.md) - Notification & Newsletter System + API + PWA Push + Weekend Reminder
 
 ### Examples
 - [EXAMPLE-THEME-VELOCITY.html](examples/EXAMPLE-THEME-VELOCITY.html) - Modern demo

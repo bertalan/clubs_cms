@@ -203,4 +203,19 @@ User clicks notification → opens URL in browser.
 ## References
 
 - [84-PWA-BASE.md](84-PWA-BASE.md) - PWA base setup
-- [80-MEMBERSHIP-SYSTEM.md](80-MEMBERSHIP-SYSTEM.md) - Member system
+- [80-SISTEMA-SOCI.md](80-SISTEMA-SOCI.md) - Member system
+- [91-NOTIFICATIONS.md](91-NOTIFICATIONS.md) - Full notification system (email + push + queue)
+
+---
+
+## Note
+
+This document covers the PWA-specific push subscription mechanics. For the complete notification system including:
+- Email notifications
+- Notification queue and scheduling
+- User preferences (day/time)
+- Weekend favorites reminder
+- One-click unsubscribe
+- API endpoints
+
+See **[91-NOTIFICATIONS.md](91-NOTIFICATIONS.md)**.

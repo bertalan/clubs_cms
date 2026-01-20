@@ -78,7 +78,94 @@ def theme_context(request):
     return {"theme": settings.theme, "colors": settings.get_colors()}
 ```
 
+---
+
+## Email Configuration
+
+### Development
+
+```python
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+```
+
+### Production
+
+```python
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env.int("EMAIL_PORT", 587)
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = env("EMAIL_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", "noreply@example.com")
+```
+
+---
+
+## Push Notifications (VAPID)
+
+```python
+WEBPUSH_SETTINGS = {
+    "VAPID_PUBLIC_KEY": env("VAPID_PUBLIC_KEY"),
+    "VAPID_PRIVATE_KEY": env("VAPID_PRIVATE_KEY"),
+    "VAPID_ADMIN_EMAIL": env("VAPID_ADMIN_EMAIL"),
+}
+```
+
+Generate VAPID keys once and store in environment variables.
+
+---
+
+## Background Tasks (Django-Q)
+
+```python
+Q_CLUSTER = {
+    "name": "clubcms",
+    "workers": 2,
+    "recycle": 500,
+    "timeout": 60,
+    "retry": 120,
+    "queue_limit": 50,
+    "bulk": 10,
+    "orm": "default",  # Use database as broker
+}
+```
+
+### Scheduled Tasks
+
+| Task | Schedule | Purpose |
+|------|----------|---------|
+| process_notification_queue | Every 5 min | Send pending notifications |
+| send_daily_digest | 08:00 daily | Compile daily digests |
+| send_weekly_digest | 08:00 Monday | Compile weekly digests |
+| send_weekend_reminder | 09:00 Thursday | Weekend favorites email |
+| check_expiring_memberships | 09:00 daily | Queue expiry reminders |
+| cleanup_old_notifications | 03:00 daily | Delete old notifications |
+
+---
+
+## Authentication (django-allauth)
+
+```python
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_USERNAME_REQUIRED = False
+LOGIN_REDIRECT_URL = "/my-profile/"
+LOGOUT_REDIRECT_URL = "/"
+```
+
+---
+
 | Current | New |
 |---------|-----|
 | django-jinja | Django templates |
 | CodeRedCMS | Pure Wagtail |
+| - | django-q2 (background tasks) |
+| - | django-allauth (auth) |
+| - | pywebpush (push notifications) |

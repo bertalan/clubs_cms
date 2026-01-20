@@ -16,18 +16,60 @@ dependencies = [
 ]
 ```
 
+## Member Features
+
+```toml
+[project.optional-dependencies]
+members = [
+    "qrcode>=7.4",           # QR code generation for member cards
+    "python-barcode>=0.15",  # Barcode generation for member cards
+    "django-allauth>=0.60",  # User authentication
+]
+```
+
+## Notifications & Background Tasks
+
+```toml
+[project.optional-dependencies]
+notifications = [
+    "django-q2>=1.6",        # Background task queue
+    "pywebpush>=1.14",       # Web Push notifications
+    "croniter>=2.0",         # Cron scheduling for django-q
+]
+```
+
 ## Production
 
 ```toml
 [project.optional-dependencies]
-prod = ["gunicorn>=21.0", "whitenoise>=6.0", "sentry-sdk>=1.0", "django-storages[s3]>=1.14"]
+prod = [
+    "gunicorn>=21.0",
+    "whitenoise>=6.0",
+    "sentry-sdk>=1.0",
+    "django-storages[s3]>=1.14",
+]
 ```
 
 ## Development
 
 ```toml
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "pytest-django>=4.5", "factory-boy>=3.3", "django-debug-toolbar>=4.0", "ruff>=0.1"]
+dev = [
+    "pytest>=8.0",
+    "pytest-django>=4.5",
+    "factory-boy>=3.3",
+    "django-debug-toolbar>=4.0",
+    "ruff>=0.1",
+]
+```
+
+## Full Installation
+
+```toml
+[project.optional-dependencies]
+all = [
+    "clubcms[members,notifications,prod]",
+]
 ```
 
 ## Differences from Current
@@ -36,10 +78,15 @@ dev = ["pytest>=8.0", "pytest-django>=4.5", "factory-boy>=3.3", "django-debug-to
 |---------|-----|-------|
 | coderedcms | wagtail | Pure Wagtail |
 | django-jinja | - | Django templates |
+| - | django-q2 | Background tasks |
+| - | pywebpush | Push notifications |
+| - | qrcode | Member cards |
+| - | python-barcode | Member cards |
 
 ## Install
 
 ```bash
-pip install -e ".[dev]"     # Dev
-pip install -e ".[prod]"    # Prod
+pip install -e ".[dev]"              # Dev only
+pip install -e ".[members,dev]"      # Dev + member features
+pip install -e ".[all]"              # Everything
 ```

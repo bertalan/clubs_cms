@@ -141,15 +141,335 @@ Managed via **Settings → Footer Menu**:
 - Recent edits
 - Pending moderation
 
+### Custom Dashboard Widgets
+
+Add project-specific widgets to the Wagtail dashboard:
+
+| Widget | Content | Priority |
+|--------|---------|----------|
+| Recent Registrations | Last 10 event registrations with trend | High |
+| Photos Pending | Count of photos awaiting moderation | High |
+| Expiring Memberships | Members expiring in next 30 days | Medium |
+| Failed Notifications | Notifications that need retry | Medium |
+| Aid Requests | Open mutual aid requests | Low |
+| Partner Activity | Recent partner verifications | Low |
+
+### Widget Display
+
+| Widget | Shows |
+|--------|-------|
+| Registration Trend | Sparkline chart (7 days) |
+| Pending Count | Badge with number |
+| Expiring List | Name, expiry date, days left |
+| Failed List | Type, recipient, error, retry button |
+
+---
+
+## Site Settings Extended
+
+### Settings Tabs
+
+Organize Site Settings into logical tabs:
+
+| Tab | Contents |
+|-----|----------|
+| General | Site name, tagline, contact email |
+| Theme | Theme selection, color scheme |
+| Branding | Logo, favicon, social images |
+| Social | Social media links |
+| SEO | Default meta, Organization schema data |
+| Forms | Captcha configuration |
+| Notifications | Email settings, VAPID keys |
+| PWA | App name, icons, manifest settings |
+
+### SEO Tab Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| Organization Name | Text | For schema.org |
+| Organization Type | Dropdown | SportsClub, Organization, etc. |
+| Phone | Text | Contact phone |
+| Email | Email | Contact email |
+| Address | Text | Physical address |
+| Latitude | Decimal | For maps and schema |
+| Longitude | Decimal | For maps and schema |
+
+### Notifications Tab Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| From Email | Email | Sender address |
+| Reply-To Email | Email | Reply address |
+| SMTP configured | Boolean | Read-only status |
+| VAPID Public Key | Text | For push notifications |
+| VAPID Private Key | Text | Hidden, for push |
+| Default Digest Time | Time | When to send daily digest |
+| Weekend Reminder Day | Dropdown | Day for weekend events email |
+
+### PWA Tab Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| App Name | Text | PWA display name |
+| Short Name | Text | Max 12 chars |
+| App Icon 192 | Image | Android icon |
+| App Icon 512 | Image | Splash screen |
+| Theme Color | Color | Browser chrome color |
+| Enable Offline | Boolean | Cache for offline use |
+
+---
+
+## Admin ViewSets
+
+Register custom admin panels for transactional data using Wagtail's ModelViewSet.
+
+### Members ViewSet
+
+**Admin Path:** Members (in sidebar)
+
+| View | Features |
+|------|----------|
+| List | Name, email, card number, expiry, status badge |
+| Filters | Status (active/expired/pending), expiry range |
+| Search | Name, email, card number |
+| Actions | Renew, Export CSV, Send reminder |
+| Detail | Full profile, products, registrations, uploads |
+
+### Partners ViewSet
+
+**Admin Path:** Partners (in sidebar)
+
+| View | Features |
+|------|----------|
+| List | Name, category, owner, discount, status |
+| Filters | Category, status (active/inactive) |
+| Search | Name, description |
+| Actions | Assign owner, Toggle status |
+| Detail | Full info, verification log, discount history |
+
+### Event Registrations ViewSet
+
+**Admin Path:** Events → Registrations
+
+| View | Features |
+|------|----------|
+| List | Event, attendee, date, status, payment |
+| Filters | Event, status, date range, member/non-member |
+| Search | Attendee name, email |
+| Actions | Confirm, Cancel, Move to waitlist, Export CSV |
+| Detail | Full registration, passenger info, payment |
+
+### Photo Moderation ViewSet
+
+**Admin Path:** Images → Moderation Queue
+
+| View | Features |
+|------|----------|
+| List | Thumbnail, uploader, date, status |
+| Filters | Status (pending/approved/rejected), date |
+| Bulk Actions | Approve selected, Reject selected |
+| Detail | Full image, metadata, uploader info |
+
+### Aid Requests ViewSet
+
+**Admin Path:** Mutual Aid → Requests
+
+| View | Features |
+|------|----------|
+| List | Date, requester, location, status |
+| Filters | Status (open/resolved), date range |
+| Search | Location, requester |
+| Actions | Mark resolved, Contact helper |
+| Detail | Request details, helper responses |
+
+### Notification Queue ViewSet
+
+**Admin Path:** Notifications → Queue
+
+| View | Features |
+|------|----------|
+| List | Type, recipient, channel, status, scheduled |
+| Filters | Status (pending/sent/failed), type, channel |
+| Actions | Retry failed, Cancel pending, Send test |
+| Stats | Sent today, failed rate, pending count |
+
+---
+
+## Wagtail Reports
+
+Built-in reports accessible from Reports menu.
+
+### Event Registration Report
+
+| Column | Data |
+|--------|------|
+| Event | Event name with link |
+| Total Registrations | Count |
+| Members | Count (%) |
+| Non-Members | Count (%) |
+| Revenue | Sum of payments |
+| Waitlist | Count |
+
+**Filters:** Date range, event category
+**Export:** CSV, PDF
+
+### Membership Status Report
+
+| Column | Data |
+|--------|------|
+| Status | Active / Expiring / Expired |
+| Count | Number of members |
+| Percentage | Of total |
+| Trend | vs. previous period |
+
+**Filters:** Date range, product type
+**Export:** CSV
+
+### Notification Delivery Report
+
+| Column | Data |
+|--------|------|
+| Period | Day/Week/Month |
+| Sent | Total sent |
+| Delivered | Successfully delivered |
+| Failed | Failed attempts |
+| Open Rate | Email opens (%) |
+| Click Rate | Link clicks (%) |
+
+**Filters:** Date range, notification type, channel
+**Export:** CSV
+
+### Photo Upload Report
+
+| Column | Data |
+|--------|------|
+| Period | Week/Month |
+| Uploaded | Total submitted |
+| Approved | Published |
+| Rejected | Rejected |
+| Pending | Awaiting review |
+
+---
+
+## Bulk Actions
+
+### Photo Moderation
+
+| Action | Description |
+|--------|-------------|
+| Approve Selected | Publish all selected photos |
+| Reject Selected | Reject with optional reason |
+| Assign Collection | Move to specific collection |
+| Add Tags | Apply tags to selected |
+
+### Notification Queue
+
+| Action | Description |
+|--------|-------------|
+| Retry Failed | Requeue failed notifications |
+| Cancel Pending | Remove from queue |
+| Send Now | Override schedule, send immediately |
+
+### Event Registrations
+
+| Action | Description |
+|--------|-------------|
+| Export Selected | Download as CSV |
+| Send Reminder | Email selected attendees |
+| Confirm All | Confirm pending registrations |
+| Cancel All | Cancel with notification |
+
+### Member Management
+
+| Action | Description |
+|--------|-------------|
+| Export Selected | Download as CSV |
+| Send Renewal | Email renewal reminder |
+| Extend Membership | Add days to expiry |
+| Generate Cards | Batch PDF generation |
+
+---
+
 ## User Permissions
 
 ### Editor Groups
+
 | Group | Permissions |
 |-------|-------------|
 | Editors | Create/edit pages, manage images |
-| Moderators | Publish pages, manage comments |
+| Moderators | Publish pages, manage comments, moderate photos |
 | Designers | Edit theme settings, color schemes |
 | Admins | Full access |
+
+### Extended Groups
+
+| Group | Permissions |
+|-------|-------------|
+| Partner Owners | Edit own partner only, view verifications |
+| Press Editors | Manage press releases, brand assets |
+| Aid Coordinators | Manage aid network, view helpers |
+| Notification Managers | Manage notification queue, templates |
+| Member Managers | View/edit members, registrations, renewals |
+
+### Permission Matrix
+
+| Feature | Editor | Moderator | Partner Owner | Press | Aid Coord | Notif Mgr | Member Mgr | Admin |
+|---------|--------|-----------|---------------|-------|-----------|-----------|------------|-------|
+| Pages | Edit | Publish | - | Press only | - | - | - | All |
+| Images | Upload | Moderate | Own | Press | - | - | - | All |
+| Members | - | View | - | - | View | - | Edit | All |
+| Partners | - | - | Own | - | - | - | - | All |
+| Registrations | - | View | - | - | - | - | Edit | All |
+| Aid Network | - | - | - | - | Edit | - | - | All |
+| Notifications | - | - | - | - | - | Edit | - | All |
+
+---
+
+## Admin API Endpoints
+
+Internal API for admin functionality.
+
+### Image Metadata
+
+**Endpoint:** `/admin/api/image-metadata/{id}/`
+
+| Method | Returns |
+|--------|---------|
+| GET | Title, description, tags, focal point |
+
+Used by gallery upload to display existing metadata.
+
+### Partner Verification
+
+**Endpoint:** `/admin/api/partner/verify/`
+
+| Method | Body | Returns |
+|--------|------|---------|
+| POST | card_number, secondary_check | is_valid, display_name, expiry |
+
+Used by partner verification page.
+
+### Notification Test
+
+**Endpoint:** `/admin/api/notifications/test/`
+
+| Method | Body | Returns |
+|--------|------|---------|
+| POST | type, channel, recipient | success, message |
+
+Used to test notification delivery.
+
+### Member Lookup
+
+**Endpoint:** `/admin/api/members/lookup/`
+
+| Method | Query | Returns |
+|--------|-------|---------|
+| GET | ?q=searchterm | List of matching members (id, name) |
+
+Used by registration form for passenger lookup.
+
+---
 
 ## Native Wagtail Features Used
 
@@ -162,3 +482,18 @@ All configuration uses native Wagtail components:
 | Menus | `wagtailmenus` or custom snippets |
 | Forms | `wagtail.contrib.forms` |
 | Branding | `WAGTAIL_SITE_NAME`, CSS overrides |
+| ViewSets | `ModelViewSet` (Wagtail 5.0+) |
+| Reports | `wagtail.contrib.reports` |
+| Dashboard | `wagtail.admin.panels` hooks |
+| Bulk Actions | `@hooks.register('register_bulk_action')` |
+
+---
+
+## References
+
+- [80-SISTEMA-SOCI.md](80-SISTEMA-SOCI.md) - Member system
+- [81-GALLERY-UPLOAD.md](81-GALLERY-UPLOAD.md) - Photo moderation
+- [82-EVENTI-ISCRIZIONI.md](82-EVENTI-ISCRIZIONI.md) - Event registrations
+- [89-PARTNERS.md](89-PARTNERS.md) - Partner system
+- [90-MUTUAL-AID.md](90-MUTUAL-AID.md) - Mutual aid network
+- [91-NOTIFICATIONS.md](91-NOTIFICATIONS.md) - Notification system

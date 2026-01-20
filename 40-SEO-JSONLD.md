@@ -104,7 +104,82 @@ Index pages (news listing, events listing, search results) use **ItemList** sche
 | News Index | ItemList → ListItem → Article |
 | Events Index | ItemList → ListItem → Event |
 | Gallery Index | ItemList → ListItem → ImageObject |
+| Partners Page | ItemList → ListItem → LocalBusiness |
 | Search Results | SearchResultsPage → ItemList |
+
+---
+
+## Partners Schema (PartnersPage)
+
+### ItemList for Partners Page
+
+| Property | Source |
+|----------|--------|
+| @type | "ItemList" |
+| name | "Our Partners" |
+| numberOfItems | Total partners count |
+| itemListElement | Array of LocalBusiness |
+
+### LocalBusiness Schema (per partner)
+
+| Property | Source |
+|----------|--------|
+| @type | "LocalBusiness" |
+| name | Partner name |
+| description | Partner description |
+| url | Partner website |
+| image | Partner logo |
+| address | Partner address (if provided) |
+| telephone | Partner phone (if provided) |
+| makesOffer | Member discount offer |
+
+### Offer Schema (member discount)
+
+| Property | Source |
+|----------|--------|
+| @type | "Offer" |
+| name | Discount description |
+| eligibleCustomerType | "Member" |
+| priceSpecification | Discount percentage or amount |
+
+---
+
+## Press Office Schema (PressPage)
+
+| Property | Source |
+|----------|--------|
+| @type | "WebPage" |
+| name | Page title |
+| description | Meta description |
+| mainEntity | Organization schema |
+| hasPart | Array of MediaObject (press assets) |
+
+### MediaObject (brand assets)
+
+| Property | Source |
+|----------|--------|
+| @type | "MediaObject" |
+| name | Asset name |
+| contentUrl | Download URL |
+| encodingFormat | File MIME type |
+| description | Asset description |
+
+---
+
+## Mutual Aid Schema (MutualAidPage)
+
+Minimal schema to protect helper privacy:
+
+| Property | Source |
+|----------|--------|
+| @type | "WebPage" |
+| name | Page title |
+| description | General description of the network |
+| potentialAction | SearchAction for finding helpers |
+
+No individual helper data is exposed in schema.
+
+---
 
 #### ItemList Properties
 
