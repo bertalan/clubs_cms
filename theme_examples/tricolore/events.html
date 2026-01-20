@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Routes - Tricolore Theme Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --verde: #009246;
+      --bianco: #F4F5F0;
+      --rosso: #CE2B37;
+      --oro: #C9A227;
+      --ink: #1a1a1a;
+      --gray: #666;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Montserrat', system-ui, sans-serif; background: var(--bianco); color: var(--ink); line-height: 1.6; }
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
+    a { color: var(--ink); text-decoration: none; }
+    
+    /* === TRICOLORE RIBBON === */
+    .tricolore-ribbon { height: 6px; display: flex; }
+    .tricolore-ribbon span { flex: 1; }
+    .tricolore-ribbon .verde { background: var(--verde); }
+    .tricolore-ribbon .bianco { background: white; }
+    .tricolore-ribbon .rosso { background: var(--rosso); }
+    
+    /* === NAV === */
+    nav { background: white; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-weight: 900; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    .logo-badge { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(90deg, var(--verde) 33%, white 33%, white 66%, var(--rosso) 66%); border: 2px solid var(--ink); }
+    nav ul { list-style: none; display: flex; gap: 2.5rem; }
+    nav a { font-weight: 600; font-size: 0.9rem; color: var(--gray); transition: color 0.2s; }
+    nav a:hover, nav a.active { color: var(--rosso); }
+    
+    /* === HEADER === */
+    .header {
+      background: linear-gradient(135deg, var(--rosso) 0%, #e03040 100%);
+      color: white; padding: 5rem 0; text-align: center; position: relative;
+    }
+    .header::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 6px;
+      background: linear-gradient(90deg, var(--verde), white, var(--rosso));
+    }
+    .header h1 { font-size: 3rem; font-weight: 900; margin-bottom: 0.5rem; }
+    .header p { opacity: 0.9; font-size: 1.1rem; }
+    
+    /* === ITINERARI GRID === */
+    .section { padding: 4rem 0; }
+    .itinerari-grid { display: flex; flex-direction: column; gap: 2rem; }
+    
+    .itinerario-card {
+      background: white; border-radius: 16px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      display: grid; grid-template-columns: 250px 1fr auto;
+      transition: all 0.3s;
+    }
+    .itinerario-card:hover { transform: translateX(8px); box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+    @media (max-width: 900px) { .itinerario-card { grid-template-columns: 1fr; } }
+    
+    .itinerario-image {
+      background: linear-gradient(135deg, var(--verde), #00a650);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem; min-height: 200px;
+    }
+    .itinerario-card:nth-child(2) .itinerario-image { background: linear-gradient(135deg, var(--rosso), #e03040); }
+    .itinerario-card:nth-child(3) .itinerario-image { background: linear-gradient(135deg, var(--oro), #d4a82a); }
+    .itinerario-card:nth-child(4) .itinerario-image { background: linear-gradient(135deg, #0066cc, #0088ff); }
+    .itinerario-card:nth-child(5) .itinerario-image { background: linear-gradient(135deg, var(--ink), #333); }
+    
+    .itinerario-content { padding: 2rem; }
+    .itinerario-region {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--bianco); padding: 0.3rem 0.8rem; border-radius: 50px;
+      font-size: 0.75rem; font-weight: 700; color: var(--verde);
+      text-transform: uppercase; margin-bottom: 1rem;
+    }
+    .itinerario-region::before {
+      content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor;
+    }
+    .itinerario-card:nth-child(2) .itinerario-region { color: var(--rosso); }
+    .itinerario-card:nth-child(3) .itinerario-region { color: var(--oro); }
+    .itinerario-content h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .itinerario-content p { color: var(--gray); margin-bottom: 1rem; }
+    .itinerario-stats { display: flex; gap: 2rem; }
+    .itinerario-stat { text-align: center; }
+    .itinerario-stat strong { display: block; font-size: 1.3rem; font-weight: 900; color: var(--verde); }
+    .itinerario-card:nth-child(2) .itinerario-stat strong { color: var(--rosso); }
+    .itinerario-stat span { font-size: 0.75rem; color: var(--gray); text-transform: uppercase; }
+    
+    .itinerario-action {
+      padding: 2rem; display: flex; align-items: center; justify-content: center;
+      border-left: 1px solid var(--bianco);
+    }
+    @media (max-width: 900px) { .itinerario-action { border-left: none; border-top: 1px solid var(--bianco); justify-content: flex-start; } }
+    .btn {
+      display: inline-block; padding: 0.8rem 1.5rem; background: var(--verde);
+      color: white; font-weight: 700; border-radius: 8px; transition: all 0.3s;
+    }
+    .btn:hover { background: var(--rosso); transform: scale(1.05); }
+    
+    /* === FOOTER === */
+    footer { background: var(--ink); color: white; padding: 2rem 0; text-align: center; }
+    footer a { color: rgba(255,255,255,0.7); margin: 0 1rem; font-size: 0.9rem; }
+    footer a:hover { color: var(--oro); }
+    footer p { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 1rem; }
+    .footer-tricolore { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; }
+    .footer-tricolore span { width: 30px; height: 4px; border-radius: 2px; }
+  </style>
+</head>
+<body>
+  <div class="tricolore-ribbon">
+    <span class="verde"></span>
+    <span class="bianco"></span>
+    <span class="rosso"></span>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="logo-badge"></span>
+        MotoItalia
+      </a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="events.html" class="active">Routes</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="header">
+    <h1>Routes</h1>
+    <p>Discover the most beautiful roads in Italy</p>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="itinerari-grid">
+        <article class="itinerario-card">
+          <div class="itinerario-image">🏔️</div>
+          <div class="itinerario-content">
+            <span class="itinerario-region">Alto Adige</span>
+            <h3>Passo dello Stelvio</h3>
+            <p>48 tornanti mozzafiato attraverso le Alpi. Il secondo passo più alto d'Europa, un'esperienza che ogni motociclista deve vivere almeno una volta.</p>
+            <div class="itinerario-stats">
+              <div class="itinerario-stat"><strong>180</strong><span>km</span></div>
+              <div class="itinerario-stat"><strong>2758</strong><span>m slm</span></div>
+              <div class="itinerario-stat"><strong>48</strong><span>tornanti</span></div>
+            </div>
+          </div>
+          <div class="itinerario-action">
+            <a href="#" class="btn">Explore</a>
+          </div>
+        </article>
+
+        <article class="itinerario-card">
+          <div class="itinerario-image">🌊</div>
+          <div class="itinerario-content">
+            <span class="itinerario-region">Campania</span>
+            <h3>Costiera Amalfitana</h3>
+            <p>La strada costiera più famosa al mondo. Tra limoni, panorami sul mare e borghi colorati che sembrano dipinti.</p>
+            <div class="itinerario-stats">
+              <div class="itinerario-stat"><strong>50</strong><span>km</span></div>
+              <div class="itinerario-stat"><strong>13</strong><span>borghi</span></div>
+              <div class="itinerario-stat"><strong>∞</strong><span>bellezza</span></div>
+            </div>
+          </div>
+          <div class="itinerario-action">
+            <a href="#" class="btn">Explore</a>
+          </div>
+        </article>
+
+        <article class="itinerario-card">
+          <div class="itinerario-image">🏛️</div>
+          <div class="itinerario-content">
+            <span class="itinerario-region">Toscana</span>
+            <h3>Chianti Classic Tour</h3>
+            <p>Colline, vigneti e cipressi. Un viaggio attraverso il cuore della Toscana, tra borghi medievali e cantine storiche.</p>
+            <div class="itinerario-stats">
+              <div class="itinerario-stat"><strong>120</strong><span>km</span></div>
+              <div class="itinerario-stat"><strong>8</strong><span>borghi</span></div>
+              <div class="itinerario-stat"><strong>5</strong><span>cantine</span></div>
+            </div>
+          </div>
+          <div class="itinerario-action">
+            <a href="#" class="btn">Explore</a>
+          </div>
+        </article>
+
+        <article class="itinerario-card">
+          <div class="itinerario-image">🌋</div>
+          <div class="itinerario-content">
+            <span class="itinerario-region">Sicilia</span>
+            <h3>Giro dell'Etna</h3>
+            <p>Alle pendici del vulcano più alto d'Europa. Paesaggi lunari, colate laviche e viste mozzafiato sul Mediterraneo.</p>
+            <div class="itinerario-stats">
+              <div class="itinerario-stat"><strong>140</strong><span>km</span></div>
+              <div class="itinerario-stat"><strong>3350</strong><span>m slm</span></div>
+              <div class="itinerario-stat"><strong>4</strong><span>crateri</span></div>
+            </div>
+          </div>
+          <div class="itinerario-action">
+            <a href="#" class="btn">Explore</a>
+          </div>
+        </article>
+
+        <article class="itinerario-card">
+          <div class="itinerario-image">🏎️</div>
+          <div class="itinerario-content">
+            <span class="itinerario-region">Emilia-Romagna</span>
+            <h3>Motor Valley</h3>
+            <p>La terra dei motori. Da Maranello a Borgo Panigale, un pellegrinaggio tra i templi di Ferrari, Lamborghini e Ducati.</p>
+            <div class="itinerario-stats">
+              <div class="itinerario-stat"><strong>200</strong><span>km</span></div>
+              <div class="itinerario-stat"><strong>5</strong><span>musei</span></div>
+              <div class="itinerario-stat"><strong>3</strong><span>factory</span></div>
+            </div>
+          </div>
+          <div class="itinerario-action">
+            <a href="#" class="btn">Explore</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-tricolore">
+        <span style="background: var(--verde);"></span>
+        <span style="background: white;"></span>
+        <span style="background: var(--rosso);"></span>
+      </div>
+      <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <p>© 2026 MotoItalia • Tricolore Theme Demo</p>
+    </div>
+  </footer>
+</body>
+</html>

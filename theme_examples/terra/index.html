@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - Terra Theme Demo</title>
+  <style>
+    :root {
+      --forest: #2D5016;
+      --earth: #6B3410;
+      --accent: #E85D04;
+      --cream: #F5F5DC;
+      --text: #1a1a1a;
+      --text-light: #555;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--cream); color: var(--text); line-height: 1.6; }
+    a { color: var(--forest); }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+    
+    /* Nav */
+    nav { background: var(--forest); padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
+    nav .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .logo { color: white; text-decoration: none; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; }
+    .logo span { color: var(--accent); }
+    nav ul { list-style: none; display: flex; gap: 2rem; flex-wrap: wrap; }
+    nav ul a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    nav ul a:hover, nav ul a.active { color: var(--accent); }
+    
+    /* Buttons */
+    .btn { 
+      display: inline-block; padding: 0.75rem 1.75rem; text-decoration: none; 
+      font-weight: 700; border-radius: 2px; transition: all 0.3s ease; 
+    }
+    .btn-accent { background: var(--accent); color: white; }
+    .btn-accent:hover { background: #ff6b0a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(232,93,4,0.3); }
+    .btn-outline { background: transparent; color: white; border: 2px solid white; }
+    .btn-outline:hover { background: white; color: var(--forest); }
+    
+    /* Hero with diagonal */
+    .hero { 
+      background: linear-gradient(135deg, var(--forest) 0%, #3d6b1e 100%); 
+      color: white; padding: 6rem 0 8rem; text-align: center; 
+      position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 80px; background: var(--cream);
+      clip-path: polygon(0 100%, 100% 100%, 100% 0);
+    }
+    .hero h1 { 
+      font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom: 1rem; 
+      font-weight: 900; letter-spacing: -0.02em; 
+    }
+    .hero p { max-width: 600px; margin: 0 auto 2rem; opacity: 0.9; font-size: 1.1rem; }
+    .hero-badge { 
+      display: inline-block; background: var(--accent); color: white; 
+      padding: 0.4rem 1rem; font-size: 0.8rem; font-weight: 700; 
+      letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    
+    /* Stats - XXL numbers */
+    .stats { background: var(--earth); color: white; padding: 3rem 0; margin-top: -40px; position: relative; z-index: 10; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: center; }
+    @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    .stat-item h3 { 
+      font-size: 3rem; font-weight: 900; line-height: 1; 
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .stat-item p { font-size: 0.85rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+    
+    /* Section */
+    .section { padding: 5rem 0; }
+    .section-title { 
+      text-align: center; color: var(--forest); margin-bottom: 3rem; 
+      font-size: 2rem; font-weight: 800; position: relative;
+    }
+    .section-title::after {
+      content: ''; display: block; width: 60px; height: 4px; 
+      background: var(--accent); margin: 1rem auto 0;
+    }
+    
+    /* Cards with racing stripe */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .card { 
+      background: white; border-left: 4px solid var(--accent); 
+      padding: 1.5rem; position: relative; 
+      transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .card:hover { 
+      transform: translateY(-4px); 
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
+    }
+    .card-date { 
+      display: inline-block; background: var(--accent); color: white; 
+      padding: 0.25rem 0.6rem; font-size: 0.75rem; font-weight: 700; 
+      margin-bottom: 0.75rem;
+    }
+    .card h3 { color: var(--forest); margin-bottom: 0.5rem; font-weight: 700; }
+    .card p { color: var(--text-light); font-size: 0.95rem; margin-bottom: 1rem; }
+    .card-link { 
+      color: var(--forest); font-weight: 600; text-decoration: none; 
+      display: inline-flex; align-items: center; gap: 0.3rem; transition: gap 0.2s;
+    }
+    .card-link:hover { color: var(--accent); gap: 0.6rem; }
+    .card-link .arrow { transition: transform 0.2s; }
+    .card-link:hover .arrow { transform: translateX(4px); }
+    
+    /* CTA */
+    .cta { 
+      background: linear-gradient(135deg, var(--forest), #3d6b1e); 
+      color: white; padding: 4rem 0; text-align: center; position: relative;
+    }
+    .cta::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 60px; background: var(--cream);
+      clip-path: polygon(0 0, 100% 0, 100% 100%);
+    }
+    .cta h2 { font-size: 1.8rem; margin-bottom: 0.75rem; font-weight: 800; }
+    .cta p { opacity: 0.9; margin-bottom: 1.5rem; }
+    .cta .btn-accent { background: var(--accent); }
+    .cta .btn-accent:hover { background: #ff6b0a; }
+    
+    /* Footer */
+    footer { background: #1a1a1a; color: #aaa; padding: 3rem 0 1.5rem; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+    footer h4 { color: white; margin-bottom: 1rem; font-weight: 700; }
+    footer a { color: #aaa; text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--accent); }
+    footer hr { border: none; border-top: 1px solid #333; margin-bottom: 1.5rem; }
+    .footer-copy { text-align: center; font-size: 0.85rem; color: #666; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <a href="index.html" class="logo">Green<span>Org</span></a>
+      <ul>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <span class="hero-badge">🌱 Carbon Neutral Since 2020</span>
+      <h1>Growing Together Sustainably</h1>
+      <p>A community dedicated to environmental stewardship and sustainable living. Join us in making a difference.</p>
+      <div class="hero-btns">
+        <a href="events.html" class="btn btn-accent">Our Initiatives</a>
+        <a href="about.html" class="btn btn-outline">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item"><h3>250+</h3><p>Active Members</p></div>
+        <div class="stat-item"><h3>12</h3><p>Years Active</p></div>
+        <div class="stat-item"><h3>1000+</h3><p>Trees Planted</p></div>
+        <div class="stat-item"><h3>50</h3><p>Partner Farms</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Upcoming Initiatives</h2>
+      <div class="card-grid">
+        <article class="card">
+          <span class="card-date">March 22, 2026</span>
+          <h3>Community Garden Day</h3>
+          <p>Join us for a day of planting and nurturing our community garden. All skill levels welcome.</p>
+          <a href="events.html" class="card-link">Learn more <span class="arrow">→</span></a>
+        </article>
+        <article class="card">
+          <span class="card-date">April 10, 2026</span>
+          <h3>Sustainable Living Workshop</h3>
+          <p>Practical tips for reducing your carbon footprint at home and in daily life.</p>
+          <a href="events.html" class="card-link">Register <span class="arrow">→</span></a>
+        </article>
+        <article class="card">
+          <span class="card-date">May 5, 2026</span>
+          <h3>River Cleanup Drive</h3>
+          <p>Help restore our local waterways. Equipment and refreshments provided.</p>
+          <a href="events.html" class="card-link">Volunteer <span class="arrow">→</span></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <h2>Ready to Make a Difference?</h2>
+      <p>Join our community of environmental advocates today.</p>
+      <a href="contact.html" class="btn btn-accent">Become a Member</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>GreenOrg</h4>
+          <p style="font-size: 0.9rem; line-height: 1.8;">789 Eco Lane<br>Green Valley<br>hello@greenorg.example</p>
+        </div>
+        <div>
+          <h4>Links</h4>
+          <p><a href="about.html">About Us</a></p>
+          <p><a href="events.html">Events</a></p>
+          <p><a href="contact.html">Contact</a></p>
+        </div>
+        <div>
+          <h4>Resources</h4>
+          <p><a href="#">Sustainability Guide</a></p>
+          <p><a href="#">Partner Network</a></p>
+        </div>
+      </div>
+      <hr>
+      <p class="footer-copy">© 2026 GreenOrg • Terra Theme Demo • Built with minimal footprint</p>
+    </div>
+  </footer>
+</body>
+</html>

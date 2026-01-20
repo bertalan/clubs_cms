@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - Tricolore Theme Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --verde: #009246;
+      --bianco: #F4F5F0;
+      --rosso: #CE2B37;
+      --oro: #C9A227;
+      --ink: #1a1a1a;
+      --gray: #666;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Montserrat', system-ui, sans-serif; background: var(--bianco); color: var(--ink); line-height: 1.6; }
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
+    a { color: var(--ink); text-decoration: none; }
+    
+    /* === TRICOLORE RIBBON === */
+    .tricolore-ribbon { height: 6px; display: flex; }
+    .tricolore-ribbon span { flex: 1; }
+    .tricolore-ribbon .verde { background: var(--verde); }
+    .tricolore-ribbon .bianco { background: white; }
+    .tricolore-ribbon .rosso { background: var(--rosso); }
+    
+    /* === NAV === */
+    nav { background: white; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-weight: 900; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    .logo-badge { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(90deg, var(--verde) 33%, white 33%, white 66%, var(--rosso) 66%); border: 2px solid var(--ink); }
+    nav ul { list-style: none; display: flex; gap: 2.5rem; }
+    nav a { font-weight: 600; font-size: 0.9rem; color: var(--gray); transition: color 0.2s; }
+    nav a:hover, nav a.active { color: var(--rosso); }
+    
+    /* === HEADER === */
+    .header {
+      background: linear-gradient(135deg, var(--ink) 0%, #2a2a2a 100%);
+      color: white; padding: 5rem 0; text-align: center; position: relative;
+    }
+    .header::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 6px;
+      background: linear-gradient(90deg, var(--verde), white, var(--rosso));
+    }
+    .header h1 { font-size: 3rem; font-weight: 900; margin-bottom: 0.5rem; }
+    .header p { opacity: 0.7; font-size: 1.1rem; }
+    
+    /* === CONTENT === */
+    .section { padding: 5rem 0; }
+    .content-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 4rem; align-items: start; }
+    @media (max-width: 900px) { .content-grid { grid-template-columns: 1fr; } }
+    
+    .content h2 { font-size: 2rem; font-weight: 900; margin-bottom: 1.5rem; position: relative; display: inline-block; }
+    .content h2::after {
+      content: ''; position: absolute; bottom: -8px; left: 0;
+      width: 60px; height: 4px; background: linear-gradient(90deg, var(--verde), var(--rosso));
+    }
+    .content p { color: var(--gray); margin-bottom: 1.5rem; font-size: 1.05rem; }
+    
+    /* === VALUES === */
+    .values-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; }
+    .value-card {
+      background: white; padding: 1.5rem; border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06); border-left: 4px solid var(--verde);
+      transition: all 0.3s;
+    }
+    .value-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+    .value-card:nth-child(2) { border-left-color: var(--rosso); }
+    .value-card:nth-child(3) { border-left-color: var(--oro); }
+    .value-card:nth-child(4) { border-left-color: var(--verde); }
+    .value-card h3 { font-weight: 800; margin-bottom: 0.5rem; font-size: 1rem; }
+    .value-card p { color: var(--gray); font-size: 0.9rem; margin: 0; }
+    
+    /* === SIDEBAR === */
+    .sidebar-card {
+      background: white; border-radius: 16px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .sidebar-header {
+      background: linear-gradient(135deg, var(--verde), #00a650);
+      color: white; padding: 1.5rem; text-align: center;
+    }
+    .sidebar-header h3 { font-weight: 800; }
+    .team-list { padding: 1.5rem; }
+    .team-member {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 0; border-bottom: 1px solid var(--bianco);
+    }
+    .team-member:last-child { border-bottom: none; }
+    .team-avatar {
+      width: 50px; height: 50px; border-radius: 50%;
+      background: var(--bianco); display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem; color: var(--verde);
+    }
+    .team-member:nth-child(2) .team-avatar { color: var(--rosso); }
+    .team-member:nth-child(3) .team-avatar { color: var(--oro); }
+    .team-info strong { display: block; font-weight: 700; font-size: 0.95rem; }
+    .team-info span { font-size: 0.8rem; color: var(--gray); }
+    
+    /* === COCKADE DECORATION === */
+    .cockade {
+      width: 80px; height: 80px; border-radius: 50%; margin: 2rem auto;
+      background: conic-gradient(var(--verde) 0deg 120deg, white 120deg 240deg, var(--rosso) 240deg 360deg);
+      position: relative;
+    }
+    .cockade::after {
+      content: '🏍️'; position: absolute; inset: 15px;
+      background: white; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; font-size: 1.5rem;
+    }
+    
+    /* === FOOTER === */
+    footer { background: var(--ink); color: white; padding: 2rem 0; text-align: center; }
+    footer a { color: rgba(255,255,255,0.7); margin: 0 1rem; font-size: 0.9rem; }
+    footer a:hover { color: var(--oro); }
+    footer p { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 1rem; }
+    .footer-tricolore { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; }
+    .footer-tricolore span { width: 30px; height: 4px; border-radius: 2px; }
+  </style>
+</head>
+<body>
+  <div class="tricolore-ribbon">
+    <span class="verde"></span>
+    <span class="bianco"></span>
+    <span class="rosso"></span>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="logo-badge"></span>
+        MotoItalia
+      </a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html" class="active">About</a></li>
+        <li><a href="events.html">Routes</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="header">
+    <h1>About Us</h1>
+    <p>Our history, our values</p>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="content-grid">
+        <div class="content">
+          <h2>Our History</h2>
+          <p>Born in 2010 from a group of friends passionate about motorcycles and travel, MotoItalia has grown to become the largest Italian community dedicated to motorcycle touring.</p>
+          <p>We believe that traveling by motorcycle is the best way to discover the beauties of our country: from the Alpine peaks to medieval villages, from wild coasts to gentle hills, every road tells a story.</p>
+          <p>Our mission is to share this passion, creating unforgettable routes and a community where every motorcyclist can feel at home.</p>
+
+          <div class="cockade"></div>
+
+          <h2 style="margin-top: 3rem;">Our Values</h2>
+          <div class="values-grid">
+            <div class="value-card">
+              <h3>🏛️ Heritage</h3>
+              <p>We respect Italian history and traditions</p>
+            </div>
+            <div class="value-card">
+              <h3>🤝 Community</h3>
+              <p>Together we are stronger and the journey is more beautiful</p>
+            </div>
+            <div class="value-card">
+              <h3>🌍 Sustainability</h3>
+              <p>We travel with respect for the environment</p>
+            </div>
+            <div class="value-card">
+              <h3>❤️ Passion</h3>
+              <p>The love for two wheels guides us</p>
+            </div>
+          </div>
+        </div>
+
+        <aside>
+          <div class="sidebar-card">
+            <div class="sidebar-header">
+              <h3>The Board</h3>
+            </div>
+            <div class="team-list">
+              <div class="team-member">
+                <div class="team-avatar">MR</div>
+                <div class="team-info">
+                  <strong>Marco Rossi</strong>
+                  <span>President</span>
+                </div>
+              </div>
+              <div class="team-member">
+                <div class="team-avatar">GB</div>
+                <div class="team-info">
+                  <strong>Giulia Bianchi</strong>
+                  <span>Vice President</span>
+                </div>
+              </div>
+              <div class="team-member">
+                <div class="team-avatar">LV</div>
+                <div class="team-info">
+                  <strong>Luca Verdi</strong>
+                  <span>Routes Manager</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-tricolore">
+        <span style="background: var(--verde);"></span>
+        <span style="background: white;"></span>
+        <span style="background: var(--rosso);"></span>
+      </div>
+      <div>
+        <a href="index.html">Home</a>
+        <a href="events.html">Routes</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <p>© 2026 MotoItalia • Tricolore Theme Demo</p>
+    </div>
+  </footer>
+</body>
+</html>

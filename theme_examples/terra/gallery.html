@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery - Terra Theme Demo</title>
+  <style>
+    :root {
+      --forest: #2D5016;
+      --earth: #6B3410;
+      --accent: #E85D04;
+      --cream: #F5F5DC;
+      --text: #1a1a1a;
+      --text-light: #555;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--cream); color: var(--text); line-height: 1.6; }
+    a { color: var(--forest); }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+    
+    /* Nav */
+    nav { background: var(--forest); padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
+    nav .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .logo { color: white; text-decoration: none; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; }
+    .logo span { color: var(--accent); }
+    nav ul { list-style: none; display: flex; gap: 2rem; flex-wrap: wrap; }
+    nav ul a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    nav ul a:hover, nav ul a.active { color: var(--accent); }
+    
+    /* Header with diagonal */
+    .header { 
+      background: linear-gradient(135deg, var(--forest) 0%, #3d6b1e 100%); 
+      color: white; padding: 4rem 0 6rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .header::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 60px; background: var(--cream);
+      clip-path: polygon(0 100%, 100% 100%, 100% 0);
+    }
+    .header h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; }
+    .header p { opacity: 0.9; }
+    
+    /* Section */
+    .section { padding: 4rem 0; }
+    
+    /* Gallery Note */
+    .gallery-note { 
+      background: white; border-left: 4px solid var(--accent); 
+      padding: 1.25rem 1.5rem; margin-bottom: 2rem; 
+      display: flex; align-items: center; gap: 0.75rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .gallery-note p { color: var(--text-light); font-size: 0.95rem; }
+    .gallery-note strong { color: var(--forest); }
+    
+    /* Gallery Grid */
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .gallery-item { 
+      background: white; border-left: 4px solid var(--accent); 
+      padding: 1rem; text-align: center; 
+      transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .gallery-item:hover { 
+      transform: translateY(-4px); 
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
+    }
+    .gallery-placeholder { 
+      background: linear-gradient(135deg, var(--forest), #3d6b1e); 
+      height: 180px; display: flex; align-items: center; justify-content: center; 
+      color: white; font-size: 3rem; margin-bottom: 1rem;
+      transition: transform 0.3s ease;
+    }
+    .gallery-item:hover .gallery-placeholder { transform: scale(1.02); }
+    .gallery-item h4 { color: var(--forest); margin-bottom: 0.3rem; font-weight: 700; }
+    .gallery-item p { color: var(--text-light); font-size: 0.85rem; }
+    
+    /* Footer */
+    footer { background: #1a1a1a; color: #aaa; padding: 2rem 0; text-align: center; }
+    footer a { color: #aaa; text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <a href="index.html" class="logo">Green<span>Org</span></a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="gallery.html" class="active">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="header">
+    <h1>Gallery</h1>
+    <p>Moments from our community initiatives</p>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="gallery-note">
+        <span style="font-size: 1.5rem;">🌱</span>
+        <p><strong>Eco-Friendly Design:</strong> This gallery uses CSS placeholders instead of images to minimize bandwidth and environmental impact.</p>
+      </div>
+      
+      <div class="gallery-grid">
+        <div class="gallery-item">
+          <div class="gallery-placeholder">🌱</div>
+          <h4>Community Garden</h4>
+          <p>Spring planting season 2025</p>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-placeholder">🌳</div>
+          <h4>Tree Planting</h4>
+          <p>100 trees planted in 2024</p>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-placeholder">🌊</div>
+          <h4>River Cleanup</h4>
+          <p>50 volunteers, 200 lbs collected</p>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-placeholder">📚</div>
+          <h4>Workshop Series</h4>
+          <p>Sustainability education</p>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-placeholder">🤝</div>
+          <h4>Community Fair</h4>
+          <p>Annual celebration</p>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-placeholder">♻️</div>
+          <h4>Recycling Drive</h4>
+          <p>Monthly collection events</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 GreenOrg • Terra Theme Demo</p>
+      <p style="margin-top: 0.5rem;"><a href="index.html">Home</a> · <a href="about.html">About</a> · <a href="contact.html">Contact</a></p>
+    </div>
+  </footer>
+</body>
+</html>

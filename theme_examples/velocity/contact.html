@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - Velocity Theme Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary: #0F172A; --secondary: #F59E0B; --accent: #8B5CF6; }
+    body { font-family: 'Open Sans', sans-serif; }
+    h1, h2, h3, h4 { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50">
+  <!-- Navbar -->
+  <nav class="fixed w-full bg-slate-900/95 backdrop-blur z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="index.html" class="text-2xl font-black text-white">Club<span class="text-amber-500">Hub</span></a>
+      <div class="hidden md:flex gap-8 text-white">
+        <a href="index.html" class="hover:text-amber-500 transition">Home</a>
+        <a href="about.html" class="hover:text-amber-500 transition">About</a>
+        <a href="events.html" class="hover:text-amber-500 transition">Events</a>
+        <a href="gallery.html" class="hover:text-amber-500 transition">Gallery</a>
+        <a href="contact.html" class="text-amber-500">Contact</a>
+      </div>
+      <a href="contact.html" class="bg-amber-500 text-slate-900 px-5 py-2 rounded-full font-bold hover:scale-105 transition">Join Us</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-32 pb-16 bg-slate-900">
+    <div class="max-w-4xl mx-auto px-6 text-center text-white">
+      <h1 class="text-5xl font-black mb-6">Get in Touch</h1>
+      <p class="text-xl text-white">We'd love to hear from you</p>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="py-20">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid lg:grid-cols-2 gap-12">
+        <!-- Form -->
+        <div class="bg-white p-8 rounded-2xl shadow-lg">
+          <h2 class="text-2xl font-bold text-slate-900 mb-6">Send us a message</h2>
+          <form class="space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-bold text-slate-700 mb-2">First Name</label>
+                <input type="text" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none transition">
+              </div>
+              <div>
+                <label class="block text-sm font-bold text-slate-700 mb-2">Last Name</label>
+                <input type="text" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none transition">
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2">Email</label>
+              <input type="email" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none transition">
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2">Subject</label>
+              <select class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none transition">
+                <option>General Inquiry</option>
+                <option>Membership</option>
+                <option>Events</option>
+                <option>Partnership</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2">Message</label>
+              <textarea rows="5" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none transition resize-none"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-amber-500 text-slate-900 py-4 rounded-full font-bold hover:scale-105 transition">Send Message</button>
+          </form>
+        </div>
+        
+        <!-- Info -->
+        <div class="space-y-8">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900 mb-6">Contact Information</h2>
+            <div class="space-y-4">
+              <div class="flex gap-4 items-start">
+                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-500 font-bold">📍</div>
+                <div>
+                  <h3 class="font-bold text-slate-900">Address</h3>
+                  <p class="text-slate-600">123 Community Street<br>City, Country 12345</p>
+                </div>
+              </div>
+              <div class="flex gap-4 items-start">
+                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-500 font-bold">✉️</div>
+                <div>
+                  <h3 class="font-bold text-slate-900">Email</h3>
+                  <p class="text-slate-600">hello@clubhub.example</p>
+                </div>
+              </div>
+              <div class="flex gap-4 items-start">
+                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-500 font-bold">📞</div>
+                <div>
+                  <h3 class="font-bold text-slate-900">Phone</h3>
+                  <p class="text-slate-600">+1 234 567 890</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-slate-900 p-8 rounded-2xl text-white">
+            <h3 class="text-xl font-bold mb-4">Office Hours</h3>
+            <ul class="space-y-2 text-slate-300">
+              <li class="flex justify-between"><span>Monday - Friday</span><span>9:00 - 18:00</span></li>
+              <li class="flex justify-between"><span>Saturday</span><span>10:00 - 14:00</span></li>
+              <li class="flex justify-between"><span>Sunday</span><span>Closed</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-white/70 py-12">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
+      <div>
+        <h3 class="text-xl font-bold text-white mb-4">ClubHub</h3>
+        <p>123 Community Street</p>
+        <p>hello@clubhub.example</p>
+      </div>
+      <div>
+        <h3 class="text-xl font-bold text-white mb-4">Links</h3>
+        <ul class="space-y-2">
+          <li><a href="about.html" class="hover:text-amber-500">About Us</a></li>
+          <li><a href="events.html" class="hover:text-amber-500">Events</a></li>
+          <li><a href="contact.html" class="hover:text-amber-500">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-xl font-bold text-white mb-4">Follow Us</h3>
+        <div class="flex gap-4">
+          <span class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">FB</span>
+          <span class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">IG</span>
+          <span class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">YT</span>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-white/10 mt-8 pt-8 text-center text-sm">© 2026 ClubHub • Velocity Theme Demo</div>
+  </footer>
+</body>
+</html>

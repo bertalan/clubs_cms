@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events - Clubs Theme Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { --red: #C41E3A; --red-hover: #E02547; }
+    body { font-family: system-ui, -apple-system, sans-serif; }
+    .text-red { color: var(--red); }
+    .bg-red { background-color: var(--red); }
+    .nav-link { position: relative; }
+    .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--red); transition: width 0.3s; }
+    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+  </style>
+</head>
+<body class="bg-[#0A0A0A] text-white">
+  <!-- Navbar -->
+  <nav class="fixed w-full bg-[#0A0A0A]/95 backdrop-blur-md z-50 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="index.html" class="text-2xl font-black tracking-tight">EAGLE<span class="text-red">RIDERS</span></a>
+      <div class="hidden md:flex gap-8 text-sm font-semibold uppercase tracking-wider">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">Heritage</a>
+        <a href="events.html" class="nav-link active">Events</a>
+        <a href="gallery.html" class="nav-link">Gallery</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <a href="contact.html" class="bg-red px-6 py-2 text-sm font-bold uppercase tracking-wider hover:scale-105 transition">Join Us</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="relative h-[50vh] flex items-center justify-center pt-20">
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=1920')] bg-cover bg-center"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/70 to-[#0A0A0A]"></div>
+    <div class="relative z-10 text-center px-6">
+      <p class="text-red font-bold uppercase tracking-[0.3em] mb-4">Calendar</p>
+      <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tight">Events</h1>
+    </div>
+  </section>
+
+  <!-- Tabs -->
+  <section class="bg-[#1A1A1A] border-y border-white/10">
+    <div class="max-w-7xl mx-auto px-6 flex gap-8 overflow-x-auto">
+      <button class="py-4 text-sm font-bold uppercase tracking-wider border-b-2 border-red text-white">Upcoming</button>
+      <button class="py-4 text-sm font-bold uppercase tracking-wider border-b-2 border-transparent text-gray-400 hover:text-white">Past</button>
+      <button class="py-4 text-sm font-bold uppercase tracking-wider border-b-2 border-transparent text-gray-400 hover:text-white">Rallies</button>
+      <button class="py-4 text-sm font-bold uppercase tracking-wider border-b-2 border-transparent text-gray-400 hover:text-white">Tours</button>
+    </div>
+  </section>
+
+  <!-- Events List -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-6 space-y-8">
+      
+      <!-- Event 1 -->
+      <article class="group bg-[#1A1A1A] border border-white/10 hover:border-red transition flex flex-col md:flex-row">
+        <div class="md:w-1/3">
+          <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600" alt="Event" class="w-full h-64 md:h-full object-cover">
+        </div>
+        <div class="flex-1 p-8 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-4 mb-4">
+              <span class="bg-red px-3 py-1 text-xs font-bold uppercase">Rally</span>
+              <span class="text-gray-400 text-sm">March 15-17, 2026</span>
+            </div>
+            <h3 class="text-2xl font-black uppercase mb-4 group-hover:text-red transition">Spring Rally 2026</h3>
+            <p class="text-gray-400 mb-6">The event that officially opens the motorcycle season. Three days of passion, scenic routes through the hills and gala dinner with awards.</p>
+            <div class="flex gap-6 text-sm text-gray-400">
+              <span>📍 Club Headquarters + Hill Route</span>
+              <span>👥 Max 150 participants</span>
+            </div>
+          </div>
+          <div class="mt-6 flex gap-4">
+            <a href="#" class="bg-red px-6 py-3 font-bold uppercase text-sm tracking-wider hover:scale-105 transition">Sign Up</a>
+            <a href="#" class="border border-white/30 px-6 py-3 font-bold uppercase text-sm tracking-wider hover:bg-white hover:text-[#0A0A0A] transition">Details</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Event 2 -->
+      <article class="group bg-[#1A1A1A] border border-white/10 hover:border-red transition flex flex-col md:flex-row">
+        <div class="md:w-1/3">
+          <img src="https://images.unsplash.com/photo-1558980664-769d59546b3d?w=600" alt="Event" class="w-full h-64 md:h-full object-cover">
+        </div>
+        <div class="flex-1 p-8 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-4 mb-4">
+              <span class="bg-white/20 px-3 py-1 text-xs font-bold uppercase">Tour</span>
+              <span class="text-gray-400 text-sm">April 28 - May 5, 2026</span>
+            </div>
+            <h3 class="text-2xl font-black uppercase mb-4 group-hover:text-red transition">Alps Tour</h3>
+            <p class="text-gray-400 mb-6">A week through the most iconic Alpine passes: Stelvio, Spluga, San Bernardino. Route reserved for members with certified experience.</p>
+            <div class="flex gap-6 text-sm text-gray-400">
+              <span>📍 Departure from Milan</span>
+              <span>👥 Max 30 participants</span>
+            </div>
+          </div>
+          <div class="mt-6 flex gap-4">
+            <a href="#" class="bg-red px-6 py-3 font-bold uppercase text-sm tracking-wider hover:scale-105 transition">Waiting List</a>
+            <a href="#" class="border border-white/30 px-6 py-3 font-bold uppercase text-sm tracking-wider hover:bg-white hover:text-[#0A0A0A] transition">Details</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Event 3 -->
+      <article class="group bg-[#1A1A1A] border border-white/10 hover:border-red transition flex flex-col md:flex-row">
+        <div class="md:w-1/3">
+          <img src="https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=600" alt="Event" class="w-full h-64 md:h-full object-cover">
+        </div>
+        <div class="flex-1 p-8 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-4 mb-4">
+              <span class="bg-red px-3 py-1 text-xs font-bold uppercase">Open Day</span>
+              <span class="text-gray-400 text-sm">June 10, 2026</span>
+            </div>
+            <h3 class="text-2xl font-black uppercase mb-4 group-hover:text-red transition">Open Day 2026</h3>
+            <p class="text-gray-400 mb-6">Open doors at the club! Come meet us, visit the museum, try our motorcycles and discover the exclusive membership benefits.</p>
+            <div class="flex gap-6 text-sm text-gray-400">
+              <span>📍 Club Headquarters, Via Roma 123</span>
+              <span>👥 Open to everyone</span>
+            </div>
+          </div>
+          <div class="mt-6 flex gap-4">
+            <a href="#" class="bg-red px-6 py-3 font-bold uppercase text-sm tracking-wider hover:scale-105 transition">Book Visit</a>
+            <a href="#" class="border border-white/30 px-6 py-3 font-bold uppercase text-sm tracking-wider hover:bg-white hover:text-[#0A0A0A] transition">Details</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Event 4 -->
+      <article class="group bg-[#1A1A1A] border border-white/10 hover:border-red transition flex flex-col md:flex-row">
+        <div class="md:w-1/3">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600" alt="Event" class="w-full h-64 md:h-full object-cover">
+        </div>
+        <div class="flex-1 p-8 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-4 mb-4">
+              <span class="bg-white/20 px-3 py-1 text-xs font-bold uppercase">Rally</span>
+              <span class="text-gray-400 text-sm">September 12-14, 2026</span>
+            </div>
+            <h3 class="text-2xl font-black uppercase mb-4 group-hover:text-red transition">National Rally</h3>
+            <p class="text-gray-400 mb-6">The main event of the year. All regional sections gathered for three days of celebration, races and awards. Gala dinner with special guests.</p>
+            <div class="flex gap-6 text-sm text-gray-400">
+              <span>📍 Location to be defined</span>
+              <span>👥 500+ expected participants</span>
+            </div>
+          </div>
+          <div class="mt-6 flex gap-4">
+            <a href="#" class="bg-red px-6 py-3 font-bold uppercase text-sm tracking-wider hover:scale-105 transition">Pre-Registration</a>
+            <a href="#" class="border border-white/30 px-6 py-3 font-bold uppercase text-sm tracking-wider hover:bg-white hover:text-[#0A0A0A] transition">Details</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#0A0A0A] border-t border-white/10 py-16">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <p class="text-2xl font-black">EAGLE<span class="text-red">RIDERS</span></p>
+        <div class="flex gap-8 mt-6 md:mt-0 text-sm text-gray-400">
+          <a href="index.html" class="hover:text-white transition">Home</a>
+          <a href="about.html" class="hover:text-white transition">Heritage</a>
+          <a href="gallery.html" class="hover:text-white transition">Gallery</a>
+          <a href="contact.html" class="hover:text-white transition">Contact</a>
+        </div>
+      </div>
+      <div class="mt-8 pt-8 border-t border-white/10 text-center text-gray-500 text-sm">
+        © 2026 EagleRiders • Clubs Theme Demo
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

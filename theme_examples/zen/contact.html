@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - Zen Theme Demo</title>
+  <style>
+    :root { 
+      --ink: #0a0a0a; 
+      --paper: #ffffff; 
+      --gray: #f5f5f5;
+      --pop: #FF3366;
+      --pop-yellow: #FFD700;
+      --pop-blue: #00BFFF;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--gray); color: var(--ink); line-height: 1.6; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    a { color: var(--ink); }
+    
+    /* === NAV === */
+    nav { background: var(--ink); color: var(--paper); padding: 1rem 0; border-bottom: 4px solid var(--pop); }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav a { color: var(--paper); text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.85rem; }
+    nav a:hover, nav a.active { color: var(--pop); }
+    .logo { font-weight: 900; font-size: 1.3rem; text-decoration: none; color: var(--paper); }
+    .logo span { color: var(--pop); }
+    
+    /* === HEADER === */
+    .header { padding: 3rem 0; }
+    .header-panel {
+      background: var(--pop); color: var(--paper); border: 4px solid var(--ink);
+      box-shadow: 8px 8px 0 var(--ink); padding: 3rem; text-align: center;
+    }
+    .header-panel h1 { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; }
+    
+    /* === CONTACT GRID === */
+    .section { padding: 2rem 0 3rem; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 700px) { .contact-grid { grid-template-columns: 1fr; } }
+    
+    /* Form Panel */
+    .form-panel {
+      background: var(--paper); border: 3px solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink); padding: 2rem;
+    }
+    .form-panel h2 {
+      font-weight: 900; font-size: 1.3rem; text-transform: uppercase;
+      margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;
+    }
+    .form-panel h2::before {
+      content: ''; width: 8px; height: 100%; min-height: 24px; background: var(--pop);
+    }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { 
+      display: block; margin-bottom: 0.4rem; font-weight: 700; 
+      font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .form-group input, .form-group textarea { 
+      width: 100%; padding: 0.9rem; border: 3px solid var(--ink);
+      background: var(--paper); font-family: inherit; font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .form-group input:focus, .form-group textarea:focus { 
+      outline: none; border-color: var(--pop); 
+      box-shadow: 4px 4px 0 var(--pop);
+    }
+    .btn-submit {
+      display: inline-block; padding: 1rem 2.5rem; background: var(--ink); color: var(--paper);
+      border: 3px solid var(--ink); font-weight: 800; text-transform: uppercase;
+      font-size: 1rem; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-submit:hover { 
+      background: var(--pop); border-color: var(--pop); 
+      transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--ink);
+    }
+    
+    /* Info Panels */
+    .info-stack { display: flex; flex-direction: column; gap: 1rem; }
+    .info-panel {
+      background: var(--paper); border: 3px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink); padding: 1.5rem;
+      transition: all 0.2s;
+    }
+    .info-panel:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+    .info-panel:nth-child(1) { background: var(--pop-yellow); }
+    .info-panel:nth-child(2) { background: var(--pop-blue); }
+    .info-panel h4 { 
+      font-weight: 800; font-size: 0.85rem; text-transform: uppercase;
+      margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .info-panel p { font-size: 0.95rem; color: #333; margin: 0; }
+    
+    /* CTA Panel */
+    .cta-panel {
+      background: var(--ink); color: var(--paper); border: 3px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--pop); padding: 1.5rem; text-align: center;
+    }
+    .cta-panel h4 { font-weight: 900; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .cta-panel p { font-size: 0.9rem; opacity: 0.8; margin: 0; }
+    
+    /* === FOOTER === */
+    footer { background: var(--ink); color: var(--paper); padding: 2.5rem 0; text-align: center; }
+    footer a { color: var(--paper); text-decoration: none; margin: 0 1rem; font-size: 0.9rem; }
+    footer a:hover { color: var(--pop); }
+    footer .copy { margin-top: 1rem; font-size: 0.8rem; opacity: 0.6; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <a href="index.html" class="logo">MIND<span>FUL</span></a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="header">
+    <div class="container">
+      <div class="header-panel">
+        <h1>Get in Touch</h1>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="form-panel">
+          <h2>Send a Message</h2>
+          <form>
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" placeholder="Your name">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" placeholder="your@email.example">
+            </div>
+            <div class="form-group">
+              <label>Message</label>
+              <textarea rows="5" placeholder="What's on your mind?"></textarea>
+            </div>
+            <button type="submit" class="btn-submit">Send →</button>
+          </form>
+        </div>
+
+        <div class="info-stack">
+          <div class="info-panel">
+            <h4>📍 Location</h4>
+            <p>321 Quiet Street<br>Stillwater, SW 54321</p>
+          </div>
+          <div class="info-panel">
+            <h4>✉️ Email</h4>
+            <p>hello@mindful.example</p>
+          </div>
+          <div class="info-panel">
+            <h4>🕐 Hours</h4>
+            <p>By appointment only</p>
+          </div>
+          <div class="cta-panel">
+            <h4>Ready to Begin?</h4>
+            <p>Join us. No experience needed.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="events.html">Events</a>
+        <a href="gallery.html">Gallery</a>
+      </div>
+      <p class="copy">© 2026 Mindful • Zen Comic Theme</p>
+    </div>
+  </footer>
+</body>
+</html>

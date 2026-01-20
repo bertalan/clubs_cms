@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - Tricolore Theme Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --verde: #009246;
+      --bianco: #F4F5F0;
+      --rosso: #CE2B37;
+      --oro: #C9A227;
+      --ink: #1a1a1a;
+      --gray: #666;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Montserrat', system-ui, sans-serif; background: var(--bianco); color: var(--ink); line-height: 1.6; }
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
+    a { color: var(--ink); text-decoration: none; }
+    
+    /* === TRICOLORE RIBBON === */
+    .tricolore-ribbon {
+      height: 6px; display: flex;
+    }
+    .tricolore-ribbon span { flex: 1; }
+    .tricolore-ribbon .verde { background: var(--verde); }
+    .tricolore-ribbon .bianco { background: white; }
+    .tricolore-ribbon .rosso { background: var(--rosso); }
+    
+    /* === NAV === */
+    nav { background: white; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-weight: 900; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    .logo-badge {
+      width: 36px; height: 36px; border-radius: 50%; 
+      background: linear-gradient(90deg, var(--verde) 33%, white 33%, white 66%, var(--rosso) 66%);
+      border: 2px solid var(--ink);
+    }
+    nav ul { list-style: none; display: flex; gap: 2.5rem; }
+    nav a { font-weight: 600; font-size: 0.9rem; color: var(--gray); transition: color 0.2s; }
+    nav a:hover, nav a.active { color: var(--rosso); }
+    
+    /* === HERO === */
+    .hero {
+      background: linear-gradient(135deg, var(--verde) 0%, #00a650 50%, var(--verde) 100%);
+      color: white; padding: 5rem 0; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: 0; right: 0; width: 40%; height: 100%;
+      background: linear-gradient(90deg, transparent 0%, var(--rosso) 100%);
+      opacity: 0.15;
+    }
+    .hero-content { position: relative; z-index: 10; max-width: 650px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+      padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.85rem;
+      font-weight: 600; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.2);
+    }
+    .hero-badge .dot { width: 8px; height: 8px; background: var(--oro); border-radius: 50%; }
+    .hero h1 { font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 1rem; }
+    .hero p { font-size: 1.15rem; opacity: 0.9; margin-bottom: 2rem; }
+    .btn { display: inline-block; padding: 1rem 2rem; font-weight: 700; border-radius: 4px; transition: all 0.3s; }
+    .btn-white { background: white; color: var(--verde); }
+    .btn-white:hover { background: var(--oro); color: white; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+    .btn-outline { background: transparent; color: white; border: 2px solid white; margin-left: 1rem; }
+    .btn-outline:hover { background: white; color: var(--verde); }
+    
+    /* === STATS TRICOLORE === */
+    .stats { padding: 4rem 0; background: white; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+    @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card { text-align: center; padding: 2rem; border-radius: 12px; background: var(--bianco); position: relative; overflow: hidden; }
+    .stat-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--verde), white, var(--rosso));
+    }
+    .stat-card h3 { font-size: 2.5rem; font-weight: 900; color: var(--verde); }
+    .stat-card:nth-child(2) h3 { color: var(--rosso); }
+    .stat-card:nth-child(3) h3 { color: var(--verde); }
+    .stat-card:nth-child(4) h3 { color: var(--rosso); }
+    .stat-card p { font-size: 0.9rem; color: var(--gray); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    
+    /* === FEATURED ROUTES === */
+    .routes { padding: 5rem 0; }
+    .section-header { text-align: center; margin-bottom: 3rem; }
+    .section-header h2 { font-size: 2.2rem; font-weight: 900; margin-bottom: 0.5rem; }
+    .section-header p { color: var(--gray); }
+    .routes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+    @media (max-width: 900px) { .routes-grid { grid-template-columns: 1fr; } }
+    .route-card {
+      background: white; border-radius: 16px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: all 0.3s;
+    }
+    .route-card:hover { transform: translateY(-8px); box-shadow: 0 12px 40px rgba(0,0,0,0.15); }
+    .route-image {
+      height: 180px; background: linear-gradient(135deg, var(--verde), #00a650);
+      display: flex; align-items: center; justify-content: center; font-size: 4rem;
+      position: relative;
+    }
+    .route-card:nth-child(2) .route-image { background: linear-gradient(135deg, var(--rosso), #e03040); }
+    .route-card:nth-child(3) .route-image { background: linear-gradient(135deg, var(--oro), #d4a82a); }
+    .route-ribbon {
+      position: absolute; top: 15px; right: -30px; background: var(--rosso);
+      color: white; padding: 0.3rem 2.5rem; font-size: 0.7rem; font-weight: 700;
+      text-transform: uppercase; transform: rotate(45deg);
+    }
+    .route-content { padding: 1.5rem; }
+    .route-tag {
+      display: inline-block; background: var(--bianco); color: var(--verde);
+      padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem;
+      font-weight: 700; text-transform: uppercase; margin-bottom: 0.75rem;
+    }
+    .route-card:nth-child(2) .route-tag { color: var(--rosso); }
+    .route-content h3 { font-weight: 800; font-size: 1.2rem; margin-bottom: 0.5rem; }
+    .route-content p { color: var(--gray); font-size: 0.9rem; margin-bottom: 1rem; }
+    .route-meta { display: flex; gap: 1rem; font-size: 0.8rem; color: var(--gray); }
+    .route-meta span { display: flex; align-items: center; gap: 0.3rem; }
+    
+    /* === CTA === */
+    .cta { 
+      background: var(--rosso); color: white; padding: 4rem 0; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .cta::before, .cta::after {
+      content: ''; position: absolute; width: 150px; height: 150px;
+      border: 20px solid rgba(255,255,255,0.1); border-radius: 50%;
+    }
+    .cta::before { top: -50px; left: -50px; }
+    .cta::after { bottom: -50px; right: -50px; }
+    .cta h2 { font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem; position: relative; }
+    .cta p { opacity: 0.9; margin-bottom: 1.5rem; position: relative; }
+    .cta .btn-white { background: white; color: var(--rosso); }
+    .cta .btn-white:hover { background: var(--oro); color: white; }
+    
+    /* === FOOTER === */
+    footer { background: var(--ink); color: white; padding: 3rem 0 1.5rem; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    footer h4 { font-weight: 700; margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .footer-brand { display: flex; align-items: center; gap: 0.75rem; font-weight: 900; font-size: 1.3rem; margin-bottom: 1rem; }
+    footer p { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+    footer a { color: rgba(255,255,255,0.7); font-size: 0.9rem; display: block; margin-bottom: 0.5rem; transition: color 0.2s; }
+    footer a:hover { color: var(--oro); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; text-align: center; }
+    .footer-bottom p { font-size: 0.85rem; color: rgba(255,255,255,0.5); }
+    .footer-tricolore { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; }
+    .footer-tricolore span { width: 30px; height: 4px; border-radius: 2px; }
+  </style>
+</head>
+<body>
+  <div class="tricolore-ribbon">
+    <span class="verde"></span>
+    <span class="bianco"></span>
+    <span class="rosso"></span>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="logo-badge"></span>
+        MotoItalia
+      </a>
+      <ul>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="events.html">Routes</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <span class="hero-badge"><span class="dot"></span> On Italy's roads since 2010</span>
+        <h1>Discover Italy by Motorcycle</h1>
+        <p>Experience the thrill of riding the most beautiful roads of the Bel Paese. From the Alps to Sicily, every curve tells a story.</p>
+        <a href="events.html" class="btn btn-white">Explore Routes</a>
+        <a href="about.html" class="btn btn-outline">Discover More</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>500+</h3>
+          <p>Active Members</p>
+        </div>
+        <div class="stat-card">
+          <h3>15</h3>
+          <p>Years of Passion</p>
+        </div>
+        <div class="stat-card">
+          <h3>120</h3>
+          <p>Routes</p>
+        </div>
+        <div class="stat-card">
+          <h3>20</h3>
+          <p>Regions Covered</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="routes">
+    <div class="container">
+      <div class="section-header">
+        <h2>Featured Routes</h2>
+        <p>The roads most loved by our members</p>
+      </div>
+      <div class="routes-grid">
+        <article class="route-card">
+          <div class="route-image">
+            <span class="route-ribbon">New</span>
+            🏔️
+          </div>
+          <div class="route-content">
+            <span class="route-tag">Alps</span>
+            <h3>Stelvio Pass</h3>
+            <p>48 breathtaking hairpin turns through the Alps, an unforgettable experience.</p>
+            <div class="route-meta">
+              <span>📍 South Tyrol</span>
+              <span>🛣️ 180 km</span>
+            </div>
+          </div>
+        </article>
+        <article class="route-card">
+          <div class="route-image">🌊</div>
+          <div class="route-content">
+            <span class="route-tag">Coastal</span>
+            <h3>Amalfi Coast Road</h3>
+            <p>The most famous coastal road in the world, among lemon trees and sea views.</p>
+            <div class="route-meta">
+              <span>📍 Campania</span>
+              <span>🛣️ 50 km</span>
+            </div>
+          </div>
+        </article>
+        <article class="route-card">
+          <div class="route-image">🏛️</div>
+          <div class="route-content">
+            <span class="route-tag">Classic</span>
+            <h3>Via Francigena</h3>
+            <p>In the footsteps of pilgrims, through Tuscan hills and medieval villages.</p>
+            <div class="route-meta">
+              <span>📍 Tuscany</span>
+              <span>🛣️ 320 km</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <h2>Join the Family</h2>
+      <p>Become part of the largest Italian motorcycle touring community</p>
+      <a href="contact.html" class="btn btn-white">Become a Member</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <span class="logo-badge" style="width:28px;height:28px;"></span>
+            MotoItalia
+          </div>
+          <p>The passion for two wheels and the Bel Paese, since 2010.</p>
+        </div>
+        <div>
+          <h4>Links</h4>
+          <a href="about.html">About</a>
+          <a href="events.html">Routes</a>
+          <a href="gallery.html">Gallery</a>
+        </div>
+        <div>
+          <h4>Community</h4>
+          <a href="#">Forum</a>
+          <a href="#">Events</a>
+          <a href="#">Rallies</a>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <a href="contact.html">Write Us</a>
+          <a href="#">Newsletter</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-tricolore">
+          <span style="background: var(--verde);"></span>
+          <span style="background: white;"></span>
+          <span style="background: var(--rosso);"></span>
+        </div>
+        <p>© 2026 MotoItalia • Tricolore Theme Demo • Made with ❤️ in Italy</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

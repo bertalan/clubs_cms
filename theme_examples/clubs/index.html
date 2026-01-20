@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - Clubs Theme Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { --red: #C41E3A; --red-hover: #E02547; }
+    body { font-family: system-ui, -apple-system, sans-serif; }
+    .text-red { color: var(--red); }
+    .bg-red { background-color: var(--red); }
+    .bg-red:hover { background-color: var(--red-hover); }
+    .nav-link { position: relative; }
+    .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--red); transition: width 0.3s; }
+    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+  </style>
+</head>
+<body class="bg-[#0A0A0A] text-white">
+  <!-- Navbar -->
+  <nav class="fixed w-full bg-[#0A0A0A]/95 backdrop-blur-md z-50 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="index.html" class="text-2xl font-black tracking-tight">EAGLE<span class="text-red">RIDERS</span></a>
+      <div class="hidden md:flex gap-8 text-sm font-semibold uppercase tracking-wider">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="about.html" class="nav-link">Heritage</a>
+        <a href="events.html" class="nav-link">Events</a>
+        <a href="gallery.html" class="nav-link">Gallery</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <a href="contact.html" class="bg-red px-6 py-2 text-sm font-bold uppercase tracking-wider hover:scale-105 transition">Join Us</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="relative h-screen flex items-center justify-center">
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920')] bg-cover bg-center"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/80 via-[#0A0A0A]/50 to-[#0A0A0A]"></div>
+    <div class="relative z-10 text-center px-6 max-w-4xl">
+      <p class="text-red font-bold uppercase tracking-[0.3em] mb-4">Since 1985</p>
+      <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tight mb-6 leading-none">The Passion<br>That Unites Us</h1>
+      <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">An exclusive club for those who live the road as a way of life. Tradition, brotherhood and adventure.</p>
+      <div class="flex gap-4 justify-center flex-wrap">
+        <a href="events.html" class="bg-red px-8 py-4 font-bold uppercase tracking-wider hover:scale-105 transition">Upcoming Events</a>
+        <a href="about.html" class="border-2 border-white px-8 py-4 font-bold uppercase tracking-wider hover:bg-white hover:text-[#0A0A0A] transition">Our History</a>
+      </div>
+    </div>
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="bg-[#1A1A1A] py-16 border-y border-white/10">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div>
+        <p class="text-5xl font-black text-red">40</p>
+        <p class="text-gray-400 uppercase tracking-wider text-sm mt-2">Years of History</p>
+      </div>
+      <div>
+        <p class="text-5xl font-black">280+</p>
+        <p class="text-gray-400 uppercase tracking-wider text-sm mt-2">Active Members</p>
+      </div>
+      <div>
+        <p class="text-5xl font-black">50+</p>
+        <p class="text-gray-400 uppercase tracking-wider text-sm mt-2">Annual Events</p>
+      </div>
+      <div>
+        <p class="text-5xl font-black">15</p>
+        <p class="text-gray-400 uppercase tracking-wider text-sm mt-2">Regional Chapters</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Heritage Section -->
+  <section class="py-24">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <div>
+          <p class="text-red font-bold uppercase tracking-[0.2em] mb-4">Our Heritage</p>
+          <h2 class="text-4xl md:text-5xl font-black uppercase mb-6">A Century of Passion</h2>
+          <p class="text-gray-300 text-lg mb-6 leading-relaxed">Founded in 1985 by a group of enthusiasts, EagleRiders now represents the largest motorcyclist community in the region. Our history is made of roads traveled together, friendships born in the saddle, and values passed down from generation to generation.</p>
+          <a href="about.html" class="inline-block border-b-2 border-red text-red font-bold uppercase tracking-wider hover:text-white hover:border-white transition pb-1">Discover More →</a>
+        </div>
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=800" alt="Heritage" class="w-full aspect-[4/3] object-cover">
+          <div class="absolute -bottom-6 -left-6 bg-red p-6">
+            <p class="text-4xl font-black">1985</p>
+            <p class="text-sm uppercase tracking-wider">Year Founded</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- News/Events -->
+  <section class="py-24 bg-[#1A1A1A]">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex justify-between items-end mb-12">
+        <div>
+          <p class="text-red font-bold uppercase tracking-[0.2em] mb-4">EagleRiders World</p>
+          <h2 class="text-4xl font-black uppercase">News & Events</h2>
+        </div>
+        <a href="events.html" class="hidden md:inline-block border-b-2 border-red text-red font-bold uppercase tracking-wider hover:text-white hover:border-white transition pb-1">All Events →</a>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <article class="group">
+          <div class="overflow-hidden mb-4">
+            <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600" alt="Event" class="w-full aspect-[3/2] object-cover group-hover:scale-105 transition duration-500">
+          </div>
+          <p class="text-red text-sm font-bold uppercase tracking-wider mb-2">March 15, 2026</p>
+          <h3 class="text-xl font-bold mb-2 group-hover:text-red transition">Spring Rally</h3>
+          <p class="text-gray-400">The annual event that opens the riding season. Three days of passion, breathtaking routes and brotherhood.</p>
+        </article>
+        <article class="group">
+          <div class="overflow-hidden mb-4">
+            <img src="https://images.unsplash.com/photo-1558980664-769d59546b3d?w=600" alt="Event" class="w-full aspect-[3/2] object-cover group-hover:scale-105 transition duration-500">
+          </div>
+          <p class="text-red text-sm font-bold uppercase tracking-wider mb-2">April 28, 2026</p>
+          <h3 class="text-xl font-bold mb-2 group-hover:text-red transition">Alps Tour</h3>
+          <p class="text-gray-400">A week through the most iconic Alpine passes. Route reserved for members.</p>
+        </article>
+        <article class="group">
+          <div class="overflow-hidden mb-4">
+            <img src="https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=600" alt="Event" class="w-full aspect-[3/2] object-cover group-hover:scale-105 transition duration-500">
+          </div>
+          <p class="text-red text-sm font-bold uppercase tracking-wider mb-2">June 10, 2026</p>
+          <h3 class="text-xl font-bold mb-2 group-hover:text-red transition">Open Day 2026</h3>
+          <p class="text-gray-400">Open doors at the club. Come meet us, try our motorcycles and discover the exclusive benefits.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-24 bg-red">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h2 class="text-4xl md:text-5xl font-black uppercase mb-6">Join the Family</h2>
+      <p class="text-xl text-white/80 mb-10">Join over 280 passionate members. Annual fee €80, exclusive benefits all year round.</p>
+      <a href="contact.html" class="inline-block bg-[#0A0A0A] px-10 py-4 font-bold uppercase tracking-wider hover:scale-105 transition">Become a Member</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#0A0A0A] border-t border-white/10 py-16">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-4 gap-12 mb-12">
+        <div class="md:col-span-2">
+          <p class="text-3xl font-black mb-4">EAGLE<span class="text-red">RIDERS</span></p>
+          <p class="text-gray-400 max-w-md">The passion that unites us since 1985. Official club recognized by the Motorcycle Federation.</p>
+        </div>
+        <div>
+          <p class="font-bold uppercase tracking-wider mb-4">Menu</p>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="about.html" class="hover:text-white transition">Heritage</a></li>
+            <li><a href="events.html" class="hover:text-white transition">Events</a></li>
+            <li><a href="gallery.html" class="hover:text-white transition">Gallery</a></li>
+            <li><a href="contact.html" class="hover:text-white transition">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-bold uppercase tracking-wider mb-4">Contact</p>
+          <ul class="space-y-2 text-gray-400">
+            <li>Via Roma 123</li>
+            <li>info@eagleriders.example</li>
+            <li>+39 012 345 6789</li>
+          </ul>
+        </div>
+      </div>
+      <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/10">
+        <p class="text-gray-500 text-sm">© 2026 EagleRiders • Clubs Theme Demo</p>
+        <div class="flex gap-6 mt-4 md:mt-0">
+          <a href="#" class="text-gray-400 hover:text-white transition">Facebook</a>
+          <a href="#" class="text-gray-400 hover:text-white transition">Instagram</a>
+          <a href="#" class="text-gray-400 hover:text-white transition">YouTube</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

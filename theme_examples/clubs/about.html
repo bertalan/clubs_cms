@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heritage - Clubs Theme Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { --red: #C41E3A; --red-hover: #E02547; }
+    body { font-family: system-ui, -apple-system, sans-serif; }
+    .text-red { color: var(--red); }
+    .bg-red { background-color: var(--red); }
+    .nav-link { position: relative; }
+    .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--red); transition: width 0.3s; }
+    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+  </style>
+</head>
+<body class="bg-[#0A0A0A] text-white">
+  <!-- Navbar -->
+  <nav class="fixed w-full bg-[#0A0A0A]/95 backdrop-blur-md z-50 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="index.html" class="text-2xl font-black tracking-tight">EAGLE<span class="text-red">RIDERS</span></a>
+      <div class="hidden md:flex gap-8 text-sm font-semibold uppercase tracking-wider">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link active">Heritage</a>
+        <a href="events.html" class="nav-link">Events</a>
+        <a href="gallery.html" class="nav-link">Gallery</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <a href="contact.html" class="bg-red px-6 py-2 text-sm font-bold uppercase tracking-wider hover:scale-105 transition">Join Us</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="relative h-[60vh] flex items-center justify-center pt-20">
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=1920')] bg-cover bg-center"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/70 to-[#0A0A0A]"></div>
+    <div class="relative z-10 text-center px-6">
+      <p class="text-red font-bold uppercase tracking-[0.3em] mb-4">Our</p>
+      <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tight">Heritage</h1>
+    </div>
+  </section>
+
+  <!-- History -->
+  <section class="py-24">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="mb-16">
+        <p class="text-red font-bold uppercase tracking-[0.2em] mb-4">The History</p>
+        <h2 class="text-3xl md:text-4xl font-black uppercase mb-8">Forty Years of Passion</h2>
+        <p class="text-gray-300 text-lg leading-relaxed mb-6">Born in 1985 from a meeting of five friends united by their passion for two wheels, EagleRiders has grown to become the reference point for motorcyclists in the region. Ours is a story made of roads traveled together, friendships that last a lifetime, values that are passed down.</p>
+        <p class="text-gray-300 text-lg leading-relaxed">Every Sunday morning, for forty years, our members gather to share breakfasts, stories and of course miles. This is the true essence of EagleRiders: an extended family that lives motorcycling not as a means of transport, but as a philosophy of life.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section class="py-24 bg-[#1A1A1A]">
+    <div class="max-w-4xl mx-auto px-6">
+      <p class="text-red font-bold uppercase tracking-[0.2em] mb-4 text-center">Timeline</p>
+      <h2 class="text-3xl md:text-4xl font-black uppercase mb-16 text-center">Key Moments</h2>
+      
+      <div class="space-y-12">
+        <div class="flex gap-8 items-start">
+          <div class="text-right w-24 flex-shrink-0">
+            <p class="text-3xl font-black text-red">1985</p>
+          </div>
+          <div class="w-px bg-red flex-shrink-0"></div>
+          <div class="pb-12">
+            <h3 class="text-xl font-bold mb-2">Founding</h3>
+            <p class="text-gray-400">Five friends found the club in a provincial garage. The first rally counts 12 participants.</p>
+          </div>
+        </div>
+        
+        <div class="flex gap-8 items-start">
+          <div class="text-right w-24 flex-shrink-0">
+            <p class="text-3xl font-black text-red">1995</p>
+          </div>
+          <div class="w-px bg-red flex-shrink-0"></div>
+          <div class="pb-12">
+            <h3 class="text-xl font-bold mb-2">100 Members</h3>
+            <p class="text-gray-400">The club reaches 100 members. The first official headquarters is inaugurated.</p>
+          </div>
+        </div>
+        
+        <div class="flex gap-8 items-start">
+          <div class="text-right w-24 flex-shrink-0">
+            <p class="text-3xl font-black text-red">2005</p>
+          </div>
+          <div class="w-px bg-red flex-shrink-0"></div>
+          <div class="pb-12">
+            <h3 class="text-xl font-bold mb-2">FMI Recognition</h3>
+            <p class="text-gray-400">The Italian Motorcycle Federation officially recognizes the club.</p>
+          </div>
+        </div>
+        
+        <div class="flex gap-8 items-start">
+          <div class="text-right w-24 flex-shrink-0">
+            <p class="text-3xl font-black text-red">2020</p>
+          </div>
+          <div class="w-px bg-red flex-shrink-0"></div>
+          <div>
+            <h3 class="text-xl font-bold mb-2">New Headquarters</h3>
+            <p class="text-gray-400">Inauguration of the new headquarters with museum, social workshop and event hall.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="py-24">
+    <div class="max-w-7xl mx-auto px-6">
+      <p class="text-red font-bold uppercase tracking-[0.2em] mb-4 text-center">Our</p>
+      <h2 class="text-3xl md:text-4xl font-black uppercase mb-16 text-center">Values</h2>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-[#1A1A1A] p-8 border border-white/10 hover:border-red transition">
+          <p class="text-5xl font-black text-red mb-4">01</p>
+          <h3 class="text-xl font-bold uppercase mb-4">Brotherhood</h3>
+          <p class="text-gray-400">A member is never alone. On the road as in life, we support each other.</p>
+        </div>
+        <div class="bg-[#1A1A1A] p-8 border border-white/10 hover:border-red transition">
+          <p class="text-5xl font-black text-red mb-4">02</p>
+          <h3 class="text-xl font-bold uppercase mb-4">Heritage</h3>
+          <p class="text-gray-400">We respect our roots and pass on values to new members.</p>
+        </div>
+        <div class="bg-[#1A1A1A] p-8 border border-white/10 hover:border-red transition">
+          <p class="text-5xl font-black text-red mb-4">03</p>
+          <h3 class="text-xl font-bold uppercase mb-4">Passion</h3>
+          <p class="text-gray-400">Motorcycling is not a hobby, it's a lifestyle we share every day.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Board -->
+  <section class="py-24 bg-[#1A1A1A]">
+    <div class="max-w-7xl mx-auto px-6">
+      <p class="text-red font-bold uppercase tracking-[0.2em] mb-4 text-center">The</p>
+      <h2 class="text-3xl md:text-4xl font-black uppercase mb-16 text-center">Board</h2>
+      
+      <div class="grid md:grid-cols-4 gap-8">
+        <div class="text-center">
+          <div class="w-32 h-32 bg-[#0A0A0A] rounded-full mx-auto mb-4"></div>
+          <h3 class="font-bold">Marco Rossi</h3>
+          <p class="text-gray-400 text-sm uppercase tracking-wider">President</p>
+        </div>
+        <div class="text-center">
+          <div class="w-32 h-32 bg-[#0A0A0A] rounded-full mx-auto mb-4"></div>
+          <h3 class="font-bold">Lucia Bianchi</h3>
+          <p class="text-gray-400 text-sm uppercase tracking-wider">Vice President</p>
+        </div>
+        <div class="text-center">
+          <div class="w-32 h-32 bg-[#0A0A0A] rounded-full mx-auto mb-4"></div>
+          <h3 class="font-bold">Paolo Verdi</h3>
+          <p class="text-gray-400 text-sm uppercase tracking-wider">Secretary</p>
+        </div>
+        <div class="text-center">
+          <div class="w-32 h-32 bg-[#0A0A0A] rounded-full mx-auto mb-4"></div>
+          <h3 class="font-bold">Anna Neri</h3>
+          <p class="text-gray-400 text-sm uppercase tracking-wider">Treasurer</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#0A0A0A] border-t border-white/10 py-16">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <p class="text-2xl font-black">EAGLE<span class="text-red">RIDERS</span></p>
+        <div class="flex gap-8 mt-6 md:mt-0 text-sm text-gray-400">
+          <a href="index.html" class="hover:text-white transition">Home</a>
+          <a href="events.html" class="hover:text-white transition">Events</a>
+          <a href="gallery.html" class="hover:text-white transition">Gallery</a>
+          <a href="contact.html" class="hover:text-white transition">Contact</a>
+        </div>
+      </div>
+      <div class="mt-8 pt-8 border-t border-white/10 text-center text-gray-500 text-sm">
+        © 2026 EagleRiders • Clubs Theme Demo
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

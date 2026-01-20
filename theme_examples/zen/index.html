@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - Zen Theme Demo</title>
+  <style>
+    :root { 
+      --ink: #0a0a0a; 
+      --paper: #ffffff; 
+      --gray: #f5f5f5;
+      --pop: #FF3366;
+      --pop-yellow: #FFD700;
+      --pop-blue: #00BFFF;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--gray); color: var(--ink); line-height: 1.6; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    a { color: var(--ink); }
+    
+    /* === COMIC PANEL STYLES === */
+    .panel {
+      background: var(--paper);
+      border: 3px solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      position: relative;
+    }
+    .panel-pop { border-color: var(--pop); box-shadow: 6px 6px 0 var(--pop); }
+    
+    /* Halftone pattern */
+    .halftone {
+      background-image: radial-gradient(var(--ink) 1px, transparent 1px);
+      background-size: 4px 4px;
+    }
+    
+    /* Speed lines */
+    .speed-lines {
+      background: repeating-linear-gradient(
+        90deg, transparent, transparent 10px, 
+        rgba(0,0,0,0.03) 10px, rgba(0,0,0,0.03) 12px
+      );
+    }
+    
+    /* === NAV === */
+    nav { 
+      background: var(--ink); color: var(--paper); padding: 1rem 0; 
+      border-bottom: 4px solid var(--pop);
+    }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav a { color: var(--paper); text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.85rem; }
+    nav a:hover, nav a.active { color: var(--pop); }
+    .logo { font-weight: 900; font-size: 1.3rem; text-decoration: none; color: var(--paper); letter-spacing: -0.02em; }
+    .logo span { color: var(--pop); }
+    
+    /* === HERO COMIC PANEL === */
+    .hero { padding: 4rem 0; }
+    .hero-panel {
+      background: var(--paper); border: 4px solid var(--ink);
+      box-shadow: 10px 10px 0 var(--ink);
+      padding: 4rem 3rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero-panel::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(0,0,0,0.02) 20px, rgba(0,0,0,0.02) 22px);
+      pointer-events: none;
+    }
+    .speech-bubble {
+      display: inline-block; background: var(--pop-yellow); color: var(--ink);
+      padding: 0.4rem 1rem; font-size: 0.75rem; font-weight: 700; 
+      text-transform: uppercase; letter-spacing: 0.1em;
+      border: 2px solid var(--ink); border-radius: 20px;
+      margin-bottom: 1.5rem; position: relative;
+    }
+    .hero h1 { 
+      font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; 
+      line-height: 1.1; margin-bottom: 1rem; letter-spacing: -0.03em;
+      text-transform: uppercase;
+    }
+    .hero h1 .pop { color: var(--pop); }
+    .hero p { max-width: 500px; margin: 0 auto 2rem; color: #333; font-size: 1.1rem; }
+    .btn-comic {
+      display: inline-block; padding: 1rem 2.5rem; background: var(--ink); color: var(--paper);
+      text-decoration: none; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
+      border: 3px solid var(--ink); transition: all 0.2s;
+    }
+    .btn-comic:hover { background: var(--pop); border-color: var(--pop); transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--ink); }
+    
+    /* === STATS PANELS === */
+    .stats { padding: 3rem 0; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    @media (max-width: 600px) { .stats-grid { grid-template-columns: 1fr; } }
+    .stat-panel {
+      background: var(--paper); border: 3px solid var(--ink);
+      box-shadow: 5px 5px 0 var(--ink); padding: 2rem; text-align: center;
+      transition: transform 0.2s;
+    }
+    .stat-panel:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 var(--ink); }
+    .stat-panel:nth-child(2) { background: var(--pop); color: var(--paper); border-color: var(--ink); }
+    .stat-panel h3 { font-size: 3rem; font-weight: 900; line-height: 1; }
+    .stat-panel p { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; margin-top: 0.5rem; }
+    
+    /* === EVENTS MANGA STRIP === */
+    .events { padding: 3rem 0; }
+    .section-title {
+      font-size: 1.8rem; font-weight: 900; text-transform: uppercase;
+      margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;
+    }
+    .section-title::after { content: ''; flex: 1; height: 4px; background: var(--ink); }
+    .manga-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    @media (max-width: 700px) { .manga-strip { grid-template-columns: 1fr; } }
+    .manga-panel {
+      background: var(--paper); border: 3px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink); padding: 1.5rem;
+      position: relative; transition: all 0.2s;
+    }
+    .manga-panel:hover { transform: rotate(-1deg) scale(1.02); z-index: 10; }
+    .manga-panel::before {
+      content: attr(data-num); position: absolute; top: -12px; left: 15px;
+      background: var(--ink); color: var(--paper); width: 24px; height: 24px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700;
+    }
+    .manga-date {
+      display: inline-block; background: var(--pop-yellow); color: var(--ink);
+      padding: 0.2rem 0.5rem; font-size: 0.7rem; font-weight: 700;
+      border: 2px solid var(--ink); margin-bottom: 0.75rem;
+    }
+    .manga-panel h3 { font-weight: 800; font-size: 1rem; margin-bottom: 0.5rem; }
+    .manga-panel p { font-size: 0.85rem; color: #444; }
+    .manga-panel .action { 
+      display: inline-block; margin-top: 1rem; font-weight: 700; 
+      color: var(--pop); text-decoration: none; font-size: 0.85rem;
+    }
+    .manga-panel .action:hover { text-decoration: underline; }
+    
+    /* === CTA BURST === */
+    .cta { padding: 3rem 0; }
+    .burst-panel {
+      background: var(--pop); border: 4px solid var(--ink);
+      box-shadow: 8px 8px 0 var(--ink); padding: 3rem; text-align: center;
+      position: relative;
+    }
+    .burst-panel h2 { font-size: 2rem; font-weight: 900; text-transform: uppercase; color: var(--paper); }
+    .burst-panel p { color: rgba(255,255,255,0.9); margin: 1rem 0 1.5rem; }
+    .btn-light {
+      display: inline-block; padding: 0.8rem 2rem; background: var(--paper); color: var(--ink);
+      text-decoration: none; font-weight: 800; text-transform: uppercase;
+      border: 3px solid var(--ink);
+    }
+    .btn-light:hover { background: var(--pop-yellow); }
+    
+    /* === FOOTER === */
+    footer { background: var(--ink); color: var(--paper); padding: 2.5rem 0; text-align: center; }
+    footer a { color: var(--paper); text-decoration: none; margin: 0 1rem; font-size: 0.9rem; }
+    footer a:hover { color: var(--pop); }
+    footer .copy { margin-top: 1rem; font-size: 0.8rem; opacity: 0.6; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <a href="index.html" class="logo">MIND<span>FUL</span></a>
+      <ul>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-panel">
+        <span class="speech-bubble">✦ Since 2018</span>
+        <h1>Less, But <span class="pop">Better</span></h1>
+        <p>A community focused on intentional living, mindful practices, and meaningful connections.</p>
+        <a href="about.html" class="btn-comic">Discover More</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-panel">
+          <h3>120</h3>
+          <p>Members</p>
+        </div>
+        <div class="stat-panel">
+          <h3>8</h3>
+          <p>Years</p>
+        </div>
+        <div class="stat-panel">
+          <h3>24</h3>
+          <p>Sessions/Year</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="events">
+    <div class="container">
+      <h2 class="section-title">Upcoming</h2>
+      <div class="manga-strip">
+        <div class="manga-panel" data-num="01">
+          <span class="manga-date">March 15</span>
+          <h3>Mindfulness Workshop</h3>
+          <p>Introduction to daily mindfulness practices.</p>
+          <a href="events.html" class="action">Join →</a>
+        </div>
+        <div class="manga-panel" data-num="02">
+          <span class="manga-date">March 28</span>
+          <h3>Silent Retreat</h3>
+          <p>A day of quiet reflection and renewal.</p>
+          <a href="events.html" class="action">Reserve →</a>
+        </div>
+        <div class="manga-panel" data-num="03">
+          <span class="manga-date">April 12</span>
+          <h3>Discussion Circle</h3>
+          <p>Monthly gathering for meaningful dialogue.</p>
+          <a href="events.html" class="action">Learn →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <div class="burst-panel">
+        <h2>Ready to Begin?</h2>
+        <p>Join our community of mindful practitioners.</p>
+        <a href="contact.html" class="btn-light">Get Started</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div>
+        <a href="about.html">About</a>
+        <a href="events.html">Events</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <p class="copy">© 2026 Mindful • Zen Comic Theme</p>
+    </div>
+  </footer>
+</body>
+</html>
