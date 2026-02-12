@@ -10,12 +10,8 @@ Provides forms for:
 """
 
 from django import forms
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
-
-
-def _get_user_model():
-    from apps.members.models import ClubUser
-    return ClubUser
 
 
 # ---------------------------------------------------------------------------
@@ -94,7 +90,7 @@ except ImportError:
         )
 
         class Meta:
-            model = None  # set dynamically
+            model = get_user_model()
             fields = (
                 "username",
                 "email",
@@ -104,11 +100,6 @@ except ImportError:
                 "password1",
                 "password2",
             )
-
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            if self.Meta.model is None:
-                self.Meta.model = _get_user_model()
 
         def save(self, commit=True):
             user = super().save(commit=False)
@@ -130,7 +121,7 @@ class ProfileForm(forms.ModelForm):
     """Form for editing personal data and address fields."""
 
     class Meta:
-        model = None  # set dynamically
+        model = get_user_model()
         fields = [
             "first_name",
             "last_name",
@@ -158,11 +149,6 @@ class ProfileForm(forms.ModelForm):
             "country": forms.TextInput(attrs={"maxlength": 2}),
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.Meta.model is None:
-            self.Meta.model = _get_user_model()
-
 
 # ---------------------------------------------------------------------------
 # 3. Privacy Settings Form
@@ -172,7 +158,7 @@ class PrivacySettingsForm(forms.ModelForm):
     """Form for privacy and directory visibility preferences."""
 
     class Meta:
-        model = None  # set dynamically
+        model = get_user_model()
         fields = [
             "show_in_directory",
             "public_profile",
@@ -182,8 +168,6 @@ class PrivacySettingsForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.Meta.model is None:
-            self.Meta.model = _get_user_model()
         self.fields["show_in_directory"].label = _("Show me in the member directory")
         self.fields["public_profile"].label = _("Make my profile public")
         self.fields["show_real_name_to_members"].label = _(
@@ -200,7 +184,7 @@ class NotificationPreferencesForm(forms.ModelForm):
     """Form for email/push notification toggles and digest frequency."""
 
     class Meta:
-        model = None  # set dynamically
+        model = get_user_model()
         fields = [
             "email_notifications",
             "push_notifications",
@@ -217,8 +201,6 @@ class NotificationPreferencesForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.Meta.model is None:
-            self.Meta.model = _get_user_model()
         self.fields["email_notifications"].label = _("Email notifications")
         self.fields["push_notifications"].label = _("Push notifications")
         self.fields["news_updates"].label = _("News updates")
@@ -240,7 +222,7 @@ class AidAvailabilityForm(forms.ModelForm):
     """Form for mutual-aid availability settings."""
 
     class Meta:
-        model = None  # set dynamically
+        model = get_user_model()
         fields = [
             "aid_available",
             "aid_radius_km",
@@ -257,8 +239,6 @@ class AidAvailabilityForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.Meta.model is None:
-            self.Meta.model = _get_user_model()
         self.fields["aid_available"].label = _("I am available for mutual aid")
         self.fields["aid_radius_km"].label = _("Radius (km)")
         self.fields["aid_location_city"].label = _("City")

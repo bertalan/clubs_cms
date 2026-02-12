@@ -22,7 +22,7 @@
                 <tr>
                     <td>
                         {% if member.public_profile %}
-                        <a href="{% url 'account:public_profile' username=member.username %}">
+                        <a href="{% url 'public_profile' username=member.username %}">
                             {{ member.visible_name }}
                         </a>
                         {% else %}
