@@ -1,0 +1,17 @@
+{% load wagtailimages_tags %}
+
+<div class="block-team-member">
+    {% if self.photo %}
+        {% image self.photo fill-300x300 as member_img %}
+        <div class="block-team-member__photo">
+            <img src="{{ member_img.url }}" alt="{{ self.name }}" loading="lazy" width="{{ member_img.width }}" height="{{ member_img.height }}">
+        </div>
+    {% endif %}
+    <h3 class="block-team-member__name">{{ self.name }}</h3>
+    {% if self.role %}
+    <p class="block-team-member__role">{{ self.role }}</p>
+    {% endif %}
+    {% if self.bio %}
+    <div class="block-team-member__bio">{{ self.bio }}</div>
+    {% endif %}
+</div>

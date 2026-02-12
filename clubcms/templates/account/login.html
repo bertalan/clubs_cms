@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Log in" %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h1>{% trans "Welcome back" %}</h1>
+        <p class="auth-subtitle">
+            {% trans "Log in to access your profile, events, and club features." %}
+        </p>
+
+        <form method="post" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group {% if field.errors %}has-error{% endif %}">
+                <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                    {% if field.field.required %}<span class="required" aria-hidden="true">*</span>{% endif %}
+                </label>
+                {{ field }}
+                {% for error in field.errors %}
+                <span class="form-error" role="alert">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+            {% endif %}
+            <button type="submit" class="btn btn-primary btn-block">
+                {% trans "Log in" %}
+            </button>
+        </form>
+
+        <p class="auth-switch">
+            <a href="{% url 'account_reset_password' %}">{% trans "Forgot your password?" %}</a>
+        </p>
+        <p class="auth-switch">
+            {% trans "Don't have an account?" %}
+            <a href="{% url 'account_signup' %}">{% trans "Sign up" %}</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

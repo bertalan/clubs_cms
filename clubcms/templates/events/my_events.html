@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "My Favorite Events" %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{% trans "My Favorite Events" %}</h1>
+
+    <nav class="subnav">
+        <a href="{% url 'events:my_events' %}" class="active">{% trans "Upcoming" %}</a>
+        <a href="{% url 'events:my_events_archive' %}">{% trans "Archive" %}</a>
+        <a href="{% url 'events:my_registrations' %}">{% trans "My Registrations" %}</a>
+    </nav>
+
+    <!-- Map placeholder -->
+    <div class="map-placeholder" id="events-map" aria-label="{% trans 'Events map' %}">
+        <p class="text-muted">{% trans "Map view of your favorite events" %}</p>
+    </div>
+
+    {% if favorites %}
+    <ul class="event-list">
+        {% for fav in favorites %}
+        <li class="event-card">
+            <h3>
+                <a href="{{ fav.event.url }}">{{ fav.event.title }}</a>
+            </h3>
+            <p class="event-date">{{ fav.event.start_date }}</p>
+
+            {% if fav.event.location_name %}
+            <p class="event-location">{{ fav.event.location_name }}</p>
+            {% endif %}
+
+            <div class="event-actions">
+                <form method="post" action="{% url 'events:toggle_favorite' fav.event.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline" title="{% trans 'Remove from favorites' %}">
+                        {% trans "Remove" %}
+                    </button>
+                </form>
+
+                <a href="{% url 'events:event_ics' fav.event.pk %}" class="btn btn-sm btn-outline"
+                   title="{% trans 'Download calendar file' %}">
+                    {% trans "ICS" %}
+                </a>
+
+                {% if fav.event.is_registration_open %}
+                <a href="{% url 'events:register' fav.event.pk %}" class="btn btn-sm btn-primary">
+                    {% trans "Register" %}
+                </a>
+                {% endif %}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% if is_paginated %}
+    <nav class="pagination" aria-label="{% trans 'Pagination' %}">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a>
+        {% endif %}
+        <span>{% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}</span>
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
+        {% endif %}
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <p>{% trans "You have not added any events to your favorites yet." %}</p>
+    {% endif %}
+</div>
+{% endblock %}

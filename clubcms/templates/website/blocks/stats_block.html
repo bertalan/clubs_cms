@@ -1,0 +1,17 @@
+{% load wagtailcore_tags %}
+
+<section class="block-stats">
+    <div class="container">
+        {% if self.title %}
+        <h2 class="block-stats__title">{{ self.title }}</h2>
+        {% endif %}
+        <div class="block-stats__grid">
+            {% for stat in self.stats %}
+            <div class="block-stats__item">
+                <span class="block-stats__value">{{ stat.value.value }}</span>
+                <span class="block-stats__label">{{ stat.value.label }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

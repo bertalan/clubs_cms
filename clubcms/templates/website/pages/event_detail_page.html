@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}page-event-detail{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<article class="page-event-detail" itemscope itemtype="https://schema.org/Event">
+    <div class="container">
+        {# Cover image #}
+        {% if page.cover_image %}
+        <div class="page-event-detail__cover">
+            {% image page.cover_image fill-1200x500 as cover_img %}
+            <img src="{{ cover_img.url }}" alt="{{ page.title }}" class="page-event-detail__cover-image" itemprop="image" width="{{ cover_img.width }}" height="{{ cover_img.height }}">
+            {% if page.is_past %}
+            <span class="page-event-detail__badge" data-variant="past">Past Event</span>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {# Header #}
+        <header class="page-event-detail__header">
+            {% if page.category %}
+            <span class="page-event-detail__category">{{ page.category.name }}</span>
+            {% endif %}
+
+            <h1 class="page-event-detail__title" itemprop="name">{{ page.title }}</h1>
+
+            {% if page.intro %}
+            <p class="page-event-detail__intro" itemprop="description">{{ page.intro }}</p>
+            {% endif %}
+        </header>
+
+        <div class="page-event-detail__layout">
+            {# Main content #}
+            <div class="page-event-detail__main">
+                {# Body StreamField #}
+                {% if page.body %}
+                <div class="page-event-detail__body">
+                    {% for block in page.body %}
+                        {% include_block block %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            {# Sidebar with event details #}
+            <aside class="page-event-detail__sidebar">
+                <div class="page-event-detail__info-card">
+                    <h2 class="page-event-detail__info-heading">Event Details</h2>
+
+                    {# Date and time #}
+                    <div class="page-event-detail__info-item">
+                        <span class="page-event-detail__info-label">Date</span>
+                        <div class="page-event-detail__info-value">
+                            <time datetime="{{ page.start_date|date:'c' }}" itemprop="startDate">
+                                {{ page.start_date|date:"l, F j, Y" }}
+                                <br>{{ page.start_date|date:"g:i A" }}
+                            </time>
+                            {% if page.end_date %}
+                            <span class="page-event-detail__info-separator">to</span>
+                            <time datetime="{{ page.end_date|date:'c' }}" itemprop="endDate">
+                                {% if page.end_date|date:"Y-m-d" != page.start_date|date:"Y-m-d" %}
+                                    {{ page.end_date|date:"l, F j, Y" }}
+                                {% endif %}
+                                {{ page.end_date|date:"g:i A" }}
+                            </time>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {# Location #}
+                    {% if page.location_name %}
+                    <div class="page-event-detail__info-item" itemprop="location" itemscope itemtype="https://schema.org/Place">
+                        <span class="page-event-detail__info-label">Location</span>
+                        <div class="page-event-detail__info-value">
+                            <span itemprop="name">{{ page.location_name }}</span>
+                            {% if page.location_address %}
+                            <br>
+                            <span class="page-event-detail__address" itemprop="address">{{ page.location_address }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {# Pricing #}
+                    {% if page.base_fee %}
+                    <div class="page-event-detail__info-item">
+                        <span class="page-event-detail__info-label">Price</span>
+                        <div class="page-event-detail__info-value">
+                            <span class="page-event-detail__price">{{ page.current_price }} &euro;</span>
+                            {% if page.early_bird_discount and page.early_bird_deadline %}
+                                <br>
+                                <small class="page-event-detail__early-bird">
+                                    Early bird: -{{ page.early_bird_discount }}%
+                                    (until {{ page.early_bird_deadline|date:"M j" }})
+                                </small>
+                            {% endif %}
+                            {% if page.member_discount_percent %}
+                                <br>
+                                <small class="page-event-detail__member-discount">
+                                    Members: {{ page.member_price }} &euro;
+                                    (-{{ page.member_discount_percent }}%)
+                                </small>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {# Registration status #}
+                    <div class="page-event-detail__info-item">
+                        <span class="page-event-detail__info-label">Registration</span>
+                        <div class="page-event-detail__info-value">
+                            {% if page.is_past %}
+                                <span class="page-event-detail__status" data-status="past">Event has ended</span>
+                            {% elif page.is_registration_open %}
+                                <span class="page-event-detail__status" data-status="open">Open</span>
+                                {% if page.spots_remaining is not None %}
+                                    <br>
+                                    <small class="page-event-detail__spots">{{ page.spots_remaining }} spot{{ page.spots_remaining|pluralize }} remaining</small>
+                                {% endif %}
+                                {% if page.registration_deadline %}
+                                    <br>
+                                    <small class="page-event-detail__deadline">
+                                        Deadline: {{ page.registration_deadline|date:"M j, Y - g:i A" }}
+                                    </small>
+                                {% endif %}
+                            {% else %}
+                                <span class="page-event-detail__status" data-status="closed">Closed</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {# Attendees count #}
+                    {% if page.confirmed_count %}
+                    <div class="page-event-detail__info-item">
+                        <span class="page-event-detail__info-label">Confirmed</span>
+                        <div class="page-event-detail__info-value">
+                            {{ page.confirmed_count }} attendee{{ page.confirmed_count|pluralize }}
+                            {% if page.max_attendees %}
+                                / {{ page.max_attendees }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {# Register button #}
+                    {% if page.is_registration_open and not page.is_past %}
+                    <div class="page-event-detail__register">
+                        <a href="{% url 'events:register' event_pk=page.pk %}" class="btn btn-primary">
+                            Register Now
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {# Tags #}
+                {% with tags=page.tags.all %}
+                {% if tags %}
+                <div class="page-event-detail__tags" aria-label="Tags">
+                    <span class="page-event-detail__tags-label">Tags:</span>
+                    <ul class="page-event-detail__tags-list">
+                        {% for tag in tags %}
+                        <li class="page-event-detail__tags-item">
+                            <a href="{{ page.get_parent.url }}?tag={{ tag.slug }}" class="page-event-detail__tag">{{ tag }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                {% endwith %}
+            </aside>
+        </div>
+    </div>
+</article>
+{% endblock %}

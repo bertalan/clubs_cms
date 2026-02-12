@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Unsubscribe" %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin: 4rem auto; padding: 2rem;">
+    {% if valid %}
+        <h1>{% trans "Unsubscribe from notifications" %}</h1>
+
+        <p>
+            {% blocktrans with email=masked_email type=notification_type_display %}
+            You are about to unsubscribe <strong>{{ email }}</strong> from
+            <strong>{{ type }}</strong> notifications.
+            {% endblocktrans %}
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">
+                {% trans "Confirm unsubscribe" %}
+            </button>
+        </form>
+
+        <p style="margin-top: 1rem; font-size: 0.875rem; color: #666;">
+            {% trans "You can re-enable notifications at any time from your account settings." %}
+        </p>
+    {% else %}
+        <h1>{% trans "Invalid link" %}</h1>
+        <p>
+            {% trans "This unsubscribe link is invalid or has expired. Please check the link and try again, or manage your preferences from your account settings." %}
+        </p>
+    {% endif %}
+</div>
+{% endblock %}

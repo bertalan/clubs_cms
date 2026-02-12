@@ -1,0 +1,88 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% with event=self.event.specific %}
+<section class="block-hero-countdown" aria-label="Event countdown">
+    {% if self.background_image %}
+        {% image self.background_image fill-1920x700 as bg_img %}
+        <img src="{{ bg_img.url }}" alt="" loading="eager" width="{{ bg_img.width }}" height="{{ bg_img.height }}">
+    {% endif %}
+    <div class="container">
+        <div class="block-hero-countdown__content">
+            <h2>
+                {% if self.title_override %}
+                    {{ self.title_override }}
+                {% else %}
+                    {{ event.title }}
+                {% endif %}
+            </h2>
+
+            {% if event.start_date %}
+            <div class="block-hero-countdown__timer" data-countdown="{{ event.start_date|date:'c' }}" aria-label="Countdown to event">
+                <div class="block-hero-countdown__unit">
+                    <span class="block-hero-countdown__value" data-days>--</span>
+                    <span class="block-hero-countdown__label">Days</span>
+                </div>
+                <div class="block-hero-countdown__unit">
+                    <span class="block-hero-countdown__value" data-hours>--</span>
+                    <span class="block-hero-countdown__label">Hours</span>
+                </div>
+                <div class="block-hero-countdown__unit">
+                    <span class="block-hero-countdown__value" data-minutes>--</span>
+                    <span class="block-hero-countdown__label">Minutes</span>
+                </div>
+                <div class="block-hero-countdown__unit">
+                    <span class="block-hero-countdown__value" data-seconds>--</span>
+                    <span class="block-hero-countdown__label">Seconds</span>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if event.location_name %}
+            <p>{{ event.location_name }}</p>
+            {% endif %}
+
+            {% if event.start_date %}
+            <p>
+                <time datetime="{{ event.start_date|date:'c' }}">{{ event.start_date|date:"F j, Y - g:i A" }}</time>
+            </p>
+            {% endif %}
+
+            {% if self.show_registration_button and event.is_registration_open %}
+            <a href="{% pageurl event %}" class="btn btn-primary">Register Now</a>
+            {% else %}
+            <a href="{% pageurl event %}" class="btn btn-outline-light">View Details</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endwith %}
+
+<script>
+(function() {
+    var timers = document.querySelectorAll('[data-countdown]');
+    timers.forEach(function(timer) {
+        var target = new Date(timer.getAttribute('data-countdown')).getTime();
+        var interval = setInterval(function() {
+            var now = new Date().getTime();
+            var diff = target - now;
+            if (diff < 0) {
+                clearInterval(interval);
+                timer.innerHTML = '<p>Event has started!</p>';
+                return;
+            }
+            var d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            var h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            var s = Math.floor((diff % (1000 * 60)) / 1000);
+            var days = timer.querySelector('[data-days]');
+            var hours = timer.querySelector('[data-hours]');
+            var minutes = timer.querySelector('[data-minutes]');
+            var seconds = timer.querySelector('[data-seconds]');
+            if (days) days.textContent = d;
+            if (hours) hours.textContent = h;
+            if (minutes) minutes.textContent = m;
+            if (seconds) seconds.textContent = s;
+        }, 1000);
+    });
+})();
+</script>

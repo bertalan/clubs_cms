@@ -1,0 +1,21 @@
+{% extends "notifications/emails/base.html" %}
+
+{% block email_title %}{{ notification.title }} | {{ site_name }}{% endblock %}
+
+{% block email_body %}
+<h2 style="font-size: 22px; margin-bottom: 16px; color: #1a1a2e;">
+    {{ notification.title }}
+</h2>
+
+<p style="margin-bottom: 16px; color: #333333;">
+    {{ notification.body|linebreaksbr }}
+</p>
+
+{% if notification.url %}
+<p style="text-align: center;">
+    <a href="{{ base_url }}{{ notification.url }}" class="btn">
+        View details
+    </a>
+</p>
+{% endif %}
+{% endblock %}

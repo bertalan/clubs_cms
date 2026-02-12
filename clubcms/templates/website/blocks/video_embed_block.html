@@ -1,0 +1,8 @@
+<figure class="block-video-embed">
+    <div class="block-video-embed__wrapper">
+        {{ self.video }}
+    </div>
+    {% if self.caption %}
+    <figcaption class="block-video-embed__caption">{{ self.caption }}</figcaption>
+    {% endif %}
+</figure>

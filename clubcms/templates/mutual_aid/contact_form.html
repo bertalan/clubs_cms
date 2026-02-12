@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Request Help" %} - {{ helper.get_visible_name }} | {% trans "Mutual Aid" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contact-form-page {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+    .contact-form-page .breadcrumb {
+        margin-bottom: 1.5rem;
+        font-size: 0.875rem;
+    }
+    .contact-form-page .breadcrumb a {
+        color: var(--color-primary, #1e40af);
+        text-decoration: none;
+    }
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.375rem;
+        font-size: 0.9rem;
+    }
+    .form-control {
+        width: 100%;
+        padding: 0.625rem 0.75rem;
+        border: 1px solid var(--color-border, #ccc);
+        border-radius: 0.375rem;
+        font-size: 0.9rem;
+    }
+    .form-control:focus {
+        outline: none;
+        border-color: var(--color-primary, #1e40af);
+        box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.2);
+    }
+    .form-errors {
+        color: #dc2626;
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+    }
+    .helper-summary {
+        background: var(--color-bg-secondary, #f8f9fa);
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .helper-summary h3 {
+        margin: 0 0 0.25rem 0;
+        font-size: 1rem;
+    }
+    .helper-summary .meta {
+        font-size: 0.85rem;
+        color: var(--color-text-muted, #6b7280);
+    }
+    .btn-primary {
+        display: inline-block;
+        padding: 0.75rem 2rem;
+        background: var(--color-primary, #1e40af);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 0.375rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+    .btn-secondary {
+        display: inline-block;
+        padding: 0.75rem 2rem;
+        background: transparent;
+        color: var(--color-text, #1f2937);
+        text-decoration: none;
+        border-radius: 0.375rem;
+        font-size: 0.9rem;
+        border: 1px solid var(--color-border, #ccc);
+    }
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="contact-form-page">
+    <nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
+        <a href="{% url 'mutual_aid:map' %}">{% trans "Mutual Aid" %}</a>
+        &rsaquo;
+        <a href="{% url 'mutual_aid:helper_detail' pk=helper.pk %}">{{ helper.get_visible_name }}</a>
+        &rsaquo;
+        <span>{% trans "Request Help" %}</span>
+    </nav>
+
+    <h1>{% trans "Request Help" %}</h1>
+
+    <div class="helper-summary">
+        <h3>{% trans "Sending request to:" %} {{ helper.get_visible_name }}</h3>
+        <div class="meta">{{ helper.aid_location_city }} - {{ helper.aid_radius_km }} km {% trans "radius" %}</div>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <small style="color: var(--color-text-muted, #6b7280); font-size: 0.8rem;">
+                        {{ field.help_text }}
+                    </small>
+                {% endif %}
+                {% if field.errors %}
+                    <div class="form-errors">
+                        {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        {% if form.non_field_errors %}
+            <div class="form-errors" style="margin-bottom: 1rem;">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">{% trans "Send Request" %}</button>
+            <a href="{% url 'mutual_aid:helper_detail' pk=helper.pk %}" class="btn-secondary">{% trans "Cancel" %}</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

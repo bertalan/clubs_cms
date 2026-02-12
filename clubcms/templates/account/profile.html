@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "My Profile" %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{% trans "My Profile" %}</h1>
+
+    {% if form.errors %}
+    <div class="alert alert-error" role="alert">
+        <p>{% trans "Please correct the errors below." %}</p>
+    </div>
+    {% endif %}
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        <fieldset>
+            <legend>{% trans "Personal Information" %}</legend>
+            {% for field in form %}
+                {% if field.name in "first_name,last_name,display_name,phone,mobile,birth_date,birth_place,bio" %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                    <small class="form-help">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% if field.errors %}
+                    <ul class="form-errors">
+                        {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                {% endif %}
+            {% endfor %}
+        </fieldset>
+
+        <fieldset>
+            <legend>{% trans "Address" %}</legend>
+            {% for field in form %}
+                {% if field.name in "address,city,province,postal_code,country" %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                    <ul class="form-errors">
+                        {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                {% endif %}
+            {% endfor %}
+        </fieldset>
+
+        <button type="submit" class="btn btn-primary">{% trans "Save Profile" %}</button>
+    </form>
+</div>
+{% endblock %}

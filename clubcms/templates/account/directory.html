@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Member Directory" %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{% trans "Member Directory" %}</h1>
+
+    {% if members %}
+    <div class="member-directory">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "City" %}</th>
+                    <th>{% trans "Member since" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in members %}
+                <tr>
+                    <td>
+                        {% if member.public_profile %}
+                        <a href="{% url 'account:public_profile' username=member.username %}">
+                            {{ member.visible_name }}
+                        </a>
+                        {% else %}
+                            {{ member.visible_name }}
+                        {% endif %}
+                    </td>
+                    <td>{{ member.city }}</td>
+                    <td>{{ member.membership_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if is_paginated %}
+    <nav class="pagination" aria-label="{% trans 'Pagination' %}">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-secondary">
+            {% trans "Previous" %}
+        </a>
+        {% endif %}
+
+        <span class="page-info">
+            {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}
+                Page {{ current }} of {{ total }}
+            {% endblocktrans %}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="btn btn-secondary">
+            {% trans "Next" %}
+        </a>
+        {% endif %}
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <div class="alert alert-info">
+        <p>{% trans "No members are currently visible in the directory." %}</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

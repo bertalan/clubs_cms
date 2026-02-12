@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Notification history" %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 2rem auto; padding: 1rem;">
+    <h1>{% trans "Notification history" %}</h1>
+
+    {% if notifications %}
+        <ul class="notification-list" style="list-style: none; padding: 0;">
+            {% for notification in notifications %}
+            <li class="notification-item" data-pk="{{ notification.pk }}"
+                style="border-bottom: 1px solid #eee; padding: 1rem 0;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <strong>{{ notification.title }}</strong>
+                        <span class="badge" style="font-size: 0.75rem; background: #e2e8f0; padding: 0.15rem 0.5rem; border-radius: 4px; margin-left: 0.5rem;">
+                            {{ notification.get_channel_display }}
+                        </span>
+                        <p style="margin: 0.25rem 0; color: #555;">{{ notification.body|truncatewords:30 }}</p>
+                        {% if notification.url %}
+                            <a href="{{ notification.url }}" style="font-size: 0.875rem;">{% trans "View" %} &rarr;</a>
+                        {% endif %}
+                    </div>
+                    <time style="font-size: 0.8rem; color: #888; white-space: nowrap; margin-left: 1rem;"
+                          datetime="{{ notification.sent_at|date:'c' }}">
+                        {{ notification.sent_at|timesince }} {% trans "ago" %}
+                    </time>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+
+        {# Pagination #}
+        {% if is_paginated %}
+        <nav aria-label="{% trans 'Pagination' %}" style="margin-top: 2rem; text-align: center;">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">&laquo; {% trans "Previous" %}</a>
+            {% endif %}
+
+            <span style="margin: 0 1rem;">
+                {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}
+                Page {{ current }} of {{ total }}
+                {% endblocktrans %}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">{% trans "Next" %} &raquo;</a>
+            {% endif %}
+        </nav>
+        {% endif %}
+
+    {% else %}
+        <p style="color: #888; margin-top: 2rem;">
+            {% trans "No notifications yet." %}
+        </p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+<div class="block-document">
+    <a href="{{ self.document.url }}" download>
+        <span class="block-document__icon" aria-hidden="true"></span>
+        <span class="block-document__info">
+            <span class="block-document__name">{{ self.document.title }}</span>
+        </span>
+    </a>
+    {% if self.description %}
+    <p class="block-document__desc">{{ self.description }}</p>
+    {% endif %}
+</div>

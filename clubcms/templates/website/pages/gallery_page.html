@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}page-gallery{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<div class="page-gallery">
+    <div class="container">
+        {# Header #}
+        <header class="page-gallery__header">
+            <h1 class="page-gallery__title">{{ page.title }}</h1>
+            {% if page.intro %}
+            <div class="page-gallery__intro">
+                {{ page.intro|richtext }}
+            </div>
+            {% endif %}
+        </header>
+
+        {% if album %}
+            {# Album detail view #}
+            <div class="page-gallery__album-detail">
+                <nav class="page-gallery__back" aria-label="Back to albums">
+                    <a href="{% pageurl page %}" class="page-gallery__back-link">&laquo; Back to albums</a>
+                </nav>
+
+                <h2 class="page-gallery__album-title">{{ album.name }}</h2>
+
+                {% if photos %}
+                <div class="page-gallery__photos" data-lightbox="gallery">
+                    {% for photo in photos %}
+                    <figure class="page-gallery__photo">
+                        {% image photo fill-300x300 as thumb %}
+                        {% image photo max-1600x1200 as full %}
+                        <a href="{{ full.url }}" class="page-gallery__photo-link" data-lightbox-src="{{ full.url }}" data-lightbox-caption="{{ photo.title }}">
+                            <img src="{{ thumb.url }}" alt="{{ photo.title }}" loading="lazy" width="{{ thumb.width }}" height="{{ thumb.height }}" class="page-gallery__photo-img">
+                        </a>
+                        {% if photo.title %}
+                        <figcaption class="page-gallery__photo-caption">{{ photo.title }}</figcaption>
+                        {% endif %}
+                    </figure>
+                    {% endfor %}
+                </div>
+
+                {# Pagination for photos #}
+                {% include "includes/pagination.html" with paginator=paginator page_obj=photos %}
+                {% else %}
+                <p class="page-gallery__empty">No photos in this album.</p>
+                {% endif %}
+            </div>
+
+        {% else %}
+            {# Albums grid view #}
+            {% if albums %}
+            <div class="page-gallery__albums">
+                {% for collection in albums %}
+                <article class="album-card">
+                    <a href="{% pageurl page %}?album={{ collection.id }}" class="album-card__link">
+                        {% if collection.cover_image %}
+                            {% image collection.cover_image fill-400x300 as album_thumb %}
+                            <div class="album-card__image">
+                                <img src="{{ album_thumb.url }}" alt="{{ collection.name }}" loading="lazy" width="{{ album_thumb.width }}" height="{{ album_thumb.height }}">
+                            </div>
+                        {% else %}
+                            <div class="album-card__image" data-placeholder>
+                                <span class="album-card__placeholder-icon" aria-hidden="true"></span>
+                            </div>
+                        {% endif %}
+                        <div class="album-card__content">
+                            <h2 class="album-card__title">{{ collection.name }}</h2>
+                            <span class="album-card__count">{{ collection.image_count }} photo{{ collection.image_count|pluralize }}</span>
+                        </div>
+                    </a>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="page-gallery__empty">No albums yet.</p>
+            {% endif %}
+        {% endif %}
+
+        {# Body StreamField #}
+        {% if page.body %}
+        <div class="page-gallery__body">
+            {% for block in page.body %}
+                {% include_block block %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    {# Simple lightbox initialization #}
+    document.addEventListener('DOMContentLoaded', function() {
+        var lightboxLinks = document.querySelectorAll('[data-lightbox-src]');
+        if (lightboxLinks.length === 0) return;
+
+        lightboxLinks.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                var src = this.getAttribute('data-lightbox-src');
+                var caption = this.getAttribute('data-lightbox-caption') || '';
+
+                var overlay = document.createElement('div');
+                overlay.className = 'lightbox';
+                overlay.setAttribute('role', 'dialog');
+                overlay.setAttribute('aria-modal', 'true');
+                overlay.setAttribute('aria-label', caption || 'Image preview');
+                overlay.innerHTML =
+                    '<div class="lightbox__backdrop"></div>' +
+                    '<div class="lightbox__content">' +
+                        '<button class="lightbox__close" aria-label="Close">&times;</button>' +
+                        '<img src="' + src + '" alt="' + caption + '" class="lightbox__image">' +
+                        (caption ? '<p class="lightbox__caption">' + caption + '</p>' : '') +
+                    '</div>';
+
+                document.body.appendChild(overlay);
+                document.body.style.overflow = 'hidden';
+
+                function closeLightbox() {
+                    document.body.removeChild(overlay);
+                    document.body.style.overflow = '';
+                }
+
+                overlay.querySelector('.lightbox__close').addEventListener('click', closeLightbox);
+                overlay.querySelector('.lightbox__backdrop').addEventListener('click', closeLightbox);
+                document.addEventListener('keydown', function onEsc(e) {
+                    if (e.key === 'Escape') {
+                        closeLightbox();
+                        document.removeEventListener('keydown', onEsc);
+                    }
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}

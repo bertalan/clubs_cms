@@ -1,0 +1,37 @@
+{% load i18n %}
+{# Event card for the events grid listing #}
+<div class="event-card" style="border: 1px solid var(--color-border, #e5e7eb); border-radius: 0.5rem; overflow: hidden; background: var(--color-bg, #fff); transition: box-shadow 0.2s;">
+    {% if event.image_url %}
+        <a href="{% url 'federation_frontend:detail' club_code=event.source_club.short_code event_id=event.pk %}">
+            <img src="{{ event.image_url }}" alt="{{ event.event_name }}" loading="lazy"
+                 style="width: 100%; height: 200px; object-fit: cover;">
+        </a>
+    {% endif %}
+    <div style="padding: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+            <span style="font-size: 0.75rem; color: var(--color-primary, #1e40af); font-weight: 600;">
+                {{ event.source_club.name }}
+            </span>
+            {% if event.event_status != "EventScheduled" %}
+                <span class="event-status-badge status-{{ event.event_status }}"
+                      style="font-size: 0.65rem; padding: 0.125rem 0.5rem; border-radius: 9999px;">
+                    {{ event.get_event_status_display }}
+                </span>
+            {% endif %}
+        </div>
+        <h3 style="margin: 0 0 0.5rem 0; font-size: 1.1rem;">
+            <a href="{% url 'federation_frontend:detail' club_code=event.source_club.short_code event_id=event.pk %}"
+               style="color: inherit; text-decoration: none;">
+                {{ event.event_name }}
+            </a>
+        </h3>
+        <p style="font-size: 0.85rem; color: var(--color-text-muted, #6b7280); margin: 0 0 0.5rem 0;">
+            {{ event.start_date|date:"D, d M Y - H:i" }}
+        </p>
+        {% if event.location_name %}
+            <p style="font-size: 0.85rem; color: var(--color-text-muted, #6b7280); margin: 0;">
+                {{ event.location_name }}
+            </p>
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,41 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<section class="block-hero-video" aria-label="Video hero">
+    <video
+        {% if self.muted %}muted{% endif %}
+        {% if self.loop %}loop{% endif %}
+        autoplay
+        playsinline
+        aria-hidden="true">
+        <source src="{{ self.video_url }}" type="video/mp4">
+    </video>
+
+    {% if self.fallback_image %}
+        {% image self.fallback_image fill-1920x900 as fallback_img %}
+        <div class="block-hero-video__fallback">
+            <img src="{{ fallback_img.url }}" alt="" loading="eager" width="{{ fallback_img.width }}" height="{{ fallback_img.height }}" aria-hidden="true">
+        </div>
+    {% endif %}
+
+    <div class="block-hero-video__overlay">
+        <div class="container">
+            <div class="block-hero-video__content">
+                {% if self.title %}
+                <h2 class="block-hero-video__title">{{ self.title }}</h2>
+                {% endif %}
+                {% if self.subtitle %}
+                <p class="block-hero-video__subtitle">{{ self.subtitle }}</p>
+                {% endif %}
+                {% if self.cta_text %}
+                <div class="block-hero-video__actions">
+                    {% if self.cta_link %}
+                    <a href="{% pageurl self.cta_link %}" class="btn btn-outline-light">{{ self.cta_text }}</a>
+                    {% elif self.cta_url %}
+                    <a href="{{ self.cta_url }}" class="btn btn-outline-light" target="_blank" rel="noopener noreferrer">{{ self.cta_text }}</a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>

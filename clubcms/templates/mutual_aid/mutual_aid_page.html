@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Mutual Aid" %} | {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .aid-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+    .aid-intro {
+        margin-bottom: 2rem;
+        line-height: 1.7;
+    }
+    .helpers-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .helper-card {
+        border: 1px solid var(--color-border, #e5e7eb);
+        border-radius: 0.5rem;
+        padding: 1.25rem;
+        background: var(--color-bg, #fff);
+        transition: box-shadow 0.2s;
+    }
+    .helper-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .helper-card h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+    }
+    .helper-meta {
+        font-size: 0.85rem;
+        color: var(--color-text-muted, #6b7280);
+        margin-bottom: 0.75rem;
+    }
+    .helper-notes {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 0.75rem;
+    }
+    .helper-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+    .btn-primary {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background: var(--color-primary, #1e40af);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 0.375rem;
+        font-size: 0.85rem;
+        border: none;
+        cursor: pointer;
+    }
+    .btn-secondary {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background: transparent;
+        color: var(--color-primary, #1e40af);
+        text-decoration: none;
+        border-radius: 0.375rem;
+        font-size: 0.85rem;
+        border: 1px solid var(--color-primary, #1e40af);
+    }
+    .emergency-contacts {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .emergency-contacts h2 {
+        color: #991b1b;
+        margin-top: 0;
+    }
+    .emergency-contact-item {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #fecaca;
+    }
+    .emergency-contact-item:last-child {
+        border-bottom: none;
+    }
+    .no-helpers {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--color-text-muted, #6b7280);
+    }
+    .pagination-nav {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+    }
+    .pagination-nav a,
+    .pagination-nav span {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--color-border, #ccc);
+        border-radius: 0.375rem;
+        text-decoration: none;
+        font-size: 0.875rem;
+    }
+    .pagination-nav .current {
+        background: var(--color-primary, #1e40af);
+        color: #fff;
+        border-color: var(--color-primary, #1e40af);
+    }
+    .aid-radius-badge {
+        display: inline-block;
+        padding: 0.125rem 0.5rem;
+        background: #dbeafe;
+        color: #1e40af;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="aid-container">
+    <h1>{% trans "Mutual Aid" %}</h1>
+
+    {% if self.intro %}
+        <div class="aid-intro">
+            {{ self.intro|safe }}
+        </div>
+    {% endif %}
+
+    {# Emergency contacts #}
+    {% if self.body %}
+        <div class="emergency-contacts">
+            <h2>{% trans "Emergency Contacts" %}</h2>
+            {% for block in self.body %}
+                <div class="emergency-contact-item">
+                    <strong>{{ block.value.name }}</strong>
+                    {% if block.value.role %}<span> - {{ block.value.role }}</span>{% endif %}
+                    <br>
+                    <a href="tel:{{ block.value.phone }}">{{ block.value.phone }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <h2>{% trans "Available Helpers" %}</h2>
+
+    {# Helpers grid #}
+    {% if helpers %}
+        <div class="helpers-grid">
+            {% for helper in helpers %}
+                <div class="helper-card">
+                    <h3>{{ helper.get_visible_name }}</h3>
+                    <div class="helper-meta">
+                        <span>{{ helper.aid_location_city }}</span>
+                        <span class="aid-radius-badge">{{ helper.aid_radius_km }} km</span>
+                    </div>
+                    {% if helper.aid_notes %}
+                        <div class="helper-notes">{{ helper.aid_notes|truncatewords:30 }}</div>
+                    {% endif %}
+                    <div class="helper-actions">
+                        <a href="{% url 'mutual_aid:helper_detail' pk=helper.pk %}" class="btn-secondary">
+                            {% trans "Details" %}
+                        </a>
+                        {% if is_active_member %}
+                            <a href="{% url 'mutual_aid:contact_form' pk=helper.pk %}" class="btn-primary">
+                                {% trans "Request Help" %}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {# Pagination #}
+        {% if is_paginated %}
+            <nav class="pagination-nav" aria-label="{% trans 'Pagination' %}">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">&laquo; {% trans "Previous" %}</a>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="current">{{ num }}</span>
+                    {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+                        <a href="?page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">{% trans "Next" %} &raquo;</a>
+                {% endif %}
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="no-helpers">
+            <p>{% trans "No helpers are currently available." %}</p>
+            <p>{% trans "Check back later or contact the club directly." %}</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

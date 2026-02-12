@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Unsubscribed" %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin: 4rem auto; padding: 2rem;">
+    <h1>{% trans "Successfully unsubscribed" %}</h1>
+
+    <p>
+        {% trans "You have been unsubscribed from these notifications. You will no longer receive them." %}
+    </p>
+
+    <p>
+        {% trans "If you change your mind, you can re-enable notifications from your" %}
+        <a href="{% url 'members:profile' %}">{% trans "account settings" %}</a>.
+    </p>
+</div>
+{% endblock %}

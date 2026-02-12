@@ -1,0 +1,24 @@
+{# SEO meta tags, JSON-LD structured data, and feed discovery #}
+{# Include this in the <head> section of base.html #}
+{% load seo_tags %}
+
+{# JSON-LD structured data (page-type-aware) #}
+{% json_ld_tag %}
+
+{# Breadcrumb structured data #}
+{% breadcrumb_json_ld_tag %}
+
+{# Open Graph meta tags #}
+{% og_tags_tag %}
+
+{# Twitter Card meta tags #}
+{% twitter_tags_tag %}
+
+{# Alternate language links (hreflang) #}
+{% hreflang_tags_tag %}
+
+{# Canonical URL #}
+{% canonical_url_tag %}
+
+{# RSS/Atom feed discovery #}
+{% feed_discovery_tag %}

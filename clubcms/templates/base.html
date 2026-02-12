@@ -1,0 +1,82 @@
+{% load static wagtailcore_tags wagtailimages_tags wagtailsettings_tags %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'en' }}" {% if settings.website.SiteSettings.color_scheme.is_dark_mode %}class="dark-mode"{% endif %}>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% elif self.title %}{{ self.title }}{% endif %} | {{ settings.website.SiteSettings.site_name }}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{% if self.search_description %}{{ self.search_description }}{% else %}{{ settings.website.SiteSettings.description }}{% endif %}{% endblock %}">
+
+    {# Favicon #}
+    {% if settings.website.SiteSettings.favicon %}
+        {% image settings.website.SiteSettings.favicon fill-32x32 as favicon_img %}
+        <link rel="icon" type="image/png" href="{{ favicon_img.url }}">
+    {% endif %}
+
+    {# Base CSS (shared across all themes) #}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+    {# Theme CSS #}
+    {% with theme=settings.website.SiteSettings.theme %}
+        {% if theme %}
+            <link rel="stylesheet" href="{% static 'css/themes/' %}{{ theme }}/main.css">
+        {% else %}
+            <link rel="stylesheet" href="{% static 'css/themes/velocity/main.css' %}">
+        {% endif %}
+    {% endwith %}
+
+    {# Color scheme CSS custom properties #}
+    {% with colors=settings.website.SiteSettings.get_colors %}
+        {% if colors %}
+        <style>
+            :root {
+                {% for var_name, value in colors.items %}
+                {{ var_name }}: {{ value }};
+                {% endfor %}
+            }
+        </style>
+        {% endif %}
+    {% endwith %}
+
+    {# PWA manifest #}
+    {% if settings.website.SiteSettings.pwa_name %}
+    <link rel="manifest" href="{% url 'pwa-manifest' %}">
+    <meta name="theme-color" content="{{ settings.website.SiteSettings.pwa_theme_color|default:'#0F172A' }}">
+    {% endif %}
+
+    {# SEO: JSON-LD, Open Graph, Twitter Cards, hreflang, canonical, feeds #}
+    {% include "includes/seo_head.html" %}
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+    {# Skip to content for accessibility #}
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    {# Navbar #}
+    {% include "includes/navbar.html" %}
+
+    {# Main content #}
+    <main id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    {# Footer #}
+    {% include "includes/footer.html" %}
+
+    {# PWA service worker registration #}
+    {% if settings.website.SiteSettings.pwa_name %}
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("{% url 'pwa-sw' %}")
+                .catch(function(err) {
+                    console.warn('ServiceWorker registration failed:', err);
+                });
+        }
+    </script>
+    {% endif %}
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

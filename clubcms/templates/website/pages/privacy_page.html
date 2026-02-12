@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block body_class %}page-privacy{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<article class="page-privacy">
+    <div class="container">
+        {# Header #}
+        <header class="page-privacy__header">
+            <h1 class="page-privacy__title">{{ page.title }}</h1>
+            {% if page.last_updated %}
+            <p class="page-privacy__updated">
+                Last updated: <time datetime="{{ page.last_updated|date:'c' }}">{{ page.last_updated|date:"F j, Y" }}</time>
+            </p>
+            {% endif %}
+        </header>
+
+        {# Body StreamField #}
+        {% if page.body %}
+        <div class="page-privacy__body">
+            {% for block in page.body %}
+                {% include_block block %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</article>
+{% endblock %}

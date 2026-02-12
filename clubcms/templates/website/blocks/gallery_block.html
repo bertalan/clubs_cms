@@ -1,0 +1,25 @@
+{% load wagtailimages_tags %}
+
+<section class="block-gallery" data-cols="{{ self.columns|default:'3' }}" data-ratio="{{ self.aspect_ratio|default:'auto' }}">
+    {% if self.title %}
+    <h2 class="block-gallery__title">{{ self.title }}</h2>
+    {% endif %}
+    <div class="block-gallery__grid" {% if self.lightbox %}data-lightbox="gallery-{{ block.id }}"{% endif %}>
+        {% for item in self.images %}
+        <figure class="block-gallery__item">
+            {% image item.value.image fill-400x400 as thumb %}
+            {% if self.lightbox %}
+                {% image item.value.image max-1600x1200 as full %}
+                <a href="{{ full.url }}" data-lightbox-src="{{ full.url }}" data-lightbox-caption="{{ item.value.caption|default:'' }}">
+                    <img src="{{ thumb.url }}" alt="{{ item.value.caption|default:'' }}" loading="lazy" width="{{ thumb.width }}" height="{{ thumb.height }}">
+                </a>
+            {% else %}
+                <img src="{{ thumb.url }}" alt="{{ item.value.caption|default:'' }}" loading="lazy" width="{{ thumb.width }}" height="{{ thumb.height }}">
+            {% endif %}
+            {% if item.value.caption %}
+            <figcaption class="block-gallery__caption">{{ item.value.caption }}</figcaption>
+            {% endif %}
+        </figure>
+        {% endfor %}
+    </div>
+</section>

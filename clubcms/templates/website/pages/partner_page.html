@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}page-partner{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<div class="page-partner">
+    <div class="container">
+        {# Header #}
+        <header class="page-partner__header">
+            {% if page.logo %}
+                {% image page.logo max-400x300 as partner_logo %}
+                <div class="page-partner__logo">
+                    <img src="{{ partner_logo.url }}"
+                         alt="{{ page.title }}"
+                         width="{{ partner_logo.width }}"
+                         height="{{ partner_logo.height }}">
+                </div>
+            {% endif %}
+
+            <div class="page-partner__header-text">
+                <h1 class="page-partner__title">{{ page.title }}</h1>
+
+                {% if page.category %}
+                <span class="page-partner__category">{{ page.category.name }}</span>
+                {% endif %}
+
+                {% if page.is_featured %}
+                <span class="page-partner__badge">Featured Partner</span>
+                {% endif %}
+
+                {% if page.intro %}
+                <p class="page-partner__intro">{{ page.intro }}</p>
+                {% endif %}
+            </div>
+        </header>
+
+        <div class="page-partner__content-grid">
+            {# Main content area #}
+            <div class="page-partner__main">
+                {# Body StreamField #}
+                {% if page.body %}
+                <div class="page-partner__body">
+                    {% for block in page.body %}
+                        {% include_block block %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            {# Sidebar: Contact, Social, Info #}
+            <aside class="page-partner__sidebar">
+                {# Contact information #}
+                {% if page.website or page.email or page.phone or page.address %}
+                <div class="page-partner__contact-card">
+                    <h2 class="page-partner__sidebar-title">Contact</h2>
+
+                    {% if page.website %}
+                    <p class="page-partner__contact-item">
+                        <strong>Website:</strong>
+                        <a href="{{ page.website }}" target="_blank" rel="noopener noreferrer">
+                            {{ page.website }}
+                        </a>
+                    </p>
+                    {% endif %}
+
+                    {% if page.email %}
+                    <p class="page-partner__contact-item">
+                        <strong>Email:</strong>
+                        <a href="mailto:{{ page.email }}">{{ page.email }}</a>
+                    </p>
+                    {% endif %}
+
+                    {% if page.phone %}
+                    <p class="page-partner__contact-item">
+                        <strong>Phone:</strong>
+                        <a href="tel:{{ page.phone }}">{{ page.phone }}</a>
+                    </p>
+                    {% endif %}
+
+                    {% if page.address %}
+                    <p class="page-partner__contact-item">
+                        <strong>Address:</strong><br>
+                        {{ page.address|linebreaksbr }}
+                    </p>
+                    {% endif %}
+
+                    {% if page.contact_city %}
+                    <p class="page-partner__contact-item">
+                        <strong>City:</strong> {{ page.contact_city }}
+                    </p>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                {# Social links #}
+                {% if page.facebook_url or page.instagram_url or page.linkedin_url or page.youtube_url or page.twitter_url %}
+                <div class="page-partner__social-card">
+                    <h2 class="page-partner__sidebar-title">Social</h2>
+                    <ul class="page-partner__social-list">
+                        {% if page.facebook_url %}
+                        <li><a href="{{ page.facebook_url }}" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+                        {% endif %}
+                        {% if page.instagram_url %}
+                        <li><a href="{{ page.instagram_url }}" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                        {% endif %}
+                        {% if page.linkedin_url %}
+                        <li><a href="{{ page.linkedin_url }}" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+                        {% endif %}
+                        {% if page.youtube_url %}
+                        <li><a href="{{ page.youtube_url }}" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+                        {% endif %}
+                        {% if page.twitter_url %}
+                        <li><a href="{{ page.twitter_url }}" target="_blank" rel="noopener noreferrer">Twitter / X</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                {# Partnership info #}
+                {% if page.partnership_start %}
+                <div class="page-partner__info-card">
+                    <h2 class="page-partner__sidebar-title">Partnership</h2>
+                    <p class="page-partner__info-item">
+                        <strong>Since:</strong> {{ page.partnership_start|date:"F Y" }}
+                    </p>
+                    {% if page.partnership_end %}
+                    <p class="page-partner__info-item">
+                        <strong>Until:</strong> {{ page.partnership_end|date:"F Y" }}
+                    </p>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </aside>
+        </div>
+    </div>
+</div>
+{% endblock %}

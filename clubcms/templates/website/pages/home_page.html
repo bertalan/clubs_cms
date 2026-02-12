@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags website_tags %}
+
+{% block body_class %}page-home{% endblock %}
+
+{% block content %}
+{# Hero section — uses .block-hero-banner classes so theme CSS applies #}
+<section class="block-hero-banner" aria-label="Hero">
+    {% if page.hero_image %}
+        {% image page.hero_image fill-1920x800 as hero_img %}
+        <img src="{{ hero_img.url }}" alt="" loading="eager" width="{{ hero_img.width }}" height="{{ hero_img.height }}">
+    {% endif %}
+    <div class="block-hero-banner__overlay">
+        <div class="block-hero-banner__content">
+            {% if page.hero_title %}
+                <h1 class="block-hero-banner__title">{{ page.hero_title }}</h1>
+            {% endif %}
+            {% if page.hero_subtitle %}
+                <p class="block-hero-banner__subtitle">{{ page.hero_subtitle }}</p>
+            {% endif %}
+
+            <div class="block-hero-banner__actions">
+                {% if page.primary_cta_text %}
+                    {% if page.primary_cta_link %}
+                        <a href="{% pageurl page.primary_cta_link %}" class="btn btn-primary">
+                            {{ page.primary_cta_text }}
+                        </a>
+                    {% elif page.primary_cta_url %}
+                        <a href="{{ page.primary_cta_url }}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                            {{ page.primary_cta_text }}
+                        </a>
+                    {% endif %}
+                {% endif %}
+
+                {% if page.secondary_cta_text %}
+                    {% if page.secondary_cta_link %}
+                        <a href="{% pageurl page.secondary_cta_link %}" class="btn btn-secondary">
+                            {{ page.secondary_cta_text }}
+                        </a>
+                    {% elif page.secondary_cta_url %}
+                        <a href="{{ page.secondary_cta_url }}" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
+                            {{ page.secondary_cta_text }}
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Upcoming Events — grid of up to 3 #}
+{% upcoming_events 3 as events_list %}
+{% if events_list %}
+<section class="block-cards-grid" aria-label="Upcoming events">
+    <div class="container">
+        <h2 class="block-cards-grid__title">{{ page.events_section_title|default:"Upcoming Events" }}</h2>
+        <div class="block-cards-grid__grid" data-columns="3">
+            {% for event in events_list %}
+            <article class="block-card">
+                {% if event.cover_image %}
+                    {% image event.cover_image fill-600x400 as evt_img %}
+                    <div class="block-card__image">
+                        <img src="{{ evt_img.url }}" alt="{{ event.title }}" loading="lazy" width="{{ evt_img.width }}" height="{{ evt_img.height }}">
+                    </div>
+                {% endif %}
+                {% if event.start_date %}
+                <span class="block-card__badge">{{ event.start_date|date:"d M Y" }}</span>
+                {% endif %}
+                <div class="block-card__body">
+                    <h3 class="block-card__title">
+                        <a href="{% pageurl event %}">{{ event.title }}</a>
+                    </h3>
+                    {% if event.intro %}
+                    <p class="block-card__text">{{ event.intro|truncatewords:25 }}</p>
+                    {% endif %}
+                    <a href="{% pageurl event %}" class="block-card__link">Details</a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{# Body StreamField #}
+{% if page.body %}
+<section class="home-body">
+    <div class="container">
+        {% for block in page.body %}
+            {% include_block block %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}

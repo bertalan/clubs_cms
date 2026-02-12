@@ -1,0 +1,32 @@
+<section class="block-accordion">
+    {% if self.title %}
+    <h2 class="block-accordion__title">{{ self.title }}</h2>
+    {% endif %}
+    {% for item in self.items %}
+    <div class="block-accordion__item">
+        <button class="block-accordion__header" type="button" aria-expanded="false" aria-controls="accordion-{{ block.id }}-{{ forloop.counter }}" id="accordion-{{ block.id }}-{{ forloop.counter }}-header">
+            {{ item.value.title }}
+            <span class="block-accordion__icon" aria-hidden="true"></span>
+        </button>
+        <div class="block-accordion__body" id="accordion-{{ block.id }}-{{ forloop.counter }}" role="region" aria-labelledby="accordion-{{ block.id }}-{{ forloop.counter }}-header">
+            <div class="block-accordion__body-inner">
+                {{ item.value.content }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</section>
+
+<script>
+(function() {
+    var headers = document.querySelectorAll('.block-accordion__header');
+    headers.forEach(function(header) {
+        header.addEventListener('click', function() {
+            var item = this.closest('.block-accordion__item');
+            var expanded = item.classList.contains('active');
+            item.classList.toggle('active');
+            this.setAttribute('aria-expanded', !expanded);
+        });
+    });
+})();
+</script>

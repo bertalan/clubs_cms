@@ -1,0 +1,44 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<section class="block-cards-grid" data-columns="{{ self.columns|default:'3' }}">
+    <div class="container">
+        {% if self.title %}
+        <h2 class="block-cards-grid__title">{{ self.title }}</h2>
+        {% endif %}
+        <div class="block-cards-grid__grid">
+            {% for card in self.cards %}
+            <div class="block-card">
+                {% if card.value.image %}
+                    {% image card.value.image fill-400x250 as card_img %}
+                    <div class="block-card__image">
+                        {% if card.value.link_page %}
+                        <a href="{% pageurl card.value.link_page %}">
+                            <img src="{{ card_img.url }}" alt="{{ card.value.title }}" loading="lazy" width="{{ card_img.width }}" height="{{ card_img.height }}">
+                        </a>
+                        {% elif card.value.link_url %}
+                        <a href="{{ card.value.link_url }}" target="_blank" rel="noopener noreferrer">
+                            <img src="{{ card_img.url }}" alt="{{ card.value.title }}" loading="lazy" width="{{ card_img.width }}" height="{{ card_img.height }}">
+                        </a>
+                        {% else %}
+                        <img src="{{ card_img.url }}" alt="{{ card.value.title }}" loading="lazy" width="{{ card_img.width }}" height="{{ card_img.height }}">
+                        {% endif %}
+                    </div>
+                {% endif %}
+                <div class="block-card__body">
+                    <h3 class="block-card__title">{{ card.value.title }}</h3>
+                    {% if card.value.text %}
+                    <p class="block-card__text">{{ card.value.text }}</p>
+                    {% endif %}
+                    {% if card.value.link_text %}
+                        {% if card.value.link_page %}
+                        <a href="{% pageurl card.value.link_page %}" class="block-card__link">{{ card.value.link_text }}</a>
+                        {% elif card.value.link_url %}
+                        <a href="{{ card.value.link_url }}" class="block-card__link" target="_blank" rel="noopener noreferrer">{{ card.value.link_text }}</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

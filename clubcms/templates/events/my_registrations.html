@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "My Registrations" %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{% trans "My Registrations" %}</h1>
+
+    {% if registrations %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>{% trans "Event" %}</th>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th>{% trans "Payment" %}</th>
+                <th>{% trans "Registered" %}</th>
+                <th>{% trans "Actions" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reg in registrations %}
+            <tr>
+                <td>
+                    <a href="{{ reg.event.url }}">{{ reg.event.title }}</a>
+                </td>
+                <td>{{ reg.event.start_date }}</td>
+                <td>
+                    <span class="badge badge-{{ reg.status }}">
+                        {{ reg.get_status_display }}
+                    </span>
+                </td>
+                <td>
+                    <span class="badge badge-{{ reg.payment_status }}">
+                        {{ reg.get_payment_status_display }}
+                    </span>
+                </td>
+                <td>{{ reg.registered_at }}</td>
+                <td>
+                    {% if reg.status != "cancelled" %}
+                    <form method="post" action="{% url 'events:cancel' reg.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-danger"
+                                onclick="return confirm('{% trans "Are you sure you want to cancel this registration?" %}')">
+                            {% trans "Cancel" %}
+                        </button>
+                    </form>
+                    {% else %}
+                    <span class="text-muted">{% trans "Cancelled" %}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_paginated %}
+    <nav class="pagination" aria-label="{% trans 'Pagination' %}">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a>
+        {% endif %}
+        <span>{% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}</span>
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
+        {% endif %}
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <p>{% trans "You have not registered for any events yet." %}</p>
+    {% endif %}
+
+    <div class="actions">
+        <a href="{% url 'events:my_events' %}" class="btn btn-secondary">{% trans "My Favorite Events" %}</a>
+    </div>
+</div>
+{% endblock %}

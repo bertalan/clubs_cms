@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Partner Events" %} | {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .federation-filters {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+        align-items: flex-end;
+    }
+    .federation-filters .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    .federation-filters label {
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+    .federation-filters select,
+    .federation-filters input[type="text"] {
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--color-border, #ccc);
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+    }
+    .events-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.5rem;
+    }
+    .no-events {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--color-text-muted, #6b7280);
+    }
+    .pagination-nav {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+    }
+    .pagination-nav a,
+    .pagination-nav span {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--color-border, #ccc);
+        border-radius: 0.375rem;
+        text-decoration: none;
+        font-size: 0.875rem;
+    }
+    .pagination-nav .current {
+        background: var(--color-primary, #1e40af);
+        color: #fff;
+        border-color: var(--color-primary, #1e40af);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;">
+    <h1>{% trans "Partner Events" %}</h1>
+    <p class="text-muted">{% trans "Events from our federated partner clubs." %}</p>
+
+    {# Filters #}
+    <form method="get" class="federation-filters">
+        <div class="filter-group">
+            <label for="club-filter">{% trans "Partner Club" %}</label>
+            <select name="club" id="club-filter" onchange="this.form.submit()">
+                <option value="">{% trans "All clubs" %}</option>
+                {% for club in partner_clubs %}
+                    <option value="{{ club.short_code }}" {% if selected_club == club.short_code %}selected{% endif %}>
+                        {{ club.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="search-input">{% trans "Search" %}</label>
+            <input type="text" name="q" id="search-input" value="{{ search_query }}"
+                   placeholder="{% trans 'Search events...' %}">
+        </div>
+        <div class="filter-group">
+            <button type="submit" style="padding: 0.5rem 1.5rem; background: var(--color-primary, #1e40af); color: #fff; border: none; border-radius: 0.375rem; cursor: pointer;">
+                {% trans "Filter" %}
+            </button>
+        </div>
+    </form>
+
+    {# Events grid #}
+    {% if events %}
+        <div class="events-grid">
+            {% for event in events %}
+                {% include "federation/includes/event_card.html" with event=event %}
+            {% endfor %}
+        </div>
+
+        {# Pagination #}
+        {% if is_paginated %}
+            <nav class="pagination-nav" aria-label="{% trans 'Pagination' %}">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}{% if selected_club %}&club={{ selected_club }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
+                        &laquo; {% trans "Previous" %}
+                    </a>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="current">{{ num }}</span>
+                    {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+                        <a href="?page={{ num }}{% if selected_club %}&club={{ selected_club }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
+                            {{ num }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if selected_club %}&club={{ selected_club }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
+                        {% trans "Next" %} &raquo;
+                    </a>
+                {% endif %}
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="no-events">
+            <p>{% trans "No partner events found." %}</p>
+            {% if selected_club or search_query %}
+                <p><a href="{% url 'federation_frontend:list' %}">{% trans "Clear filters" %}</a></p>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

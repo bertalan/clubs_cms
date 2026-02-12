@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Unlock Limit Reached" %} | {% trans "Mutual Aid" %}{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto; padding: 3rem 1rem; text-align: center;">
+    <h1>{% trans "Contact Unlock Limit Reached" %}</h1>
+
+    <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 0.5rem; padding: 1.5rem; margin: 2rem 0;">
+        <p style="font-size: 1.1rem; margin: 0 0 1rem 0;">
+            {% blocktrans with limit=unlock_limit days=window_days %}
+                You have reached the maximum of {{ limit }} contact unlocks
+                per {{ days }}-day period.
+            {% endblocktrans %}
+        </p>
+        <p style="color: var(--color-text-muted, #6b7280); margin: 0;">
+            {% trans "Please wait before unlocking more contacts, or use the contacts you have already unlocked." %}
+        </p>
+    </div>
+
+    <a href="{% url 'mutual_aid:map' %}"
+       style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--color-primary, #1e40af); color: #fff; text-decoration: none; border-radius: 0.375rem; font-weight: 600;">
+        {% trans "Back to Mutual Aid" %}
+    </a>
+</div>
+{% endblock %}

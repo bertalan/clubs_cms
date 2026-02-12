@@ -1,0 +1,49 @@
+{% load i18n %}
+{# Interest buttons for external event detail page #}
+<div class="interest-section">
+    <h3>{% trans "Are you interested?" %}</h3>
+
+    {# Interest counts #}
+    <div style="display: flex; gap: 1.5rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--color-text-muted, #6b7280);">
+        <span>{{ interest_counts.going }} {% trans "going" %}</span>
+        <span>{{ interest_counts.interested }} {% trans "interested" %}</span>
+        <span>{{ interest_counts.maybe }} {% trans "maybe" %}</span>
+    </div>
+
+    {% if is_active_member %}
+        <form method="post"
+              action="{% url 'federation_frontend:set_interest' club_code=event.source_club.short_code event_id=event.pk %}"
+              style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            {% csrf_token %}
+
+            <button type="submit" name="interest_level" value="going"
+                    style="padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; font-size: 0.875rem;
+                           {% if user_interest.interest_level == 'going' %}background: var(--color-primary, #1e40af); color: #fff; border: 2px solid var(--color-primary, #1e40af);{% else %}background: transparent; border: 2px solid var(--color-border, #ccc); color: inherit;{% endif %}">
+                {% trans "Going" %}
+            </button>
+
+            <button type="submit" name="interest_level" value="interested"
+                    style="padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; font-size: 0.875rem;
+                           {% if user_interest.interest_level == 'interested' %}background: var(--color-primary, #1e40af); color: #fff; border: 2px solid var(--color-primary, #1e40af);{% else %}background: transparent; border: 2px solid var(--color-border, #ccc); color: inherit;{% endif %}">
+                {% trans "Interested" %}
+            </button>
+
+            <button type="submit" name="interest_level" value="maybe"
+                    style="padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; font-size: 0.875rem;
+                           {% if user_interest.interest_level == 'maybe' %}background: var(--color-primary, #1e40af); color: #fff; border: 2px solid var(--color-primary, #1e40af);{% else %}background: transparent; border: 2px solid var(--color-border, #ccc); color: inherit;{% endif %}">
+                {% trans "Maybe" %}
+            </button>
+
+            {% if user_interest %}
+                <button type="submit" name="interest_level" value="remove"
+                        style="padding: 0.5rem 1rem; border: 2px solid #ef4444; color: #ef4444; background: transparent; border-radius: 0.375rem; cursor: pointer; font-size: 0.875rem;">
+                    {% trans "Remove" %}
+                </button>
+            {% endif %}
+        </form>
+    {% else %}
+        <p style="color: var(--color-text-muted, #6b7280); font-size: 0.875rem;">
+            {% trans "Only active members can express interest in partner events." %}
+        </p>
+    {% endif %}
+</div>

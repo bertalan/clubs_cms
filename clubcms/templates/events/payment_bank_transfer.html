@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Bank Transfer Instructions" %} — {{ event.title }} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{% trans "Bank Transfer Instructions" %}</h1>
+
+    <section class="event-summary">
+        <h2>{{ event.title }}</h2>
+        <p>{{ event.start_date }}</p>
+    </section>
+
+    <section class="bank-transfer-details">
+        <h3>{% trans "Transfer Details" %}</h3>
+
+        <dl class="bank-info">
+            <dt>{% trans "Account holder" %}</dt>
+            <dd>{{ payment_settings.bank_account_holder }}</dd>
+
+            <dt>{% trans "IBAN" %}</dt>
+            <dd class="iban-display">{{ payment_settings.bank_iban }}</dd>
+
+            {% if payment_settings.bank_bic %}
+            <dt>{% trans "BIC / SWIFT" %}</dt>
+            <dd>{{ payment_settings.bank_bic }}</dd>
+            {% endif %}
+
+            {% if payment_settings.bank_name %}
+            <dt>{% trans "Bank" %}</dt>
+            <dd>{{ payment_settings.bank_name }}</dd>
+            {% endif %}
+
+            <dt>{% trans "Amount" %}</dt>
+            <dd><strong>{{ registration.payment_amount }} &euro;</strong></dd>
+
+            <dt>{% trans "Payment Reference" %}</dt>
+            <dd class="payment-reference">
+                <code>{{ registration.payment_reference }}</code>
+                <button type="button"
+                        class="btn btn-sm"
+                        onclick="navigator.clipboard.writeText('{{ registration.payment_reference }}')">
+                    {% trans "Copy" %}
+                </button>
+            </dd>
+
+            <dt>{% trans "Deadline" %}</dt>
+            <dd>
+                {{ registration.payment_expires_at }}
+            </dd>
+        </dl>
+
+        {% if payment_settings.bank_transfer_instructions %}
+        <div class="bank-extra-instructions">
+            {{ payment_settings.bank_transfer_instructions|safe }}
+        </div>
+        {% endif %}
+
+        <div class="alert alert-info">
+            <p>{% trans "Please include the payment reference in the transfer description. Your registration will be confirmed once the payment is verified by the organiser." %}</p>
+        </div>
+    </section>
+
+    <p>
+        <a href="{% url 'events:my_registrations' %}">{% trans "Back to my registrations" %}</a>
+    </p>
+</div>
+{% endblock %}

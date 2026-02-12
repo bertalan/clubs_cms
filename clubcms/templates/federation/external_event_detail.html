@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ event.event_name }} | {% trans "Partner Events" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .event-detail {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+    .event-detail .breadcrumb {
+        margin-bottom: 1.5rem;
+        font-size: 0.875rem;
+    }
+    .event-detail .breadcrumb a {
+        color: var(--color-primary, #1e40af);
+        text-decoration: none;
+    }
+    .event-header {
+        margin-bottom: 2rem;
+    }
+    .event-header h1 {
+        margin-bottom: 0.5rem;
+    }
+    .event-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        color: var(--color-text-muted, #6b7280);
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+    .event-meta .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    .event-image img {
+        width: 100%;
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .event-body {
+        line-height: 1.7;
+        margin-bottom: 2rem;
+    }
+    .event-location {
+        background: var(--color-bg-secondary, #f8f9fa);
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        margin-bottom: 2rem;
+    }
+    .event-status-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    .status-EventScheduled { background: #d1fae5; color: #065f46; }
+    .status-EventCancelled { background: #fee2e2; color: #991b1b; }
+    .status-EventPostponed { background: #fef3c7; color: #92400e; }
+    .status-EventMovedOnline { background: #dbeafe; color: #1e40af; }
+    .external-link-btn {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background: var(--color-primary, #1e40af);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 0.375rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+    }
+    .external-link-btn:hover {
+        opacity: 0.9;
+    }
+    .section-divider {
+        border: none;
+        border-top: 1px solid var(--color-border, #e5e7eb);
+        margin: 2rem 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="event-detail">
+    {# Breadcrumb #}
+    <nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
+        <a href="{% url 'federation_frontend:list' %}">{% trans "Partner Events" %}</a>
+        &rsaquo;
+        <a href="{% url 'federation_frontend:list' %}?club={{ event.source_club.short_code }}">{{ event.source_club.name }}</a>
+        &rsaquo;
+        <span>{{ event.event_name }}</span>
+    </nav>
+
+    {# Header #}
+    <div class="event-header">
+        <h1>{{ event.event_name }}</h1>
+        <span class="event-status-badge status-{{ event.event_status }}">
+            {{ event.get_event_status_display }}
+        </span>
+    </div>
+
+    {# Meta #}
+    <div class="event-meta">
+        <div class="meta-item">
+            <strong>{% trans "Date" %}:</strong>
+            {{ event.start_date|date:"D, d M Y H:i" }}
+            {% if event.end_date %} &ndash; {{ event.end_date|date:"D, d M Y H:i" }}{% endif %}
+        </div>
+        <div class="meta-item">
+            <strong>{% trans "Club" %}:</strong>
+            {{ event.source_club.name }}
+        </div>
+    </div>
+
+    {# Image #}
+    {% if event.image_url %}
+        <div class="event-image">
+            <img src="{{ event.image_url }}" alt="{{ event.event_name }}" loading="lazy">
+        </div>
+    {% endif %}
+
+    {# Description #}
+    {% if event.description %}
+        <div class="event-body">
+            {{ event.description|safe }}
+        </div>
+    {% endif %}
+
+    {# Location #}
+    {% if event.location_name or event.location_address %}
+        <div class="event-location">
+            <h3>{% trans "Location" %}</h3>
+            {% if event.location_name %}<p><strong>{{ event.location_name }}</strong></p>{% endif %}
+            {% if event.location_address %}<p>{{ event.location_address }}</p>{% endif %}
+            {% if event.location_lat and event.location_lon %}
+                <p>
+                    <a href="https://www.google.com/maps?q={{ event.location_lat }},{{ event.location_lon }}"
+                       target="_blank" rel="noopener noreferrer">
+                        {% trans "View on Google Maps" %}
+                    </a>
+                </p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {# External link #}
+    {% if event.detail_url %}
+        <a href="{{ event.detail_url }}" target="_blank" rel="noopener noreferrer" class="external-link-btn">
+            {% trans "View on partner site" %}
+        </a>
+    {% endif %}
+
+    <hr class="section-divider">
+
+    {# Interest buttons #}
+    {% include "federation/includes/interest_buttons.html" %}
+
+    <hr class="section-divider">
+
+    {# Comments #}
+    {% include "federation/includes/comments_section.html" %}
+</div>
+{% endblock %}

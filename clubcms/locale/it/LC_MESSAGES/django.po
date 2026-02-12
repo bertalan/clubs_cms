@@ -1,0 +1,223 @@
+# ClubCMS Italian translations
+# Copyright (C) 2024 ClubCMS
+# This file is distributed under the same license as ClubCMS.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ClubCMS 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: ClubCMS Team\n"
+"Language-Team: Italian\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: Navigation
+msgid "Home"
+msgstr "Home"
+
+msgid "About"
+msgstr "Chi siamo"
+
+msgid "News"
+msgstr "Notizie"
+
+msgid "Events"
+msgstr "Eventi"
+
+msgid "Gallery"
+msgstr "Galleria"
+
+msgid "Contact"
+msgstr "Contatti"
+
+msgid "Members"
+msgstr "Soci"
+
+msgid "Privacy"
+msgstr "Privacy"
+
+msgid "Transparency"
+msgstr "Trasparenza"
+
+msgid "Press"
+msgstr "Stampa"
+
+#: Auth / Account
+msgid "Log in"
+msgstr "Accedi"
+
+msgid "Log out"
+msgstr "Esci"
+
+msgid "Sign up"
+msgstr "Registrati"
+
+msgid "My profile"
+msgstr "Il mio profilo"
+
+msgid "Settings"
+msgstr "Impostazioni"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Email"
+msgstr "Email"
+
+#: Forms
+msgid "Submit"
+msgstr "Invia"
+
+msgid "Cancel"
+msgstr "Annulla"
+
+msgid "Save"
+msgstr "Salva"
+
+msgid "Delete"
+msgstr "Elimina"
+
+msgid "Search"
+msgstr "Cerca"
+
+msgid "Filter"
+msgstr "Filtra"
+
+msgid "Reset"
+msgstr "Ripristina"
+
+#: Events specific
+msgid "Upcoming events"
+msgstr "Prossimi eventi"
+
+msgid "Past events"
+msgstr "Eventi passati"
+
+msgid "Register"
+msgstr "Iscriviti"
+
+msgid "Registration"
+msgstr "Iscrizione"
+
+msgid "Location"
+msgstr "Luogo"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "Price"
+msgstr "Prezzo"
+
+msgid "Free"
+msgstr "Gratuito"
+
+msgid "Sold out"
+msgstr "Esaurito"
+
+msgid "Spots remaining"
+msgstr "Posti rimanenti"
+
+#: Members
+msgid "Member since"
+msgstr "Socio dal"
+
+msgid "Membership"
+msgstr "Tessera"
+
+msgid "Active"
+msgstr "Attivo"
+
+msgid "Expired"
+msgstr "Scaduto"
+
+#: General / misc
+msgid "Read more"
+msgstr "Leggi tutto"
+
+msgid "Back"
+msgstr "Indietro"
+
+msgid "Next"
+msgstr "Avanti"
+
+msgid "Previous"
+msgstr "Precedente"
+
+msgid "Page"
+msgstr "Pagina"
+
+msgid "Share"
+msgstr "Condividi"
+
+msgid "Loading..."
+msgstr "Caricamento..."
+
+msgid "No results found."
+msgstr "Nessun risultato trovato."
+
+msgid "All rights reserved."
+msgstr "Tutti i diritti riservati."
+
+#: Footer
+msgid "Follow us"
+msgstr "Seguici"
+
+msgid "Contact us"
+msgstr "Contattaci"
+
+msgid "Newsletter"
+msgstr "Newsletter"
+
+msgid "Cookie policy"
+msgstr "Cookie policy"
+
+msgid "Terms of service"
+msgstr "Termini di servizio"
+
+#: Contact page
+msgid "Thank you for your message. We will get back to you shortly."
+msgstr "Grazie per il tuo messaggio! Ti risponderemo il prima possibile."
+
+msgid "Please correct the errors below:"
+msgstr "Correggi gli errori indicati di seguito:"
+
+msgid "Name"
+msgstr "Nome"
+
+msgid "Subject"
+msgstr "Oggetto"
+
+msgid "Message"
+msgstr "Messaggio"
+
+msgid "Send Message"
+msgstr "Invia Messaggio"
+
+msgid "Contact information"
+msgstr "Informazioni di contatto"
+
+msgid "Club location map"
+msgstr "Mappa sede del club"
+
+msgid "View larger map"
+msgstr "Visualizza mappa ingrandita"
+
+msgid "opens in a new window"
+msgstr "si apre in una nuova finestra"
+
+msgid "Where to Find Us"
+msgstr "Dove Trovarci"
+
+msgid "Direct Contacts"
+msgstr "Contatti Diretti"
+
+msgid "Phone"
+msgstr "Telefono"
+
+msgid "Opening Hours"
+msgstr "Orari Sede"

@@ -1,0 +1,28 @@
+{% load wagtailimages_tags %}
+
+<section class="block-team-grid">
+    <div class="container">
+        {% if self.title %}
+        <h2 class="block-team-grid__title">{{ self.title }}</h2>
+        {% endif %}
+        <div class="block-team-grid__grid">
+            {% for member in self.members %}
+            <div class="block-team-member">
+                {% if member.photo %}
+                    {% image member.photo fill-300x300 as member_img %}
+                    <div class="block-team-member__photo">
+                        <img src="{{ member_img.url }}" alt="{{ member.name }}" loading="lazy" width="{{ member_img.width }}" height="{{ member_img.height }}">
+                    </div>
+                {% endif %}
+                <h3 class="block-team-member__name">{{ member.name }}</h3>
+                {% if member.role %}
+                <p class="block-team-member__role">{{ member.role }}</p>
+                {% endif %}
+                {% if member.bio %}
+                <div class="block-team-member__bio">{{ member.bio }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

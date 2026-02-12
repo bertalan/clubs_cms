@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block body_class %}page-upload{% endblock %}
+
+{% block content %}
+<div class="page-upload">
+    <div class="page-upload__container">
+        <header class="page-upload__header">
+            <h1 class="page-upload__title">Upload Photos</h1>
+            <p class="page-upload__description">
+                Share your photos from club events. Uploads will be reviewed
+                by a moderator before appearing in the gallery.
+            </p>
+        </header>
+
+        {% if success %}
+        <div class="page-upload__success" role="alert">
+            <h2>Upload Successful</h2>
+            <p>{{ uploads_count }} photo{{ uploads_count|pluralize }} uploaded successfully and
+               sent for moderation.</p>
+            <p><a href="{% url 'website:my_uploads' %}">View your uploads</a></p>
+        </div>
+        {% endif %}
+
+        <div class="page-upload__form-wrapper">
+            <form method="post"
+                  action="{% url 'website:upload_photo' %}"
+                  enctype="multipart/form-data"
+                  class="page-upload__form">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                <div class="page-upload__errors" role="alert">
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <div class="page-upload__field">
+                    <label for="{{ form.photos.id_for_label }}" class="page-upload__label">
+                        {{ form.photos.label }}
+                    </label>
+                    {{ form.photos }}
+                    {% if form.photos.help_text %}
+                    <p class="page-upload__help">{{ form.photos.help_text }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="page-upload__field">
+                    <label for="{{ form.title_prefix.id_for_label }}" class="page-upload__label">
+                        {{ form.title_prefix.label }}
+                    </label>
+                    {{ form.title_prefix }}
+                    {% if form.title_prefix.help_text %}
+                    <p class="page-upload__help">{{ form.title_prefix.help_text }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="page-upload__field">
+                    <label for="{{ form.event.id_for_label }}" class="page-upload__label">
+                        {{ form.event.label }}
+                    </label>
+                    {{ form.event }}
+                    {% if form.event.help_text %}
+                    <p class="page-upload__help">{{ form.event.help_text }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="page-upload__field">
+                    <fieldset>
+                        <legend class="page-upload__label">{{ form.tags.label }}</legend>
+                        {{ form.tags }}
+                        {% if form.tags.help_text %}
+                        <p class="page-upload__help">{{ form.tags.help_text }}</p>
+                        {% endif %}
+                    </fieldset>
+                </div>
+
+                <div class="page-upload__actions">
+                    <button type="submit" class="page-upload__submit-btn">
+                        Upload Photos
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

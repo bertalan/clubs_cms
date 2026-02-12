@@ -1,0 +1,87 @@
+<section class="block-route" aria-label="{{ self.title }}">
+    <header class="block-route__header">
+        <h2 class="block-route__title">{{ self.title }}</h2>
+        {% if self.description %}
+        <p>{{ self.description }}</p>
+        {% endif %}
+
+        <div class="block-route__meta">
+            {% if self.route_type %}
+            <span>{{ self.route_type }}</span>
+            {% endif %}
+            {% if self.distance %}
+            <span>{{ self.distance }}</span>
+            {% endif %}
+            {% if self.elevation %}
+            <span>{{ self.elevation }}</span>
+            {% endif %}
+            {% if self.estimated_duration %}
+            <span>{{ self.estimated_duration }}</span>
+            {% endif %}
+        </div>
+
+        {% if self.difficulty %}
+        <span class="block-route__difficulty" data-level="{{ self.difficulty }}">{{ self.difficulty }}</span>
+        {% endif %}
+    </header>
+
+    {# Route map #}
+    <div class="block-route__map" id="route-map-{{ block.id }}" style="height: {{ self.map_height|default:'500' }}px;"
+        data-waypoints='[{% for wp in self.waypoints %}{"name":"{{ wp.value.name }}","coordinates":"{{ wp.value.coordinates }}","icon_type":"{{ wp.value.icon_type }}","notes":"{{ wp.value.notes|default:'' }}"}{% if not forloop.last %},{% endif %}{% endfor %}]'>
+        <noscript>
+            <p>Enable JavaScript to view the interactive route map.</p>
+        </noscript>
+    </div>
+
+    {# Waypoint list #}
+    <div class="block-route__waypoints">
+        {% for wp in self.waypoints %}
+        <div class="block-route__waypoint">
+            <span class="block-route__waypoint-marker">{{ forloop.counter }}</span>
+            <span class="block-route__waypoint-name">{{ wp.value.name }}</span>
+            {% if wp.value.notes %}
+            <p class="block-route__waypoint-notes">{{ wp.value.notes }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<script>
+(function() {
+    var mapEl = document.getElementById('route-map-{{ block.id }}');
+    if (!mapEl || typeof L === 'undefined') return;
+
+    var waypointsData = JSON.parse(mapEl.getAttribute('data-waypoints'));
+    if (!waypointsData || waypointsData.length === 0) return;
+
+    var points = [];
+    waypointsData.forEach(function(wp) {
+        var coords = wp.coordinates.split(',');
+        if (coords.length === 2) {
+            points.push([parseFloat(coords[0]), parseFloat(coords[1])]);
+        }
+    });
+
+    if (points.length === 0) return;
+
+    var map = L.map(mapEl).fitBounds(points, { padding: [30, 30] });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    waypointsData.forEach(function(wp, idx) {
+        var coords = wp.coordinates.split(',');
+        var lat = parseFloat(coords[0]);
+        var lng = parseFloat(coords[1]);
+        var marker = L.marker([lat, lng]).addTo(map);
+        var popup = '<strong>' + (idx + 1) + '. ' + wp.name + '</strong>';
+        if (wp.notes) popup += '<br>' + wp.notes;
+        marker.bindPopup(popup);
+    });
+
+    if (points.length > 1) {
+        L.polyline(points, { color: 'var(--primary, #0F172A)', weight: 3 }).addTo(map);
+    }
+})();
+</script>

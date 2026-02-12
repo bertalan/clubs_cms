@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Payment Cancelled" %} — {{ event.title }} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{% trans "Payment Cancelled" %}</h1>
+
+    <div class="alert alert-warning">
+        <p>{% trans "Your payment was not completed. You can try again using the link below." %}</p>
+    </div>
+
+    <section class="event-summary">
+        <h2>{{ event.title }}</h2>
+        <dl>
+            <dt>{% trans "Amount" %}</dt>
+            <dd><strong>{{ registration.payment_amount }} &euro;</strong></dd>
+        </dl>
+    </section>
+
+    <p>
+        <a href="{% url 'events:payment_choice' registration.pk %}" class="btn btn-primary">{% trans "Try again" %}</a>
+        <a href="{% url 'events:my_registrations' %}">{% trans "My Registrations" %}</a>
+    </p>
+</div>
+{% endblock %}

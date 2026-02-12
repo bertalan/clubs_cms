@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}page-partners{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<div class="page-partners">
+    <div class="container">
+        {# Header #}
+        <header class="page-partners__header">
+            <h1 class="page-partners__title">{{ page.title }}</h1>
+            {% if page.intro %}
+            <div class="page-partners__intro">
+                {{ page.intro|richtext }}
+            </div>
+            {% endif %}
+        </header>
+
+        {# Category filters #}
+        {% if categories %}
+        <div class="page-partners__filters" role="navigation" aria-label="Partner filters">
+            <ul class="page-partners__filter-list">
+                <li class="page-partners__filter-item">
+                    <a href="{% pageurl page %}"
+                       class="page-partners__filter-link" {% if not current_category %}data-active{% endif %}>
+                        All
+                    </a>
+                </li>
+                {% for cat in categories %}
+                <li class="page-partners__filter-item">
+                    <a href="{% pageurl page %}?category={{ cat.slug }}"
+                       class="page-partners__filter-link" {% if current_category == cat.slug %}data-active{% endif %}>
+                        {{ cat.name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {# Partner listing #}
+        {% if partner_items %}
+        <div class="page-partners__grid">
+            {% for partner in partner_items %}
+            <article class="partner-card" {% if partner.is_featured %}data-featured{% endif %}>
+                {% if partner.logo %}
+                    {% image partner.logo fill-300x200 as card_logo %}
+                    <div class="partner-card__logo">
+                        <a href="{% pageurl partner %}">
+                            <img src="{{ card_logo.url }}"
+                                 alt="{{ partner.title }}"
+                                 loading="lazy"
+                                 width="{{ card_logo.width }}"
+                                 height="{{ card_logo.height }}">
+                        </a>
+                    </div>
+                {% endif %}
+                <div class="partner-card__content">
+                    {% if partner.category %}
+                    <span class="partner-card__category">{{ partner.category.name }}</span>
+                    {% endif %}
+
+                    <h2 class="partner-card__title">
+                        <a href="{% pageurl partner %}">{{ partner.title }}</a>
+                    </h2>
+
+                    {% if partner.intro %}
+                    <p class="partner-card__excerpt">{{ partner.intro|truncatewords:20 }}</p>
+                    {% endif %}
+
+                    {% if partner.contact_city %}
+                    <p class="partner-card__city">{{ partner.contact_city }}</p>
+                    {% endif %}
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+        {# Pagination #}
+        {% include "includes/pagination.html" with paginator=paginator page_obj=partner_items %}
+
+        {% else %}
+        <div class="page-partners__empty">
+            <p>No partners found.</p>
+        </div>
+        {% endif %}
+
+        {# Body StreamField #}
+        {% if page.body %}
+        <div class="page-partners__body">
+            {% for block in page.body %}
+                {% include_block block %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

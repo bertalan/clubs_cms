@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Register" %} — {{ event.title }} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container container--narrow">
+    <h1 class="register-title">{% trans "Register for Event" %}</h1>
+
+    {# ── Event summary card ── #}
+    <div class="register-summary">
+        <h2 class="register-summary__title">{{ event.title }}</h2>
+        <div class="register-summary__details">
+            <div class="register-summary__item">
+                <span class="register-summary__icon" aria-hidden="true">&#128197;</span>
+                <span>{{ event.start_date }}{% if event.end_date %} &mdash; {{ event.end_date }}{% endif %}</span>
+            </div>
+            {% if event.location_name %}
+            <div class="register-summary__item">
+                <span class="register-summary__icon" aria-hidden="true">&#128205;</span>
+                <span>{{ event.location_name }}{% if event.location_address %}, {{ event.location_address }}{% endif %}</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {# ── Pricing card ── #}
+    <div class="register-pricing">
+        <h3 class="register-pricing__heading">{% trans "Pricing" %}</h3>
+        <div class="register-pricing__rows">
+            <div class="register-pricing__row">
+                <span>{% trans "Base fee" %}</span>
+                <span>{{ pricing.base_fee }}&nbsp;&euro;</span>
+            </div>
+            {% if pricing.tier %}
+            <div class="register-pricing__row register-pricing__row--discount">
+                <span>{{ pricing.tier.label }}</span>
+                <span>-{{ pricing.tier_discount_percent }}%</span>
+            </div>
+            {% endif %}
+            {% if pricing.member_discount_percent %}
+            <div class="register-pricing__row register-pricing__row--discount">
+                <span>{% trans "Member discount" %}</span>
+                <span>-{{ pricing.member_discount_percent }}%</span>
+            </div>
+            {% endif %}
+            <div class="register-pricing__row register-pricing__row--total">
+                <strong>{% trans "Your price" %}</strong>
+                <strong>{{ pricing.final_price }}&nbsp;&euro;</strong>
+            </div>
+        </div>
+    </div>
+
+    {# ── Error banner ── #}
+    {% if form.non_field_errors %}
+    <div class="alert alert-error" role="alert">
+        {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if form.errors %}
+    <div class="alert alert-error" role="alert">
+        <p>{% trans "Please correct the highlighted errors below." %}</p>
+    </div>
+    {% endif %}
+
+    {# ── Registration form ── #}
+    <form method="post" novalidate class="register-form">
+        {% csrf_token %}
+
+        {# === Guest info (non-authenticated only) === #}
+        {% if not user.is_authenticated %}
+        <fieldset class="register-fieldset">
+            <legend class="register-fieldset__legend">{% trans "Your Information" %}</legend>
+            {% for field in form %}
+                {% if field.name in "first_name,last_name,email" %}
+                {% include "events/_form_field.html" with field=field %}
+                {% endif %}
+            {% endfor %}
+        </fieldset>
+        {% endif %}
+
+        {# === Registration details === #}
+        <fieldset class="register-fieldset">
+            <legend class="register-fieldset__legend">{% trans "Registration Details" %}</legend>
+            {% for field in form %}
+                {% if field.name in "guests,guest_names,notes" %}
+                {% include "events/_form_field.html" with field=field %}
+                {% endif %}
+            {% endfor %}
+        </fieldset>
+
+        {# === Passenger / Companion === #}
+        <fieldset class="register-fieldset">
+            <legend class="register-fieldset__legend">{% trans "Passenger / Companion" %}</legend>
+
+            {# Toggle checkbox #}
+            {% for field in form %}
+                {% if field.name == "has_passenger" %}
+                <div class="form-group form-check">
+                    {{ field }}
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% if field.help_text %}
+                    <button type="button"
+                            class="field-help-btn"
+                            aria-label="{% trans 'Help' %}"
+                            data-help="{{ field.help_text }}">?</button>
+                    {% endif %}
+                </div>
+                {% endif %}
+            {% endfor %}
+
+            {# Passenger details (hidden until has_passenger is checked) #}
+            <div id="passenger-fields" class="register-passenger-fields" hidden>
+                {# Member toggle #}
+                {% for field in form %}
+                    {% if field.name == "passenger_is_member" %}
+                    <div class="form-group form-check">
+                        {{ field }}
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {% if field.help_text %}
+                        <button type="button"
+                                class="field-help-btn"
+                                aria-label="{% trans 'Help' %}"
+                                data-help="{{ field.help_text }}">?</button>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+
+                {# Member select (shown when passenger_is_member is checked) #}
+                <div id="passenger-member-select" hidden>
+                    {% for field in form %}
+                        {% if field.name == "passenger_member" %}
+                        {% include "events/_form_field.html" with field=field %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                {# Non-member passenger fields (shown when passenger_is_member is unchecked) #}
+                <div id="passenger-manual-fields">
+                    {% for field in form %}
+                        {% if field.name in "passenger_first_name,passenger_last_name,passenger_email,passenger_phone,passenger_fiscal_code,passenger_birth_date,passenger_emergency_contact" %}
+                        {% include "events/_form_field.html" with field=field %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </fieldset>
+
+        {# === Terms === #}
+        <fieldset class="register-fieldset">
+            <legend class="register-fieldset__legend">{% trans "Terms" %}</legend>
+            {% for field in form %}
+                {% if field.name == "accept_terms" %}
+                <div class="form-group form-check">
+                    {{ field }}
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% if field.errors %}
+                    <ul class="form-errors">
+                        {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                {% endif %}
+            {% endfor %}
+        </fieldset>
+
+        {# GAP-16: Pre-submit summary #}
+        <div id="register-review" class="register-summary-review" aria-live="polite">
+            <h3>{% trans "Registration Summary" %}</h3>
+            <dl>
+                <dt>{% trans "Event" %}</dt>
+                <dd>{{ event.title }}</dd>
+                <dt>{% trans "Date" %}</dt>
+                <dd>{{ event.start_date|date:"l d M Y, H:i" }}</dd>
+                {% if pricing.final_price > 0 %}
+                <dt>{% trans "Price" %}</dt>
+                <dd>&euro; {{ pricing.final_price|floatformat:2 }}</dd>
+                {% endif %}
+                {% if pricing.passenger_price > 0 %}
+                <dt>{% trans "Passenger" %}</dt>
+                <dd id="review-passenger-price">&euro; {{ pricing.passenger_price|floatformat:2 }}</dd>
+                {% endif %}
+            </dl>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn--block">{% trans "Register" %}</button>
+    </form>
+</div>
+
+{# ── Help modal ── #}
+<div id="field-help-modal" class="field-help-modal" hidden>
+    <div class="field-help-modal__backdrop"></div>
+    <div class="field-help-modal__content" role="dialog" aria-modal="true" aria-label="{% trans 'Field help' %}">
+        <button type="button" class="field-help-modal__close" aria-label="{% trans 'Close' %}">&times;</button>
+        <p id="field-help-modal-text"></p>
+    </div>
+</div>
+
+<script>
+(function() {
+    /* ── Help modal ── */
+    var modal = document.getElementById('field-help-modal');
+    var modalText = document.getElementById('field-help-modal-text');
+    var backdrop = modal.querySelector('.field-help-modal__backdrop');
+    var closeBtn = modal.querySelector('.field-help-modal__close');
+
+    function openHelp(text) {
+        modalText.textContent = text;
+        modal.hidden = false;
+        closeBtn.focus();
+    }
+    function closeHelp() {
+        modal.hidden = true;
+    }
+
+    document.querySelectorAll('.field-help-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            openHelp(this.getAttribute('data-help'));
+        });
+    });
+    backdrop.addEventListener('click', closeHelp);
+    closeBtn.addEventListener('click', closeHelp);
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !modal.hidden) closeHelp();
+    });
+
+    /* ── Passenger toggle ── */
+    var hasPassenger = document.getElementById('id_has_passenger');
+    var passengerFields = document.getElementById('passenger-fields');
+    var isMember = document.getElementById('id_passenger_is_member');
+    var memberSelect = document.getElementById('passenger-member-select');
+    var manualFields = document.getElementById('passenger-manual-fields');
+
+    function togglePassenger() {
+        passengerFields.hidden = !hasPassenger.checked;
+    }
+    function toggleMemberMode() {
+        if (isMember) {
+            memberSelect.hidden = !isMember.checked;
+            manualFields.hidden = isMember.checked;
+        }
+    }
+
+    if (hasPassenger) {
+        hasPassenger.addEventListener('change', togglePassenger);
+        togglePassenger();
+    }
+    if (isMember) {
+        isMember.addEventListener('change', toggleMemberMode);
+        toggleMemberMode();
+    }
+
+    /* ── GAP-16: Show pre-submit summary when accept_terms is checked ── */
+    var acceptTerms = document.getElementById('id_accept_terms');
+    var reviewBlock = document.getElementById('register-review');
+    if (acceptTerms && reviewBlock) {
+        function toggleReview() {
+            reviewBlock.classList.toggle('visible', acceptTerms.checked);
+        }
+        acceptTerms.addEventListener('change', toggleReview);
+        toggleReview();
+    }
+})();
+</script>
+{% endblock %}

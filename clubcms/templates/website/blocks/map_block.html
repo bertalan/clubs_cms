@@ -1,0 +1,41 @@
+{% load wagtailsettings_tags %}
+
+<section class="block-map" aria-label="{{ self.title|default:'Map' }}">
+    {% if self.title %}
+    <h2 class="block-map__title">{{ self.title }}</h2>
+    {% endif %}
+    <div class="block-map__wrapper"
+        id="map-{{ block.id }}"
+        data-coordinates="{{ self.coordinates }}"
+        data-zoom="{{ self.zoom|default:'14' }}"
+        style="height: {{ self.height|default:'400' }}px;">
+        {# Map rendered via JS #}
+        <noscript>
+            {% if self.address %}
+            <p>{{ self.address }}</p>
+            {% endif %}
+        </noscript>
+    </div>
+    {% if self.address %}
+    <p>{{ self.address }}</p>
+    {% endif %}
+</section>
+
+<script>
+(function() {
+    var container = document.getElementById('map-{{ block.id }}');
+    if (!container) return;
+    var coords = container.getAttribute('data-coordinates').split(',');
+    var zoom = parseInt(container.getAttribute('data-zoom')) || 14;
+    var lat = parseFloat(coords[0]);
+    var lng = parseFloat(coords[1]);
+
+    if (typeof L !== 'undefined') {
+        var map = L.map(container).setView([lat, lng], zoom);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        L.marker([lat, lng]).addTo(map);
+    }
+})();
+</script>

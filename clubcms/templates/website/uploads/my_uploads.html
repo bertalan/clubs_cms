@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags %}
+
+{% block body_class %}page-my-uploads{% endblock %}
+
+{% block content %}
+<div class="page-my-uploads">
+    <div class="page-my-uploads__container">
+        <header class="page-my-uploads__header">
+            <h1 class="page-my-uploads__title">My Uploads</h1>
+            <p class="page-my-uploads__description">
+                View the status of your photo uploads.
+            </p>
+            <a href="{% url 'website:upload_photo' %}" class="page-my-uploads__upload-link">
+                Upload More Photos
+            </a>
+        </header>
+
+        {% if uploads %}
+        <div class="page-my-uploads__grid">
+            {% for upload in uploads %}
+            <div class="upload-card upload-card--{{ upload.is_approved|yesno:'approved,pending' }}{% if upload.is_rejected %} upload-card--rejected{% endif %}">
+                {% image upload.image fill-300x200 as thumb %}
+                <div class="upload-card__image">
+                    <img src="{{ thumb.url }}"
+                         alt="{{ upload.image.title }}"
+                         loading="lazy"
+                         width="{{ thumb.width }}"
+                         height="{{ thumb.height }}">
+                </div>
+                <div class="upload-card__info">
+                    <h3 class="upload-card__title">{{ upload.image.title }}</h3>
+
+                    <p class="upload-card__date">
+                        {{ upload.uploaded_at|date:"F j, Y H:i" }}
+                    </p>
+
+                    {% if upload.event %}
+                    <p class="upload-card__event">
+                        Event: {{ upload.event.title }}
+                    </p>
+                    {% endif %}
+
+                    <p class="upload-card__status">
+                        {% if upload.is_approved %}
+                            <span class="upload-card__badge upload-card__badge--approved">Approved</span>
+                        {% elif upload.is_rejected %}
+                            <span class="upload-card__badge upload-card__badge--rejected">Rejected</span>
+                        {% else %}
+                            <span class="upload-card__badge upload-card__badge--pending">Pending Review</span>
+                        {% endif %}
+                    </p>
+
+                    {% if upload.rejection_reason %}
+                    <p class="upload-card__reason">
+                        Reason: {{ upload.rejection_reason }}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {# Pagination #}
+        {% if is_paginated %}
+        <nav class="page-my-uploads__pagination" aria-label="Pagination">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                {% endif %}
+                <li class="pagination__current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </li>
+                {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <div class="page-my-uploads__empty">
+            <p>You haven't uploaded any photos yet.</p>
+            <a href="{% url 'website:upload_photo' %}">Upload your first photo</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

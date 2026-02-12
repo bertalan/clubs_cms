@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}page-board{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<article class="page-board">
+    <div class="container">
+        {# Header #}
+        <header class="page-board__header">
+            <h1 class="page-board__title">{{ page.title }}</h1>
+        </header>
+
+        {# Intro #}
+        {% if page.intro %}
+        <div class="page-board__intro">
+            {{ page.intro|richtext }}
+        </div>
+        {% endif %}
+
+        {# Body StreamField #}
+        {% if page.body %}
+        <div class="page-board__body">
+            {% for block in page.body %}
+                {% include_block block %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</article>
+{% endblock %}

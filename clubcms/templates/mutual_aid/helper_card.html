@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ helper.get_visible_name }} | {% trans "Mutual Aid" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .helper-detail {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+    .helper-detail .breadcrumb {
+        margin-bottom: 1.5rem;
+        font-size: 0.875rem;
+    }
+    .helper-detail .breadcrumb a {
+        color: var(--color-primary, #1e40af);
+        text-decoration: none;
+    }
+    .helper-profile {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        align-items: flex-start;
+    }
+    .helper-profile img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .helper-info h1 {
+        margin: 0 0 0.5rem 0;
+    }
+    .helper-info .meta {
+        color: var(--color-text-muted, #6b7280);
+        font-size: 0.9rem;
+    }
+    .info-section {
+        background: var(--color-bg-secondary, #f8f9fa);
+        padding: 1.25rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .info-section h3 {
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+    }
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.375rem 0;
+        border-bottom: 1px solid var(--color-border, #e5e7eb);
+    }
+    .info-row:last-child {
+        border-bottom: none;
+    }
+    .info-label {
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    .info-value {
+        font-size: 0.9rem;
+    }
+    .btn-primary {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background: var(--color-primary, #1e40af);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 0.375rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+    }
+    .radius-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        background: #dbeafe;
+        color: #1e40af;
+        border-radius: 9999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="helper-detail">
+    <nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
+        <a href="{% url 'mutual_aid:map' %}">{% trans "Mutual Aid" %}</a>
+        &rsaquo;
+        <span>{{ helper.get_visible_name }}</span>
+    </nav>
+
+    <div class="helper-profile">
+        {% if privacy.show_photo_on_aid and helper.photo %}
+            {% load wagtailimages_tags %}
+            {% image helper.photo fill-100x100 as photo_img %}
+            <img src="{{ photo_img.url }}" alt="{{ helper.get_visible_name }}">
+        {% endif %}
+        <div class="helper-info">
+            <h1>{{ helper.get_visible_name }}</h1>
+            <div class="meta">
+                <span>{{ helper.aid_location_city }}</span>
+                <span class="radius-badge">{{ helper.aid_radius_km }} km</span>
+            </div>
+        </div>
+    </div>
+
+    {# Aid info #}
+    <div class="info-section">
+        <h3>{% trans "Availability" %}</h3>
+        <div class="info-row">
+            <span class="info-label">{% trans "City" %}</span>
+            <span class="info-value">{{ helper.aid_location_city }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">{% trans "Radius" %}</span>
+            <span class="info-value">{{ helper.aid_radius_km }} km</span>
+        </div>
+        {% if helper.aid_notes and privacy.show_bio_on_aid %}
+            <div class="info-row">
+                <span class="info-label">{% trans "Notes" %}</span>
+                <span class="info-value">{{ helper.aid_notes }}</span>
+            </div>
+        {% endif %}
+    </div>
+
+    {# Contact info (based on privacy settings) #}
+    {% if privacy.show_phone_on_aid or privacy.show_mobile_on_aid or privacy.show_email_on_aid or privacy.show_whatsapp_on_aid %}
+        <div class="info-section">
+            <h3>{% trans "Contact" %}</h3>
+            {% if privacy.show_phone_on_aid and helper.phone %}
+                <div class="info-row">
+                    <span class="info-label">{% trans "Phone" %}</span>
+                    <span class="info-value"><a href="tel:{{ helper.phone }}">{{ helper.phone }}</a></span>
+                </div>
+            {% endif %}
+            {% if privacy.show_mobile_on_aid and helper.mobile %}
+                <div class="info-row">
+                    <span class="info-label">{% trans "Mobile" %}</span>
+                    <span class="info-value"><a href="tel:{{ helper.mobile }}">{{ helper.mobile }}</a></span>
+                </div>
+            {% endif %}
+            {% if privacy.show_whatsapp_on_aid and helper.mobile %}
+                <div class="info-row">
+                    <span class="info-label">{% trans "WhatsApp" %}</span>
+                    <span class="info-value">
+                        <a href="https://wa.me/{{ helper.mobile }}" target="_blank" rel="noopener noreferrer">
+                            {% trans "Send message" %}
+                        </a>
+                    </span>
+                </div>
+            {% endif %}
+            {% if privacy.show_email_on_aid and helper.email %}
+                <div class="info-row">
+                    <span class="info-label">{% trans "Email" %}</span>
+                    <span class="info-value"><a href="mailto:{{ helper.email }}">{{ helper.email }}</a></span>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {# Action buttons #}
+    {% if is_active_member %}
+        <a href="{% url 'mutual_aid:contact_form' pk=helper.pk %}" class="btn-primary">
+            {% trans "Send Aid Request" %}
+        </a>
+    {% endif %}
+</div>
+{% endblock %}

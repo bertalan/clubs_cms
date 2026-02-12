@@ -1,0 +1,41 @@
+{% extends "notifications/emails/base.html" %}
+{% load i18n %}
+
+{% block email_title %}{% trans "Notification digest" %} | {{ site_name }}{% endblock %}
+
+{% block email_body %}
+<h2 style="font-size: 22px; margin-bottom: 16px; color: #1a1a2e;">
+    {% blocktrans with name=user.get_short_name|default:user.username %}
+    Hi {{ name }}, here is your notification digest
+    {% endblocktrans %}
+</h2>
+
+<p style="margin-bottom: 24px; color: #666666; font-size: 14px;">
+    {% blocktrans with count=notifications|length %}
+    You have {{ count }} new notification(s).
+    {% endblocktrans %}
+</p>
+
+{% for notification in notifications %}
+<div style="border-left: 3px solid #2563eb; padding: 12px 16px; margin-bottom: 16px; background: #f8fafc;">
+    <h3 style="font-size: 16px; margin-bottom: 4px; color: #1a1a2e;">
+        {{ notification.title }}
+    </h3>
+    <p style="font-size: 14px; color: #555555; margin-bottom: 8px;">
+        {{ notification.body|truncatewords:40 }}
+    </p>
+    {% if notification.url %}
+    <a href="{{ base_url }}{{ notification.url }}"
+       style="font-size: 13px; color: #2563eb; text-decoration: none;">
+        {% trans "View details" %} &rarr;
+    </a>
+    {% endif %}
+</div>
+{% endfor %}
+
+<p style="text-align: center; margin-top: 24px;">
+    <a href="{{ base_url }}/notifications/history/" class="btn">
+        {% trans "View all notifications" %}
+    </a>
+</p>
+{% endblock %}

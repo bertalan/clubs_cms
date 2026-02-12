@@ -1,0 +1,180 @@
+# ClubCMS English translations
+# Copyright (C) 2024 ClubCMS
+# This file is distributed under the same license as ClubCMS.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ClubCMS 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: ClubCMS Team\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: Navigation
+msgid "Home"
+msgstr "Home"
+
+msgid "About"
+msgstr "About"
+
+msgid "News"
+msgstr "News"
+
+msgid "Events"
+msgstr "Events"
+
+msgid "Gallery"
+msgstr "Gallery"
+
+msgid "Contact"
+msgstr "Contact"
+
+msgid "Members"
+msgstr "Members"
+
+msgid "Privacy"
+msgstr "Privacy"
+
+msgid "Transparency"
+msgstr "Transparency"
+
+msgid "Press"
+msgstr "Press"
+
+#: Auth / Account
+msgid "Log in"
+msgstr "Log in"
+
+msgid "Log out"
+msgstr "Log out"
+
+msgid "Sign up"
+msgstr "Sign up"
+
+msgid "My profile"
+msgstr "My profile"
+
+msgid "Settings"
+msgstr "Settings"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Email"
+msgstr "Email"
+
+#: Forms
+msgid "Submit"
+msgstr "Submit"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Reset"
+msgstr "Reset"
+
+#: Events specific
+msgid "Upcoming events"
+msgstr "Upcoming events"
+
+msgid "Past events"
+msgstr "Past events"
+
+msgid "Register"
+msgstr "Register"
+
+msgid "Registration"
+msgstr "Registration"
+
+msgid "Location"
+msgstr "Location"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Price"
+msgstr "Price"
+
+msgid "Free"
+msgstr "Free"
+
+msgid "Sold out"
+msgstr "Sold out"
+
+msgid "Spots remaining"
+msgstr "Spots remaining"
+
+#: Members
+msgid "Member since"
+msgstr "Member since"
+
+msgid "Membership"
+msgstr "Membership"
+
+msgid "Active"
+msgstr "Active"
+
+msgid "Expired"
+msgstr "Expired"
+
+#: General / misc
+msgid "Read more"
+msgstr "Read more"
+
+msgid "Back"
+msgstr "Back"
+
+msgid "Next"
+msgstr "Next"
+
+msgid "Previous"
+msgstr "Previous"
+
+msgid "Page"
+msgstr "Page"
+
+msgid "Share"
+msgstr "Share"
+
+msgid "Loading..."
+msgstr "Loading..."
+
+msgid "No results found."
+msgstr "No results found."
+
+msgid "All rights reserved."
+msgstr "All rights reserved."
+
+#: Footer
+msgid "Follow us"
+msgstr "Follow us"
+
+msgid "Contact us"
+msgstr "Contact us"
+
+msgid "Newsletter"
+msgstr "Newsletter"
+
+msgid "Cookie policy"
+msgstr "Cookie policy"
+
+msgid "Terms of service"
+msgstr "Terms of service"

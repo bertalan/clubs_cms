@@ -1,0 +1,56 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<section class="block-hero-slider" aria-label="Hero slider"
+    data-autoplay="{{ self.autoplay|default:'True' }}"
+    data-interval="{{ self.interval|default:'5000' }}">
+
+    {% for slide in self.slides %}
+    <div class="block-hero-slider__slide{% if forloop.first %} active{% endif %}" role="group" aria-roledescription="slide" aria-label="Slide {{ forloop.counter }} of {{ self.slides|length }}">
+        {% if slide.value.image %}
+            {% image slide.value.image fill-1920x900 as slide_img %}
+            <img src="{{ slide_img.url }}" alt="{{ slide.value.title|default:'' }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" width="{{ slide_img.width }}" height="{{ slide_img.height }}">
+        {% endif %}
+        <div class="block-hero-slider__overlay">
+            <div class="container">
+                <div class="block-hero-slider__content">
+                    {% if slide.value.badge %}
+                    <span class="block-hero-slider__badge">{{ slide.value.badge }}</span>
+                    {% endif %}
+                    {% if slide.value.title %}
+                    <h2 class="block-hero-slider__title">{{ slide.value.title }}</h2>
+                    {% endif %}
+                    {% if slide.value.subtitle %}
+                    <p class="block-hero-slider__subtitle">{{ slide.value.subtitle }}</p>
+                    {% endif %}
+                    {% if slide.value.cta_text %}
+                    <div class="block-hero-slider__actions">
+                        {% if slide.value.cta_link %}
+                        <a href="{% pageurl slide.value.cta_link %}" class="btn btn-primary">{{ slide.value.cta_text }}</a>
+                        {% elif slide.value.cta_url %}
+                        <a href="{{ slide.value.cta_url }}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">{{ slide.value.cta_text }}</a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {# Navigation arrows #}
+    {% if self.show_arrows %}
+    <div class="block-hero-slider__arrows">
+        <button class="block-hero-slider__arrow" data-direction="prev" type="button" aria-label="Previous slide">&lsaquo;</button>
+        <button class="block-hero-slider__arrow" data-direction="next" type="button" aria-label="Next slide">&rsaquo;</button>
+    </div>
+    {% endif %}
+
+    {# Dots navigation #}
+    {% if self.show_dots %}
+    <div class="block-hero-slider__dots" role="tablist" aria-label="Slide navigation">
+        {% for slide in self.slides %}
+        <button class="block-hero-slider__dot{% if forloop.first %} active{% endif %}" type="button" role="tab" aria-label="Go to slide {{ forloop.counter }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"></button>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>

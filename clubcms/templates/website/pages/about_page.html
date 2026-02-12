@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}page-about{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<article class="page-about">
+    <div class="container">
+        {# Header #}
+        <header class="page-about__header">
+            <h1 class="page-about__title">{{ page.title }}</h1>
+        </header>
+
+        {# Cover image #}
+        {% if page.cover_image %}
+        <div class="page-about__cover">
+            {% image page.cover_image fill-1200x500 as cover_img %}
+            <img src="{{ cover_img.url }}" alt="{{ page.title }}" class="page-about__cover-image" width="{{ cover_img.width }}" height="{{ cover_img.height }}">
+        </div>
+        {% endif %}
+
+        {# Intro #}
+        {% if page.intro %}
+        <div class="page-about__intro">
+            {{ page.intro|richtext }}
+        </div>
+        {% endif %}
+
+        {# Body StreamField #}
+        {% if page.body %}
+        <div class="page-about__body">
+            {% for block in page.body %}
+                {% include_block block %}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {# Child pages (BoardPage links) #}
+        {% with children=page.get_children.live %}
+        {% if children %}
+        <nav class="page-about__subpages" aria-label="Related pages">
+            <h2 class="page-about__subpages-heading">Sections</h2>
+            <ul class="page-about__subpages-list">
+                {% for child in children %}
+                <li class="page-about__subpages-item">
+                    <a href="{% pageurl child %}" class="page-about__subpages-link">{{ child.title }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </nav>
+        {% endif %}
+        {% endwith %}
+    </div>
+</article>
+{% endblock %}

@@ -1,0 +1,43 @@
+<section class="block-tabs">
+    <div class="block-tabs__nav" role="tablist" aria-label="Tabs">
+        {% for tab in self.tabs %}
+        <button class="block-tabs__tab{% if forloop.first %} active{% endif %}" type="button" role="tab" id="tab-{{ block.id }}-{{ forloop.counter }}" aria-controls="tabpanel-{{ block.id }}-{{ forloop.counter }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" {% if not forloop.first %}tabindex="-1"{% endif %}>
+            {{ tab.value.title }}
+        </button>
+        {% endfor %}
+    </div>
+    {% for tab in self.tabs %}
+    <div class="block-tabs__panel{% if forloop.first %} active{% endif %}" id="tabpanel-{{ block.id }}-{{ forloop.counter }}" role="tabpanel" aria-labelledby="tab-{{ block.id }}-{{ forloop.counter }}" {% if not forloop.first %}hidden{% endif %}>
+        {{ tab.value.content }}
+    </div>
+    {% endfor %}
+</section>
+
+<script>
+(function() {
+    var tablists = document.querySelectorAll('.block-tabs__nav');
+    tablists.forEach(function(tablist) {
+        var tabs = tablist.querySelectorAll('[role="tab"]');
+        tabs.forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                var parent = this.closest('.block-tabs');
+                parent.querySelectorAll('[role="tab"]').forEach(function(t) {
+                    t.setAttribute('aria-selected', 'false');
+                    t.classList.remove('active');
+                    t.setAttribute('tabindex', '-1');
+                });
+                parent.querySelectorAll('[role="tabpanel"]').forEach(function(p) {
+                    p.setAttribute('hidden', '');
+                    p.classList.remove('active');
+                });
+                this.setAttribute('aria-selected', 'true');
+                this.classList.add('active');
+                this.removeAttribute('tabindex');
+                var panel = document.getElementById(this.getAttribute('aria-controls'));
+                panel.removeAttribute('hidden');
+                panel.classList.add('active');
+            });
+        });
+    });
+})();
+</script>

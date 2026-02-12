@@ -1,0 +1,20 @@
+{% load wagtailcore_tags %}
+
+<section class="block-timeline">
+    <div class="container">
+        {% if self.title %}
+        <h2 class="block-timeline__title">{{ self.title }}</h2>
+        {% endif %}
+        <div class="block-timeline__list">
+            {% for item in self.items %}
+            <div class="block-timeline__item">
+                <span class="block-timeline__year">{{ item.value.year }}</span>
+                <h3 class="block-timeline__item-title">{{ item.value.title }}</h3>
+                {% if item.value.description %}
+                <div class="block-timeline__description">{{ item.value.description }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

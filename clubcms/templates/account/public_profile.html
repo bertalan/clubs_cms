@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ visible_name }} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="public-profile">
+        <h1>{{ visible_name }}</h1>
+
+        {% if member.bio %}
+        <div class="profile-bio">
+            <h2>{% trans "About" %}</h2>
+            <p>{{ member.bio }}</p>
+        </div>
+        {% endif %}
+
+        {% if member.city %}
+        <div class="profile-location">
+            <h2>{% trans "Location" %}</h2>
+            <p>{{ member.city }}{% if member.province %}, {{ member.province }}{% endif %}</p>
+        </div>
+        {% endif %}
+
+        {% if member.membership_date %}
+        <div class="profile-membership">
+            <p>
+                <strong>{% trans "Member since" %}:</strong>
+                {{ member.membership_date }}
+            </p>
+        </div>
+        {% endif %}
+
+        {% if member.is_active_member %}
+        <div class="profile-badge">
+            <span class="badge badge-active">{% trans "Active Member" %}</span>
+        </div>
+        {% endif %}
+
+        <div class="profile-actions">
+            <a href="{% url 'account:directory' %}" class="btn btn-secondary">
+                {% trans "Back to Directory" %}
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

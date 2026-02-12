@@ -1,0 +1,180 @@
+# ClubCMS German translations
+# Copyright (C) 2024 ClubCMS
+# This file is distributed under the same license as ClubCMS.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ClubCMS 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: ClubCMS Team\n"
+"Language-Team: German\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: Navigation
+msgid "Home"
+msgstr "Startseite"
+
+msgid "About"
+msgstr "Uber uns"
+
+msgid "News"
+msgstr "Nachrichten"
+
+msgid "Events"
+msgstr "Veranstaltungen"
+
+msgid "Gallery"
+msgstr "Galerie"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Members"
+msgstr "Mitglieder"
+
+msgid "Privacy"
+msgstr "Datenschutz"
+
+msgid "Transparency"
+msgstr "Transparenz"
+
+msgid "Press"
+msgstr "Presse"
+
+#: Auth / Account
+msgid "Log in"
+msgstr "Anmelden"
+
+msgid "Log out"
+msgstr "Abmelden"
+
+msgid "Sign up"
+msgstr "Registrieren"
+
+msgid "My profile"
+msgstr "Mein Profil"
+
+msgid "Settings"
+msgstr "Einstellungen"
+
+msgid "Password"
+msgstr "Passwort"
+
+msgid "Email"
+msgstr "E-Mail"
+
+#: Forms
+msgid "Submit"
+msgstr "Absenden"
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "Save"
+msgstr "Speichern"
+
+msgid "Delete"
+msgstr "Loschen"
+
+msgid "Search"
+msgstr "Suchen"
+
+msgid "Filter"
+msgstr "Filtern"
+
+msgid "Reset"
+msgstr "Zurucksetzen"
+
+#: Events specific
+msgid "Upcoming events"
+msgstr "Kommende Veranstaltungen"
+
+msgid "Past events"
+msgstr "Vergangene Veranstaltungen"
+
+msgid "Register"
+msgstr "Anmelden"
+
+msgid "Registration"
+msgstr "Anmeldung"
+
+msgid "Location"
+msgstr "Ort"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Price"
+msgstr "Preis"
+
+msgid "Free"
+msgstr "Kostenlos"
+
+msgid "Sold out"
+msgstr "Ausverkauft"
+
+msgid "Spots remaining"
+msgstr "Verfugbare Platze"
+
+#: Members
+msgid "Member since"
+msgstr "Mitglied seit"
+
+msgid "Membership"
+msgstr "Mitgliedschaft"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid "Expired"
+msgstr "Abgelaufen"
+
+#: General / misc
+msgid "Read more"
+msgstr "Weiterlesen"
+
+msgid "Back"
+msgstr "Zuruck"
+
+msgid "Next"
+msgstr "Weiter"
+
+msgid "Previous"
+msgstr "Zuruck"
+
+msgid "Page"
+msgstr "Seite"
+
+msgid "Share"
+msgstr "Teilen"
+
+msgid "Loading..."
+msgstr "Laden..."
+
+msgid "No results found."
+msgstr "Keine Ergebnisse gefunden."
+
+msgid "All rights reserved."
+msgstr "Alle Rechte vorbehalten."
+
+#: Footer
+msgid "Follow us"
+msgstr "Folgen Sie uns"
+
+msgid "Contact us"
+msgstr "Kontaktieren Sie uns"
+
+msgid "Newsletter"
+msgstr "Newsletter"
+
+msgid "Cookie policy"
+msgstr "Cookie-Richtlinie"
+
+msgid "Terms of service"
+msgstr "Nutzungsbedingungen"

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags %}
+
+{% block body_class %}page-moderation{% endblock %}
+
+{% block content %}
+<div class="page-moderation">
+    <div class="page-moderation__container">
+        <header class="page-moderation__header">
+            <h1 class="page-moderation__title">Photo Moderation Queue</h1>
+            <p class="page-moderation__description">
+                Review and approve or reject member-uploaded photos.
+            </p>
+        </header>
+
+        {% if uploads %}
+        <div class="page-moderation__grid">
+            {% for upload in uploads %}
+            <div class="moderation-card" id="upload-{{ upload.pk }}">
+                {% image upload.image fill-300x200 as thumb %}
+                <div class="moderation-card__image">
+                    <img src="{{ thumb.url }}"
+                         alt="{{ upload.image.title }}"
+                         loading="lazy"
+                         width="{{ thumb.width }}"
+                         height="{{ thumb.height }}">
+                </div>
+                <div class="moderation-card__info">
+                    <h3 class="moderation-card__title">{{ upload.image.title }}</h3>
+
+                    <p class="moderation-card__meta">
+                        Uploaded by: {{ upload.uploaded_by.display_name|default:upload.uploaded_by.username }}
+                    </p>
+                    <p class="moderation-card__meta">
+                        Date: {{ upload.uploaded_at|date:"F j, Y H:i" }}
+                    </p>
+
+                    {% if upload.event %}
+                    <p class="moderation-card__meta">
+                        Event: {{ upload.event.title }}
+                    </p>
+                    {% endif %}
+
+                    {% if upload.tags.all %}
+                    <p class="moderation-card__tags">
+                        Tags:
+                        {% for tag in upload.tags.all %}
+                            <span class="moderation-card__tag">{{ tag.name }}</span>
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+
+                <div class="moderation-card__actions">
+                    <form method="post"
+                          action="{% url 'website:approve_photo' pk=upload.pk %}"
+                          class="moderation-card__form moderation-card__form--approve">
+                        {% csrf_token %}
+                        <button type="submit" class="moderation-card__btn moderation-card__btn--approve">
+                            Approve
+                        </button>
+                    </form>
+
+                    <form method="post"
+                          action="{% url 'website:reject_photo' pk=upload.pk %}"
+                          class="moderation-card__form moderation-card__form--reject">
+                        {% csrf_token %}
+                        <div class="moderation-card__reject-reason">
+                            <label for="reason-{{ upload.pk }}" class="moderation-card__label">
+                                Reason (optional):
+                            </label>
+                            <input type="text"
+                                   name="reason"
+                                   id="reason-{{ upload.pk }}"
+                                   class="moderation-card__input"
+                                   placeholder="Reason for rejection">
+                        </div>
+                        <button type="submit" class="moderation-card__btn moderation-card__btn--reject">
+                            Reject
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {# Pagination #}
+        {% if is_paginated %}
+        <nav class="page-moderation__pagination" aria-label="Pagination">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                {% endif %}
+                <li class="pagination__current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </li>
+                {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <div class="page-moderation__empty">
+            <p>No photos pending moderation.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

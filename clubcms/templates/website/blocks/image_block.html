@@ -1,0 +1,15 @@
+{% load wagtailimages_tags %}
+
+<figure class="block-image" data-align="{{ self.alignment|default:'full' }}">
+    {% if self.alignment == 'full' %}
+        {% image self.image width-1200 as img %}
+    {% elif self.alignment == 'left' or self.alignment == 'right' %}
+        {% image self.image width-600 as img %}
+    {% else %}
+        {% image self.image width-800 as img %}
+    {% endif %}
+    <img src="{{ img.url }}" alt="{{ self.caption|default:'' }}" loading="lazy" width="{{ img.width }}" height="{{ img.height }}">
+    {% if self.caption %}
+    <figcaption class="block-image__caption">{{ self.caption }}</figcaption>
+    {% endif %}
+</figure>

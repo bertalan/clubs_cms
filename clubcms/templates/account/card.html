@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Membership Card" %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{% trans "Membership Card" %}</h1>
+
+    {% if user.card_number %}
+    <div class="card membership-card">
+        <div class="card-header">
+            <h2>{{ club_name }}</h2>
+        </div>
+        <div class="card-body">
+            <p class="card-member-name">{{ user.get_full_name }}</p>
+            <p class="card-number">
+                <strong>{% trans "Card No." %}:</strong> {{ user.card_number }}
+            </p>
+            {% if user.membership_date %}
+            <p>
+                <strong>{% trans "Member since" %}:</strong>
+                {{ user.membership_date }}
+            </p>
+            {% endif %}
+            {% if user.membership_expiry %}
+            <p>
+                <strong>{% trans "Expires" %}:</strong>
+                {{ user.membership_expiry }}
+            </p>
+            {% endif %}
+
+            {% if qr_url %}
+            <div class="card-qr">
+                <img src="{{ qr_url }}" alt="{% trans 'QR Code' %}" width="200" height="200">
+            </div>
+            {% endif %}
+
+            {% if barcode_url %}
+            <div class="card-barcode">
+                <img src="{{ barcode_url }}" alt="{% trans 'Barcode' %}">
+            </div>
+            {% endif %}
+        </div>
+        <div class="card-actions">
+            <a href="{% url 'account:card_pdf' %}" class="btn btn-secondary">
+                {% trans "Download PDF" %}
+            </a>
+            <a href="{% url 'account:card_qr' %}" class="btn btn-secondary">
+                {% trans "QR Code" %}
+            </a>
+            <a href="{% url 'account:card_barcode' %}" class="btn btn-secondary">
+                {% trans "Barcode" %}
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <p>{% trans "No membership card has been issued yet. Please contact the club administration." %}</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+<div class="block-alert" data-type="{{ self.alert_type|default:'info' }}" role="alert">
+    {{ self.message }}
+    {% if self.dismissible %}
+    <button type="button" class="block-alert__dismiss" aria-label="Dismiss alert">&times;</button>
+    {% endif %}
+</div>
+
+{% if self.dismissible %}
+<script>
+(function() {
+    var btns = document.querySelectorAll('.block-alert__dismiss');
+    btns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            this.closest('.block-alert').remove();
+        });
+    });
+})();
+</script>
+{% endif %}

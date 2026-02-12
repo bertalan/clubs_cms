@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Payment Confirmed" %} — {{ event.title }} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{% trans "Payment Confirmed" %}</h1>
+
+    <div class="alert alert-success">
+        <p>{% trans "Your payment has been received. You are registered for this event." %}</p>
+    </div>
+
+    <section class="event-summary">
+        <h2>{{ event.title }}</h2>
+        <dl>
+            <dt>{% trans "Date" %}</dt>
+            <dd>{{ event.start_date }}</dd>
+            {% if event.location_name %}
+            <dt>{% trans "Location" %}</dt>
+            <dd>{{ event.location_name }}</dd>
+            {% endif %}
+        </dl>
+    </section>
+
+    <p>
+        <a href="{% url 'events:my_registrations' %}" class="btn btn-primary">{% trans "My Registrations" %}</a>
+    </p>
+</div>
+{% endblock %}

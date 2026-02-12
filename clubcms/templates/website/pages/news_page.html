@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}page-news-detail{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<article class="page-news-detail" itemscope itemtype="https://schema.org/NewsArticle">
+    <div class="container">
+        {# Cover image #}
+        {% if page.cover_image %}
+        <div class="page-news-detail__cover">
+            {% image page.cover_image fill-1200x500 as cover_img %}
+            <img src="{{ cover_img.url }}" alt="{{ page.title }}" class="page-news-detail__cover-image" itemprop="image" width="{{ cover_img.width }}" height="{{ cover_img.height }}">
+        </div>
+        {% endif %}
+
+        {# Header #}
+        <header class="page-news-detail__header">
+            {% if page.category %}
+            <span class="page-news-detail__category">
+                <a href="{{ page.get_parent.url }}?category={{ page.category.slug }}">{{ page.category.name }}</a>
+            </span>
+            {% endif %}
+
+            <h1 class="page-news-detail__title" itemprop="headline">{{ page.title }}</h1>
+
+            <div class="page-news-detail__meta">
+                <time datetime="{{ page.display_date|date:'c' }}" class="page-news-detail__date" itemprop="datePublished">
+                    {{ page.display_date|date:"F j, Y" }}
+                </time>
+
+                {% if page.author %}
+                <span class="page-news-detail__author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <span itemprop="name">{{ page.author.get_full_name|default:page.author.username }}</span>
+                </span>
+                {% endif %}
+
+                {% if page.reading_time %}
+                <span class="page-news-detail__reading-time">{{ page.reading_time }} min read</span>
+                {% endif %}
+            </div>
+        </header>
+
+        {# Intro #}
+        {% if page.intro %}
+        <div class="page-news-detail__intro" itemprop="description">
+            <p>{{ page.intro }}</p>
+        </div>
+        {% endif %}
+
+        {# Body StreamField #}
+        {% if page.body %}
+        <div class="page-news-detail__body" itemprop="articleBody">
+            {% for block in page.body %}
+                {% include_block block %}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {# Tags #}
+        {% with tags=page.tags.all %}
+        {% if tags %}
+        <div class="page-news-detail__tags" aria-label="Tags">
+            <span class="page-news-detail__tags-label">Tags:</span>
+            <ul class="page-news-detail__tags-list">
+                {% for tag in tags %}
+                <li class="page-news-detail__tags-item">
+                    <a href="{{ page.get_parent.url }}?tag={{ tag.slug }}" class="page-news-detail__tag">{{ tag }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {# Navigation to adjacent posts #}
+        <nav class="page-news-detail__nav" aria-label="News navigation">
+            {% with prev=page.get_prev_siblings.live.first next=page.get_next_siblings.live.first %}
+            {% if prev or next %}
+            <div class="page-news-detail__nav-links">
+                {% if prev %}
+                <a href="{% pageurl prev %}" class="page-news-detail__nav-link" data-direction="prev">
+                    <span class="page-news-detail__nav-label">&laquo; Previous</span>
+                    <span class="page-news-detail__nav-title">{{ prev.title }}</span>
+                </a>
+                {% endif %}
+                {% if next %}
+                <a href="{% pageurl next %}" class="page-news-detail__nav-link" data-direction="next">
+                    <span class="page-news-detail__nav-label">Next &raquo;</span>
+                    <span class="page-news-detail__nav-title">{{ next.title }}</span>
+                </a>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endwith %}
+        </nav>
+    </div>
+</article>
+{% endblock %}

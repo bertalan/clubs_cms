@@ -1,0 +1,41 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<section class="block-hero-banner" data-overlay="{{ self.overlay|default:'dark' }}" data-text-position="{{ self.text_position|default:'center' }}" aria-label="Banner">
+    {% if self.image %}
+        {% image self.image fill-1920x900 as banner_img %}
+        <img src="{{ banner_img.url }}" alt="{{ self.title|default:'' }}" loading="eager" width="{{ banner_img.width }}" height="{{ banner_img.height }}">
+    {% endif %}
+    <div class="block-hero-banner__overlay">
+        <div class="container">
+            <div class="block-hero-banner__content">
+                {% if self.badge %}
+                <span class="block-hero-banner__badge">{{ self.badge }}</span>
+                {% endif %}
+                {% if self.title %}
+                <h2 class="block-hero-banner__title">{{ self.title }}</h2>
+                {% endif %}
+                {% if self.subtitle %}
+                <p class="block-hero-banner__subtitle">{{ self.subtitle }}</p>
+                {% endif %}
+                {% if self.cta_text or self.secondary_cta_text %}
+                <div class="block-hero-banner__actions">
+                    {% if self.cta_text %}
+                        {% if self.cta_link %}
+                        <a href="{% pageurl self.cta_link %}" class="btn btn-primary">{{ self.cta_text }}</a>
+                        {% elif self.cta_url %}
+                        <a href="{{ self.cta_url }}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">{{ self.cta_text }}</a>
+                        {% endif %}
+                    {% endif %}
+                    {% if self.secondary_cta_text %}
+                        {% if self.secondary_cta_link %}
+                        <a href="{% pageurl self.secondary_cta_link %}" class="btn btn-outline-light">{{ self.secondary_cta_text }}</a>
+                        {% elif self.secondary_cta_url %}
+                        <a href="{{ self.secondary_cta_url }}" class="btn btn-outline-light" target="_blank" rel="noopener noreferrer">{{ self.secondary_cta_text }}</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}page-press{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<div class="page-press">
+    <div class="container">
+        {# Header #}
+        <header class="page-press__header">
+            <h1 class="page-press__title">{{ page.title }}</h1>
+            {% if page.intro %}
+            <div class="page-press__intro">
+                {{ page.intro|richtext }}
+            </div>
+            {% endif %}
+        </header>
+
+        {# Press contact information #}
+        {% if page.press_contact or page.press_email or page.press_phone %}
+        <section class="page-press__contact" aria-label="Press contact">
+            <h2 class="page-press__section-title">Press Contact</h2>
+            <div class="page-press__contact-card">
+                {% if page.press_contact %}
+                <p class="page-press__contact-name">{{ page.press_contact }}</p>
+                {% endif %}
+                {% if page.press_email %}
+                <p class="page-press__contact-email">
+                    <a href="mailto:{{ page.press_email }}">{{ page.press_email }}</a>
+                </p>
+                {% endif %}
+                {% if page.press_phone %}
+                <p class="page-press__contact-phone">
+                    <a href="tel:{{ page.press_phone }}">{{ page.press_phone }}</a>
+                </p>
+                {% endif %}
+            </div>
+        </section>
+        {% endif %}
+
+        {# Press releases #}
+        {% if press_releases %}
+        <section class="page-press__releases" aria-label="Press releases">
+            <h2 class="page-press__section-title">Press Releases</h2>
+            <div class="page-press__releases-list">
+                {% for release in press_releases %}
+                <article class="press-release-card">
+                    <div class="press-release-card__header">
+                        <time datetime="{{ release.date|date:'c' }}" class="press-release-card__date">
+                            {{ release.date|date:"F j, Y" }}
+                        </time>
+                        <h3 class="press-release-card__title">{{ release.title }}</h3>
+                    </div>
+                    <div class="press-release-card__body">
+                        {{ release.body|richtext }}
+                    </div>
+                    {% if release.attachment %}
+                    <div class="press-release-card__download">
+                        <a href="{{ release.attachment.url }}" class="btn btn-secondary" download>
+                            Download ({{ release.attachment.file_extension|upper }})
+                        </a>
+                    </div>
+                    {% endif %}
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {# Brand assets #}
+        {% if brand_assets %}
+        <section class="page-press__assets" aria-label="Brand assets">
+            <h2 class="page-press__section-title">Brand Assets</h2>
+            <div class="page-press__assets-grid">
+                {% for asset in brand_assets %}
+                <div class="brand-asset-card">
+                    {% if asset.preview %}
+                        {% image asset.preview fill-300x200 as preview_img %}
+                        <div class="brand-asset-card__preview">
+                            <img src="{{ preview_img.url }}" alt="{{ asset.name }}" loading="lazy" width="{{ preview_img.width }}" height="{{ preview_img.height }}">
+                        </div>
+                    {% endif %}
+                    <div class="brand-asset-card__content">
+                        <h3 class="brand-asset-card__title">{{ asset.name }}</h3>
+                        <span class="brand-asset-card__category">{{ asset.get_category_display }}</span>
+                        {% if asset.description %}
+                        <p class="brand-asset-card__description">{{ asset.description|truncatewords:20 }}</p>
+                        {% endif %}
+                        {% if asset.file %}
+                        <a href="{{ asset.file.url }}" class="btn btn-secondary" download>
+                            Download
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {# Body StreamField #}
+        {% if page.body %}
+        <div class="page-press__body">
+            {% for block in page.body %}
+                {% include_block block %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

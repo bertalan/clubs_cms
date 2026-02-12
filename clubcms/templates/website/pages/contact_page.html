@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags wagtail_cache wagtailsettings_tags i18n %}
+
+{% block body_class %}page-contact{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<div class="page-contact">
+    <div class="container">
+        {# Header #}
+        <header class="page-contact__header">
+            <h1 class="page-contact__title">{{ page.title }}</h1>
+            {% if page.intro %}
+            <div class="page-contact__intro">
+                {{ page.intro|richtext }}
+            </div>
+            {% endif %}
+        </header>
+
+        <div class="page-contact__layout">
+            {# Contact form #}
+            <section class="page-contact__form-section" aria-labelledby="contact-form-heading">
+                {% if form_success %}
+                    <div class="page-contact__success" role="status" aria-live="polite">
+                        {% if page.success_message %}
+                            {{ page.success_message|richtext }}
+                        {% else %}
+                            <p>{% trans "Thank you for your message. We will get back to you shortly." %}</p>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    {% if page.form_title %}
+                    <h2 id="contact-form-heading" class="page-contact__form-title">{{ page.form_title }}</h2>
+                    {% endif %}
+
+                    <form method="post" action="{% pageurl page %}" class="page-contact__form" novalidate>
+                        {% csrf_token %}
+
+                        {% if form.errors %}
+                        <div class="page-contact__form-errors" role="alert" aria-live="assertive">
+                            <p>{% trans "Please correct the errors below:" %}</p>
+                            {{ form.non_field_errors }}
+                        </div>
+                        {% endif %}
+
+                        <div class="page-contact__field">
+                            <label for="id_name" class="page-contact__label">{% trans "Name" %} <span aria-hidden="true">*</span></label>
+                            <input type="text" id="id_name" name="name" required class="page-contact__input" {% if form.name.errors %}aria-invalid="true" aria-describedby="id_name_error"{% endif %} value="{{ form.name.value|default:'' }}" aria-required="true" autocomplete="name">
+                            {% if form.name.errors %}
+                            <span id="id_name_error" class="page-contact__error" role="alert">{{ form.name.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="page-contact__field">
+                            <label for="id_email" class="page-contact__label">{% trans "Email" %} <span aria-hidden="true">*</span></label>
+                            <input type="email" id="id_email" name="email" required class="page-contact__input" {% if form.email.errors %}aria-invalid="true" aria-describedby="id_email_error"{% endif %} value="{{ form.email.value|default:'' }}" aria-required="true" autocomplete="email">
+                            {% if form.email.errors %}
+                            <span id="id_email_error" class="page-contact__error" role="alert">{{ form.email.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="page-contact__field">
+                            <label for="id_subject" class="page-contact__label">{% trans "Subject" %}</label>
+                            <input type="text" id="id_subject" name="subject" class="page-contact__input" value="{{ form.subject.value|default:'' }}" autocomplete="off">
+                        </div>
+
+                        <div class="page-contact__field">
+                            <label for="id_message" class="page-contact__label">{% trans "Message" %} <span aria-hidden="true">*</span></label>
+                            <textarea id="id_message" name="message" rows="6" required class="page-contact__textarea" {% if form.message.errors %}aria-invalid="true" aria-describedby="id_message_error"{% endif %} aria-required="true">{{ form.message.value|default:'' }}</textarea>
+                            {% if form.message.errors %}
+                            <span id="id_message_error" class="page-contact__error" role="alert">{{ form.message.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+
+                        {# CAPTCHA - honeypot #}
+                        {% if page.captcha_enabled and page.captcha_provider == 'honeypot' %}
+                        <div class="page-contact__field" style="display:none" aria-hidden="true">
+                            <label for="id_website">Website</label>
+                            <input type="text" id="id_website" name="website" tabindex="-1" autocomplete="off">
+                        </div>
+                        {% endif %}
+
+                        {# CAPTCHA - Turnstile #}
+                        {% if page.captcha_enabled and page.captcha_provider == 'turnstile' %}
+                        <div class="page-contact__captcha">
+                            <div class="cf-turnstile" data-sitekey="{{ page.captcha_site_key }}"></div>
+                        </div>
+                        {% endif %}
+
+                        {# CAPTCHA - hCaptcha #}
+                        {% if page.captcha_enabled and page.captcha_provider == 'hcaptcha' %}
+                        <div class="page-contact__captcha">
+                            <div class="h-captcha" data-sitekey="{{ page.captcha_site_key }}"></div>
+                        </div>
+                        {% endif %}
+
+                        <div class="page-contact__submit">
+                            <button type="submit" class="btn btn-primary">{% trans "Send Message" %}</button>
+                        </div>
+                    </form>
+                {% endif %}
+            </section>
+
+            {# Sidebar: map + info cards #}
+            <aside class="page-contact__sidebar" aria-label="{% trans 'Contact information' %}">
+                {% get_settings %}
+
+                {# OpenStreetMap #}
+                {% if settings.website.SiteSettings.map_embed_url %}
+                <div class="page-contact__map">
+                    <iframe
+                        title="{% trans 'Club location map' %}"
+                        src="{{ settings.website.SiteSettings.map_embed_url }}"
+                        loading="lazy"
+                        referrerpolicy="no-referrer"
+                        allowfullscreen
+                    ></iframe>
+                    {% if settings.website.SiteSettings.map_link_url %}
+                    <small class="page-contact__map-link">
+                        <a href="{{ settings.website.SiteSettings.map_link_url }}" target="_blank" rel="noopener noreferrer">
+                            {% trans "View larger map" %}
+                            <span class="sr-only"> ({% trans "opens in a new window" %})</span>
+                        </a>
+                    </small>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                {# Card: Address #}
+                {% if settings.website.SiteSettings.address %}
+                <div class="page-contact__info-card">
+                    <h3 class="page-contact__info-card-title">
+                        <span class="page-contact__info-card-icon" aria-hidden="true">📍</span>
+                        {% trans "Where to Find Us" %}
+                    </h3>
+                    <address class="page-contact__address">
+                        {% if settings.website.SiteSettings.site_name %}
+                        <p><strong>{{ settings.website.SiteSettings.site_name }}</strong></p>
+                        {% endif %}
+                        <p>{{ settings.website.SiteSettings.address|linebreaksbr }}</p>
+                    </address>
+                </div>
+                {% endif %}
+
+                {# Card: Contacts #}
+                {% if settings.website.SiteSettings.phone or settings.website.SiteSettings.email %}
+                <div class="page-contact__info-card">
+                    <h3 class="page-contact__info-card-title">
+                        <span class="page-contact__info-card-icon" aria-hidden="true">📞</span>
+                        {% trans "Direct Contacts" %}
+                    </h3>
+                    <ul class="page-contact__contact-list" role="list">
+                        {% if settings.website.SiteSettings.phone %}
+                        <li>
+                            <span class="page-contact__contact-label">{% trans "Phone" %}</span>
+                            <a href="tel:{{ settings.website.SiteSettings.phone }}">{{ settings.website.SiteSettings.phone }}</a>
+                        </li>
+                        {% endif %}
+                        {% if settings.website.SiteSettings.email %}
+                        <li>
+                            <span class="page-contact__contact-label">{% trans "Email" %}</span>
+                            <a href="mailto:{{ settings.website.SiteSettings.email }}">{{ settings.website.SiteSettings.email }}</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                {# Card: Hours #}
+                {% if settings.website.SiteSettings.hours %}
+                <div class="page-contact__info-card">
+                    <h3 class="page-contact__info-card-title">
+                        <span class="page-contact__info-card-icon" aria-hidden="true">🕐</span>
+                        {% trans "Opening Hours" %}
+                    </h3>
+                    <p>{{ settings.website.SiteSettings.hours }}</p>
+                </div>
+                {% endif %}
+
+                {# Extra body blocks if any #}
+                {% if page.body %}
+                <div class="page-contact__body">
+                    {% for block in page.body %}
+                        {% include_block block %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </aside>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if page.captcha_enabled and page.captcha_provider == 'turnstile' %}
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+{% elif page.captcha_enabled and page.captcha_provider == 'hcaptcha' %}
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+{% endif %}
+{% endblock %}

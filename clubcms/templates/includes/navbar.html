@@ -1,0 +1,284 @@
+{% load i18n wagtailcore_tags wagtailimages_tags wagtailsettings_tags %}
+
+{% with navbar=settings.website.SiteSettings.navbar %}
+<nav class="site-nav" role="navigation" aria-label="{% trans 'Main navigation' %}">
+    <div class="container">
+        {# Logo / Brand #}
+        <a href="/" class="site-nav__logo" aria-label="{{ settings.website.SiteSettings.site_name }} - Home">
+            {% if navbar.logo %}
+                {% image navbar.logo max-200x60 as logo_img %}
+                <img src="{{ logo_img.url }}" alt="{{ settings.website.SiteSettings.site_name }}" width="{{ logo_img.width }}" height="{{ logo_img.height }}">
+            {% elif settings.website.SiteSettings.logo %}
+                {% image settings.website.SiteSettings.logo max-200x60 as site_logo %}
+                <img src="{{ site_logo.url }}" alt="{{ settings.website.SiteSettings.site_name }}" width="{{ site_logo.width }}" height="{{ site_logo.height }}">
+            {% else %}
+                <span>{{ settings.website.SiteSettings.site_name }}</span>
+            {% endif %}
+        </a>
+
+        {# Mobile toggle #}
+        <button class="site-nav__toggle" type="button" aria-controls="nav-links" aria-expanded="false" aria-label="{% trans 'Toggle navigation' %}">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        {# Navigation items #}
+        <div class="site-nav__links" id="nav-links">
+            {% if navbar %}
+                {% for item in navbar.top_level_items %}
+                    {% with children=item.children.all %}
+                    {% if children %}
+                        {# DROPDOWN MENU #}
+                        <div class="site-nav__dropdown">
+                            <button class="site-nav__dropdown-toggle"
+                                    type="button"
+                                    aria-expanded="false"
+                                    aria-haspopup="true">
+                                {{ item.label }}
+                                <span class="site-nav__dropdown-arrow" aria-hidden="true">&#9662;</span>
+                            </button>
+                            <ul class="site-nav__dropdown-menu" role="menu">
+                                {% for child in children %}
+                                <li role="none">
+                                    {% if child.link_page %}
+                                        <a href="{% pageurl child.link_page %}"
+                                           role="menuitem"
+                                           {% if child.open_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
+                                           {% if request.path == child.link_page.url %}aria-current="page"{% endif %}>
+                                            {{ child.label }}
+                                        </a>
+                                    {% elif child.link_url %}
+                                        <a href="{{ child.link_url }}"
+                                           role="menuitem"
+                                           {% if child.open_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                                            {{ child.label }}
+                                        </a>
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        {# SINGLE LINK #}
+                        {% if item.link_page %}
+                            <a href="{% pageurl item.link_page %}"
+                               class="{% if item.is_cta %}site-nav__cta{% endif %}{% if request.path == item.link_page.url %} active{% endif %}"
+                               {% if item.open_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
+                               {% if request.path == item.link_page.url %}aria-current="page"{% endif %}>
+                                {{ item.label }}
+                            </a>
+                        {% elif item.link_url %}
+                            <a href="{{ item.link_url }}"
+                               class="{% if item.is_cta %}site-nav__cta{% endif %}"
+                               {% if item.open_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}>
+                                {{ item.label }}
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                    {% endwith %}
+                {% endfor %}
+            {% endif %}
+
+            {# Search toggle #}
+            {% if navbar.show_search %}
+            <form action="/search/" method="get" class="site-nav__search" role="search">
+                <label for="nav-search-input" class="sr-only">{% trans "Search" %}</label>
+                <input type="search" id="nav-search-input" name="q" placeholder="{% trans 'Search...' %}" aria-label="{% trans 'Search the site' %}">
+                <button type="submit" aria-label="{% trans 'Submit search' %}">
+                    <span aria-hidden="true">&#128269;</span>
+                </button>
+            </form>
+            {% endif %}
+
+            {# ---- User menu ---- #}
+            {# Resolve allauth URLs defensively (empty if allauth not installed) #}
+            {% url 'account_logout' as logout_url %}
+            {% url 'account_login' as login_url %}
+            {% url 'account_signup' as signup_url %}
+            <div class="site-nav__user">
+                {% if request.user.is_authenticated %}
+                    {# Authenticated user dropdown #}
+                    <div class="site-nav__dropdown">
+                        <button class="site-nav__dropdown-toggle site-nav__user-toggle"
+                                type="button"
+                                aria-expanded="false"
+                                aria-haspopup="true">
+                            <span class="site-nav__user-icon" aria-hidden="true">&#9679;</span>
+                            <span>{{ request.user.get_display_name }}</span>
+                            <span class="site-nav__dropdown-arrow" aria-hidden="true">&#9662;</span>
+                        </button>
+                        <ul class="site-nav__dropdown-menu site-nav__user-menu" role="menu">
+                            <li role="none">
+                                <a href="{% url 'account:profile' %}" role="menuitem">
+                                    {% trans "My profile" %}
+                                </a>
+                            </li>
+                            <li role="none">
+                                <a href="{% url 'account:card' %}" role="menuitem">
+                                    {% trans "Membership card" %}
+                                </a>
+                            </li>
+                            <li role="none">
+                                <a href="{% url 'events:my_registrations' %}" role="menuitem">
+                                    {% trans "My registrations" %}
+                                </a>
+                            </li>
+                            <li role="none">
+                                <a href="{% url 'events:my_events' %}" role="menuitem">
+                                    {% trans "My events" %}
+                                </a>
+                            </li>
+                            {% if request.user.is_active_member %}
+                            <li role="none">
+                                <a href="{% url 'account:directory' %}" role="menuitem">
+                                    {% trans "Member directory" %}
+                                </a>
+                            </li>
+                            {% endif %}
+                            <li class="site-nav__dropdown-divider" role="separator" aria-hidden="true"></li>
+                            <li role="none">
+                                <a href="{% url 'account:privacy' %}" role="menuitem">
+                                    {% trans "Privacy settings" %}
+                                </a>
+                            </li>
+                            <li role="none">
+                                <a href="{% url 'account:notifications' %}" role="menuitem">
+                                    {% trans "Notification preferences" %}
+                                </a>
+                            </li>
+                            {% if request.user.is_active_member %}
+                            <li role="none">
+                                <a href="{% url 'account:aid' %}" role="menuitem">
+                                    {% trans "Mutual aid settings" %}
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% if logout_url %}
+                            <li class="site-nav__dropdown-divider" role="separator" aria-hidden="true"></li>
+                            <li role="none">
+                                <a href="{{ logout_url }}" role="menuitem">
+                                    {% trans "Log out" %}
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% else %}
+                    {# Anonymous user: login/signup links #}
+                    {% if login_url %}
+                    <a href="{{ login_url }}" class="site-nav__login">
+                        {% trans "Log in" %}
+                    </a>
+                    {% endif %}
+                    {% if signup_url %}
+                    <a href="{{ signup_url }}" class="site-nav__cta">
+                        {% trans "Sign up" %}
+                    </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            {# Language switcher #}
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as languages %}
+            <div class="site-nav__lang" role="navigation" aria-label="{% trans 'Language' %}">
+                <button class="site-nav__lang-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+                    {{ LANGUAGE_CODE|upper }}
+                    <span aria-hidden="true">&#9662;</span>
+                </button>
+                <ul class="site-nav__lang-menu" role="menu">
+                    {% for lang_code, lang_name in languages %}
+                    <li role="none">
+                        <form action="{% url 'set_language' %}" method="post" role="menuitem">
+                            {% csrf_token %}
+                            <input type="hidden" name="language" value="{{ lang_code }}">
+                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                            <button type="submit" class="{% if lang_code == LANGUAGE_CODE %}active{% endif %}" {% if lang_code == LANGUAGE_CODE %}aria-current="true"{% endif %}>
+                                {{ lang_name }}
+                            </button>
+                        </form>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="nav-spacer"></div>
+{% endwith %}
+
+{# Dropdown and mobile navigation JavaScript #}
+<script>
+(function() {
+    'use strict';
+
+    // --- Dropdown toggle ---
+    document.querySelectorAll('.site-nav__dropdown-toggle').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var dropdown = this.closest('.site-nav__dropdown');
+            var isOpen = dropdown.classList.contains('open');
+
+            // Close all other dropdowns
+            document.querySelectorAll('.site-nav__dropdown.open').forEach(function(d) {
+                if (d !== dropdown) {
+                    d.classList.remove('open');
+                    d.querySelector('.site-nav__dropdown-toggle').setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // Toggle current
+            dropdown.classList.toggle('open', !isOpen);
+            this.setAttribute('aria-expanded', String(!isOpen));
+        });
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.site-nav__dropdown')) {
+            document.querySelectorAll('.site-nav__dropdown.open').forEach(function(d) {
+                d.classList.remove('open');
+                d.querySelector('.site-nav__dropdown-toggle').setAttribute('aria-expanded', 'false');
+            });
+        }
+    });
+
+    // Keyboard: Escape closes dropdown
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.site-nav__dropdown.open').forEach(function(d) {
+                d.classList.remove('open');
+                var toggle = d.querySelector('.site-nav__dropdown-toggle');
+                toggle.setAttribute('aria-expanded', 'false');
+                toggle.focus();
+            });
+        }
+    });
+
+    // --- Language switcher ---
+    var langToggle = document.querySelector('.site-nav__lang-toggle');
+    var langMenu = document.querySelector('.site-nav__lang-menu');
+    if (langToggle && langMenu) {
+        langToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var isOpen = langMenu.classList.contains('open');
+            langMenu.classList.toggle('open', !isOpen);
+            langToggle.setAttribute('aria-expanded', String(!isOpen));
+        });
+    }
+
+    // --- Mobile hamburger ---
+    var navToggle = document.querySelector('.site-nav__toggle');
+    var navLinks = document.getElementById('nav-links');
+    if (navToggle && navLinks) {
+        navToggle.addEventListener('click', function() {
+            var isOpen = navLinks.classList.contains('open');
+            navLinks.classList.toggle('open', !isOpen);
+            navToggle.setAttribute('aria-expanded', String(!isOpen));
+        });
+    }
+})();
+</script>

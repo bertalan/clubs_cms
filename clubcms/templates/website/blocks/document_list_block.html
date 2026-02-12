@@ -1,0 +1,20 @@
+<section class="block-document-list">
+    {% if self.title %}
+    <h2 class="block-document-list__title">{{ self.title }}</h2>
+    {% endif %}
+    <ul class="block-document-list__items">
+        {% for doc in self.documents %}
+        <li class="block-document">
+            <a href="{{ doc.value.document.url }}" download>
+                <span class="block-document__icon" aria-hidden="true"></span>
+                <span class="block-document__info">
+                    <span class="block-document__name">{{ doc.value.document.title }}</span>
+                </span>
+            </a>
+            {% if doc.value.description %}
+            <p class="block-document__desc">{{ doc.value.description }}</p>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</section>

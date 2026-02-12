@@ -1,0 +1,19 @@
+{% load wagtailimages_tags %}
+
+<blockquote class="block-quote">
+    {% if self.image %}
+        {% image self.image fill-80x80 as quote_img %}
+        <div class="block-quote__image">
+            <img src="{{ quote_img.url }}" alt="{% if self.author %}{{ self.author }}{% else %}Quote author{% endif %}" loading="lazy" width="{{ quote_img.width }}" height="{{ quote_img.height }}">
+        </div>
+    {% endif %}
+    <div class="block-quote__body">{{ self.quote }}</div>
+    {% if self.author %}
+    <footer class="block-quote__footer">
+        <cite class="block-quote__author">{{ self.author }}</cite>
+        {% if self.role %}
+        <span class="block-quote__role">{{ self.role }}</span>
+        {% endif %}
+    </footer>
+    {% endif %}
+</blockquote>

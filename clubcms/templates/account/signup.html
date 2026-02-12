@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Sign up" %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h1>{% trans "Create your account" %}</h1>
+        <p class="auth-subtitle">
+            {% trans "Join the club and access events, member directory, and more." %}
+        </p>
+
+        <form method="post" action="{% url 'account_signup' %}">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group {% if field.errors %}has-error{% endif %}">
+                <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                    {% if field.field.required %}<span class="required" aria-hidden="true">*</span>{% endif %}
+                </label>
+                {{ field }}
+                {% if field.help_text %}
+                <small id="{{ field.id_for_label }}_help" class="form-help">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                <span class="form-error" role="alert">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+            {% endif %}
+            <button type="submit" class="btn btn-primary btn-block">
+                {% trans "Sign up" %}
+            </button>
+        </form>
+
+        <p class="auth-switch">
+            {% trans "Already have an account?" %}
+            <a href="{% url 'account_login' %}">{% trans "Log in" %}</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

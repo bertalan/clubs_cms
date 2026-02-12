@@ -1,0 +1,108 @@
+{% load i18n wagtailcore_tags wagtailimages_tags wagtailsettings_tags %}
+
+{% with footer=settings.website.SiteSettings.footer %}
+<footer class="site-footer" role="contentinfo">
+    <div class="container">
+        <div class="site-footer__grid">
+            {# About / Description #}
+            <div>
+                <h3>{{ settings.website.SiteSettings.site_name }}</h3>
+                {% if footer.description %}
+                    <div>{{ footer.description|richtext }}</div>
+                {% elif settings.website.SiteSettings.tagline %}
+                    <p>{{ settings.website.SiteSettings.tagline }}</p>
+                {% endif %}
+            </div>
+
+            {# Menu items #}
+            {% if footer %}
+                {% with menu_items=footer.menu_items.all %}
+                {% if menu_items %}
+                <div>
+                    <h3>Links</h3>
+                    <ul>
+                        {% for item in menu_items %}
+                        <li>
+                            {% if item.link_page %}
+                                <a href="{% pageurl item.link_page %}">{{ item.label }}</a>
+                            {% elif item.link_url %}
+                                <a href="{{ item.link_url }}" target="_blank" rel="noopener noreferrer">{{ item.label }}</a>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                {% endwith %}
+            {% endif %}
+
+            {# Contact info #}
+            {% with site=settings.website.SiteSettings %}
+            {% if site.phone or site.email or site.address or footer.phone or footer.email or footer.address %}
+            <div>
+                <h3>Contact</h3>
+                <address>
+                    {% with phone=footer.phone|default:site.phone %}
+                    {% if phone %}
+                        <p>
+                            <span>Phone:</span>
+                            <a href="tel:{{ phone }}">{{ phone }}</a>
+                        </p>
+                    {% endif %}
+                    {% endwith %}
+
+                    {% with email=footer.email|default:site.email %}
+                    {% if email %}
+                        <p>
+                            <span>Email:</span>
+                            <a href="mailto:{{ email }}">{{ email }}</a>
+                        </p>
+                    {% endif %}
+                    {% endwith %}
+
+                    {% with address=footer.address|default:site.address %}
+                    {% if address %}
+                        <p>
+                            <span>Address:</span>
+                            {{ address|linebreaksbr }}
+                        </p>
+                    {% endif %}
+                    {% endwith %}
+                </address>
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            {# Social links #}
+            {% if footer %}
+                {% with social_links=footer.social_links.all %}
+                {% if social_links %}
+                <div>
+                    <h3>Follow Us</h3>
+                    <div class="site-footer__social">
+                        {% for link in social_links %}
+                            <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ link.platform }}">
+                                <span aria-hidden="true"></span>
+                                <span class="sr-only">{{ link.platform }}</span>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endwith %}
+            {% endif %}
+        </div>
+
+        {# Copyright #}
+        <div class="site-footer__bottom">
+            <p>
+                {% if footer.copyright_text %}
+                    {{ footer.copyright_text }}
+                {% else %}
+                    &copy; {% now "Y" %} {{ settings.website.SiteSettings.site_name }}. {% trans "All rights reserved." %}
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</footer>
+{% endwith %}

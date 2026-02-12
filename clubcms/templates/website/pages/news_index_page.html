@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}page-news-index{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<div class="page-news-index">
+    <div class="container">
+        {# Header #}
+        <header class="page-news-index__header">
+            <h1 class="page-news-index__title">{{ page.title }}</h1>
+            {% if page.intro %}
+            <div class="page-news-index__intro">
+                {{ page.intro|richtext }}
+            </div>
+            {% endif %}
+        </header>
+
+        {# Category filters #}
+        {% if categories %}
+        <div class="page-news-index__filters" role="navigation" aria-label="News filters">
+            <ul class="page-news-index__filter-list">
+                <li class="page-news-index__filter-item">
+                    <a href="{% pageurl page %}" class="page-news-index__filter-link" {% if not current_category %}data-active{% endif %}>All</a>
+                </li>
+                {% for cat in categories %}
+                <li class="page-news-index__filter-item">
+                    <a href="{% pageurl page %}?category={{ cat.slug }}" class="page-news-index__filter-link" {% if current_category == cat.slug %}data-active{% endif %}>
+                        {{ cat.name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {# News listing #}
+        {% if news_pages %}
+        <div class="page-news-index__grid">
+            {% for post in news_pages %}
+            <article class="news-card" itemscope itemtype="https://schema.org/NewsArticle">
+                {% if post.cover_image %}
+                    {% image post.cover_image fill-400x250 as card_img %}
+                    <div class="news-card__image">
+                        <a href="{% pageurl post %}">
+                            <img src="{{ card_img.url }}" alt="{{ post.title }}" loading="lazy" width="{{ card_img.width }}" height="{{ card_img.height }}">
+                        </a>
+                    </div>
+                {% endif %}
+                <div class="news-card__content">
+                    {% if post.category %}
+                    <span class="news-card__category">{{ post.category.name }}</span>
+                    {% endif %}
+                    <h2 class="news-card__title" itemprop="headline">
+                        <a href="{% pageurl post %}" itemprop="url">{{ post.title }}</a>
+                    </h2>
+                    <div class="news-card__meta">
+                        <time datetime="{{ post.display_date|date:'c' }}" class="news-card__date" itemprop="datePublished">
+                            {{ post.display_date|date:"F j, Y" }}
+                        </time>
+                        {% if post.author %}
+                        <span class="news-card__author" itemprop="author">{{ post.author.get_full_name|default:post.author.username }}</span>
+                        {% endif %}
+                        {% if post.reading_time %}
+                        <span class="news-card__reading-time">{{ post.reading_time }} min read</span>
+                        {% endif %}
+                    </div>
+                    {% if post.intro %}
+                    <p class="news-card__excerpt" itemprop="description">{{ post.intro|truncatewords:25 }}</p>
+                    {% endif %}
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+        {# Pagination #}
+        {% include "includes/pagination.html" with paginator=paginator page_obj=news_pages %}
+
+        {% else %}
+        <div class="page-news-index__empty">
+            <p>No news articles found.</p>
+        </div>
+        {% endif %}
+
+        {# Body StreamField #}
+        {% if page.body %}
+        <div class="page-news-index__body">
+            {% for block in page.body %}
+                {% include_block block %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Choose Payment Method" %} — {{ event.title }} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{% trans "Choose Payment Method" %}</h1>
+
+    <section class="event-summary">
+        <h2>{{ event.title }}</h2>
+        <dl>
+            <dt>{% trans "Date" %}</dt>
+            <dd>{{ event.start_date }}</dd>
+            <dt>{% trans "Amount" %}</dt>
+            <dd><strong>{{ registration.payment_amount }} &euro;</strong></dd>
+        </dl>
+    </section>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="payment-providers">
+            {% if "stripe" in available_providers %}
+            <button type="submit" name="provider" value="stripe" class="payment-provider-btn payment-provider-btn--stripe">
+                <span>{% trans "Credit / Debit Card" %}</span>
+                <small>{% trans "Pay securely with Stripe" %}</small>
+            </button>
+            {% endif %}
+
+            {% if "paypal" in available_providers %}
+            <button type="submit" name="provider" value="paypal" class="payment-provider-btn payment-provider-btn--paypal">
+                <span>{% trans "PayPal" %}</span>
+                <small>{% trans "Pay with your PayPal account" %}</small>
+            </button>
+            {% endif %}
+
+            {% if "bank_transfer" in available_providers %}
+            <button type="submit" name="provider" value="bank_transfer" class="payment-provider-btn payment-provider-btn--bank">
+                <span>{% trans "Bank Transfer" %}</span>
+                <small>{% trans "Pay via SEPA bank transfer" %}</small>
+            </button>
+            {% endif %}
+        </div>
+    </form>
+
+    <p class="payment-note">
+        <a href="{% url 'events:my_registrations' %}">{% trans "Back to my registrations" %}</a>
+    </p>
+</div>
+{% endblock %}

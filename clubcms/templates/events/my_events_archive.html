@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Events Archive" %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{% trans "Events Archive" %}</h1>
+
+    <nav class="subnav">
+        <a href="{% url 'events:my_events' %}">{% trans "Upcoming" %}</a>
+        <a href="{% url 'events:my_events_archive' %}" class="active">{% trans "Archive" %}</a>
+        <a href="{% url 'events:my_registrations' %}">{% trans "My Registrations" %}</a>
+    </nav>
+
+    {% if favorites_by_year %}
+        {% for year, year_favorites in favorites_by_year.items %}
+        <section class="year-group">
+            <h2>{{ year }}</h2>
+            <ul class="event-list">
+                {% for fav in year_favorites %}
+                <li class="event-card event-past">
+                    <h3>
+                        <a href="{{ fav.event.url }}">{{ fav.event.title }}</a>
+                    </h3>
+                    <p class="event-date">{{ fav.event.start_date }}</p>
+
+                    {% if fav.event.location_name %}
+                    <p class="event-location">{{ fav.event.location_name }}</p>
+                    {% endif %}
+
+                    <div class="event-actions">
+                        <form method="post" action="{% url 'events:toggle_favorite' fav.event.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline" title="{% trans 'Remove from favorites' %}">
+                                {% trans "Remove" %}
+                            </button>
+                        </form>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% endfor %}
+
+    {% if is_paginated %}
+    <nav class="pagination" aria-label="{% trans 'Pagination' %}">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a>
+        {% endif %}
+        <span>{% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}</span>
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
+        {% endif %}
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <p>{% trans "No past events in your favorites." %}</p>
+    {% endif %}
+</div>
+{% endblock %}

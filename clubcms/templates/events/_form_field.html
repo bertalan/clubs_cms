@@ -1,0 +1,31 @@
+{# Reusable form field partial — renders label, input, help button, and errors #}
+{% load i18n %}
+
+<div class="form-group{% if field.errors %} form-group--error{% endif %}">
+    <div class="form-label-row">
+        <label class="form-label" for="{{ field.id_for_label }}">
+            {{ field.label }}{% if field.field.required %} <span class="form-required" aria-hidden="true">*</span>{% endif %}
+        </label>
+        {% if field.help_text %}
+        <button type="button"
+                class="field-help-btn"
+                aria-label="{% trans 'Help' %}: {{ field.label }}"
+                data-help="{{ field.help_text }}">?</button>
+        {% endif %}
+    </div>
+
+    {{ field }}
+
+    {# WCAG GAP-11: help text element with matching id for aria-describedby #}
+    {% if field.help_text %}
+    <p class="form-help-text" id="help_{{ field.html_name }}">{{ field.help_text }}</p>
+    {% endif %}
+
+    {% if field.errors %}
+    <ul class="form-errors" role="alert">
+        {% for error in field.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
