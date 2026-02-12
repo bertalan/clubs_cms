@@ -20,6 +20,7 @@
   --color-surface-alt: #FFFFFF;
   --color-text-primary: #1a1a1a;
   --color-text-muted: #555555;
+  --color-border: rgba(30, 58, 95, 0.35);
 
   /* Theme-specific tokens */
   --heritage-radius: 4px;

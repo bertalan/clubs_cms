@@ -20,6 +20,7 @@
   --color-surface-alt: #F5F5F5;
   --color-text-primary: #111111;
   --color-text-muted: #666666;
+  --color-border: #bbb;
 
   /* Theme-specific tokens */
   --zen-max-width: 720px;

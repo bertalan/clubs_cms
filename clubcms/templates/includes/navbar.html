@@ -4,7 +4,7 @@
 <nav class="site-nav" role="navigation" aria-label="{% trans 'Main navigation' %}">
     <div class="container">
         {# Logo / Brand #}
-        <a href="/" class="site-nav__logo" aria-label="{{ settings.website.SiteSettings.site_name }} - Home">
+        <a href="/" class="site-nav__logo" aria-label="{{ settings.website.SiteSettings.site_name }} - {% trans 'Home' %}">
             {% if navbar.logo %}
                 {% image navbar.logo max-200x60 as logo_img %}
                 <img src="{{ logo_img.url }}" alt="{{ settings.website.SiteSettings.site_name }}" width="{{ logo_img.width }}" height="{{ logo_img.height }}">
@@ -121,11 +121,6 @@
                             </li>
                             <li role="none">
                                 <a href="{% url 'events:my_registrations' %}" role="menuitem">
-                                    {% trans "My registrations" %}
-                                </a>
-                            </li>
-                            <li role="none">
-                                <a href="{% url 'events:my_events' %}" role="menuitem">
                                     {% trans "My events" %}
                                 </a>
                             </li>
@@ -139,21 +134,9 @@
                             <li class="site-nav__dropdown-divider" role="separator" aria-hidden="true"></li>
                             <li role="none">
                                 <a href="{% url 'account:privacy' %}" role="menuitem">
-                                    {% trans "Privacy settings" %}
+                                    {% trans "Settings" %}
                                 </a>
                             </li>
-                            <li role="none">
-                                <a href="{% url 'account:notifications' %}" role="menuitem">
-                                    {% trans "Notification preferences" %}
-                                </a>
-                            </li>
-                            {% if request.user.is_active_member %}
-                            <li role="none">
-                                <a href="{% url 'account:aid' %}" role="menuitem">
-                                    {% trans "Mutual aid settings" %}
-                                </a>
-                            </li>
-                            {% endif %}
                             {% if logout_url %}
                             <li class="site-nav__dropdown-divider" role="separator" aria-hidden="true"></li>
                             <li role="none">

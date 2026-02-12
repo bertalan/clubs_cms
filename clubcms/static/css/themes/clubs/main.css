@@ -19,6 +19,7 @@
   --color-surface-alt: #1A1A1A;
   --color-text-primary: #FFFFFF;
   --color-text-muted: #A0A0A0;
+  --color-border: rgba(255, 255, 255, 0.3);
 
   /* Theme-specific tokens */
   --clubs-radius: 0;
@@ -1454,13 +1455,13 @@ a:hover {
 }
 
 /* --------------------------------------------------------------------------
-   27. Form overrides for dark theme
+   27. Form overrides for dark theme (WCAG 2.2 SC 1.4.11)
    -------------------------------------------------------------------------- */
 .form-input,
 .form-select,
 .form-textarea {
   background: var(--color-surface-alt);
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
   color: var(--color-text-primary);
 }
 
@@ -1468,7 +1469,62 @@ a:hover {
 .form-select:focus,
 .form-textarea:focus {
   border-color: var(--color-secondary);
-  box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.2);
+  box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.25);
+}
+
+/* Auth form inputs on dark background */
+.auth-card {
+  background: var(--color-surface-alt);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.auth-card input[type="text"],
+.auth-card input[type="email"],
+.auth-card input[type="password"],
+.auth-card input[type="number"],
+.auth-card input[type="tel"],
+.auth-card input[type="url"],
+.auth-card select,
+.auth-card textarea {
+  background: var(--color-surface);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: var(--color-text-primary);
+}
+.auth-card input:focus,
+.auth-card select:focus,
+.auth-card textarea:focus {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.25);
+}
+.auth-card h1 {
+  color: var(--color-text-primary);
+}
+.auth-subtitle {
+  color: var(--color-text-muted);
+}
+.auth-switch {
+  color: var(--color-text-muted);
+}
+.auth-switch a {
+  color: var(--color-secondary);
+}
+
+/* Pricing cards dark overrides */
+.pricing-card {
+  background: var(--color-surface-alt);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.pricing-card--active {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 2px var(--color-secondary);
+}
+.pricing-card__price {
+  color: var(--color-secondary);
+}
+.pricing-card__badge {
+  background: var(--color-secondary);
+}
+.pricing-card__features li::before {
+  color: #22c55e;
 }
 
 /* --------------------------------------------------------------------------
