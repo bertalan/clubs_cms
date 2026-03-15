@@ -11,8 +11,8 @@
 set -euo pipefail
 
 # ── Configurazione ──────────────────────────────────────────────────────────
-REMOTE_HOST="YOUR_SERVER_HOST"
-REMOTE_PORT="YOUR_SSH_PORT"
+REMOTE_HOST="guzzi-days.net"
+REMOTE_PORT="100"
 REMOTE_PATH="/www/wwwroot/clubs.betabi.it/clubcms"
 REPO_URL="https://github.com/bertalan/clubs_cms.git"
 COMPOSE_FILE="deploy/clubs.betabi.it/docker-compose.yml"
@@ -45,6 +45,8 @@ else
 fi
 
 cd /www/wwwroot/clubs.betabi.it/clubcms
+git pull --ff-only
+echo "  Codice aggiornato."
 
 # ── .env nella cartella del dominio, fuori dal repo git ──────────────────────
 # Posizione: /www/wwwroot/clubs.betabi.it/.env  (una dir sopra il repo clubcms/)
