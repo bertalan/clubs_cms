@@ -45,7 +45,8 @@ else
 fi
 
 cd /www/wwwroot/clubs.betabi.it/clubcms
-git pull --ff-only
+git fetch origin
+git reset --hard origin/main
 echo "  Codice aggiornato."
 
 # ── .env nella cartella del dominio, fuori dal repo git ──────────────────────
