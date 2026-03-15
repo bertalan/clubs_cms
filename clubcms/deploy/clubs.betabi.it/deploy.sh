@@ -1,30 +1,28 @@
 #!/bin/bash
-# ClubCMS — Deploy script per clubs.betabi.it (aaPanel)
+# ClubCMS — Deploy script per clubs.betabi.it (aaPanel, bare metal)
 # Eseguire dalla macchina locale: bash deploy/clubs.betabi.it/deploy.sh
 #
-# Prerequisiti locali:
-#   - Accesso SSH: ssh -p YOUR_SSH_PORT YOUR_SERVER_HOST  (utente root configurato in ~/.ssh/config)
-#   - Chiave SSH: ~/.ssh/id_rsa
+# Server bare metal: Python venv + gunicorn + systemd
+# Nessun Docker in produzione.
 #
-# Prima installazione sul server, eseguire:
+# Prima installazione sul server:
 #   bash deploy/clubs.betabi.it/deploy.sh --setup
 set -euo pipefail
 
 # ── Configurazione ──────────────────────────────────────────────────────────
 REMOTE_HOST="guzzi-days.net"
 REMOTE_PORT="100"
-REMOTE_REPO="/www/wwwroot/clubs.betabi.it/clubcms"
-REMOTE_PATH="/www/wwwroot/clubs.betabi.it/clubcms/clubcms"
+DOMAIN_DIR="/www/wwwroot/clubs.betabi.it"
+REMOTE_REPO="$DOMAIN_DIR/clubcms"
+REMOTE_PATH="$REMOTE_REPO/clubcms"
+VENV_DIR="$DOMAIN_DIR/venv"
 REPO_URL="https://github.com/bertalan/clubs_cms.git"
-COMPOSE_FILE="deploy/clubs.betabi.it/docker-compose.yml"
-COMPOSE="docker compose -f $COMPOSE_FILE"
-BACKUP_DIR="/www/wwwroot/clubs.betabi.it/backups"
+BACKUP_DIR="$DOMAIN_DIR/backups"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-# Utente root già nel ~/.ssh/config per YOUR_SERVER_HOST
 SSH_CMD="ssh -p $REMOTE_PORT -i ~/.ssh/id_rsa $REMOTE_HOST"
 
 echo "=== ClubCMS Deploy → clubs.betabi.it — $TIMESTAMP ==="
-echo "    Server: $REMOTE_HOST (porta $REMOTE_PORT)"
+echo "    Server: $REMOTE_HOST (porta $REMOTE_PORT) — bare metal"
 
 # ── Prima installazione ──────────────────────────────────────────────────────
 if [[ "${1:-}" == "--setup" ]]; then
@@ -34,59 +32,108 @@ if [[ "${1:-}" == "--setup" ]]; then
     $SSH_CMD bash <<'ENDSSH'
 set -euo pipefail
 
-# Crea directory webroot
-mkdir -p /www/wwwroot/clubs.betabi.it/{staticfiles,media,backups}
+DOMAIN_DIR="/www/wwwroot/clubs.betabi.it"
+
+# Crea directory
+mkdir -p "$DOMAIN_DIR"/{staticfiles,media,backups}
 
 # Clona il repository
-if [ ! -d "/www/wwwroot/clubs.betabi.it/clubcms" ]; then
-    git clone https://github.com/bertalan/clubs_cms.git /www/wwwroot/clubs.betabi.it/clubcms
+if [ ! -d "$DOMAIN_DIR/clubcms" ]; then
+    git clone https://github.com/bertalan/clubs_cms.git "$DOMAIN_DIR/clubcms"
     echo "  Repo clonato."
 else
     echo "  Repo già presente, skip clone."
 fi
 
-cd /www/wwwroot/clubs.betabi.it/clubcms
+cd "$DOMAIN_DIR/clubcms"
 git fetch origin
 git reset --hard origin/main
 echo "  Codice aggiornato."
 
-# ── .env nella cartella del dominio, fuori dal repo git ──────────────────────
-# Posizione: /www/wwwroot/clubs.betabi.it/.env  (una dir sopra il repo clubcms/)
-ENV_FILE="/www/wwwroot/clubs.betabi.it/.env"
+# ── Python venv ──────────────────────────────────────────────────────────────
+if [ ! -d "$DOMAIN_DIR/venv" ]; then
+    python3 -m venv "$DOMAIN_DIR/venv"
+    echo "  Virtualenv creato."
+fi
+source "$DOMAIN_DIR/venv/bin/activate"
+pip install --upgrade pip
+pip install -r "$DOMAIN_DIR/clubcms/clubcms/requirements.txt"
+echo "  Dipendenze installate."
+
+# ── .env ─────────────────────────────────────────────────────────────────────
+ENV_FILE="$DOMAIN_DIR/.env"
 
 if [ ! -f "$ENV_FILE" ]; then
-    cp deploy/clubs.betabi.it/.env.example "$ENV_FILE"
-    # Genera SECRET_KEY Django/Wagtail sicura (50 byte → 67 char base64url)
+    cp "$DOMAIN_DIR/clubcms/clubcms/deploy/clubs.betabi.it/.env.example" "$ENV_FILE"
     NEW_KEY=$(python3 -c "import secrets; print(secrets.token_urlsafe(50))")
     sed -i "s|^SECRET_KEY=.*|SECRET_KEY=$NEW_KEY|" "$ENV_FILE"
     chmod 600 "$ENV_FILE"
     echo ""
     echo "  .env creato in: $ENV_FILE  (chmod 600)"
-    echo "  SECRET_KEY generata automaticamente."
-    echo ""
-    echo "  ATTENZIONE: modifica $ENV_FILE con i valori reali:"
-    echo "    - DATABASE_URL (password del DB)"
-    echo "    - ALLOWED_HOSTS, CSRF_TRUSTED_ORIGINS"
-    echo "    - EMAIL_HOST, EMAIL_USER, EMAIL_PASSWORD"
-    echo "  Poi esegui: bash deploy/clubs.betabi.it/deploy.sh"
+    echo "  ATTENZIONE: modifica con i valori reali (DATABASE_URL, EMAIL, ecc.)"
 else
     echo "  .env già presente: $ENV_FILE"
-    # Ruota la SECRET_KEY ad ogni setup (sicurezza)
-    NEW_KEY=$(python3 -c "import secrets; print(secrets.token_urlsafe(50))")
-    sed -i "s|^SECRET_KEY=.*|SECRET_KEY=$NEW_KEY|" "$ENV_FILE"
-    echo "  SECRET_KEY ruotata."
 fi
 
-# Nginx vhost aaPanel
+# ── systemd: gunicorn ────────────────────────────────────────────────────────
+cat > /etc/systemd/system/clubcms.service <<SYSTEMD
+[Unit]
+Description=ClubCMS Gunicorn (clubs.betabi.it)
+After=network.target postgresql.service
+
+[Service]
+Type=notify
+User=www
+Group=www
+WorkingDirectory=$DOMAIN_DIR/clubcms/clubcms
+EnvironmentFile=$DOMAIN_DIR/.env
+ExecStart=$DOMAIN_DIR/venv/bin/gunicorn clubcms.wsgi:application \
+    --bind 127.0.0.1:8001 \
+    --workers 3 \
+    --timeout 120 \
+    --access-logfile - \
+    --error-logfile -
+ExecReload=/bin/kill -s HUP \$MAINPID
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+SYSTEMD
+
+# ── systemd: django-q2 ──────────────────────────────────────────────────────
+cat > /etc/systemd/system/clubcms-qcluster.service <<SYSTEMD
+[Unit]
+Description=ClubCMS Django-Q2 Worker (clubs.betabi.it)
+After=network.target postgresql.service clubcms.service
+
+[Service]
+Type=simple
+User=www
+Group=www
+WorkingDirectory=$DOMAIN_DIR/clubcms/clubcms
+EnvironmentFile=$DOMAIN_DIR/.env
+ExecStart=$DOMAIN_DIR/venv/bin/python manage.py qcluster
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+SYSTEMD
+
+systemctl daemon-reload
+systemctl enable clubcms clubcms-qcluster
+echo "  Servizi systemd installati e abilitati."
+
+# ── Nginx vhost aaPanel ──────────────────────────────────────────────────────
 VHOST_DIR="/www/server/panel/vhost/nginx"
 if [ -d "$VHOST_DIR" ]; then
-    cp deploy/clubs.betabi.it/nginx.conf $VHOST_DIR/clubs.betabi.it.conf
-    echo "  Nginx vhost installato in $VHOST_DIR/clubs.betabi.it.conf"
-    echo "  Riavvia nginx dal pannello aaPanel o: /etc/init.d/nginx reload"
-else
-    echo "  AVVISO: directory vhost nginx non trovata ($VHOST_DIR)."
-    echo "  Copia manuale: deploy/clubs.betabi.it/nginx.conf → vhost aaPanel"
+    cp "$DOMAIN_DIR/clubcms/clubcms/deploy/clubs.betabi.it/nginx.conf" \
+       "$VHOST_DIR/clubs.betabi.it.conf"
+    echo "  Nginx vhost installato."
+    echo "  Riavvia nginx: /etc/init.d/nginx reload"
 fi
+
 ENDSSH
 
     echo ""
@@ -101,52 +148,54 @@ fi
 $SSH_CMD bash <<EOF
 set -euo pipefail
 
-cd $REMOTE_PATH
+DOMAIN_DIR="/www/wwwroot/clubs.betabi.it"
+cd "\$DOMAIN_DIR/clubcms/clubcms"
+source "\$DOMAIN_DIR/venv/bin/activate"
 
-echo "[1/7] Backup database (pg_dump — PostgreSQL locale aaPanel)..."
-mkdir -p $BACKUP_DIR
-# Estrae user, password e dbname da DATABASE_URL in /www/wwwroot/clubs.betabi.it/.env
-# pg_dump gira sul bare metal → host sempre 127.0.0.1 (non host.docker.internal)
-_DB_URL=\$(grep '^DATABASE_URL=' /www/wwwroot/clubs.betabi.it/.env | cut -d= -f2-)
+echo "[1/7] Backup database..."
+mkdir -p "\$DOMAIN_DIR/backups"
+_DB_URL=\$(grep '^DATABASE_URL=' "\$DOMAIN_DIR/.env" | cut -d= -f2-)
 _DB_USER=\$(echo "\$_DB_URL" | sed 's|postgres://||' | cut -d: -f1)
 _DB_PASS=\$(echo "\$_DB_URL" | sed 's|postgres://[^:]*:||' | cut -d@ -f1)
 _DB_NAME=\$(echo "\$_DB_URL" | awk -F/ '{print \$NF}')
 PGPASSWORD="\$_DB_PASS" pg_dump -U "\$_DB_USER" -h 127.0.0.1 -p 5432 "\$_DB_NAME" 2>/dev/null \
-    | gzip > $BACKUP_DIR/db_${TIMESTAMP}.sql.gz \
-    && echo "  Backup: $BACKUP_DIR/db_${TIMESTAMP}.sql.gz" \
-    || echo "  AVVISO: backup fallito, continuo deploy..."
+    | gzip > "\$DOMAIN_DIR/backups/db_${TIMESTAMP}.sql.gz" \
+    && echo "  Backup OK" \
+    || echo "  AVVISO: backup fallito, continuo..."
 
-echo "[2/7] Pull codice aggiornato..."
+echo "[2/7] Pull codice..."
+cd "\$DOMAIN_DIR/clubcms"
 git pull --ff-only
+cd "\$DOMAIN_DIR/clubcms/clubcms"
 
-echo "[3/7] Build immagine Docker..."
-$COMPOSE build web
+echo "[3/7] Aggiornamento dipendenze..."
+pip install -r requirements.txt --quiet
 
 echo "[4/7] Migrazioni database..."
-$COMPOSE run --rm web python manage.py migrate --noinput
+python manage.py migrate --noinput
 
 echo "[5/7] Collect static files..."
-$COMPOSE run --rm web python manage.py collectstatic --noinput
+python manage.py collectstatic --noinput
 
 echo "[6/7] Compilazione traduzioni..."
-$COMPOSE run --rm web python manage.py compilemessages
+python manage.py compilemessages
 
 echo "[7/7] Riavvio servizi..."
-$COMPOSE up -d --remove-orphans
+systemctl restart clubcms clubcms-qcluster
 
 # Health check
-sleep 5
+sleep 3
 HTTP_CODE=\$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8001/health/ || echo "000")
 if [ "\$HTTP_CODE" = "200" ]; then
     echo "  Health check PASSED (HTTP \$HTTP_CODE)"
 else
     echo "  ERRORE: Health check FAILED (HTTP \$HTTP_CODE)"
-    echo "  Log: docker compose -f $COMPOSE_FILE logs web --tail=50"
+    echo "  Log: journalctl -u clubcms --no-pager -n 50"
     exit 1
 fi
 
 # Pulizia backup vecchi (mantieni ultimi 30)
-find $BACKUP_DIR -name "db_*.sql.gz" -mtime +30 -delete 2>/dev/null || true
+find "\$DOMAIN_DIR/backups" -name "db_*.sql.gz" -mtime +30 -delete 2>/dev/null || true
 EOF
 
 echo ""
