@@ -174,13 +174,20 @@ pip install -r requirements.txt --quiet
 echo "[4/7] Migrazioni database..."
 python manage.py migrate --noinput
 
-echo "[5/7] Collect static files..."
+echo "[5/9] Collect static files..."
 python manage.py collectstatic --noinput
 
-echo "[6/7] Compilazione traduzioni..."
+echo "[6/9] Configurazione dominio Sites..."
+python manage.py configure_sites
+
+echo "[7/9] Compilazione traduzioni..."
 python manage.py compilemessages
 
-echo "[7/7] Riavvio servizi..."
+echo "[8/9] Controllo permessi media..."
+chown -R www:www "\$DOMAIN_DIR/clubcms/clubcms/media/"
+echo "  Permessi media OK (www:www)"
+
+echo "[9/9] Riavvio servizi..."
 systemctl restart clubcms clubcms-qcluster
 
 # Health check

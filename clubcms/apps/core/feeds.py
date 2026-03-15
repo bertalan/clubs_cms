@@ -7,7 +7,7 @@ Feeds:
 - UpcomingEventsFeed   -- RSS 2.0 feed of the next 20 upcoming events
 """
 
-from datetime import datetime, time
+from datetime import datetime, time, timezone as dt_tz
 
 from django.contrib.syndication.views import Feed
 from django.utils import timezone
@@ -31,7 +31,7 @@ class LatestNewsFeed(Feed):
 
             index = NewsIndexPage.objects.live().first()
             if index:
-                return index.full_url
+                return index.url
         except Exception:
             pass
         return "/"
@@ -60,11 +60,11 @@ class LatestNewsFeed(Feed):
             # display_date is a DateField; convert to datetime for the feed
             if isinstance(display_date, datetime):
                 return display_date
-            return datetime.combine(display_date, time.min, tzinfo=timezone.utc)
+            return datetime.combine(display_date, time.min, tzinfo=dt_tz.utc)
         return getattr(item, "first_published_at", None)
 
     def item_link(self, item):
-        return item.full_url
+        return item.url
 
     def item_author_name(self, item):
         author = getattr(item, "author", None)
@@ -109,7 +109,7 @@ class UpcomingEventsFeed(Feed):
 
             index = EventsPage.objects.live().first()
             if index:
-                return index.full_url
+                return index.url
         except Exception:
             pass
         return "/"
@@ -148,7 +148,7 @@ class UpcomingEventsFeed(Feed):
         return getattr(item, "first_published_at", None)
 
     def item_link(self, item):
-        return item.full_url
+        return item.url
 
     def item_categories(self, item):
         categories = []
