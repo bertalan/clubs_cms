@@ -1,0 +1,54 @@
+# ClubCMS — docker-compose per aaPanel
+# Dominio: clubs.betabi.it | DB: PostgreSQL aaPanel (host) | Nginx: aaPanel
+#
+# Differenze rispetto a docker-compose.prod.yml:
+#   - NO container db  (PostgreSQL gestito da aaPanel sul host)
+#   - NO container nginx (nginx gestito da aaPanel)
+#   - Static/media: bind mount su paths accessibili da nginx aaPanel
+#   - host.docker.internal punta al PostgreSQL del host
+#   - Porta gunicorn: 127.0.0.1:8001 (nginx aaPanel fa proxy a localhost:8001)
+#
+# Avvio: cd /www/wwwroot/clubs.betabi.it/clubcms
+#         docker compose -f deploy/clubs.betabi.it/docker-compose.yml up -d
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: gunicorn clubcms.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120
+    ports:
+      - "127.0.0.1:8001:8000"
+    volumes:
+      - /www/wwwroot/clubs.betabi.it/staticfiles:/app/staticfiles
+      - /www/wwwroot/clubs.betabi.it/media:/app/media
+    env_file:
+      - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=clubcms.settings.prod
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  qcluster:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python manage.py qcluster
+    volumes:
+      - /www/wwwroot/clubs.betabi.it/media:/app/media
+    env_file:
+      - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=clubcms.settings.prod
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    depends_on:
+      - web
