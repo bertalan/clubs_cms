@@ -4,39 +4,45 @@
 {% block title %}{% trans "Privacy Settings" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>{% trans "Privacy Settings" %}</h1>
+<section class="page-privacy" aria-labelledby="privacy-heading">
+    <div class="container container--narrow">
+        <header class="page-privacy__header">
+            <h1 id="privacy-heading" class="page-privacy__title">{% trans "Privacy Settings" %}</h1>
+            <p class="page-privacy__subtitle">{% trans "Control how your information is displayed to other members" %}</p>
+        </header>
 
-    {% if form.errors %}
-    <div class="alert alert-error" role="alert">
-        <p>{% trans "Please correct the errors below." %}</p>
-    </div>
-    {% endif %}
+        {% if form.errors %}
+        <div class="page-privacy__alert alert alert--error" role="alert">
+            <svg class="alert__icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <p>{% trans "Please correct the errors below." %}</p>
+        </div>
+        {% endif %}
 
-    <form method="post" novalidate>
-        {% csrf_token %}
+        <form method="post" class="page-privacy__form" novalidate>
+            {% csrf_token %}
 
-        <fieldset>
-            <legend>{% trans "Visibility" %}</legend>
-            {% for field in form %}
-            <div class="form-group form-check">
-                {{ field }}
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {% if field.help_text %}
-                <small class="form-help">{{ field.help_text }}</small>
-                {% endif %}
-                {% if field.errors %}
-                <ul class="form-errors">
-                    {% for error in field.errors %}
-                    <li>{{ error }}</li>
+            <fieldset class="page-privacy__fieldset">
+                <legend class="page-privacy__legend">{% trans "Visibility" %}</legend>
+                <p class="page-privacy__description">{% trans "Choose what information is visible to other club members." %}</p>
+                
+                <div class="page-privacy__fields">
+                    {% for field in form %}
+                        <div class="page-privacy__field">
+                            {% include "includes/_form_field.html" with field=field %}
+                        </div>
                     {% endfor %}
-                </ul>
-                {% endif %}
-            </div>
-            {% endfor %}
-        </fieldset>
+                </div>
+            </fieldset>
 
-        <button type="submit" class="btn btn-primary">{% trans "Save Settings" %}</button>
-    </form>
-</div>
+            <div class="page-privacy__actions">
+                <button type="submit" class="btn btn--primary">{% trans "Save Settings" %}</button>
+                <a href="{% url 'account:profile' %}" class="btn btn--secondary">{% trans "Back to Profile" %}</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% include "includes/_field_help_modal.html" %}
 {% endblock %}

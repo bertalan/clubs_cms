@@ -3,6 +3,7 @@ URL configuration for the notifications app.
 """
 
 from django.urls import path
+from django.utils.translation import gettext_lazy as _
 
 from . import views
 
@@ -11,12 +12,12 @@ app_name = "notifications"
 urlpatterns = [
     # Unsubscribe (no login required, token-based)
     path(
-        "unsubscribe/<str:token>/",
+        _("unsubscribe/<str:token>/"),
         views.UnsubscribeView.as_view(),
         name="unsubscribe",
     ),
     path(
-        "unsubscribe/success/",
+        _("unsubscribe/success/"),
         views.UnsubscribeSuccessView.as_view(),
         name="unsubscribe_success",
     ),
@@ -33,7 +34,7 @@ urlpatterns = [
     ),
     # Notification history (login required)
     path(
-        "history/",
+        _("history/"),
         views.NotificationHistoryView.as_view(),
         name="history",
     ),

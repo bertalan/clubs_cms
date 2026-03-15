@@ -17,30 +17,39 @@
     body { font-family: system-ui, -apple-system, sans-serif; background: var(--cream); color: var(--text); line-height: 1.6; }
     a { color: var(--forest); }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
-    
+
     /* Nav */
     nav { background: var(--forest); padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
     nav .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
     .logo { color: white; text-decoration: none; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; }
     .logo span { color: var(--accent); }
-    nav ul { list-style: none; display: flex; gap: 2rem; flex-wrap: wrap; }
-    nav ul a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 500; transition: color 0.2s; }
-    nav ul a:hover, nav ul a.active { color: var(--accent); }
-    
+    .nav-center { list-style: none; display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; }
+    .nav-center a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .nav-center a:hover, .nav-center a.active { color: var(--accent); }
+    .nav-cta {
+      display: inline-block; padding: 0.5rem 1.25rem; background: var(--accent); color: white;
+      text-decoration: none; font-weight: 700; border-radius: 2px; font-size: 0.9rem;
+      transition: all 0.3s ease; letter-spacing: 0.02em;
+    }
+    .nav-cta:hover { background: #ff6b0a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(232,93,4,0.3); }
+
     /* Buttons */
-    .btn { 
-      display: inline-block; padding: 0.75rem 1.75rem; text-decoration: none; 
-      font-weight: 700; border-radius: 2px; transition: all 0.3s ease; 
+    .btn {
+      display: inline-block; padding: 0.75rem 1.75rem; text-decoration: none;
+      font-weight: 700; border-radius: 2px; transition: all 0.3s ease;
     }
     .btn-accent { background: var(--accent); color: white; }
     .btn-accent:hover { background: #ff6b0a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(232,93,4,0.3); }
     .btn-outline { background: transparent; color: white; border: 2px solid white; }
     .btn-outline:hover { background: white; color: var(--forest); }
-    
-    /* Hero with diagonal */
-    .hero { 
-      background: linear-gradient(135deg, var(--forest) 0%, #3d6b1e 100%); 
-      color: white; padding: 6rem 0 8rem; text-align: center; 
+    .btn-forest { background: var(--forest); color: white; }
+    .btn-forest:hover { background: #3d6b1e; transform: translateY(-2px); }
+
+    /* Hero with diagonal + background image */
+    .hero {
+      background: linear-gradient(135deg, rgba(45,80,22,0.88) 0%, rgba(61,107,30,0.85) 100%),
+                  url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920') center/cover no-repeat;
+      color: white; padding: 7rem 0 9rem; text-align: center;
       position: relative; overflow: hidden;
     }
     .hero::after {
@@ -48,69 +57,137 @@
       height: 80px; background: var(--cream);
       clip-path: polygon(0 100%, 100% 100%, 100% 0);
     }
-    .hero h1 { 
-      font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom: 1rem; 
-      font-weight: 900; letter-spacing: -0.02em; 
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom: 1rem;
+      font-weight: 900; letter-spacing: -0.02em;
     }
     .hero p { max-width: 600px; margin: 0 auto 2rem; opacity: 0.9; font-size: 1.1rem; }
-    .hero-badge { 
-      display: inline-block; background: var(--accent); color: white; 
-      padding: 0.4rem 1rem; font-size: 0.8rem; font-weight: 700; 
+    .hero-badge {
+      display: inline-block; background: var(--accent); color: white;
+      padding: 0.4rem 1rem; font-size: 0.8rem; font-weight: 700;
       letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1.5rem;
     }
     .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-    
+
     /* Stats - XXL numbers */
     .stats { background: var(--earth); color: white; padding: 3rem 0; margin-top: -40px; position: relative; z-index: 10; }
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: center; }
     @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
-    .stat-item h3 { 
-      font-size: 3rem; font-weight: 900; line-height: 1; 
+    .stat-item h3 {
+      font-size: 3rem; font-weight: 900; line-height: 1;
       animation: pulse 2s ease-in-out infinite;
     }
     .stat-item p { font-size: 0.85rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
-    
+
     /* Section */
     .section { padding: 5rem 0; }
-    .section-title { 
-      text-align: center; color: var(--forest); margin-bottom: 3rem; 
+    .section-title {
+      text-align: center; color: var(--forest); margin-bottom: 3rem;
       font-size: 2rem; font-weight: 800; position: relative;
     }
     .section-title::after {
-      content: ''; display: block; width: 60px; height: 4px; 
+      content: ''; display: block; width: 60px; height: 4px;
       background: var(--accent); margin: 1rem auto 0;
     }
-    
+
     /* Cards with racing stripe */
     .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-    .card { 
-      background: white; border-left: 4px solid var(--accent); 
-      padding: 1.5rem; position: relative; 
+    .card {
+      background: white; border-left: 4px solid var(--accent);
+      position: relative; overflow: hidden;
       transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
-    .card:hover { 
-      transform: translateY(-4px); 
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     }
-    .card-date { 
-      display: inline-block; background: var(--accent); color: white; 
-      padding: 0.25rem 0.6rem; font-size: 0.75rem; font-weight: 700; 
+    .card-img {
+      width: 100%; height: 180px; object-fit: cover; display: block;
+    }
+    .card-body { padding: 1.5rem; }
+    .card-date {
+      display: inline-block; background: var(--accent); color: white;
+      padding: 0.25rem 0.6rem; font-size: 0.75rem; font-weight: 700;
       margin-bottom: 0.75rem;
     }
     .card h3 { color: var(--forest); margin-bottom: 0.5rem; font-weight: 700; }
     .card p { color: var(--text-light); font-size: 0.95rem; margin-bottom: 1rem; }
-    .card-link { 
-      color: var(--forest); font-weight: 600; text-decoration: none; 
+    .card-link {
+      color: var(--forest); font-weight: 600; text-decoration: none;
       display: inline-flex; align-items: center; gap: 0.3rem; transition: gap 0.2s;
     }
     .card-link:hover { color: var(--accent); gap: 0.6rem; }
     .card-link .arrow { transition: transform 0.2s; }
     .card-link:hover .arrow { transform: translateX(4px); }
-    
+
+    /* Gallery Preview */
+    .gallery-preview-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .gallery-preview-item {
+      position: relative; overflow: hidden; border-left: 4px solid var(--accent);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s ease;
+    }
+    .gallery-preview-item:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .gallery-preview-item img {
+      width: 100%; height: 200px; object-fit: cover; display: block;
+      transition: transform 0.3s ease;
+    }
+    .gallery-preview-item:hover img { transform: scale(1.05); }
+    .gallery-preview-item .caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7)); color: white;
+      padding: 2rem 1rem 0.75rem; font-size: 0.9rem; font-weight: 600;
+    }
+    .gallery-cta-wrap { text-align: center; }
+
+    /* Newsletter */
+    .newsletter {
+      background: linear-gradient(135deg, var(--earth), #7d3e15);
+      color: white; padding: 4rem 0; text-align: center; position: relative;
+    }
+    .newsletter::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 60px; background: var(--cream);
+      clip-path: polygon(0 0, 100% 0, 0 100%);
+    }
+    .newsletter h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .newsletter p { opacity: 0.9; margin-bottom: 1.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .newsletter-form {
+      display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;
+      max-width: 500px; margin: 0 auto;
+    }
+    .newsletter-form input {
+      flex: 1; min-width: 220px; padding: 0.75rem 1rem; border: none;
+      font-size: 1rem; font-family: inherit; border-radius: 2px;
+    }
+    .newsletter-form input:focus { outline: 2px solid var(--accent); }
+    .newsletter-form button {
+      padding: 0.75rem 1.75rem; background: var(--accent); color: white;
+      border: none; font-weight: 700; font-size: 1rem; cursor: pointer;
+      border-radius: 2px; transition: all 0.3s ease;
+    }
+    .newsletter-form button:hover { background: #ff6b0a; transform: translateY(-2px); }
+
+    /* Partners */
+    .partners-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1.5rem; align-items: center; justify-items: center;
+    }
+    .partner-logo {
+      background: white; border-left: 4px solid var(--accent);
+      padding: 1.25rem 1.5rem; width: 100%; text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s ease;
+      font-weight: 700; color: var(--forest); font-size: 0.85rem;
+    }
+    .partner-logo:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .partner-icon { font-size: 1.5rem; display: block; margin-bottom: 0.4rem; color: var(--earth); }
+
     /* CTA */
-    .cta { 
-      background: linear-gradient(135deg, var(--forest), #3d6b1e); 
+    .cta {
+      background: linear-gradient(135deg, var(--forest), #3d6b1e);
       color: white; padding: 4rem 0; text-align: center; position: relative;
     }
     .cta::before {
@@ -122,34 +199,50 @@
     .cta p { opacity: 0.9; margin-bottom: 1.5rem; }
     .cta .btn-accent { background: var(--accent); }
     .cta .btn-accent:hover { background: #ff6b0a; }
-    
+
     /* Footer */
     footer { background: #1a1a1a; color: #aaa; padding: 3rem 0 1.5rem; }
     .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
     footer h4 { color: white; margin-bottom: 1rem; font-weight: 700; }
     footer a { color: #aaa; text-decoration: none; transition: color 0.2s; }
     footer a:hover { color: var(--accent); }
+    footer ul { list-style: none; }
+    footer ul li { margin-bottom: 0.4rem; }
     footer hr { border: none; border-top: 1px solid #333; margin-bottom: 1.5rem; }
     .footer-copy { text-align: center; font-size: 0.85rem; color: #666; }
+    .social-links { display: flex; gap: 1rem; margin-top: 1rem; }
+    .social-links a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 50%; background: #333;
+      color: #aaa; text-decoration: none; font-size: 0.85rem; font-weight: 700;
+      transition: all 0.3s ease;
+    }
+    .social-links a:hover { background: var(--accent); color: white; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 5rem 0 7rem; }
+      .gallery-preview-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
   <nav>
     <div class="container">
       <a href="index.html" class="logo">Green<span>Org</span></a>
-      <ul>
+      <ul class="nav-center">
         <li><a href="index.html" class="active">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="events.html">Events</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
+      <a href="contact.html" class="nav-cta">Join Us</a>
     </div>
   </nav>
 
   <section class="hero">
     <div class="container">
-      <span class="hero-badge">🌱 Carbon Neutral Since 2020</span>
+      <span class="hero-badge">Carbon Neutral Since 2020</span>
       <h1>Growing Together Sustainably</h1>
       <p>A community dedicated to environmental stewardship and sustainable living. Join us in making a difference.</p>
       <div class="hero-btns">
@@ -175,23 +268,93 @@
       <h2 class="section-title">Upcoming Initiatives</h2>
       <div class="card-grid">
         <article class="card">
-          <span class="card-date">March 22, 2026</span>
-          <h3>Community Garden Day</h3>
-          <p>Join us for a day of planting and nurturing our community garden. All skill levels welcome.</p>
-          <a href="events.html" class="card-link">Learn more <span class="arrow">→</span></a>
+          <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600" alt="Community Garden Day - volunteers planting in a garden" class="card-img">
+          <div class="card-body">
+            <span class="card-date">March 22, 2026</span>
+            <h3>Community Garden Day</h3>
+            <p>Join us for a day of planting and nurturing our community garden. All skill levels welcome.</p>
+            <a href="events.html" class="card-link">Learn more <span class="arrow">&rarr;</span></a>
+          </div>
         </article>
         <article class="card">
-          <span class="card-date">April 10, 2026</span>
-          <h3>Sustainable Living Workshop</h3>
-          <p>Practical tips for reducing your carbon footprint at home and in daily life.</p>
-          <a href="events.html" class="card-link">Register <span class="arrow">→</span></a>
+          <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=600" alt="Sustainable Living Workshop - eco-friendly garden" class="card-img">
+          <div class="card-body">
+            <span class="card-date">April 10, 2026</span>
+            <h3>Sustainable Living Workshop</h3>
+            <p>Practical tips for reducing your carbon footprint at home and in daily life.</p>
+            <a href="events.html" class="card-link">Register <span class="arrow">&rarr;</span></a>
+          </div>
         </article>
         <article class="card">
-          <span class="card-date">May 5, 2026</span>
-          <h3>River Cleanup Drive</h3>
-          <p>Help restore our local waterways. Equipment and refreshments provided.</p>
-          <a href="events.html" class="card-link">Volunteer <span class="arrow">→</span></a>
+          <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600" alt="River Cleanup Drive - nature landscape" class="card-img">
+          <div class="card-body">
+            <span class="card-date">May 5, 2026</span>
+            <h3>River Cleanup Drive</h3>
+            <p>Help restore our local waterways. Equipment and refreshments provided.</p>
+            <a href="events.html" class="card-link">Volunteer <span class="arrow">&rarr;</span></a>
+          </div>
         </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Preview -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <h2 class="section-title">From Our Gallery</h2>
+      <div class="gallery-preview-grid">
+        <div class="gallery-preview-item">
+          <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600" alt="Dense forest canopy">
+          <div class="caption">Forest Conservation</div>
+        </div>
+        <div class="gallery-preview-item">
+          <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600" alt="Volunteers working together">
+          <div class="caption">Community Volunteers</div>
+        </div>
+        <div class="gallery-preview-item">
+          <img src="https://images.unsplash.com/photo-1497250681960-ef046c08a56e?w=600" alt="Green potted plants">
+          <div class="caption">Urban Gardening</div>
+        </div>
+        <div class="gallery-preview-item">
+          <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=600" alt="Recycling initiative">
+          <div class="caption">Recycling Program</div>
+        </div>
+      </div>
+      <div class="gallery-cta-wrap">
+        <a href="gallery.html" class="btn btn-forest">View Full Gallery &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partners / Sponsors -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <h2 class="section-title">Our Partners</h2>
+      <div class="partners-grid">
+        <div class="partner-logo">
+          <span class="partner-icon">&#9752;</span>
+          EcoFarms Co-op
+        </div>
+        <div class="partner-logo">
+          <span class="partner-icon">&#9788;</span>
+          SolarGreen Energy
+        </div>
+        <div class="partner-logo">
+          <span class="partner-icon">&#9741;</span>
+          RiverWatch Alliance
+        </div>
+        <div class="partner-logo">
+          <span class="partner-icon">&#9670;</span>
+          Green Valley Council
+        </div>
+        <div class="partner-logo">
+          <span class="partner-icon">&#9827;</span>
+          NatureFirst Trust
+        </div>
+        <div class="partner-logo">
+          <span class="partner-icon">&#10047;</span>
+          BioCycle Labs
+        </div>
       </div>
     </div>
   </section>
@@ -204,27 +367,58 @@
     </div>
   </section>
 
+  <!-- Newsletter -->
+  <section class="newsletter">
+    <div class="container">
+      <h2>Stay in the Loop</h2>
+      <p>Subscribe to our monthly newsletter for updates on events, tips for sustainable living, and community stories.</p>
+      <form class="newsletter-form" action="#" method="post">
+        <input type="email" placeholder="Enter your email address" aria-label="Email address for newsletter" required>
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
   <footer>
     <div class="container">
       <div class="footer-grid">
         <div>
           <h4>GreenOrg</h4>
-          <p style="font-size: 0.9rem; line-height: 1.8;">789 Eco Lane<br>Green Valley<br>hello@greenorg.example</p>
+          <p style="font-size: 0.9rem; line-height: 1.8;">
+            789 Nature Way<br>
+            Green Valley<br>
+            <a href="mailto:info@greenorg.example">info@greenorg.example</a><br>
+            <a href="tel:+15554567890">+1 (555) 456-7890</a>
+          </p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook" title="Facebook">Fb</a>
+            <a href="#" aria-label="Instagram" title="Instagram">Ig</a>
+            <a href="#" aria-label="Twitter" title="Twitter">Tw</a>
+          </div>
         </div>
         <div>
-          <h4>Links</h4>
-          <p><a href="about.html">About Us</a></p>
-          <p><a href="events.html">Events</a></p>
-          <p><a href="contact.html">Contact</a></p>
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
         </div>
         <div>
           <h4>Resources</h4>
-          <p><a href="#">Sustainability Guide</a></p>
-          <p><a href="#">Partner Network</a></p>
+          <ul>
+            <li><a href="#">Sustainability Guide</a></li>
+            <li><a href="#">Partner Network</a></li>
+            <li><a href="#">Volunteer Handbook</a></li>
+            <li><a href="#">Annual Report</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
         </div>
       </div>
       <hr>
-      <p class="footer-copy">© 2026 GreenOrg • Terra Theme Demo • Built with minimal footprint</p>
+      <p class="footer-copy">&copy; 2026 GreenOrg &bull; Terra Theme Demo &bull; Built with minimal footprint</p>
     </div>
   </footer>
 </body>

@@ -414,7 +414,8 @@ class TestPayPalReturnView:
         response = auth_client.get(url)
 
         assert response.status_code == 302
-        assert "success" in response.url
+        expected = reverse("events:payment_success", args=[registration.pk])
+        assert response.url == expected
 
         registration.refresh_from_db()
         assert registration.payment_status == "paid"
@@ -437,7 +438,8 @@ class TestPayPalReturnView:
         response = auth_client.get(url)
 
         assert response.status_code == 302
-        assert "cancel" in response.url
+        expected = reverse("events:payment_cancel", args=[registration.pk])
+        assert response.url == expected
 
     def test_already_paid_redirects_to_success(
         self, auth_client, registration, payment_settings
@@ -458,7 +460,8 @@ class TestPayPalReturnView:
         response = auth_client.get(url)
 
         assert response.status_code == 302
-        assert "success" in response.url
+        expected = reverse("events:payment_success", args=[registration.pk])
+        assert response.url == expected
 
     def test_non_paypal_registration_redirects_to_cancel(
         self, auth_client, registration, payment_settings
@@ -471,7 +474,8 @@ class TestPayPalReturnView:
         response = auth_client.get(url)
 
         assert response.status_code == 302
-        assert "cancel" in response.url
+        expected = reverse("events:payment_cancel", args=[registration.pk])
+        assert response.url == expected
 
 
 # ---------------------------------------------------------------------------

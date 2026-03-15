@@ -1,0 +1,14 @@
+{% load wagtailcore_tags i18n website_tags %}
+
+<section {% block_attrs self.settings "block-social-feed" %} data-platform="{{ self.platform }}" data-max-posts="{{ self.max_posts }}">
+    <div class="container">
+        {% if self.title %}
+        <h2 class="block-social-feed__title">{{ self.title }}</h2>
+        {% endif %}
+        <div class="block-social-feed__embed" data-url="{{ self.embed_url }}">
+            <noscript>
+                <a href="{{ self.embed_url }}">{% trans "View on" %} {{ self.platform }}</a>
+            </noscript>
+        </div>
+    </div>
+</section>

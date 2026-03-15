@@ -46,79 +46,80 @@
   <section class="py-24">
     <div class="max-w-7xl mx-auto px-6">
       <div class="grid lg:grid-cols-2 gap-16">
-        
+
         <!-- Form -->
         <div>
           <p class="text-red font-bold uppercase tracking-[0.2em] mb-4">Write Us</p>
           <h2 class="text-3xl font-black uppercase mb-8">Send a Message</h2>
-          
+
           <form class="space-y-6">
             <div class="grid md:grid-cols-2 gap-6">
               <div>
-                <label class="block text-sm font-bold uppercase tracking-wider mb-2">First Name *</label>
-                <input type="text" class="w-full bg-[#1A1A1A] border border-white/20 px-4 py-3 text-white">
+                <label for="first-name" class="block text-sm font-bold uppercase tracking-wider mb-2">First Name *</label>
+                <input type="text" id="first-name" name="first_name" placeholder="Enter your first name" required aria-label="First name" class="w-full bg-[#1A1A1A] border border-white/20 px-4 py-3 text-white placeholder-gray-500">
               </div>
               <div>
-                <label class="block text-sm font-bold uppercase tracking-wider mb-2">Last Name *</label>
-                <input type="text" class="w-full bg-[#1A1A1A] border border-white/20 px-4 py-3 text-white">
+                <label for="last-name" class="block text-sm font-bold uppercase tracking-wider mb-2">Last Name *</label>
+                <input type="text" id="last-name" name="last_name" placeholder="Enter your last name" required aria-label="Last name" class="w-full bg-[#1A1A1A] border border-white/20 px-4 py-3 text-white placeholder-gray-500">
               </div>
             </div>
-            
+
             <div>
-              <label class="block text-sm font-bold uppercase tracking-wider mb-2">Email *</label>
-              <input type="email" class="w-full bg-[#1A1A1A] border border-white/20 px-4 py-3 text-white">
+              <label for="email" class="block text-sm font-bold uppercase tracking-wider mb-2">Email *</label>
+              <input type="email" id="email" name="email" placeholder="your.email@example.com" required aria-label="Email address" class="w-full bg-[#1A1A1A] border border-white/20 px-4 py-3 text-white placeholder-gray-500">
             </div>
-            
+
             <div>
-              <label class="block text-sm font-bold uppercase tracking-wider mb-2">Phone</label>
-              <input type="tel" class="w-full bg-[#1A1A1A] border border-white/20 px-4 py-3 text-white">
+              <label for="phone" class="block text-sm font-bold uppercase tracking-wider mb-2">Phone</label>
+              <input type="tel" id="phone" name="phone" placeholder="+39 012 345 6789" aria-label="Phone number" class="w-full bg-[#1A1A1A] border border-white/20 px-4 py-3 text-white placeholder-gray-500">
             </div>
-            
+
             <div>
-              <label class="block text-sm font-bold uppercase tracking-wider mb-2">Subject *</label>
-              <select class="w-full bg-[#1A1A1A] border border-white/20 px-4 py-3 text-white">
-                <option>Information Request</option>
-                <option>Club Membership</option>
-                <option>Events</option>
-                <option>Partnership</option>
-                <option>Other</option>
+              <label for="subject" class="block text-sm font-bold uppercase tracking-wider mb-2">Subject *</label>
+              <select id="subject" name="subject" required aria-label="Message subject" class="w-full bg-[#1A1A1A] border border-white/20 px-4 py-3 text-white">
+                <option value="">-- Select a subject --</option>
+                <option value="info">Information Request</option>
+                <option value="membership">Club Membership</option>
+                <option value="events">Events</option>
+                <option value="partnership">Partnership</option>
+                <option value="other">Other</option>
               </select>
             </div>
-            
+
             <div>
-              <label class="block text-sm font-bold uppercase tracking-wider mb-2">Message *</label>
-              <textarea rows="5" class="w-full bg-[#1A1A1A] border border-white/20 px-4 py-3 text-white"></textarea>
+              <label for="message" class="block text-sm font-bold uppercase tracking-wider mb-2">Message *</label>
+              <textarea id="message" name="message" rows="5" placeholder="Write your message here..." required aria-label="Your message" class="w-full bg-[#1A1A1A] border border-white/20 px-4 py-3 text-white placeholder-gray-500"></textarea>
             </div>
-            
+
             <div class="flex items-start gap-3">
-              <input type="checkbox" id="privacy" class="mt-1">
+              <input type="checkbox" id="privacy" name="privacy" required class="mt-1">
               <label for="privacy" class="text-sm text-gray-400">I have read and accept the privacy policy. *</label>
             </div>
-            
+
             <button type="submit" class="bg-red px-10 py-4 font-bold uppercase tracking-wider hover:scale-105 transition">Send Message</button>
           </form>
         </div>
-        
+
         <!-- Info -->
         <div>
           <p class="text-red font-bold uppercase tracking-[0.2em] mb-4">Where We Are</p>
           <h2 class="text-3xl font-black uppercase mb-8">Our Headquarters</h2>
-          
+
           <div class="space-y-8">
             <div class="bg-[#1A1A1A] border border-white/10 p-8">
               <h3 class="font-bold uppercase tracking-wider mb-4">Main Headquarters</h3>
               <p class="text-gray-400 mb-2">Via Roma 123</p>
-              <p class="text-gray-400 mb-2">12345 City (PR)</p>
+              <p class="text-gray-400 mb-2">20100 Milano (MI)</p>
               <p class="text-gray-400">Italy</p>
             </div>
-            
+
             <div class="bg-[#1A1A1A] border border-white/10 p-8">
               <h3 class="font-bold uppercase tracking-wider mb-4">Direct Contacts</h3>
-              <p class="text-gray-400 mb-2">📧 info@eagleriders.example</p>
-              <p class="text-gray-400 mb-2">📞 +39 012 345 6789</p>
-              <p class="text-gray-400">📱 WhatsApp: +39 012 345 6789</p>
+              <p class="text-gray-400 mb-2">Email: info@eagleriders.example</p>
+              <p class="text-gray-400 mb-2">Phone: +39 02 9876543</p>
+              <p class="text-gray-400">WhatsApp: +39 02 9876543</p>
             </div>
-            
+
             <div class="bg-[#1A1A1A] border border-white/10 p-8">
               <h3 class="font-bold uppercase tracking-wider mb-4">Office Hours</h3>
               <div class="grid grid-cols-2 gap-2 text-gray-400">
@@ -127,10 +128,10 @@
                 <p>Saturday</p><p>10:00 - 13:00</p>
               </div>
             </div>
-            
+
             <div class="bg-red p-8">
               <h3 class="font-bold uppercase tracking-wider mb-4">Become a Member</h3>
-              <p class="text-white/80 mb-4">Annual fee €80. Includes: membership card, event access, partner discounts, roadside assistance.</p>
+              <p class="text-white/80 mb-4">Annual fee &euro;80. Includes: membership card, event access, partner discounts, roadside assistance.</p>
               <a href="#" class="inline-block bg-[#0A0A0A] px-6 py-3 font-bold uppercase text-sm tracking-wider hover:scale-105 transition">Request Form</a>
             </div>
           </div>
@@ -144,7 +145,74 @@
   <section class="h-96 bg-[#1A1A1A] flex items-center justify-center border-y border-white/10">
     <div class="text-center">
       <p class="text-gray-400 uppercase tracking-wider mb-4">Interactive Map</p>
-      <p class="text-2xl font-bold">Via Roma 123, 12345 City (PR)</p>
+      <p class="text-2xl font-bold">Via Roma 123, 20100 Milano (MI)</p>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-24">
+    <div class="max-w-4xl mx-auto px-6">
+      <p class="text-red font-bold uppercase tracking-[0.2em] mb-4 text-center">Need Help?</p>
+      <h2 class="text-3xl md:text-4xl font-black uppercase mb-12 text-center">Frequently Asked Questions</h2>
+
+      <div class="space-y-4" id="faq-accordion">
+
+        <!-- FAQ 1 -->
+        <div class="border border-white/10 bg-[#1A1A1A]">
+          <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center p-6 text-left font-bold uppercase tracking-wider hover:text-red transition" aria-expanded="false">
+            <span>How do I become a member?</span>
+            <svg class="w-5 h-5 flex-shrink-0 transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content max-h-0 overflow-hidden transition-all duration-300">
+            <p class="px-6 pb-6 text-gray-400">To become a member, fill out the contact form above or visit us during office hours. You will need a valid ID and your motorcycle registration. The annual membership fee is &euro;80 and includes access to all club events, partner discounts, and roadside assistance.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="border border-white/10 bg-[#1A1A1A]">
+          <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center p-6 text-left font-bold uppercase tracking-wider hover:text-red transition" aria-expanded="false">
+            <span>Do I need to own a specific motorcycle brand?</span>
+            <svg class="w-5 h-5 flex-shrink-0 transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content max-h-0 overflow-hidden transition-all duration-300">
+            <p class="px-6 pb-6 text-gray-400">No! EagleRiders welcomes riders of all brands and motorcycle types. What matters is the shared passion for riding and the spirit of brotherhood. Whether you ride a sportbike, cruiser, touring, or adventure bike, you are welcome here.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="border border-white/10 bg-[#1A1A1A]">
+          <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center p-6 text-left font-bold uppercase tracking-wider hover:text-red transition" aria-expanded="false">
+            <span>Can I participate in events without being a member?</span>
+            <svg class="w-5 h-5 flex-shrink-0 transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content max-h-0 overflow-hidden transition-all duration-300">
+            <p class="px-6 pb-6 text-gray-400">Some events like Open Days are open to everyone. However, rallies, tours, and most club activities are reserved for members. We recommend attending an Open Day first to get to know us, and then joining if you like the atmosphere!</p>
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="border border-white/10 bg-[#1A1A1A]">
+          <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center p-6 text-left font-bold uppercase tracking-wider hover:text-red transition" aria-expanded="false">
+            <span>What insurance coverage do members have?</span>
+            <svg class="w-5 h-5 flex-shrink-0 transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content max-h-0 overflow-hidden transition-all duration-300">
+            <p class="px-6 pb-6 text-gray-400">All members are covered by the club's group insurance during official events. This includes civil liability and basic roadside assistance across Italy. For international tours, supplementary coverage options are available at a discounted group rate.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 5 -->
+        <div class="border border-white/10 bg-[#1A1A1A]">
+          <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center p-6 text-left font-bold uppercase tracking-wider hover:text-red transition" aria-expanded="false">
+            <span>How can I propose a new ride or event?</span>
+            <svg class="w-5 h-5 flex-shrink-0 transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content max-h-0 overflow-hidden transition-all duration-300">
+            <p class="px-6 pb-6 text-gray-400">Members can submit event proposals through the contact form or during our monthly meetings held every first Thursday. The board reviews proposals and, once approved, adds them to the official calendar. We encourage members to take an active role in shaping our activities!</p>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
@@ -154,11 +222,11 @@
       <div class="grid md:grid-cols-4 gap-12 mb-12">
         <div class="md:col-span-2">
           <p class="text-3xl font-black mb-4">EAGLE<span class="text-red">RIDERS</span></p>
-          <p class="text-gray-400 max-w-md">The passion that unites us since 1985. Official club recognized by the Italian Motorcycle Federation.</p>
-          <div class="flex gap-4 mt-6">
-            <a href="#" class="w-10 h-10 border border-white/20 flex items-center justify-center hover:border-red hover:text-red transition">f</a>
-            <a href="#" class="w-10 h-10 border border-white/20 flex items-center justify-center hover:border-red hover:text-red transition">ig</a>
-            <a href="#" class="w-10 h-10 border border-white/20 flex items-center justify-center hover:border-red hover:text-red transition">yt</a>
+          <p class="text-gray-400 max-w-md mb-6">The passion that unites us since 1985. Official club recognized by the Italian Motorcycle Federation.</p>
+          <div class="space-y-2 text-gray-400 text-sm">
+            <p>Via Roma 123, 20100 Milano</p>
+            <p>info@eagleriders.example</p>
+            <p>+39 02 9876543</p>
           </div>
         </div>
         <div>
@@ -168,23 +236,52 @@
             <li><a href="about.html" class="hover:text-white transition">Heritage</a></li>
             <li><a href="events.html" class="hover:text-white transition">Events</a></li>
             <li><a href="gallery.html" class="hover:text-white transition">Gallery</a></li>
+            <li><a href="contact.html" class="hover:text-white transition">Contact</a></li>
           </ul>
         </div>
         <div>
-          <p class="font-bold uppercase tracking-wider mb-4">Services</p>
+          <p class="font-bold uppercase tracking-wider mb-4">Follow Us</p>
           <ul class="space-y-2 text-gray-400">
-            <li><a href="#" class="hover:text-white transition">Membership</a></li>
-            <li><a href="#" class="hover:text-white transition">Partnerships</a></li>
-            <li><a href="#" class="hover:text-white transition">Assistance</a></li>
-            <li><a href="#" class="hover:text-white transition">Archive</a></li>
+            <li><a href="#" class="hover:text-white transition">Facebook</a></li>
+            <li><a href="#" class="hover:text-white transition">Instagram</a></li>
+            <li><a href="#" class="hover:text-white transition">YouTube</a></li>
           </ul>
         </div>
       </div>
       <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/10">
-        <p class="text-gray-500 text-sm">© 2026 EagleRiders • Clubs Theme Demo</p>
-        <p class="text-gray-500 text-sm mt-2 md:mt-0">VAT 12345678901</p>
+        <p class="text-gray-500 text-sm">&copy; 2026 EagleRiders. All rights reserved.</p>
+        <div class="flex gap-6 mt-4 md:mt-0">
+          <a href="#" class="text-gray-400 hover:text-white transition">Facebook</a>
+          <a href="#" class="text-gray-400 hover:text-white transition">Instagram</a>
+          <a href="#" class="text-gray-400 hover:text-white transition">YouTube</a>
+        </div>
       </div>
     </div>
   </footer>
+
+  <!-- FAQ Accordion Script -->
+  <script>
+    function toggleFaq(button) {
+      const content = button.nextElementSibling;
+      const icon = button.querySelector('.faq-icon');
+      const isOpen = button.getAttribute('aria-expanded') === 'true';
+
+      // Close all other FAQs
+      document.querySelectorAll('#faq-accordion .faq-content').forEach(function(item) {
+        item.style.maxHeight = null;
+      });
+      document.querySelectorAll('#faq-accordion button').forEach(function(btn) {
+        btn.setAttribute('aria-expanded', 'false');
+        btn.querySelector('.faq-icon').style.transform = 'rotate(0deg)';
+      });
+
+      // Toggle current
+      if (!isOpen) {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        button.setAttribute('aria-expanded', 'true');
+        icon.style.transform = 'rotate(180deg)';
+      }
+    }
+  </script>
 </body>
 </html>

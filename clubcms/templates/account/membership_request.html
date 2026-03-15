@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Request Membership" %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<section class="page-card">
+    <div class="page-card__container">
+        <header class="page-card__header">
+            <h1 class="page-card__title">{% trans "Request Membership" %}</h1>
+            <p class="page-card__subtitle">{% trans "Complete your membership application" %}</p>
+        </header>
+
+        <div class="auth-card">
+            <div class="pricing-card">
+                <h2 class="pricing-card__name">{{ product.name }}</h2>
+                <div class="pricing-card__price">
+                    &euro;{{ product.price }}
+                    <small>/ {% trans "year" %}</small>
+                </div>
+                {% if product.description %}
+                <p class="pricing-card__desc">{{ product.description }}</p>
+                {% endif %}
+                <ul class="pricing-card__features">
+                    {% if product.grants_events %}
+                    <li>{% trans "Event registration" %}</li>
+                    {% endif %}
+                    {% if product.grants_vote %}
+                    <li>{% trans "Voting rights" %}</li>
+                    {% endif %}
+                    {% if product.grants_upload %}
+                    <li>{% trans "Gallery upload" %}</li>
+                    {% endif %}
+                    {% if product.grants_discount %}
+                    <li>{% blocktrans with percent=product.discount_percent %}{{ percent }}% discount on events{% endblocktrans %}</li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <div class="page-card__no-card">
+                <p class="page-card__no-card-text">{% trans "After submitting your request, the club administration will review it and contact you with payment instructions." %}</p>
+            </div>
+
+            <form method="post" class="membership-request-form">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="notes">{% trans "Notes (optional)" %}</label>
+                    <textarea 
+                        name="notes" 
+                        id="notes" 
+                        class="form-textarea"
+                        rows="3"
+                        placeholder="{% trans 'Any additional information or questions...' %}"
+                    ></textarea>
+                </div>
+
+                <div class="membership-card__actions">
+                    <button type="submit" class="btn btn-primary">
+                        {% trans "Submit Request" %}
+                    </button>
+                    <a href="{% url 'account:card' %}" class="btn btn-outline">
+                        {% trans "Cancel" %}
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

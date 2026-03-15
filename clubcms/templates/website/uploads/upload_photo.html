@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block body_class %}page-upload{% endblock %}
 
@@ -6,19 +7,17 @@
 <div class="page-upload">
     <div class="page-upload__container">
         <header class="page-upload__header">
-            <h1 class="page-upload__title">Upload Photos</h1>
+            <h1 class="page-upload__title">{% trans "Upload Photos" %}</h1>
             <p class="page-upload__description">
-                Share your photos from club events. Uploads will be reviewed
-                by a moderator before appearing in the gallery.
+                {% trans "Share your photos from club events. Uploads will be reviewed by a moderator before appearing in the gallery." %}
             </p>
         </header>
 
         {% if success %}
         <div class="page-upload__success" role="alert">
-            <h2>Upload Successful</h2>
-            <p>{{ uploads_count }} photo{{ uploads_count|pluralize }} uploaded successfully and
-               sent for moderation.</p>
-            <p><a href="{% url 'website:my_uploads' %}">View your uploads</a></p>
+            <h2>{% trans "Upload Successful" %}</h2>
+            <p>{% blocktrans count uploads_count=uploads_count %}{{ uploads_count }} photo uploaded successfully and sent for moderation.{% plural %}{{ uploads_count }} photos uploaded successfully and sent for moderation.{% endblocktrans %}</p>
+            <p><a href="{% url 'website:my_uploads' %}">{% trans "View your uploads" %}</a></p>
         </div>
         {% endif %}
 
@@ -86,7 +85,7 @@
 
                 <div class="page-upload__actions">
                     <button type="submit" class="page-upload__submit-btn">
-                        Upload Photos
+                        {% trans "Upload Photos" %}
                     </button>
                 </div>
             </form>

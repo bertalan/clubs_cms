@@ -11,6 +11,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.test import Client
+from django.urls import reverse
 
 User = get_user_model()
 
@@ -57,31 +58,36 @@ class TestHelperDetailAccess:
     def test_anonymous_redirected_to_login(self, client):
         """Anonymous user is redirected to login."""
         helper = self._create_helper()
-        response = client.get(f"/it/mutual-aid/helper/{helper.pk}/")
+        response = client.get(reverse("mutual_aid:helper_detail", kwargs={"pk": helper.pk}))
         assert response.status_code == 302
         assert "login" in response.url or "account" in response.url
 
-    def test_non_member_gets_403(self, client):
-        """Logged-in user without active membership gets 403."""
+    def test_non_member_sees_restricted_view(self, client):
+        """Logged-in user without active membership sees restricted view with emergency info."""
         helper = self._create_helper()
         viewer = User.objects.create_user(
             username="nonmember", password="testpass123!",
             membership_expiry=None,
         )
         client.force_login(viewer)
-        response = client.get(f"/it/mutual-aid/helper/{helper.pk}/")
-        assert response.status_code == 403
+        response = client.get(reverse("mutual_aid:helper_detail", kwargs={"pk": helper.pk}))
+        assert response.status_code == 200
+        content = response.content.decode()
+        assert "helper-detail__restricted" in content
+        assert "helper-detail__emergency" in content
 
-    def test_expired_member_gets_403(self, client):
-        """Logged-in user with expired membership gets 403."""
+    def test_expired_member_sees_restricted_view(self, client):
+        """Logged-in user with expired membership sees restricted view."""
         helper = self._create_helper()
         viewer = User.objects.create_user(
             username="expired", password="testpass123!",
             membership_expiry=date.today() - timedelta(days=1),
         )
         client.force_login(viewer)
-        response = client.get(f"/it/mutual-aid/helper/{helper.pk}/")
-        assert response.status_code == 403
+        response = client.get(reverse("mutual_aid:helper_detail", kwargs={"pk": helper.pk}))
+        assert response.status_code == 200
+        content = response.content.decode()
+        assert "helper-detail__restricted" in content
 
     def test_active_member_gets_200(self, client):
         """Active member gets 200."""
@@ -91,5 +97,5 @@ class TestHelperDetailAccess:
             membership_expiry=date.today() + timedelta(days=30),
         )
         client.force_login(viewer)
-        response = client.get(f"/it/mutual-aid/helper/{helper.pk}/")
+        response = client.get(reverse("mutual_aid:helper_detail", kwargs={"pk": helper.pk}))
         assert response.status_code == 200

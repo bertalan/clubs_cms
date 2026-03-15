@@ -147,9 +147,15 @@ class EventRegisterView(CreateView):
                 )
                 return self.form_invalid(form)
 
-        # Calculate payment amount
+        # Calculate payment amount (per-person × total heads + passenger)
         pricing = calculate_price(event, user=user)
-        payment_amount = pricing["final_price"]
+        guests = form.cleaned_data.get("guests", 0) or 0
+        has_passenger = form.cleaned_data.get("has_passenger", False)
+        per_person = pricing["final_price"]
+        total_heads = 1 + guests  # registrant + extra guests
+        payment_amount = per_person * total_heads
+        if has_passenger:
+            payment_amount += pricing["passenger_price"]
 
         # Determine status based on capacity (atomic to prevent race conditions)
         max_attendees = event.max_attendees or 0

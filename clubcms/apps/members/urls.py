@@ -7,31 +7,53 @@ root URL conf.  The public profile pattern is included separately at
 """
 
 from django.urls import path
+from django.utils.translation import gettext_lazy as _
 
+from apps.core.views import MyContributionsView, SubmitContributionView
 from apps.members import views
 
 app_name = "account"
 
 urlpatterns = [
     # Profile
-    path("profile/", views.ProfileView.as_view(), name="profile"),
+    path(_("profile/"), views.ProfileView.as_view(), name="profile"),
     # Digital membership card
-    path("card/", views.CardView.as_view(), name="card"),
-    path("card/pdf/", views.CardPDFView.as_view(), name="card_pdf"),
-    path("card/qr/", views.QRCodeView.as_view(), name="card_qr"),
-    path("card/barcode/", views.BarcodeView.as_view(), name="card_barcode"),
+    path(_("card/"), views.CardView.as_view(), name="card"),
+    path(_("card/pdf/"), views.CardPDFView.as_view(), name="card_pdf"),
+    path(_("card/qr/"), views.QRCodeView.as_view(), name="card_qr"),
+    path(_("card/barcode/"), views.BarcodeView.as_view(), name="card_barcode"),
     # Settings
-    path("privacy/", views.PrivacySettingsView.as_view(), name="privacy"),
+    path(_("privacy/"), views.PrivacySettingsView.as_view(), name="privacy"),
     path(
-        "notifications/",
+        _("notifications/"),
         views.NotificationPrefsView.as_view(),
         name="notifications",
     ),
-    path("aid/", views.AidAvailabilityView.as_view(), name="aid"),
-    # Membership plans (public)
-    path("become-member/", views.MembershipPlansView.as_view(), name="membership_plans"),
+    path(_("aid/"), views.AidAvailabilityView.as_view(), name="aid"),
+    # Membership requests
+    path(
+        _("membership-request/<int:product_id>/"),
+        views.MembershipRequestCreateView.as_view(),
+        name="membership_request",
+    ),
+    path(
+        _("membership-requests/"),
+        views.MembershipRequestListView.as_view(),
+        name="membership_requests",
+    ),
     # Directory
-    path("directory/", views.MemberDirectoryView.as_view(), name="directory"),
+    path(_("directory/"), views.MemberDirectoryView.as_view(), name="directory"),
+    # Contributions
+    path(
+        _("contributions/"),
+        MyContributionsView.as_view(),
+        name="my_contributions",
+    ),
+    path(
+        _("contributions/submit/"),
+        SubmitContributionView.as_view(),
+        name="submit_contribution",
+    ),
 ]
 
 # Public profile pattern — included separately in root urlconf at

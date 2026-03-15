@@ -13,6 +13,8 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.forms_helpers import _apply_wcag_attrs
+
 
 # ---------------------------------------------------------------------------
 # 1. Registration Form
@@ -30,22 +32,30 @@ try:
         first_name = forms.CharField(
             max_length=150,
             label=_("First name"),
+            help_text=_("Your given name as it appears on official documents."),
             required=True,
         )
         last_name = forms.CharField(
             max_length=150,
             label=_("Last name"),
+            help_text=_("Your family name as it appears on official documents."),
             required=True,
         )
         display_name = forms.CharField(
             max_length=100,
             label=_("Display name (nickname)"),
+            help_text=_("The name shown publicly. Leave blank to use your real name."),
             required=False,
         )
         newsletter = forms.BooleanField(
             label=_("Subscribe to newsletter"),
+            help_text=_("Receive club news and updates by email."),
             required=False,
         )
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            _apply_wcag_attrs(self)
 
         def save(self, request):
             user = super().save(request)
@@ -68,26 +78,35 @@ except ImportError:
         first_name = forms.CharField(
             max_length=150,
             label=_("First name"),
+            help_text=_("Your given name as it appears on official documents."),
             required=True,
         )
         last_name = forms.CharField(
             max_length=150,
             label=_("Last name"),
+            help_text=_("Your family name as it appears on official documents."),
             required=True,
         )
         display_name = forms.CharField(
             max_length=100,
             label=_("Display name (nickname)"),
+            help_text=_("The name shown publicly. Leave blank to use your real name."),
             required=False,
         )
         email = forms.EmailField(
             label=_("Email"),
+            help_text=_("We will send your login credentials to this address."),
             required=True,
         )
         newsletter = forms.BooleanField(
             label=_("Subscribe to newsletter"),
+            help_text=_("Receive club news and updates by email."),
             required=False,
         )
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            _apply_wcag_attrs(self)
 
         class Meta:
             model = get_user_model()
@@ -149,6 +168,10 @@ class ProfileForm(forms.ModelForm):
             "country": forms.TextInput(attrs={"maxlength": 2}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        _apply_wcag_attrs(self)
+
 
 # ---------------------------------------------------------------------------
 # 3. Privacy Settings Form
@@ -174,6 +197,7 @@ class PrivacySettingsForm(forms.ModelForm):
             "Show my real name to other members"
         )
         self.fields["newsletter"].label = _("Subscribe to newsletter")
+        _apply_wcag_attrs(self)
 
 
 # ---------------------------------------------------------------------------
@@ -212,6 +236,7 @@ class NotificationPreferencesForm(forms.ModelForm):
         self.fields["partner_events"].label = _("Partner events")
         self.fields["partner_event_comments"].label = _("Partner event comments")
         self.fields["digest_frequency"].label = _("Digest frequency")
+        _apply_wcag_attrs(self)
 
 
 # ---------------------------------------------------------------------------
@@ -232,9 +257,7 @@ class AidAvailabilityForm(forms.ModelForm):
         ]
         widgets = {
             "aid_notes": forms.Textarea(attrs={"rows": 3}),
-            "aid_coordinates": forms.TextInput(
-                attrs={"placeholder": "45.4642,9.1900"}
-            ),
+            "aid_coordinates": forms.HiddenInput(),
         }
 
     def __init__(self, *args, **kwargs):
@@ -244,3 +267,4 @@ class AidAvailabilityForm(forms.ModelForm):
         self.fields["aid_location_city"].label = _("City")
         self.fields["aid_coordinates"].label = _("Coordinates (lat,lon)")
         self.fields["aid_notes"].label = _("Notes")
+        _apply_wcag_attrs(self)

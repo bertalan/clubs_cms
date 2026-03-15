@@ -71,6 +71,12 @@ class HomePage(Page):
     """
 
     # --- Hero section ---
+    hero_badge = models.CharField(
+        max_length=120,
+        blank=True,
+        verbose_name=_("Hero badge"),
+        help_text=_("Pre-title text displayed above hero title, e.g. 'Since 1985'."),
+    )
     hero_title = models.CharField(
         max_length=255,
         blank=True,
@@ -81,6 +87,7 @@ class HomePage(Page):
         max_length=255,
         blank=True,
         verbose_name=_("Hero subtitle"),
+        help_text=_("Testo secondario mostrato sotto il titolo hero."),
     )
     hero_image = models.ForeignKey(
         "wagtailimages.Image",
@@ -89,11 +96,13 @@ class HomePage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Hero background image"),
+        help_text=_("Immagine di sfondo della hero section."),
     )
     primary_cta_text = models.CharField(
         max_length=120,
         blank=True,
         verbose_name=_("Primary CTA text"),
+        help_text=_("Testo del pulsante principale (es. 'Scopri di più')."),
     )
     primary_cta_link = models.ForeignKey(
         "wagtailcore.Page",
@@ -102,6 +111,7 @@ class HomePage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Primary CTA link"),
+        help_text=_("Pagina interna per il pulsante principale."),
     )
     primary_cta_url = models.URLField(
         blank=True,
@@ -112,6 +122,7 @@ class HomePage(Page):
         max_length=120,
         blank=True,
         verbose_name=_("Secondary CTA text"),
+        help_text=_("Testo del pulsante secondario (es. 'Contattaci')."),
     )
     secondary_cta_link = models.ForeignKey(
         "wagtailcore.Page",
@@ -120,6 +131,7 @@ class HomePage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Secondary CTA link"),
+        help_text=_("Pagina interna per il pulsante secondario."),
     )
     secondary_cta_url = models.URLField(
         blank=True,
@@ -133,6 +145,7 @@ class HomePage(Page):
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
+        help_text=_("Contenuto principale della homepage sotto la hero section."),
     )
 
     # --- Featured content ---
@@ -155,6 +168,7 @@ class HomePage(Page):
     content_panels = Page.content_panels + [
         MultiFieldPanel(
             [
+                FieldPanel("hero_badge"),
                 FieldPanel("hero_title"),
                 FieldPanel("hero_subtitle"),
                 FieldPanel("hero_image"),
@@ -218,12 +232,14 @@ class AboutPage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Cover image"),
+        help_text=_("Immagine di copertina mostrata in alto nella pagina."),
     )
     body = StreamField(
         BODY_BLOCKS,
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
+        help_text=_("Contenuto principale della pagina Chi Siamo."),
     )
 
     # --- Wagtail config ---
@@ -262,6 +278,7 @@ class BoardPage(Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
+        help_text=_("Testo introduttivo per la pagina del direttivo."),
     )
     body = StreamField(
         BODY_BLOCKS,
@@ -305,6 +322,7 @@ class NewsIndexPage(Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
+        help_text=_("Testo introduttivo mostrato sopra l'elenco delle notizie."),
     )
     body = StreamField(
         BODY_BLOCKS,
@@ -389,6 +407,7 @@ class NewsPage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Cover image"),
+        help_text=_("Immagine di copertina per l'articolo, usata anche nelle anteprime."),
     )
     intro = models.TextField(
         blank=True,
@@ -400,6 +419,7 @@ class NewsPage(Page):
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
+        help_text=_("Contenuto completo dell'articolo."),
     )
     display_date = models.DateField(
         default=timezone.now,
@@ -413,6 +433,7 @@ class NewsPage(Page):
         on_delete=models.SET_NULL,
         related_name="news_articles",
         verbose_name=_("Author"),
+        help_text=_("Autore dell'articolo, mostrato nella pagina e nei listing."),
     )
 
     # Tags and categories
@@ -420,6 +441,7 @@ class NewsPage(Page):
         through="website.NewsPageTag",
         blank=True,
         verbose_name=_("Tags"),
+        help_text=_("Tag per classificare e filtrare l'articolo."),
     )
     category = models.ForeignKey(
         "website.NewsCategory",
@@ -428,6 +450,7 @@ class NewsPage(Page):
         on_delete=models.SET_NULL,
         related_name="news_pages",
         verbose_name=_("Category"),
+        help_text=_("Categoria principale dell'articolo."),
     )
 
     # --- Wagtail config ---
@@ -494,6 +517,7 @@ class EventsPage(Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
+        help_text=_("Testo introduttivo mostrato sopra l'elenco degli eventi."),
     )
     body = StreamField(
         BODY_BLOCKS,
@@ -542,6 +566,11 @@ class EventsPage(Page):
         else:
             events_qs = events_qs.filter(start_date__gte=now).order_by("start_date")
 
+        # Text search
+        search_query = request.GET.get("q", "").strip()
+        if search_query:
+            events_qs = events_qs.search(search_query)
+
         # Filtering
         category_slug = request.GET.get("category")
         tag = request.GET.get("tag")
@@ -570,6 +599,7 @@ class EventsPage(Page):
         context["show"] = show
         context["categories"] = categories
         context["current_category"] = category_slug
+        context["search_query"] = search_query
         return context
 
 
@@ -590,6 +620,7 @@ class EventDetailPage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Cover image"),
+        help_text=_("Immagine di copertina per l'evento, usata anche nei listing."),
     )
     intro = models.TextField(
         blank=True,
@@ -601,16 +632,19 @@ class EventDetailPage(Page):
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
+        help_text=_("Descrizione completa dell'evento con blocchi multimediali."),
     )
 
     # --- Date/Time ---
     start_date = models.DateTimeField(
         verbose_name=_("Start date & time"),
+        help_text=_("Data e ora di inizio dell'evento."),
     )
     end_date = models.DateTimeField(
         null=True,
         blank=True,
         verbose_name=_("End date & time"),
+        help_text=_("Data e ora di fine. Lasciare vuoto per eventi di un giorno."),
     )
 
     # --- Location ---
@@ -618,11 +652,13 @@ class EventDetailPage(Page):
         max_length=255,
         blank=True,
         verbose_name=_("Venue name"),
+        help_text=_("Nome del luogo o struttura che ospita l'evento."),
     )
     location_address = models.CharField(
         max_length=500,
         blank=True,
         verbose_name=_("Address"),
+        help_text=_("Indirizzo completo del luogo dell'evento."),
     )
     location_coordinates = models.CharField(
         max_length=100,
@@ -630,16 +666,32 @@ class EventDetailPage(Page):
         verbose_name=_("Coordinates"),
         help_text=_("Latitude,Longitude (e.g. '45.4642,9.1900')"),
     )
+    latitude = models.FloatField(
+        null=True,
+        blank=True,
+        editable=False,
+        verbose_name=_("Latitude"),
+        help_text=_("Auto-populated from coordinates."),
+    )
+    longitude = models.FloatField(
+        null=True,
+        blank=True,
+        editable=False,
+        verbose_name=_("Longitude"),
+        help_text=_("Auto-populated from coordinates."),
+    )
 
     # --- Registration ---
     registration_open = models.BooleanField(
         default=False,
         verbose_name=_("Registration open"),
+        help_text=_("Attiva per accettare le iscrizioni all'evento."),
     )
     registration_deadline = models.DateTimeField(
         null=True,
         blank=True,
         verbose_name=_("Registration deadline"),
+        help_text=_("Termine ultimo per le iscrizioni."),
     )
     max_attendees = models.PositiveIntegerField(
         default=0,
@@ -658,11 +710,13 @@ class EventDetailPage(Page):
     early_bird_discount = models.PositiveIntegerField(
         default=0,
         verbose_name=_("Early-bird discount (%)"),
+        help_text=_("Sconto percentuale per le iscrizioni anticipate."),
     )
     early_bird_deadline = models.DateTimeField(
         null=True,
         blank=True,
         verbose_name=_("Early-bird deadline"),
+        help_text=_("Termine per usufruire dello sconto early-bird."),
     )
     member_discount_percent = models.PositiveIntegerField(
         default=0,
@@ -711,6 +765,7 @@ class EventDetailPage(Page):
             ("expert", _("Expert")),
         ],
         verbose_name=_("Difficulty level"),
+        help_text=_("Livello di difficoltà del percorso."),
     )
 
     # --- Tags and categories ---
@@ -726,6 +781,7 @@ class EventDetailPage(Page):
         on_delete=models.SET_NULL,
         related_name="events",
         verbose_name=_("Category"),
+        help_text=_("Categoria principale dell'evento."),
     )
 
     # --- Wagtail config ---
@@ -818,7 +874,11 @@ class EventDetailPage(Page):
         index.SearchField("body"),
         index.SearchField("location_name"),
         index.SearchField("location_address"),
+        index.SearchField("meeting_point"),
         index.RelatedFields("category", [index.SearchField("name")]),
+        index.FilterField("latitude"),
+        index.FilterField("longitude"),
+        index.FilterField("start_date"),
     ]
 
     class Meta:
@@ -833,6 +893,26 @@ class EventDetailPage(Page):
                 raise ValidationError(
                     {"registration_deadline": _("Registration deadline must be before the event start date.")}
                 )
+        # Auto-populate latitude/longitude from location_coordinates
+        self._sync_lat_lng()
+
+    def save(self, *args, **kwargs):
+        self._sync_lat_lng()
+        super().save(*args, **kwargs)
+
+    def _sync_lat_lng(self):
+        """Parse location_coordinates and set latitude/longitude."""
+        if self.location_coordinates and "," in self.location_coordinates:
+            try:
+                parts = self.location_coordinates.split(",")
+                self.latitude = float(parts[0].strip())
+                self.longitude = float(parts[1].strip())
+            except (ValueError, IndexError):
+                self.latitude = None
+                self.longitude = None
+        else:
+            self.latitude = None
+            self.longitude = None
 
     # --- Computed properties ---
 
@@ -930,6 +1010,7 @@ class GalleryPage(Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
+        help_text=_("Testo introduttivo mostrato sopra le gallerie."),
     )
     root_collection = models.ForeignKey(
         Collection,
@@ -945,6 +1026,7 @@ class GalleryPage(Page):
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
+        help_text=_("Contenuto aggiuntivo sotto la galleria."),
     )
 
     # --- Wagtail config ---
@@ -1026,15 +1108,34 @@ class ContactPage(Page):
     Contact information and contact form.
     """
 
+    # Hero section (optional)
+    hero_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name=_("Hero image"),
+        help_text=_("Optional background image for the page header."),
+    )
+    hero_badge = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name=_("Hero badge"),
+        help_text=_("Small text above the title (e.g. 'Let's Talk')."),
+    )
+
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
+        help_text=_("Testo introduttivo mostrato sopra il form di contatto."),
     )
     form_title = models.CharField(
         max_length=255,
         blank=True,
         default=_("Contact us"),
         verbose_name=_("Form title"),
+        help_text=_("Titolo mostrato sopra il form di contatto."),
     )
     success_message = RichTextField(
         blank=True,
@@ -1046,12 +1147,14 @@ class ContactPage(Page):
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
+        help_text=_("Contenuto aggiuntivo sotto il form."),
     )
 
     # Captcha / anti-spam settings (stored per page for flexibility)
     captcha_enabled = models.BooleanField(
         default=True,
         verbose_name=_("Enable captcha"),
+        help_text=_("Attiva la protezione anti-spam sul form."),
     )
     captcha_provider = models.CharField(
         max_length=30,
@@ -1063,16 +1166,49 @@ class ContactPage(Page):
             ("hcaptcha", _("hCaptcha")),
         ],
         verbose_name=_("Captcha provider"),
+        help_text=_("Servizio anti-spam da utilizzare."),
     )
     captcha_site_key = models.CharField(
         max_length=255,
         blank=True,
         verbose_name=_("Captcha site key"),
+        help_text=_("Chiave pubblica del servizio CAPTCHA."),
     )
     captcha_secret_key = models.CharField(
         max_length=255,
         blank=True,
         verbose_name=_("Captcha secret key"),
+        help_text=_("Chiave segreta del servizio CAPTCHA."),
+    )
+
+    # Membership CTA (translatable - shown in sidebar)
+    membership_title = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name=_("Membership CTA title"),
+        help_text=_("E.g. 'Become a Member'"),
+    )
+    membership_description = models.TextField(
+        blank=True,
+        verbose_name=_("Membership CTA description"),
+        help_text=_("Brief description of membership benefits."),
+    )
+    membership_price = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name=_("Membership price"),
+        help_text=_("E.g. 'Annual fee €80'"),
+    )
+    membership_cta_text = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name=_("Membership CTA button text"),
+        help_text=_("E.g. 'Request Form'"),
+    )
+    membership_cta_url = models.URLField(
+        blank=True,
+        verbose_name=_("Membership CTA URL"),
+        help_text=_("Link to membership form or page."),
     )
 
     # --- Wagtail config ---
@@ -1081,10 +1217,27 @@ class ContactPage(Page):
     template = "website/pages/contact_page.html"
 
     content_panels = Page.content_panels + [
+        MultiFieldPanel(
+            [
+                FieldPanel("hero_image"),
+                FieldPanel("hero_badge"),
+            ],
+            heading=_("Hero section"),
+        ),
         FieldPanel("intro"),
         FieldPanel("form_title"),
         FieldPanel("success_message"),
         FieldPanel("body"),
+        MultiFieldPanel(
+            [
+                FieldPanel("membership_title"),
+                FieldPanel("membership_description"),
+                FieldPanel("membership_price"),
+                FieldPanel("membership_cta_text"),
+                FieldPanel("membership_cta_url"),
+            ],
+            heading=_("Membership CTA"),
+        ),
     ]
 
     captcha_panels = [
@@ -1134,6 +1287,7 @@ class PrivacyPage(Page):
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
+        help_text=_("Contenuto della pagina privacy/informativa."),
     )
     last_updated = models.DateField(
         null=True,
@@ -1175,6 +1329,7 @@ class TransparencyPage(Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
+        help_text=_("Testo introduttivo per la sezione trasparenza."),
     )
     body = StreamField(
         BODY_BLOCKS,
@@ -1218,26 +1373,31 @@ class PressPage(Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
+        help_text=_("Testo introduttivo per l'ufficio stampa."),
     )
     press_email = models.EmailField(
         blank=True,
         verbose_name=_("Press email"),
+        help_text=_("Email dedicata per i contatti stampa."),
     )
     press_phone = models.CharField(
         max_length=30,
         blank=True,
         verbose_name=_("Press phone"),
+        help_text=_("Telefono dedicato per i contatti stampa."),
     )
     press_contact = models.CharField(
         max_length=255,
         blank=True,
         verbose_name=_("Press contact person"),
+        help_text=_("Nome del referente stampa."),
     )
     body = StreamField(
         BODY_BLOCKS,
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
+        help_text=_("Contenuto aggiuntivo per la pagina stampa."),
     )
 
     # --- Wagtail config ---
@@ -1277,4 +1437,57 @@ class PressPage(Page):
             is_archived=False
         ).order_by("-date")
         context["brand_assets"] = BrandAsset.objects.all().order_by("order", "name")
+        return context
+
+
+# ---------------------------------------------------------------------------
+# MembershipPlansPage — public membership products page
+# ---------------------------------------------------------------------------
+
+
+class MembershipPlansPage(Page):
+    """
+    Public page showing available membership products/plans.
+
+    Replaces the former Django TemplateView. As a Wagtail Page it gets
+    automatic breadcrumbs, SEO tags, i18n via wagtail-localize, and lives
+    in the page tree.
+    """
+
+    intro = RichTextField(
+        blank=True,
+        verbose_name=_("Introduction"),
+        help_text=_("Displayed below the page title."),
+    )
+
+    # --- Wagtail config ---
+    max_count = 1
+    subpage_types = []
+    template = "website/pages/membership_plans_page.html"
+
+    content_panels = Page.content_panels + [
+        FieldPanel("intro"),
+    ]
+
+    promote_panels = Page.promote_panels
+
+    search_fields = Page.search_fields + [
+        index.SearchField("intro"),
+    ]
+
+    class Meta:
+        verbose_name = _("Membership plans page")
+        verbose_name_plural = _("Membership plans pages")
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        from apps.website.models.snippets import Product
+
+        context["products"] = Product.objects.filter(is_active=True).order_by("order")
+        if request.user.is_authenticated:
+            context["user_products"] = {
+                p.pk for p in request.user.products.all()
+            }
+        else:
+            context["user_products"] = set()
         return context

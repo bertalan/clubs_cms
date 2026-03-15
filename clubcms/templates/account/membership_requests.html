@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags %}
+
+{% block title %}{% trans "My Membership Requests" %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<section class="page-card">
+    <div class="page-card__container">
+        <header class="page-card__header">
+            <h1 class="page-card__title">{% trans "My Membership Requests" %}</h1>
+            <p class="page-card__subtitle">{% trans "Track the status of your membership requests." %}</p>
+        </header>
+
+        {% if requests %}
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>{% trans "Product" %}</th>
+                        <th>{% trans "Price" %}</th>
+                        <th>{% trans "Status" %}</th>
+                        <th>{% trans "Submitted" %}</th>
+                        <th>{% trans "Processed" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for req in requests %}
+                    <tr>
+                        <td>
+                            <strong>{{ req.product.name }}</strong>
+                            {% if req.notes %}
+                            <br><small class="text-muted">{{ req.notes|truncatewords:10 }}</small>
+                            {% endif %}
+                        </td>
+                        <td>&euro;{{ req.product.price }}</td>
+                        <td>
+                            {% if req.status == 'pending' %}
+                            <span class="badge badge--warning">{% trans "Pending" %}</span>
+                            {% elif req.status == 'approved' %}
+                            <span class="badge badge--success">{% trans "Approved" %}</span>
+                            {% elif req.status == 'rejected' %}
+                            <span class="badge badge--danger">{% trans "Rejected" %}</span>
+                            {% else %}
+                            <span class="badge badge--muted">{% trans "Cancelled" %}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ req.created_at|date:"d/m/Y H:i" }}</td>
+                        <td>
+                            {% if req.processed_at %}
+                            {{ req.processed_at|date:"d/m/Y H:i" }}
+                            {% else %}
+                            <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="page-card__no-card">
+            <div class="page-card__no-card-icon">📋</div>
+            <p class="page-card__no-card-text">{% trans "You have not submitted any membership requests yet." %}</p>
+            <a href="{% slugurl 'diventa-socio' %}" class="btn btn-primary">
+                {% trans "View Membership Plans" %}
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="membership-card__actions">
+            <a href="{% url 'account:card' %}" class="btn btn-outline">
+                {% trans "Back to My Card" %}
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

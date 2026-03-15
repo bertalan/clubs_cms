@@ -21,10 +21,42 @@
     .text-gold { color: var(--gold); }
     .btn-gold { background: var(--gold); color: var(--navy); border: none; font-weight: 600; }
     .btn-gold:hover { background: var(--gold-hover); color: var(--navy); }
+    .btn-outline-navy { border: 2px solid var(--navy); color: var(--navy); }
+    .btn-outline-navy:hover { background: var(--navy); color: white; }
     .nav-link.active { color: var(--gold) !important; }
-    .gallery-item { overflow: hidden; border: 2px solid var(--gold); }
+    .gallery-item { overflow: hidden; border: 2px solid var(--gold); cursor: pointer; position: relative; }
     .gallery-item img { transition: transform 0.3s ease; }
     .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-item .gallery-overlay {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(30,58,95,0.6); display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.3s ease; color: white; font-size: 1.5rem;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .filter-btn { border: 2px solid var(--navy); color: var(--navy); background: transparent; font-weight: 600; transition: all 0.2s; }
+    .filter-btn:hover, .filter-btn.active { background: var(--navy); color: white; }
+    /* Lightbox */
+    .lightbox-backdrop {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.9); z-index: 9999; display: none;
+      align-items: center; justify-content: center; flex-direction: column;
+    }
+    .lightbox-backdrop.show { display: flex; }
+    .lightbox-backdrop img { max-width: 90%; max-height: 80vh; border: 3px solid var(--gold); border-radius: 4px; }
+    .lightbox-caption { color: white; margin-top: 1rem; font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+    .lightbox-close {
+      position: absolute; top: 20px; right: 30px; color: white; font-size: 2.5rem;
+      cursor: pointer; z-index: 10000; line-height: 1; background: none; border: none;
+    }
+    .lightbox-close:hover { color: var(--gold); }
+    .lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      color: white; font-size: 3rem; cursor: pointer; background: none; border: none;
+      padding: 0 20px; z-index: 10000;
+    }
+    .lightbox-nav:hover { color: var(--gold); }
+    .lightbox-prev { left: 10px; }
+    .lightbox-next { right: 10px; }
     /* Footer */
     .footer-title { font-family: 'Playfair Display', serif; color: white; }
     .footer-text { color: var(--text-light); }
@@ -60,79 +92,227 @@
     </div>
   </section>
 
-  <!-- Gallery -->
-  <section class="py-5">
-    <div class="container py-4">
-      <div class="row g-4">
-        <div class="col-md-6 col-lg-4">
-          <div class="gallery-item rounded">
-            <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=600" class="img-fluid w-100" alt="Event 1">
-          </div>
-          <p class="text-muted small mt-2 text-center">Annual Gala 2025</p>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="gallery-item rounded">
-            <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600" class="img-fluid w-100" alt="Event 2">
-          </div>
-          <p class="text-muted small mt-2 text-center">Lecture Series</p>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="gallery-item rounded">
-            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600" class="img-fluid w-100" alt="Event 3">
-          </div>
-          <p class="text-muted small mt-2 text-center">Members' Dinner</p>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="gallery-item rounded">
-            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600" class="img-fluid w-100" alt="Event 4">
-          </div>
-          <p class="text-muted small mt-2 text-center">Conference 2024</p>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="gallery-item rounded">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600" class="img-fluid w-100" alt="Event 5">
-          </div>
-          <p class="text-muted small mt-2 text-center">Summer Reception</p>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="gallery-item rounded">
-            <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600" class="img-fluid w-100" alt="Event 6">
-          </div>
-          <p class="text-muted small mt-2 text-center">Workshop Series</p>
-        </div>
+  <!-- Filter Buttons -->
+  <section class="py-4">
+    <div class="container text-center">
+      <div class="d-flex gap-2 justify-content-center flex-wrap">
+        <button class="btn filter-btn active" data-filter="all">All</button>
+        <button class="btn filter-btn" data-filter="events">Events</button>
+        <button class="btn filter-btn" data-filter="club-life">Club Life</button>
+        <button class="btn filter-btn" data-filter="rides">Rides</button>
+        <button class="btn filter-btn" data-filter="members">Members</button>
       </div>
     </div>
   </section>
+
+  <!-- Gallery Grid -->
+  <section class="py-4 pb-5">
+    <div class="container">
+      <div class="row g-4" id="galleryGrid">
+
+        <div class="col-md-6 col-lg-4 gallery-card" data-category="events">
+          <div class="gallery-item rounded" onclick="openLightbox(0)">
+            <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=600" class="img-fluid w-100" alt="Annual Gala 2025">
+            <div class="gallery-overlay rounded">&#x2922;</div>
+          </div>
+          <p class="text-muted small mt-2 text-center">Annual Gala 2025</p>
+        </div>
+
+        <div class="col-md-6 col-lg-4 gallery-card" data-category="events">
+          <div class="gallery-item rounded" onclick="openLightbox(1)">
+            <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600" class="img-fluid w-100" alt="Lecture Series">
+            <div class="gallery-overlay rounded">&#x2922;</div>
+          </div>
+          <p class="text-muted small mt-2 text-center">Lecture Series</p>
+        </div>
+
+        <div class="col-md-6 col-lg-4 gallery-card" data-category="club-life">
+          <div class="gallery-item rounded" onclick="openLightbox(2)">
+            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600" class="img-fluid w-100" alt="Members Dinner">
+            <div class="gallery-overlay rounded">&#x2922;</div>
+          </div>
+          <p class="text-muted small mt-2 text-center">Members' Dinner</p>
+        </div>
+
+        <div class="col-md-6 col-lg-4 gallery-card" data-category="events">
+          <div class="gallery-item rounded" onclick="openLightbox(3)">
+            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600" class="img-fluid w-100" alt="Conference 2024">
+            <div class="gallery-overlay rounded">&#x2922;</div>
+          </div>
+          <p class="text-muted small mt-2 text-center">Conference 2024</p>
+        </div>
+
+        <div class="col-md-6 col-lg-4 gallery-card" data-category="members">
+          <div class="gallery-item rounded" onclick="openLightbox(4)">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600" class="img-fluid w-100" alt="Summer Reception">
+            <div class="gallery-overlay rounded">&#x2922;</div>
+          </div>
+          <p class="text-muted small mt-2 text-center">Summer Reception</p>
+        </div>
+
+        <div class="col-md-6 col-lg-4 gallery-card" data-category="rides">
+          <div class="gallery-item rounded" onclick="openLightbox(5)">
+            <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600" class="img-fluid w-100" alt="Workshop Series">
+            <div class="gallery-overlay rounded">&#x2922;</div>
+          </div>
+          <p class="text-muted small mt-2 text-center">Workshop Series</p>
+        </div>
+
+        <div class="col-md-6 col-lg-4 gallery-card" data-category="events">
+          <div class="gallery-item rounded" onclick="openLightbox(6)">
+            <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=600" class="img-fluid w-100" alt="Charity Fundraiser">
+            <div class="gallery-overlay rounded">&#x2922;</div>
+          </div>
+          <p class="text-muted small mt-2 text-center">Charity Fundraiser</p>
+        </div>
+
+        <div class="col-md-6 col-lg-4 gallery-card" data-category="members">
+          <div class="gallery-item rounded" onclick="openLightbox(7)">
+            <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=600" class="img-fluid w-100" alt="Community Gathering">
+            <div class="gallery-overlay rounded">&#x2922;</div>
+          </div>
+          <p class="text-muted small mt-2 text-center">Community Gathering</p>
+        </div>
+
+        <div class="col-md-6 col-lg-4 gallery-card" data-category="club-life">
+          <div class="gallery-item rounded" onclick="openLightbox(8)">
+            <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=600" class="img-fluid w-100" alt="Year-End Celebration">
+            <div class="gallery-overlay rounded">&#x2922;</div>
+          </div>
+          <p class="text-muted small mt-2 text-center">Year-End Celebration</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Share Your Memories CTA -->
+  <section class="py-5 bg-navy text-white text-center">
+    <div class="container py-4">
+      <h2 class="display-5 text-white mb-3">Share Your Memories</h2>
+      <p class="lead mb-4" style="color: var(--text-light);">Have photos from a Society event? We would love to feature them in our gallery. Submit your best captures and help us preserve our shared history.</p>
+      <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <a href="contact.html" class="btn btn-gold btn-lg px-5">Submit Photos</a>
+        <a href="events.html" class="btn btn-outline-light btn-lg px-5">View Events</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox-backdrop" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close lightbox">&times;</button>
+    <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)" aria-label="Previous image">&#8249;</button>
+    <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)" aria-label="Next image">&#8250;</button>
+    <img src="" alt="" id="lightboxImg">
+    <p class="lightbox-caption" id="lightboxCaption"></p>
+  </div>
 
   <!-- Footer -->
   <footer class="py-5 bg-navy">
     <div class="container">
       <div class="row g-4">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <h5 class="footer-title mb-3">The <span class="text-gold">Society</span></h5>
           <p class="footer-text mb-1">456 Heritage Lane</p>
-          <p class="footer-text">info@thesociety.example</p>
+          <p class="footer-text mb-1">info@thesociety.example</p>
+          <p class="footer-text">+1 (555) 789-0123</p>
         </div>
-        <div class="col-md-4">
-          <h5 class="footer-title mb-3">Quick Links</h5>
+        <div class="col-md-3">
+          <h5 class="footer-title mb-3">Navigation</h5>
           <ul class="list-unstyled">
-            <li><a href="about.html" class="footer-link">About</a></li>
-            <li><a href="events.html" class="footer-link">Events</a></li>
-            <li><a href="contact.html" class="footer-link">Contact</a></li>
+            <li class="mb-1"><a href="index.html" class="footer-link">Home</a></li>
+            <li class="mb-1"><a href="about.html" class="footer-link">About</a></li>
+            <li class="mb-1"><a href="events.html" class="footer-link">Events</a></li>
+            <li class="mb-1"><a href="gallery.html" class="footer-link">Gallery</a></li>
+            <li class="mb-1"><a href="contact.html" class="footer-link">Contact</a></li>
           </ul>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <h5 class="footer-title mb-3">Connect</h5>
-          <div class="d-flex gap-2">
-            <a href="#" class="btn btn-outline-light btn-sm">Facebook</a>
-            <a href="#" class="btn btn-outline-light btn-sm">LinkedIn</a>
+          <div class="d-flex flex-column gap-2">
+            <a href="#" class="footer-link">Facebook</a>
+            <a href="#" class="footer-link">LinkedIn</a>
+            <a href="#" class="footer-link">Twitter</a>
           </div>
+        </div>
+        <div class="col-md-3">
+          <h5 class="footer-title mb-3">Office Hours</h5>
+          <p class="footer-text mb-1">Mon - Fri: 9:00 - 17:00</p>
+          <p class="footer-text mb-1">Saturday: By appointment</p>
+          <p class="footer-text">Sunday: Closed</p>
         </div>
       </div>
       <hr class="my-4" style="border-color: rgba(255,255,255,0.2);">
-      <p class="text-center footer-muted small mb-0">© 2026 The Society • Heritage Theme Demo</p>
+      <p class="text-center footer-muted small mb-0">&copy; 2026 The Society. All rights reserved.</p>
     </div>
   </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Gallery data for lightbox
+    const galleryImages = [
+      { src: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200', caption: 'Annual Gala 2025' },
+      { src: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1200', caption: 'Lecture Series' },
+      { src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200', caption: "Members' Dinner" },
+      { src: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200', caption: 'Conference 2024' },
+      { src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200', caption: 'Summer Reception' },
+      { src: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=1200', caption: 'Workshop Series' },
+      { src: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=1200', caption: 'Charity Fundraiser' },
+      { src: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=1200', caption: 'Community Gathering' },
+      { src: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=1200', caption: 'Year-End Celebration' }
+    ];
+    let currentIndex = 0;
+
+    function openLightbox(index) {
+      currentIndex = index;
+      const lb = document.getElementById('lightbox');
+      document.getElementById('lightboxImg').src = galleryImages[index].src;
+      document.getElementById('lightboxImg').alt = galleryImages[index].caption;
+      document.getElementById('lightboxCaption').textContent = galleryImages[index].caption;
+      lb.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    function navigateLightbox(direction) {
+      currentIndex = (currentIndex + direction + galleryImages.length) % galleryImages.length;
+      document.getElementById('lightboxImg').src = galleryImages[currentIndex].src;
+      document.getElementById('lightboxImg').alt = galleryImages[currentIndex].caption;
+      document.getElementById('lightboxCaption').textContent = galleryImages[currentIndex].caption;
+    }
+
+    // Close lightbox on backdrop click
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+      if (e.target === this) closeLightbox();
+    });
+
+    // Close lightbox on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (!document.getElementById('lightbox').classList.contains('show')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') navigateLightbox(-1);
+      if (e.key === 'ArrowRight') navigateLightbox(1);
+    });
+
+    // Filter functionality
+    document.querySelectorAll('.filter-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        var filter = this.getAttribute('data-filter');
+        document.querySelectorAll('.gallery-card').forEach(function(card) {
+          if (filter === 'all' || card.getAttribute('data-category') === filter) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>

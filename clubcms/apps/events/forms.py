@@ -6,71 +6,24 @@ GuestRegistrationForm for non-logged-in visitors.
 """
 
 from django import forms
-from django.utils.translation import gettext_lazy as _
+from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _, gettext
 
+from apps.core.antispam import AntispamMixin
+from apps.core.forms_helpers import _apply_wcag_attrs
 from apps.events.models import EventRegistration
 
 
-# ---------------------------------------------------------------------------
-# WCAG 2.2 helpers (GAP-11..15)
-# ---------------------------------------------------------------------------
-
-# Map field names to HTML autocomplete attribute values
-_AUTOCOMPLETE_MAP = {
-    "first_name": "given-name",
-    "last_name": "family-name",
-    "email": "email",
-    "passenger_email": "email",
-    "passenger_first_name": "given-name",
-    "passenger_last_name": "family-name",
-    "passenger_phone": "tel",
-    "passenger_birth_date": "bday",
-}
-
-# CSS class for each widget type
-_CSS_CLASS_MAP = {
-    forms.TextInput: "form-input",
-    forms.EmailInput: "form-input",
-    forms.NumberInput: "form-input",
-    forms.DateInput: "form-input",
-    forms.Textarea: "form-textarea",
-    forms.Select: "form-select",
-    forms.CheckboxInput: "form-check-input",
-}
-
-
-def _apply_wcag_attrs(form):
-    """
-    Apply WCAG 2.2 attributes to all fields in a form.
-
-    - aria-describedby pointing to the help-text element
-    - aria-required="true" on required fields
-    - autocomplete on personal-data fields
-    - CSS classes on widgets
-    """
-    for name, field in form.fields.items():
-        widget = field.widget
-        attrs = widget.attrs
-
-        # GAP-11: aria-describedby (help text element id convention)
-        if field.help_text:
-            attrs["aria-describedby"] = f"help_{name}"
-
-        # GAP-12: aria-required
-        if field.required:
-            attrs["aria-required"] = "true"
-
-        # GAP-14: autocomplete
-        if name in _AUTOCOMPLETE_MAP:
-            attrs["autocomplete"] = _AUTOCOMPLETE_MAP[name]
-
-        # GAP-13: CSS classes
-        widget_type = type(widget)
-        if widget_type in _CSS_CLASS_MAP:
-            existing = attrs.get("class", "")
-            css_class = _CSS_CLASS_MAP[widget_type]
-            if css_class not in existing:
-                attrs["class"] = f"{existing} {css_class}".strip()
+def _privacy_url():
+    """Return the URL of the live PrivacyPage, falling back to '/privacy/'."""
+    try:
+        from apps.website.models import PrivacyPage
+        page = PrivacyPage.objects.live().first()
+        if page:
+            return page.url
+    except Exception:
+        pass
+    return "/privacy/"
 
 
 # ---------------------------------------------------------------------------
@@ -88,7 +41,7 @@ class EventRegistrationForm(forms.ModelForm):
 
     accept_terms = forms.BooleanField(
         required=True,
-        label=_("I accept the <a href='/privacy/' target='_blank' rel='noopener'>terms and conditions</a>"),
+        label="",  # set dynamically in __init__
         help_text=_("You must accept the terms to register."),
     )
 
@@ -200,6 +153,13 @@ class EventRegistrationForm(forms.ModelForm):
         self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
 
+        # Build accept_terms label with the correct i18n privacy URL
+        url = _privacy_url()
+        self.fields["accept_terms"].label = mark_safe(
+            gettext("I accept the <a href='%(url)s' target='_blank' rel='noopener'>terms and conditions</a>")
+            % {"url": url}
+        )
+
         # Passenger fields are not required by default
         passenger_fields = [
             "passenger_is_member",
@@ -251,12 +211,15 @@ class EventRegistrationForm(forms.ModelForm):
 # ---------------------------------------------------------------------------
 
 
-class GuestRegistrationForm(EventRegistrationForm):
+class GuestRegistrationForm(AntispamMixin, EventRegistrationForm):
     """
     Extended registration form for guest (non-authenticated) users.
 
     Adds required first_name, last_name, and email fields that are
     stored directly on the EventRegistration record.
+
+    Includes AntispamMixin (honeypot + timestamp check) to protect
+    against automated bot submissions (OWASP H-5).
     """
 
     first_name = forms.CharField(
@@ -286,6 +249,13 @@ class GuestRegistrationForm(EventRegistrationForm):
             "last_name",
             "email",
         ] + EventRegistrationForm.Meta.fields
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Guest users must not see club member names (privacy).
+        # Remove the member-selection fields entirely.
+        self.fields.pop("passenger_is_member", None)
+        self.fields.pop("passenger_member", None)
 
     def clean_email(self):
         email = self.cleaned_data.get("email", "").strip()

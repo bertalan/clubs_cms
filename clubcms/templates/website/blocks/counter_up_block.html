@@ -1,0 +1,23 @@
+{% load wagtailcore_tags i18n website_tags %}
+
+<section {% block_attrs self.settings "block-counter-up" %} data-style="{{ self.background_style }}">
+    <div class="container">
+        {% if self.title %}
+        <h2 class="block-counter-up__title">{{ self.title }}</h2>
+        {% endif %}
+        <div class="block-counter-up__grid">
+            {% for counter in self.counters %}
+            <div class="block-counter-up__item">
+                {% if counter.value.icon %}
+                <span class="block-counter-up__icon {{ counter.value.icon }}"></span>
+                {% endif %}
+                <span class="block-counter-up__value" data-target="{{ counter.value.value }}">0</span>
+                {% if counter.value.suffix %}
+                <span class="block-counter-up__suffix">{{ counter.value.suffix }}</span>
+                {% endif %}
+                <span class="block-counter-up__label">{{ counter.value.label }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

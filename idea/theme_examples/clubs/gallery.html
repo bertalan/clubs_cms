@@ -13,6 +13,9 @@
     .nav-link { position: relative; }
     .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--red); transition: width 0.3s; }
     .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+    /* Lightbox */
+    #lightbox { display: none; }
+    #lightbox.active { display: flex; }
   </style>
 </head>
 <body class="bg-[#0A0A0A] text-white">
@@ -55,9 +58,9 @@
   <section class="py-16">
     <div class="max-w-7xl mx-auto px-6">
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        
-        <div class="group relative overflow-hidden aspect-square col-span-2 row-span-2">
-          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+
+        <div class="group relative overflow-hidden aspect-square col-span-2 row-span-2 cursor-pointer" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800" alt="Rally 2025 - 500 Eagles in Flight" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
           <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-6">
             <div>
               <p class="text-red text-sm font-bold uppercase">Rally 2025</p>
@@ -65,37 +68,37 @@
             </div>
           </div>
         </div>
-        
-        <div class="group relative overflow-hidden aspect-square">
-          <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=400" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+
+        <div class="group relative overflow-hidden aspect-square cursor-pointer" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=400" alt="Alps Tour" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
           <div class="absolute inset-0 bg-[#0A0A0A]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
             <p class="font-bold uppercase">Alps Tour</p>
           </div>
         </div>
-        
-        <div class="group relative overflow-hidden aspect-square">
-          <img src="https://images.unsplash.com/photo-1558980664-769d59546b3d?w=400" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+
+        <div class="group relative overflow-hidden aspect-square cursor-pointer" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1558980664-769d59546b3d?w=400" alt="Stelvio Pass" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
           <div class="absolute inset-0 bg-[#0A0A0A]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
             <p class="font-bold uppercase">Stelvio</p>
           </div>
         </div>
-        
-        <div class="group relative overflow-hidden aspect-square">
-          <img src="https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=400" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+
+        <div class="group relative overflow-hidden aspect-square cursor-pointer" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=400" alt="Open Day" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
           <div class="absolute inset-0 bg-[#0A0A0A]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
             <p class="font-bold uppercase">Open Day</p>
           </div>
         </div>
-        
-        <div class="group relative overflow-hidden aspect-square">
-          <img src="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=400" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+
+        <div class="group relative overflow-hidden aspect-square cursor-pointer" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=400" alt="Club Museum" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
           <div class="absolute inset-0 bg-[#0A0A0A]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
             <p class="font-bold uppercase">Museum</p>
           </div>
         </div>
-        
-        <div class="group relative overflow-hidden aspect-square col-span-2">
-          <img src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=800" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+
+        <div class="group relative overflow-hidden aspect-square col-span-2 cursor-pointer" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=800" alt="Dolomites Tour 2024" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
           <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-6">
             <div>
               <p class="text-red text-sm font-bold uppercase">Tour 2024</p>
@@ -103,59 +106,195 @@
             </div>
           </div>
         </div>
-        
-        <div class="group relative overflow-hidden aspect-square">
-          <img src="https://images.unsplash.com/photo-1525160354320-d8e92641c563?w=400" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+
+        <div class="group relative overflow-hidden aspect-square cursor-pointer" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1525160354320-d8e92641c563?w=400" alt="Club Dinner" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
           <div class="absolute inset-0 bg-[#0A0A0A]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
             <p class="font-bold uppercase">Club Dinner</p>
           </div>
         </div>
-        
-        <div class="group relative overflow-hidden aspect-square">
-          <img src="https://images.unsplash.com/photo-1558618047-f4b511aae2de?w=400" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+
+        <div class="group relative overflow-hidden aspect-square cursor-pointer" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1558618047-f4b511aae2de?w=400" alt="Workshop" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
           <div class="absolute inset-0 bg-[#0A0A0A]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
             <p class="font-bold uppercase">Workshop</p>
           </div>
         </div>
-        
-        <div class="group relative overflow-hidden aspect-square">
-          <img src="https://images.unsplash.com/photo-1591378603223-e15b45a81640?w=400" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+
+        <div class="group relative overflow-hidden aspect-square cursor-pointer" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1591378603223-e15b45a81640?w=400" alt="Sunday Breakfast" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
           <div class="absolute inset-0 bg-[#0A0A0A]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
             <p class="font-bold uppercase">Breakfast</p>
           </div>
         </div>
-        
-        <div class="group relative overflow-hidden aspect-square">
-          <img src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=400" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+
+        <div class="group relative overflow-hidden aspect-square cursor-pointer" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=400" alt="Awards Ceremony" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
           <div class="absolute inset-0 bg-[#0A0A0A]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
             <p class="font-bold uppercase">Awards</p>
           </div>
         </div>
 
       </div>
-      
+
       <div class="text-center mt-12">
         <a href="#" class="inline-block border-2 border-white px-8 py-4 font-bold uppercase tracking-wider hover:bg-white hover:text-[#0A0A0A] transition">Load More Photos</a>
       </div>
     </div>
   </section>
 
+  <!-- Share Your Memories CTA -->
+  <section class="py-24 bg-[#1A1A1A] border-t border-white/10">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <p class="text-red font-bold uppercase tracking-[0.2em] mb-4">Contribute</p>
+      <h2 class="text-3xl md:text-4xl font-black uppercase mb-6">Share Your Memories</h2>
+      <p class="text-gray-400 text-lg mb-10 max-w-2xl mx-auto">Have photos from our rides, rallies, or events? Share them with the community! Upload your best shots and they may be featured in our official gallery.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <label class="inline-flex items-center gap-3 bg-red px-10 py-4 font-bold uppercase tracking-wider hover:scale-105 transition cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          Upload Photos
+          <input type="file" multiple accept="image/*" class="hidden">
+        </label>
+        <a href="contact.html" class="inline-block border-2 border-white px-10 py-4 font-bold uppercase tracking-wider hover:bg-white hover:text-[#0A0A0A] transition">Contact Us</a>
+      </div>
+      <p class="text-gray-600 text-xs mt-6">Accepted formats: JPG, PNG. Max 10MB per file. By uploading you grant EagleRiders the right to use the images.</p>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="bg-[#0A0A0A] border-t border-white/10 py-16">
     <div class="max-w-7xl mx-auto px-6">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <p class="text-2xl font-black">EAGLE<span class="text-red">RIDERS</span></p>
-        <div class="flex gap-8 mt-6 md:mt-0 text-sm text-gray-400">
-          <a href="index.html" class="hover:text-white transition">Home</a>
-          <a href="about.html" class="hover:text-white transition">Heritage</a>
-          <a href="events.html" class="hover:text-white transition">Events</a>
-          <a href="contact.html" class="hover:text-white transition">Contact</a>
+      <div class="grid md:grid-cols-4 gap-12 mb-12">
+        <div class="md:col-span-2">
+          <p class="text-3xl font-black mb-4">EAGLE<span class="text-red">RIDERS</span></p>
+          <p class="text-gray-400 max-w-md mb-6">The passion that unites us since 1985. Official club recognized by the Italian Motorcycle Federation.</p>
+          <div class="space-y-2 text-gray-400 text-sm">
+            <p>Via Roma 123, 20100 Milano</p>
+            <p>info@eagleriders.example</p>
+            <p>+39 02 9876543</p>
+          </div>
+        </div>
+        <div>
+          <p class="font-bold uppercase tracking-wider mb-4">Menu</p>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="index.html" class="hover:text-white transition">Home</a></li>
+            <li><a href="about.html" class="hover:text-white transition">Heritage</a></li>
+            <li><a href="events.html" class="hover:text-white transition">Events</a></li>
+            <li><a href="gallery.html" class="hover:text-white transition">Gallery</a></li>
+            <li><a href="contact.html" class="hover:text-white transition">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-bold uppercase tracking-wider mb-4">Follow Us</p>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white transition">Facebook</a></li>
+            <li><a href="#" class="hover:text-white transition">Instagram</a></li>
+            <li><a href="#" class="hover:text-white transition">YouTube</a></li>
+          </ul>
         </div>
       </div>
-      <div class="mt-8 pt-8 border-t border-white/10 text-center text-gray-500 text-sm">
-        © 2026 EagleRiders • Clubs Theme Demo
+      <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/10">
+        <p class="text-gray-500 text-sm">&copy; 2026 EagleRiders. All rights reserved.</p>
+        <div class="flex gap-6 mt-4 md:mt-0">
+          <a href="#" class="text-gray-400 hover:text-white transition">Facebook</a>
+          <a href="#" class="text-gray-400 hover:text-white transition">Instagram</a>
+          <a href="#" class="text-gray-400 hover:text-white transition">YouTube</a>
+        </div>
       </div>
     </div>
   </footer>
+
+  <!-- Lightbox Overlay -->
+  <div id="lightbox" class="fixed inset-0 z-[100] bg-[#0A0A0A]/95 items-center justify-center p-4" onclick="closeLightbox(event)">
+    <!-- Close Button -->
+    <button onclick="closeLightbox(event)" class="absolute top-6 right-6 text-white hover:text-red transition z-[110]" aria-label="Close lightbox">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+    <!-- Previous Button -->
+    <button onclick="navigateLightbox(-1, event)" class="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-red transition z-[110] p-2" aria-label="Previous image">
+      <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+    <!-- Next Button -->
+    <button onclick="navigateLightbox(1, event)" class="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-red transition z-[110] p-2" aria-label="Next image">
+      <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <!-- Image Container -->
+    <div class="flex items-center justify-center w-full h-full">
+      <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[90vh] object-contain">
+    </div>
+    <!-- Caption -->
+    <div id="lightbox-caption" class="absolute bottom-6 left-1/2 -translate-x-1/2 text-center">
+      <p class="text-white font-bold uppercase tracking-wider"></p>
+    </div>
+  </div>
+
+  <!-- Lightbox Script -->
+  <script>
+    var galleryItems = [];
+    var currentIndex = 0;
+
+    // Build gallery items list on load
+    document.addEventListener('DOMContentLoaded', function() {
+      var items = document.querySelectorAll('[onclick="openLightbox(this)"]');
+      items.forEach(function(item, index) {
+        var img = item.querySelector('img');
+        galleryItems.push({
+          src: img.src.replace(/w=\d+/, 'w=1200'),
+          alt: img.alt
+        });
+      });
+    });
+
+    function openLightbox(element) {
+      var items = document.querySelectorAll('[onclick="openLightbox(this)"]');
+      var itemsArray = Array.prototype.slice.call(items);
+      currentIndex = itemsArray.indexOf(element);
+
+      var lightbox = document.getElementById('lightbox');
+      var lightboxImg = document.getElementById('lightbox-img');
+      var lightboxCaption = document.getElementById('lightbox-caption').querySelector('p');
+
+      lightboxImg.src = galleryItems[currentIndex].src;
+      lightboxImg.alt = galleryItems[currentIndex].alt;
+      lightboxCaption.textContent = galleryItems[currentIndex].alt;
+
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(event) {
+      if (event) event.stopPropagation();
+      var lightbox = document.getElementById('lightbox');
+      // Only close if clicking the background or close button
+      if (!event || event.target === lightbox || event.currentTarget.tagName === 'BUTTON') {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function navigateLightbox(direction, event) {
+      if (event) event.stopPropagation();
+      currentIndex = currentIndex + direction;
+      if (currentIndex < 0) currentIndex = galleryItems.length - 1;
+      if (currentIndex >= galleryItems.length) currentIndex = 0;
+
+      var lightboxImg = document.getElementById('lightbox-img');
+      var lightboxCaption = document.getElementById('lightbox-caption').querySelector('p');
+
+      lightboxImg.src = galleryItems[currentIndex].src;
+      lightboxImg.alt = galleryItems[currentIndex].alt;
+      lightboxCaption.textContent = galleryItems[currentIndex].alt;
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      var lightbox = document.getElementById('lightbox');
+      if (!lightbox.classList.contains('active')) return;
+
+      if (e.key === 'Escape') closeLightbox(e);
+      if (e.key === 'ArrowLeft') navigateLightbox(-1, e);
+      if (e.key === 'ArrowRight') navigateLightbox(1, e);
+    });
+  </script>
 </body>
 </html>

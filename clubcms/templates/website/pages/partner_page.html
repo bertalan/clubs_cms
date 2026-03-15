@@ -1,46 +1,46 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags i18n l10n %}
 
 {% block body_class %}page-partner{% endblock %}
 
 {% block content %}
 {% include "includes/breadcrumbs.html" %}
 
-<div class="page-partner">
+<article class="page-partner" itemscope itemtype="https://schema.org/Organization">
     <div class="container">
+        {# Cover / Logo #}
+        {% if page.logo %}
+        <div class="page-partner__cover">
+            {% image page.logo max-400x300 as partner_logo %}
+            <img src="{{ partner_logo.url }}"
+                 alt="{{ page.title }}"
+                 class="page-partner__cover-image"
+                 itemprop="logo"
+                 width="{{ partner_logo.width }}"
+                 height="{{ partner_logo.height }}">
+        </div>
+        {% endif %}
+
         {# Header #}
         <header class="page-partner__header">
-            {% if page.logo %}
-                {% image page.logo max-400x300 as partner_logo %}
-                <div class="page-partner__logo">
-                    <img src="{{ partner_logo.url }}"
-                         alt="{{ page.title }}"
-                         width="{{ partner_logo.width }}"
-                         height="{{ partner_logo.height }}">
-                </div>
+            {% if page.category %}
+            <span class="page-partner__category">{{ page.category.name }}</span>
             {% endif %}
 
-            <div class="page-partner__header-text">
-                <h1 class="page-partner__title">{{ page.title }}</h1>
+            <h1 class="page-partner__title" itemprop="name">{{ page.title }}</h1>
 
-                {% if page.category %}
-                <span class="page-partner__category">{{ page.category.name }}</span>
-                {% endif %}
+            {% if page.is_featured %}
+            <span class="page-partner__badge">{% trans "Featured Partner" %}</span>
+            {% endif %}
 
-                {% if page.is_featured %}
-                <span class="page-partner__badge">Featured Partner</span>
-                {% endif %}
-
-                {% if page.intro %}
-                <p class="page-partner__intro">{{ page.intro }}</p>
-                {% endif %}
-            </div>
+            {% if page.intro %}
+            <p class="page-partner__intro" itemprop="description">{{ page.intro }}</p>
+            {% endif %}
         </header>
 
-        <div class="page-partner__content-grid">
+        <div class="page-partner__layout" role="region" aria-label="{% trans 'Partner content and details' %}">
             {# Main content area #}
             <div class="page-partner__main">
-                {# Body StreamField #}
                 {% if page.body %}
                 <div class="page-partner__body">
                     {% for block in page.body %}
@@ -50,91 +50,136 @@
                 {% endif %}
             </div>
 
-            {# Sidebar: Contact, Social, Info #}
-            <aside class="page-partner__sidebar">
+            {# Sidebar #}
+            <aside class="page-partner__sidebar" aria-label="{% trans 'Partner Details' %}">
                 {# Contact information #}
                 {% if page.website or page.email or page.phone or page.address %}
-                <div class="page-partner__contact-card">
-                    <h2 class="page-partner__sidebar-title">Contact</h2>
+                <div class="page-partner__info-card">
+                    <h2 class="page-partner__info-heading">{% trans "Contact" %}</h2>
 
                     {% if page.website %}
-                    <p class="page-partner__contact-item">
-                        <strong>Website:</strong>
-                        <a href="{{ page.website }}" target="_blank" rel="noopener noreferrer">
-                            {{ page.website }}
-                        </a>
-                    </p>
+                    <div class="page-partner__info-item">
+                        <span class="page-partner__info-label">{% trans "Website" %}</span>
+                        <div class="page-partner__info-value">
+                            <a href="{{ page.website }}" target="_blank" rel="noopener noreferrer" itemprop="url">
+                                {{ page.website|truncatechars:35 }}
+                            </a>
+                        </div>
+                    </div>
                     {% endif %}
 
                     {% if page.email %}
-                    <p class="page-partner__contact-item">
-                        <strong>Email:</strong>
-                        <a href="mailto:{{ page.email }}">{{ page.email }}</a>
-                    </p>
+                    <div class="page-partner__info-item">
+                        <span class="page-partner__info-label">{% trans "Email" %}</span>
+                        <div class="page-partner__info-value">
+                            <a href="mailto:{{ page.email }}" itemprop="email">{{ page.email }}</a>
+                        </div>
+                    </div>
                     {% endif %}
 
                     {% if page.phone %}
-                    <p class="page-partner__contact-item">
-                        <strong>Phone:</strong>
-                        <a href="tel:{{ page.phone }}">{{ page.phone }}</a>
-                    </p>
+                    <div class="page-partner__info-item">
+                        <span class="page-partner__info-label">{% trans "Phone" %}</span>
+                        <div class="page-partner__info-value">
+                            <a href="tel:{{ page.phone }}" itemprop="telephone">{{ page.phone }}</a>
+                        </div>
+                    </div>
                     {% endif %}
 
-                    {% if page.address %}
-                    <p class="page-partner__contact-item">
-                        <strong>Address:</strong><br>
-                        {{ page.address|linebreaksbr }}
-                    </p>
-                    {% endif %}
-
-                    {% if page.contact_city %}
-                    <p class="page-partner__contact-item">
-                        <strong>City:</strong> {{ page.contact_city }}
-                    </p>
+                    {% if page.address or page.contact_city %}
+                    <div class="page-partner__info-item" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                        <span class="page-partner__info-label">{% trans "Address" %}</span>
+                        <div class="page-partner__info-value">
+                            {% if page.address %}
+                            <span itemprop="streetAddress">{{ page.address|linebreaksbr }}</span>
+                            {% endif %}
+                            {% if page.contact_city %}
+                            <br><span itemprop="addressLocality">{{ page.contact_city }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
                     {% endif %}
                 </div>
                 {% endif %}
 
                 {# Social links #}
                 {% if page.facebook_url or page.instagram_url or page.linkedin_url or page.youtube_url or page.twitter_url %}
-                <div class="page-partner__social-card">
-                    <h2 class="page-partner__sidebar-title">Social</h2>
-                    <ul class="page-partner__social-list">
+                <div class="page-partner__info-card">
+                    <h2 class="page-partner__info-heading">{% trans "Social" %}</h2>
+                    <nav class="page-partner__social-list" aria-label="{% trans 'Social media links' %}">
                         {% if page.facebook_url %}
-                        <li><a href="{{ page.facebook_url }}" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+                        <a href="{{ page.facebook_url }}" target="_blank" rel="noopener noreferrer" class="page-partner__social-link" aria-label="Facebook">Facebook</a>
                         {% endif %}
                         {% if page.instagram_url %}
-                        <li><a href="{{ page.instagram_url }}" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                        <a href="{{ page.instagram_url }}" target="_blank" rel="noopener noreferrer" class="page-partner__social-link" aria-label="Instagram">Instagram</a>
                         {% endif %}
                         {% if page.linkedin_url %}
-                        <li><a href="{{ page.linkedin_url }}" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+                        <a href="{{ page.linkedin_url }}" target="_blank" rel="noopener noreferrer" class="page-partner__social-link" aria-label="LinkedIn">LinkedIn</a>
                         {% endif %}
                         {% if page.youtube_url %}
-                        <li><a href="{{ page.youtube_url }}" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+                        <a href="{{ page.youtube_url }}" target="_blank" rel="noopener noreferrer" class="page-partner__social-link" aria-label="YouTube">YouTube</a>
                         {% endif %}
                         {% if page.twitter_url %}
-                        <li><a href="{{ page.twitter_url }}" target="_blank" rel="noopener noreferrer">Twitter / X</a></li>
+                        <a href="{{ page.twitter_url }}" target="_blank" rel="noopener noreferrer" class="page-partner__social-link" aria-label="Twitter / X">Twitter / X</a>
                         {% endif %}
-                    </ul>
+                    </nav>
                 </div>
                 {% endif %}
 
                 {# Partnership info #}
                 {% if page.partnership_start %}
                 <div class="page-partner__info-card">
-                    <h2 class="page-partner__sidebar-title">Partnership</h2>
-                    <p class="page-partner__info-item">
-                        <strong>Since:</strong> {{ page.partnership_start|date:"F Y" }}
-                    </p>
+                    <h2 class="page-partner__info-heading">{% trans "Partnership" %}</h2>
+                    <div class="page-partner__info-item">
+                        <span class="page-partner__info-label">{% trans "Since" %}</span>
+                        <div class="page-partner__info-value">{{ page.partnership_start|date:"F Y" }}</div>
+                    </div>
                     {% if page.partnership_end %}
-                    <p class="page-partner__info-item">
-                        <strong>Until:</strong> {{ page.partnership_end|date:"F Y" }}
-                    </p>
+                    <div class="page-partner__info-item">
+                        <span class="page-partner__info-label">{% trans "Until" %}</span>
+                        <div class="page-partner__info-value">{{ page.partnership_end|date:"F Y" }}</div>
+                    </div>
                     {% endif %}
                 </div>
                 {% endif %}
             </aside>
         </div>
+
+        {# OpenStreetMap #}
+        {% if page.latitude and page.longitude %}
+        <section class="page-partner__map-section" aria-label="{% trans 'Location' %}">
+            <h2 class="page-partner__map-heading">{% trans "Location" %}</h2>
+            <div class="page-partner__map" id="partner-map"></div>
+        </section>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+              integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+              crossorigin="" />
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+                integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+                crossorigin=""></script>
+        <script>
+        (function() {
+            var lat = {{ page.latitude|stringformat:"f" }};
+            var lng = {{ page.longitude|stringformat:"f" }};
+            var map = L.map('partner-map').setView([lat, lng], 14);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+            var popup = '<strong>{{ page.title|escapejs }}</strong>';
+            {% if page.address %}
+            popup += '<br>{{ page.address|escapejs }}';
+            {% endif %}
+            {% if page.contact_city %}
+            popup += '<br>{{ page.contact_city|escapejs }}';
+            {% endif %}
+            popup += '<br><a href="https://maps.google.com/maps?daddr=' + lat + ',' + lng + '"'
+                   + ' target="_blank" rel="noopener" style="color:#1a73e8;font-weight:600;">'
+                   + '{% filter escapejs %}{% trans "Get directions" %}{% endfilter %} &#8594;</a>';
+            L.marker([lat, lng]).addTo(map).bindPopup(popup).openPopup();
+        })();
+        </script>
+        {% endif %}
     </div>
-</div>
+</article>
 {% endblock %}

@@ -1,205 +1,234 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n static l10n %}
 
 {% block title %}{% trans "Mutual Aid" %} | {{ block.super }}{% endblock %}
 
 {% block extra_css %}
-<style>
-    .aid-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem 1rem;
-    }
-    .aid-intro {
-        margin-bottom: 2rem;
-        line-height: 1.7;
-    }
-    .helpers-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-    .helper-card {
-        border: 1px solid var(--color-border, #e5e7eb);
-        border-radius: 0.5rem;
-        padding: 1.25rem;
-        background: var(--color-bg, #fff);
-        transition: box-shadow 0.2s;
-    }
-    .helper-card:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    .helper-card h3 {
-        margin: 0 0 0.5rem 0;
-        font-size: 1.1rem;
-    }
-    .helper-meta {
-        font-size: 0.85rem;
-        color: var(--color-text-muted, #6b7280);
-        margin-bottom: 0.75rem;
-    }
-    .helper-notes {
-        font-size: 0.9rem;
-        line-height: 1.5;
-        margin-bottom: 0.75rem;
-    }
-    .helper-actions {
-        display: flex;
-        gap: 0.5rem;
-    }
-    .btn-primary {
-        display: inline-block;
-        padding: 0.5rem 1rem;
-        background: var(--color-primary, #1e40af);
-        color: #fff;
-        text-decoration: none;
-        border-radius: 0.375rem;
-        font-size: 0.85rem;
-        border: none;
-        cursor: pointer;
-    }
-    .btn-secondary {
-        display: inline-block;
-        padding: 0.5rem 1rem;
-        background: transparent;
-        color: var(--color-primary, #1e40af);
-        text-decoration: none;
-        border-radius: 0.375rem;
-        font-size: 0.85rem;
-        border: 1px solid var(--color-primary, #1e40af);
-    }
-    .emergency-contacts {
-        background: #fef2f2;
-        border: 1px solid #fecaca;
-        border-radius: 0.5rem;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
-    }
-    .emergency-contacts h2 {
-        color: #991b1b;
-        margin-top: 0;
-    }
-    .emergency-contact-item {
-        padding: 0.5rem 0;
-        border-bottom: 1px solid #fecaca;
-    }
-    .emergency-contact-item:last-child {
-        border-bottom: none;
-    }
-    .no-helpers {
-        text-align: center;
-        padding: 3rem 1rem;
-        color: var(--color-text-muted, #6b7280);
-    }
-    .pagination-nav {
-        display: flex;
-        justify-content: center;
-        gap: 0.5rem;
-        margin-top: 2rem;
-    }
-    .pagination-nav a,
-    .pagination-nav span {
-        padding: 0.5rem 1rem;
-        border: 1px solid var(--color-border, #ccc);
-        border-radius: 0.375rem;
-        text-decoration: none;
-        font-size: 0.875rem;
-    }
-    .pagination-nav .current {
-        background: var(--color-primary, #1e40af);
-        color: #fff;
-        border-color: var(--color-primary, #1e40af);
-    }
-    .aid-radius-badge {
-        display: inline-block;
-        padding: 0.125rem 0.5rem;
-        background: #dbeafe;
-        color: #1e40af;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 600;
-    }
-</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 {% endblock %}
 
 {% block content %}
-<div class="aid-container">
-    <h1>{% trans "Mutual Aid" %}</h1>
+<div class="container">
+    <h1 class="aid-page__title">{% trans "Mutual Aid" %}</h1>
 
-    {% if self.intro %}
-        <div class="aid-intro">
-            {{ self.intro|safe }}
-        </div>
+    {% if aid_page and aid_page.intro %}
+        <div class="aid-page__intro">{{ aid_page.intro|safe }}</div>
     {% endif %}
 
-    {# Emergency contacts #}
-    {% if self.body %}
-        <div class="emergency-contacts">
-            <h2>{% trans "Emergency Contacts" %}</h2>
-            {% for block in self.body %}
-                <div class="emergency-contact-item">
-                    <strong>{{ block.value.name }}</strong>
-                    {% if block.value.role %}<span> - {{ block.value.role }}</span>{% endif %}
-                    <br>
-                    <a href="tel:{{ block.value.phone }}">{{ block.value.phone }}</a>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
+    {# ── Geo Search Bar ─────────────────────────────────────── #}
+    <form class="aid-search" method="get" id="aid-search-form" role="search" aria-label="{% trans 'Search helpers by location' %}">
+        <div class="aid-search__row">
+            <div class="aid-search__input-wrap">
+                <input type="text"
+                       name="location"
+                       id="aid-search-location"
+                       class="aid-search__input form-input"
+                       value="{{ search_location }}"
+                       placeholder="{% trans 'City or address…' %}"
+                       autocomplete="off"
+                       aria-label="{% trans 'Search location' %}"
+                       aria-autocomplete="list"
+                       aria-controls="aid-search-suggestions"
+                       aria-expanded="false">
+                <input type="hidden" name="lat" id="aid-search-lat" value="{% if search_lat != None %}{% localize off %}{{ search_lat }}{% endlocalize %}{% endif %}">
+                <input type="hidden" name="lng" id="aid-search-lng" value="{% if search_lng != None %}{% localize off %}{{ search_lng }}{% endlocalize %}{% endif %}">
+            </div>
 
-    <h2>{% trans "Available Helpers" %}</h2>
+            <button type="button" class="aid-search__locate-btn btn btn-secondary" id="aid-locate-btn"
+                    aria-label="{% trans 'Use my position' %}"
+                    title="{% trans 'Use my position' %}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4m10-10h-4M6 12H2"/>
+                </svg>
+            </button>
 
-    {# Helpers grid #}
-    {% if helpers %}
-        <div class="helpers-grid">
-            {% for helper in helpers %}
-                <div class="helper-card">
-                    <h3>{{ helper.get_visible_name }}</h3>
-                    <div class="helper-meta">
-                        <span>{{ helper.aid_location_city }}</span>
-                        <span class="aid-radius-badge">{{ helper.aid_radius_km }} km</span>
-                    </div>
-                    {% if helper.aid_notes %}
-                        <div class="helper-notes">{{ helper.aid_notes|truncatewords:30 }}</div>
-                    {% endif %}
-                    <div class="helper-actions">
-                        <a href="{% url 'mutual_aid:helper_detail' pk=helper.pk %}" class="btn-secondary">
-                            {% trans "Details" %}
-                        </a>
-                        {% if is_active_member %}
-                            <a href="{% url 'mutual_aid:contact_form' pk=helper.pk %}" class="btn-primary">
-                                {% trans "Request Help" %}
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endfor %}
+            <div class="aid-search__radius">
+                <label for="aid-search-radius" class="sr-only">{% trans "Radius" %}</label>
+                <select name="radius" id="aid-search-radius" class="aid-search__radius-select form-input">
+                    <option value="10" {% if search_radius == 10 %}selected{% endif %}>10 km</option>
+                    <option value="25" {% if search_radius == 25 %}selected{% endif %}>25 km</option>
+                    <option value="50" {% if search_radius == 50 or not search_active %}selected{% endif %}>50 km</option>
+                    <option value="100" {% if search_radius == 100 %}selected{% endif %}>100 km</option>
+                    <option value="200" {% if search_radius == 200 %}selected{% endif %}>200 km</option>
+                </select>
+            </div>
+
+            <button type="submit" class="aid-search__submit btn btn-primary">{% trans "Search" %}</button>
         </div>
 
-        {# Pagination #}
-        {% if is_paginated %}
-            <nav class="pagination-nav" aria-label="{% trans 'Pagination' %}">
-                {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}">&laquo; {% trans "Previous" %}</a>
-                {% endif %}
-                {% for num in page_obj.paginator.page_range %}
-                    {% if page_obj.number == num %}
-                        <span class="current">{{ num }}</span>
-                    {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
-                        <a href="?page={{ num }}">{{ num }}</a>
-                    {% endif %}
-                {% endfor %}
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">{% trans "Next" %} &raquo;</a>
-                {% endif %}
-            </nav>
+        <div class="aid-search__status" id="aid-search-status" aria-live="polite"></div>
+
+        {# Nominatim suggestions #}
+        <ul class="aid-search__suggestions" id="aid-search-suggestions" role="listbox" aria-label="{% trans 'Location suggestions' %}" hidden></ul>
+    </form>
+
+    {# ── Search Results Summary ─────────────────────────────── #}
+    {% if search_active %}
+    <div class="aid-search__results-summary" role="status" aria-live="polite">
+        <strong>
+        {% blocktrans count total=total_count trimmed %}
+            {{ total }} helper found
+        {% plural %}
+            {{ total }} helpers found
+        {% endblocktrans %}
+        </strong>
+        {% if search_location %}
+            {% blocktrans with loc=search_location radius=search_radius trimmed %}
+                within {{ radius }} km of {{ loc }}
+            {% endblocktrans %}
         {% endif %}
-    {% else %}
-        <div class="no-helpers">
-            <p>{% trans "No helpers are currently available." %}</p>
-            <p>{% trans "Check back later or contact the club directly." %}</p>
+        <a href="{% url 'mutual_aid:map' %}" class="aid-search__clear">{% trans "Clear search" %}</a>
+    </div>
+    {% endif %}
+
+    {# ── Leaflet Map ────────────────────────────────────────── #}
+    <div class="aid-map" id="aid-map"
+         role="application"
+         aria-label="{% trans 'Map of available helpers' %}"
+         data-api-url="{% url 'mutual_aid:helpers_api' %}"
+         data-search-lat="{% if search_lat != None %}{% localize off %}{{ search_lat }}{% endlocalize %}{% endif %}"
+         data-search-lng="{% if search_lng != None %}{% localize off %}{{ search_lng }}{% endlocalize %}{% endif %}"
+         data-search-radius="{{ search_radius|default:'50' }}">
+    </div>
+
+    {# ── Helpers Grid ───────────────────────────────────────── #}
+    <h2 class="aid-grid__heading">{% trans "Available Helpers" %}</h2>
+
+    {% if all_helpers %}
+        <div class="aid-grid" role="list">
+            {% for h in all_helpers %}
+            {% if h.type == "local" %}
+            <article class="aid-card aid-card--link" role="listitem">
+                <h3 class="aid-card__name">
+                    <a href="{% url 'mutual_aid:helper_detail' pk=h.pk %}" class="aid-card__title-link">
+                        {{ h.display_name }}
+                    </a>
+                </h3>
+                <div class="aid-card__meta">
+                    <span class="aid-card__city" aria-label="{% trans 'Location' %}">
+                        <svg class="aid-card__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        {{ h.city }}
+                    </span>
+                    <span class="aid-card__badge" aria-label="{% trans 'Coverage radius' %}">
+                        <svg class="aid-card__icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                        {{ h.radius_km }} km
+                    </span>
+                    {% if h.distance_km != None %}
+                        <span class="aid-card__distance" aria-label="{% trans 'Distance from you' %}">
+                            <svg class="aid-card__icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            {{ h.distance_km }} km
+                        </span>
+                    {% endif %}
+                </div>
+                {% if h.notes %}
+                    <p class="aid-card__notes">{{ h.notes|truncatewords:30 }}</p>
+                {% endif %}
+                <div class="aid-card__actions">
+                    <span class="aid-card__detail-label btn btn-secondary btn--sm" aria-hidden="true">{% trans "Details" %}</span>
+                    {% if is_active_member %}
+                        <a href="{% url 'mutual_aid:contact_form' pk=h.pk %}" class="btn btn-primary btn--sm aid-card__action-link">
+                            {% trans "Request Help" %}
+                        </a>
+                    {% endif %}
+                </div>
+            </article>
+            {% else %}
+            <article class="aid-card aid-card--federated aid-card--link" role="listitem">
+                <div class="aid-card__source-badge">{{ h.source_club_name }}</div>
+                <h3 class="aid-card__name">
+                    {% if h.source_club_url %}
+                    <a href="{{ h.source_club_url }}" class="aid-card__title-link" target="_blank" rel="noopener noreferrer">
+                        {{ h.display_name }}
+                        <span class="sr-only"> — {{ h.source_club_name }}</span>
+                    </a>
+                    {% else %}
+                        {{ h.display_name }}
+                    {% endif %}
+                </h3>
+                <div class="aid-card__meta">
+                    <span class="aid-card__city" aria-label="{% trans 'Location' %}">
+                        <svg class="aid-card__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        {{ h.city }}
+                    </span>
+                    <span class="aid-card__badge" aria-label="{% trans 'Coverage radius' %}">
+                        <svg class="aid-card__icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                        {{ h.radius_km }} km
+                    </span>
+                    {% if h.distance_km != None %}
+                        <span class="aid-card__distance" aria-label="{% trans 'Distance from you' %}">
+                            <svg class="aid-card__icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            {{ h.distance_km }} km
+                        </span>
+                    {% endif %}
+                </div>
+                {% if h.notes %}
+                    <p class="aid-card__notes">{{ h.notes|truncatewords:30 }}</p>
+                {% endif %}
+                <div class="aid-card__actions">
+                    {% if h.source_club_url %}
+                    <a href="{{ h.source_club_url }}" class="btn btn-secondary btn--sm aid-card__action-link" target="_blank" rel="noopener noreferrer">
+                        {% trans "View on partner site" %}
+                    </a>
+                    {% endif %}
+                </div>
+            </article>
+            {% endif %}
+            {% endfor %}
         </div>
+
+        {# Pagination (only when no geo-search) #}
+        {% if is_paginated %}
+        <nav class="pagination-nav" aria-label="{% trans 'Pagination' %}">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">&laquo; {% trans "Previous" %}</a>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <span class="current">{{ num }}</span>
+                {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+                    <a href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">{% trans "Next" %} &raquo;</a>
+            {% endif %}
+        </nav>
+        {% endif %}
+
+    {% else %}
+        <div class="aid-grid__empty">
+            <p>{% trans "No helpers are currently available." %}</p>
+            {% if search_active %}
+                <p>{% trans "Try expanding the search radius or searching a different location." %}</p>
+            {% else %}
+                <p>{% trans "Check back later or contact the club directly." %}</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {# ── Emergency Contacts ─────────────────────────────────── #}
+    {% if aid_page and aid_page.body %}
+    <section class="aid-emergency" aria-labelledby="aid-emergency-heading">
+        <h2 class="aid-emergency__title" id="aid-emergency-heading">{% trans "Emergency Contacts" %}</h2>
+        {% for block in aid_page.body %}
+        <div class="aid-emergency__item">
+            <strong>{{ block.value.name }}</strong>
+            {% if block.value.role %}<span> — {{ block.value.role }}</span>{% endif %}
+            <br>
+            <a href="tel:{{ block.value.phone }}" class="aid-emergency__phone">
+                <span aria-hidden="true">&#9742;</span>
+                {{ block.value.phone }}
+            </a>
+        </div>
+        {% endfor %}
+    </section>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="{% static 'js/aid-map.js' %}"></script>
 {% endblock %}

@@ -25,6 +25,10 @@
     .btn-outline-navy { border: 2px solid var(--navy); color: var(--navy); }
     .btn-outline-navy:hover { background: var(--navy); color: white; }
     .nav-link.active { color: var(--gold) !important; }
+    .gallery-preview-item { overflow: hidden; border: 2px solid var(--gold); }
+    .gallery-preview-item img { transition: transform 0.3s ease; }
+    .gallery-preview-item:hover img { transform: scale(1.05); }
+    .form-control:focus { border-color: var(--gold); box-shadow: 0 0 0 0.2rem rgba(212,165,32,0.25); }
     /* Footer */
     .footer-title { font-family: 'Playfair Display', serif; color: white; }
     .footer-text { color: var(--text-light); }
@@ -100,36 +104,128 @@
       <div class="row g-4">
         <div class="col-md-6 col-lg-4">
           <article class="card h-100 border border-gold">
-            <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=600" class="card-img-top" alt="Gala">
+            <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=600" class="card-img-top" alt="Spring Gala event">
             <div class="card-body">
               <span class="text-gold small fw-bold">March 20, 2026</span>
               <h5 class="card-title mt-2">Spring Gala</h5>
               <p class="card-text text-muted">An elegant evening of dining, dancing, and distinguished company.</p>
-              <a href="events.html" class="btn btn-outline-navy">Details →</a>
+              <a href="events.html" class="btn btn-outline-navy">Details</a>
             </div>
           </article>
         </div>
         <div class="col-md-6 col-lg-4">
           <article class="card h-100 border border-gold">
-            <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600" class="card-img-top" alt="Lecture">
+            <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600" class="card-img-top" alt="Distinguished Lecture Series event">
             <div class="card-body">
               <span class="text-gold small fw-bold">April 5, 2026</span>
               <h5 class="card-title mt-2">Distinguished Lecture Series</h5>
               <p class="card-text text-muted">Featuring renowned speakers on topics of cultural significance.</p>
-              <a href="events.html" class="btn btn-outline-navy">Reserve →</a>
+              <a href="events.html" class="btn btn-outline-navy">Reserve</a>
             </div>
           </article>
         </div>
         <div class="col-md-6 col-lg-4">
           <article class="card h-100 border border-gold">
-            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600" class="card-img-top" alt="Dinner">
+            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600" class="card-img-top" alt="Members Dinner event">
             <div class="card-body">
               <span class="text-gold small fw-bold">May 15, 2026</span>
               <h5 class="card-title mt-2">Members' Dinner</h5>
               <p class="card-text text-muted">An intimate gathering for members to connect and celebrate.</p>
-              <a href="events.html" class="btn btn-outline-navy">RSVP →</a>
+              <a href="events.html" class="btn btn-outline-navy">RSVP</a>
             </div>
           </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Preview -->
+  <section class="py-5" style="background: #f0ece2;">
+    <div class="container py-4">
+      <h2 class="display-5 text-center mb-3">From Our Gallery</h2>
+      <p class="text-center text-muted mb-5">A glimpse into the moments that define our community</p>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="gallery-preview-item rounded">
+            <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=600" class="img-fluid w-100" alt="Annual Gala 2025">
+          </div>
+          <p class="text-muted small mt-2 text-center">Annual Gala 2025</p>
+        </div>
+        <div class="col-md-4">
+          <div class="gallery-preview-item rounded">
+            <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=600" class="img-fluid w-100" alt="Charity Fundraiser">
+          </div>
+          <p class="text-muted small mt-2 text-center">Charity Fundraiser</p>
+        </div>
+        <div class="col-md-4">
+          <div class="gallery-preview-item rounded">
+            <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=600" class="img-fluid w-100" alt="Members Gathering">
+          </div>
+          <p class="text-muted small mt-2 text-center">Members' Gathering</p>
+        </div>
+      </div>
+      <div class="text-center mt-5">
+        <a href="gallery.html" class="btn btn-outline-navy btn-lg px-5">View Full Gallery</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Signup -->
+  <section class="py-5 bg-navy text-white">
+    <div class="container py-4">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+          <h2 class="display-5 text-white mb-3">Stay Connected</h2>
+          <p class="lead mb-4" style="color: var(--text-light);">Subscribe to our newsletter for the latest news, events, and exclusive member updates.</p>
+          <form class="row g-3 justify-content-center">
+            <div class="col-sm-5">
+              <label for="newsletter-name" class="visually-hidden">Your Name</label>
+              <input type="text" id="newsletter-name" class="form-control form-control-lg" placeholder="Your Name" aria-label="Your Name" required>
+            </div>
+            <div class="col-sm-5">
+              <label for="newsletter-email" class="visually-hidden">Email Address</label>
+              <input type="email" id="newsletter-email" class="form-control form-control-lg" placeholder="Email Address" aria-label="Email Address" required>
+            </div>
+            <div class="col-sm-2">
+              <button type="submit" class="btn btn-gold btn-lg w-100">Subscribe</button>
+            </div>
+          </form>
+          <p class="small mt-3" style="color: var(--text-muted);">We respect your privacy. Unsubscribe at any time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partners / Sponsors -->
+  <section class="py-5">
+    <div class="container py-4">
+      <h2 class="display-5 text-center mb-3">Our Partners</h2>
+      <p class="text-center text-muted mb-5">Proud collaborations with distinguished organizations</p>
+      <div class="row g-4 align-items-center justify-content-center">
+        <div class="col-6 col-md-3 col-lg-2 text-center">
+          <div class="p-4 border border-gold rounded d-flex align-items-center justify-content-center" style="height: 100px;">
+            <span class="fw-bold text-muted">Heritage Foundation</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 col-lg-2 text-center">
+          <div class="p-4 border border-gold rounded d-flex align-items-center justify-content-center" style="height: 100px;">
+            <span class="fw-bold text-muted">City Arts Council</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 col-lg-2 text-center">
+          <div class="p-4 border border-gold rounded d-flex align-items-center justify-content-center" style="height: 100px;">
+            <span class="fw-bold text-muted">National Museum</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 col-lg-2 text-center">
+          <div class="p-4 border border-gold rounded d-flex align-items-center justify-content-center" style="height: 100px;">
+            <span class="fw-bold text-muted">Cultural Trust</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 col-lg-2 text-center">
+          <div class="p-4 border border-gold rounded d-flex align-items-center justify-content-center" style="height: 100px;">
+            <span class="fw-bold text-muted">Royal Academy</span>
+          </div>
         </div>
       </div>
     </div>
@@ -138,8 +234,8 @@
   <!-- CTA -->
   <section class="py-5 bg-navy text-white text-center">
     <div class="container py-4">
-      <h2 class="display-5 mb-3">Become a Member</h2>
-      <p class="lead mb-4">Join our distinguished community today</p>
+      <h2 class="display-5 text-white mb-3">Become a Member</h2>
+      <p class="lead mb-4" style="color: var(--text-light);">Join our distinguished community today</p>
       <a href="contact.html" class="btn btn-gold btn-lg px-5">Apply for Membership</a>
     </div>
   </section>
@@ -148,29 +244,39 @@
   <footer class="py-5 bg-navy">
     <div class="container">
       <div class="row g-4">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <h5 class="footer-title mb-3">The <span class="text-gold">Society</span></h5>
           <p class="footer-text mb-1">456 Heritage Lane</p>
-          <p class="footer-text">info@thesociety.example</p>
+          <p class="footer-text mb-1">info@thesociety.example</p>
+          <p class="footer-text">+1 (555) 789-0123</p>
         </div>
-        <div class="col-md-4">
-          <h5 class="footer-title mb-3">Quick Links</h5>
+        <div class="col-md-3">
+          <h5 class="footer-title mb-3">Navigation</h5>
           <ul class="list-unstyled">
-            <li><a href="about.html" class="footer-link">About</a></li>
-            <li><a href="events.html" class="footer-link">Events</a></li>
-            <li><a href="contact.html" class="footer-link">Contact</a></li>
+            <li class="mb-1"><a href="index.html" class="footer-link">Home</a></li>
+            <li class="mb-1"><a href="about.html" class="footer-link">About</a></li>
+            <li class="mb-1"><a href="events.html" class="footer-link">Events</a></li>
+            <li class="mb-1"><a href="gallery.html" class="footer-link">Gallery</a></li>
+            <li class="mb-1"><a href="contact.html" class="footer-link">Contact</a></li>
           </ul>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <h5 class="footer-title mb-3">Connect</h5>
-          <div class="d-flex gap-2">
-            <a href="#" class="btn btn-outline-light btn-sm">Facebook</a>
-            <a href="#" class="btn btn-outline-light btn-sm">LinkedIn</a>
+          <div class="d-flex flex-column gap-2">
+            <a href="#" class="footer-link">Facebook</a>
+            <a href="#" class="footer-link">LinkedIn</a>
+            <a href="#" class="footer-link">Twitter</a>
           </div>
+        </div>
+        <div class="col-md-3">
+          <h5 class="footer-title mb-3">Office Hours</h5>
+          <p class="footer-text mb-1">Mon - Fri: 9:00 - 17:00</p>
+          <p class="footer-text mb-1">Saturday: By appointment</p>
+          <p class="footer-text">Sunday: Closed</p>
         </div>
       </div>
       <hr class="my-4" style="border-color: rgba(255,255,255,0.2);">
-      <p class="text-center footer-muted small mb-0">© 2026 The Society • Heritage Theme Demo</p>
+      <p class="text-center footer-muted small mb-0">&copy; 2026 The Society. All rights reserved.</p>
     </div>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

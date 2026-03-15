@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gallery - Tricolore Theme Demo</title>
+  <title>Gallery - MotoItalia | Tricolore Theme</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -18,23 +18,34 @@
     body { font-family: 'Montserrat', system-ui, sans-serif; background: var(--bianco); color: var(--ink); line-height: 1.6; }
     .container { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
     a { color: var(--ink); text-decoration: none; }
-    
+
     /* === TRICOLORE RIBBON === */
     .tricolore-ribbon { height: 6px; display: flex; }
     .tricolore-ribbon span { flex: 1; }
     .tricolore-ribbon .verde { background: var(--verde); }
     .tricolore-ribbon .bianco { background: white; }
     .tricolore-ribbon .rosso { background: var(--rosso); }
-    
+
     /* === NAV === */
     nav { background: white; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
     nav .container { display: flex; justify-content: space-between; align-items: center; }
     .logo { font-weight: 900; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
-    .logo-badge { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(90deg, var(--verde) 33%, white 33%, white 66%, var(--rosso) 66%); border: 2px solid var(--ink); }
+    .logo-badge {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(90deg, var(--verde) 33%, white 33%, white 66%, var(--rosso) 66%);
+      border: 2px solid var(--ink);
+    }
+    .nav-links { display: flex; align-items: center; gap: 2.5rem; }
     nav ul { list-style: none; display: flex; gap: 2.5rem; }
     nav a { font-weight: 600; font-size: 0.9rem; color: var(--gray); transition: color 0.2s; }
     nav a:hover, nav a.active { color: var(--rosso); }
-    
+    .btn-join {
+      display: inline-block; padding: 0.6rem 1.5rem; background: var(--verde);
+      color: white; font-weight: 700; font-size: 0.85rem; border-radius: 8px;
+      transition: all 0.3s; text-transform: uppercase; letter-spacing: 0.03em;
+    }
+    .btn-join:hover { background: var(--rosso); color: white; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(206,43,55,0.3); }
+
     /* === HEADER === */
     .header {
       background: linear-gradient(135deg, var(--verde) 0%, #00a650 100%);
@@ -46,9 +57,21 @@
     }
     .header h1 { font-size: 3rem; font-weight: 900; margin-bottom: 0.5rem; }
     .header p { opacity: 0.9; font-size: 1.1rem; }
-    
+
+    /* === FILTER BUTTONS === */
+    .filter-section { padding: 2rem 0 0; }
+    .filter-tabs { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+    .filter-tab {
+      padding: 0.6rem 1.5rem; border-radius: 50px; font-weight: 700;
+      font-size: 0.85rem; cursor: pointer; transition: all 0.3s;
+      background: white; color: var(--gray); border: 2px solid #e0e0e0;
+      font-family: inherit;
+    }
+    .filter-tab:hover { border-color: var(--verde); color: var(--verde); }
+    .filter-tab.active { background: var(--verde); color: white; border-color: var(--verde); }
+
     /* === MASONRY GALLERY === */
-    .section { padding: 4rem 0; }
+    .section { padding: 3rem 0 5rem; }
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -57,44 +80,42 @@
     }
     @media (max-width: 900px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 600px) { .gallery-grid { grid-template-columns: 1fr; } }
-    
+
     .gallery-item {
       border-radius: 16px; overflow: hidden; position: relative;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 4rem; cursor: pointer; transition: all 0.3s;
+      cursor: pointer; transition: all 0.3s;
+      background-size: cover; background-position: center;
     }
     .gallery-item:hover { transform: scale(1.02); z-index: 10; }
     .gallery-item:hover .gallery-overlay { opacity: 1; }
-    
+
     /* Tricolore accent borders */
     .gallery-item::before {
       content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 5px;
       background: linear-gradient(90deg, var(--verde), white, var(--rosso));
       z-index: 10;
     }
-    
-    /* Colors */
-    .g-verde { background: linear-gradient(135deg, var(--verde), #00a650); }
-    .g-rosso { background: linear-gradient(135deg, var(--rosso), #e03040); }
-    .g-oro { background: linear-gradient(135deg, var(--oro), #d4a82a); }
-    .g-blue { background: linear-gradient(135deg, #0066cc, #0088ff); }
-    .g-ink { background: linear-gradient(135deg, var(--ink), #333); }
-    .g-bianco { background: linear-gradient(135deg, #e8e8e8, #f5f5f5); color: var(--ink); }
-    
+
     /* Sizes */
     .g-tall { grid-row: span 2; }
     .g-wide { grid-column: span 2; }
     @media (max-width: 600px) { .g-tall, .g-wide { grid-row: span 1; grid-column: span 1; } }
-    
+
     /* Overlay */
     .gallery-overlay {
-      position: absolute; inset: 0; background: rgba(0,0,0,0.7);
+      position: absolute; inset: 0; background: rgba(0,0,0,0.65);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       opacity: 0; transition: opacity 0.3s; color: white; padding: 1.5rem; text-align: center;
     }
     .gallery-overlay h4 { font-weight: 800; font-size: 1.1rem; margin-bottom: 0.3rem; }
-    .gallery-overlay p { font-size: 0.85rem; opacity: 0.8; }
-    
+    .gallery-overlay p { font-size: 0.85rem; opacity: 0.8; margin-bottom: 0.75rem; }
+    .gallery-overlay .view-btn {
+      display: inline-block; padding: 0.4rem 1.2rem; background: var(--oro);
+      color: white; font-weight: 700; font-size: 0.75rem; border-radius: 50px;
+      text-transform: uppercase; letter-spacing: 0.05em; transition: all 0.2s;
+    }
+    .gallery-overlay .view-btn:hover { background: white; color: var(--ink); }
+
     /* Cockade decoration */
     .gallery-cockade {
       position: absolute; top: 15px; right: 15px;
@@ -102,12 +123,92 @@
       background: conic-gradient(var(--verde) 0deg 120deg, white 120deg 240deg, var(--rosso) 240deg 360deg);
       z-index: 10; border: 2px solid white;
     }
-    
+
+    /* === LIGHTBOX === */
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.92); align-items: center; justify-content: center;
+      padding: 2rem;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox-content {
+      position: relative; max-width: 900px; width: 100%;
+    }
+    .lightbox-content img {
+      width: 100%; max-height: 80vh; object-fit: contain;
+      border-radius: 12px;
+    }
+    .lightbox-caption {
+      text-align: center; color: white; padding: 1rem 0;
+      font-weight: 700; font-size: 1.1rem;
+    }
+    .lightbox-caption span { display: block; font-weight: 400; font-size: 0.85rem; opacity: 0.7; }
+    .lightbox-close {
+      position: absolute; top: -50px; right: 0;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.15); border: none;
+      color: white; font-size: 1.5rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .lightbox-close:hover { background: var(--rosso); }
+    .lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 50px; height: 50px; border-radius: 50%;
+      background: rgba(255,255,255,0.15); border: none;
+      color: white; font-size: 1.5rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .lightbox-nav:hover { background: var(--verde); }
+    .lightbox-prev { left: -70px; }
+    .lightbox-next { right: -70px; }
+    @media (max-width: 900px) {
+      .lightbox-prev { left: 0; }
+      .lightbox-next { right: 0; }
+    }
+
+    /* === SHARE CTA === */
+    .share-cta {
+      background: linear-gradient(135deg, var(--rosso), #e03040);
+      color: white; padding: 4rem 0; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .share-cta::before, .share-cta::after {
+      content: ''; position: absolute; width: 150px; height: 150px;
+      border: 20px solid rgba(255,255,255,0.1); border-radius: 50%;
+    }
+    .share-cta::before { top: -50px; left: -50px; }
+    .share-cta::after { bottom: -50px; right: -50px; }
+    .share-cta h2 { font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem; position: relative; }
+    .share-cta p { opacity: 0.9; margin-bottom: 1.5rem; position: relative; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .btn-white { display: inline-block; padding: 1rem 2rem; background: white; color: var(--rosso); font-weight: 700; border-radius: 8px; transition: all 0.3s; position: relative; }
+    .btn-white:hover { background: var(--oro); color: white; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+
     /* === FOOTER === */
-    footer { background: var(--ink); color: white; padding: 2rem 0; text-align: center; }
-    footer a { color: rgba(255,255,255,0.7); margin: 0 1rem; font-size: 0.9rem; }
+    footer { background: var(--ink); color: white; padding: 3rem 0 1.5rem; }
+    .footer-ribbon { height: 4px; display: flex; margin-bottom: 2.5rem; }
+    .footer-ribbon span { flex: 1; }
+    .footer-ribbon .verde { background: var(--verde); }
+    .footer-ribbon .bianco { background: white; }
+    .footer-ribbon .rosso { background: var(--rosso); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    footer h4 { font-weight: 700; margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .footer-brand { display: flex; align-items: center; gap: 0.75rem; font-weight: 900; font-size: 1.3rem; margin-bottom: 1rem; }
+    footer p { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+    footer a { color: rgba(255,255,255,0.7); font-size: 0.9rem; display: block; margin-bottom: 0.5rem; transition: color 0.2s; }
     footer a:hover { color: var(--oro); }
-    footer p { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 1rem; }
+    .footer-social { display: flex; gap: 1rem; margin-top: 1rem; }
+    .footer-social a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); color: white; font-size: 0.85rem;
+      font-weight: 700; transition: all 0.3s; margin-bottom: 0;
+    }
+    .footer-social a:hover { background: var(--oro); color: white; transform: translateY(-2px); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; text-align: center; }
+    .footer-bottom p { font-size: 0.85rem; color: rgba(255,255,255,0.5); }
     .footer-tricolore { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; }
     .footer-tricolore span { width: 30px; height: 4px; border-radius: 2px; }
   </style>
@@ -125,13 +226,16 @@
         <span class="logo-badge"></span>
         MotoItalia
       </a>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="events.html">Routes</a></li>
-        <li><a href="gallery.html" class="active">Gallery</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
+      <div class="nav-links">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="gallery.html" class="active">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <a href="contact.html" class="btn-join">Join</a>
+      </div>
     </div>
   </nav>
 
@@ -140,102 +244,264 @@
     <p>Unforgettable moments on Italian roads</p>
   </section>
 
-  <section class="section">
+  <section class="filter-section">
     <div class="container">
-      <div class="gallery-grid">
-        <div class="gallery-item g-verde g-tall">
-          <span class="gallery-cockade"></span>
-          🏔️
-          <div class="gallery-overlay">
-            <h4>Passo dello Stelvio</h4>
-            <p>Alto Adige • 48 tornanti</p>
-          </div>
-        </div>
-        
-        <div class="gallery-item g-rosso g-wide">
-          🌊
-          <div class="gallery-overlay">
-            <h4>Costiera Amalfitana</h4>
-            <p>Campania • Mare e limoni</p>
-          </div>
-        </div>
-        
-        <div class="gallery-item g-oro">
-          🏛️
-          <div class="gallery-overlay">
-            <h4>Toscana</h4>
-            <p>Colline e cipressi</p>
-          </div>
-        </div>
-        
-        <div class="gallery-item g-blue">
-          🌋
-          <div class="gallery-overlay">
-            <h4>Etna</h4>
-            <p>Sicilia • Vulcano attivo</p>
-          </div>
-        </div>
-        
-        <div class="gallery-item g-ink g-tall">
-          <span class="gallery-cockade"></span>
-          🏎️
-          <div class="gallery-overlay">
-            <h4>Motor Valley</h4>
-            <p>Emilia-Romagna</p>
-          </div>
-        </div>
-        
-        <div class="gallery-item g-bianco">
-          🏰
-          <div class="gallery-overlay">
-            <h4>Dolomiti</h4>
-            <p>Trentino • Patrimonio UNESCO</p>
-          </div>
-        </div>
-        
-        <div class="gallery-item g-verde">
-          🍷
-          <div class="gallery-overlay">
-            <h4>Langhe</h4>
-            <p>Piemonte • Vigneti</p>
-          </div>
-        </div>
-        
-        <div class="gallery-item g-rosso g-wide">
-          <span class="gallery-cockade"></span>
-          🏍️
-          <div class="gallery-overlay">
-            <h4>Raduno Nazionale</h4>
-            <p>500+ motociclisti</p>
-          </div>
-        </div>
-        
-        <div class="gallery-item g-oro">
-          ⛵
-          <div class="gallery-overlay">
-            <h4>Cinque Terre</h4>
-            <p>Liguria • Costa</p>
-          </div>
-        </div>
+      <div class="filter-tabs">
+        <button class="filter-tab active">All</button>
+        <button class="filter-tab">Events</button>
+        <button class="filter-tab">Club Life</button>
+        <button class="filter-tab">Rides</button>
+        <button class="filter-tab">Members</button>
       </div>
     </div>
   </section>
 
+  <section class="section">
+    <div class="container">
+      <div class="gallery-grid">
+
+        <div class="gallery-item g-tall"
+             style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600');"
+             data-full="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200"
+             data-title="Stelvio Pass Ride"
+             data-desc="South Tyrol -- Alpine adventure">
+          <span class="gallery-cockade"></span>
+          <div class="gallery-overlay">
+            <h4>Stelvio Pass Ride</h4>
+            <p>South Tyrol -- Alpine adventure</p>
+            <span class="view-btn">View</span>
+          </div>
+        </div>
+
+        <div class="gallery-item g-wide"
+             style="background-image: url('https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600');"
+             data-full="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=1200"
+             data-title="Amalfi Coast Road"
+             data-desc="Campania -- Sea and lemons">
+          <div class="gallery-overlay">
+            <h4>Amalfi Coast Road</h4>
+            <p>Campania -- Sea and lemons</p>
+            <span class="view-btn">View</span>
+          </div>
+        </div>
+
+        <div class="gallery-item"
+             style="background-image: url('https://images.unsplash.com/photo-1558980664-769d59546b3d?w=600');"
+             data-full="https://images.unsplash.com/photo-1558980664-769d59546b3d?w=1200"
+             data-title="Tuscan Hills"
+             data-desc="Toscana -- Cypress-lined roads">
+          <div class="gallery-overlay">
+            <h4>Tuscan Hills</h4>
+            <p>Toscana -- Cypress-lined roads</p>
+            <span class="view-btn">View</span>
+          </div>
+        </div>
+
+        <div class="gallery-item"
+             style="background-image: url('https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=600');"
+             data-full="https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=1200"
+             data-title="Club Meetup"
+             data-desc="Milano -- Monthly gathering">
+          <div class="gallery-overlay">
+            <h4>Club Meetup</h4>
+            <p>Milano -- Monthly gathering</p>
+            <span class="view-btn">View</span>
+          </div>
+        </div>
+
+        <div class="gallery-item g-tall"
+             style="background-image: url('https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=600');"
+             data-full="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=1200"
+             data-title="Motor Valley Tour"
+             data-desc="Emilia-Romagna -- Land of engines">
+          <span class="gallery-cockade"></span>
+          <div class="gallery-overlay">
+            <h4>Motor Valley Tour</h4>
+            <p>Emilia-Romagna -- Land of engines</p>
+            <span class="view-btn">View</span>
+          </div>
+        </div>
+
+        <div class="gallery-item"
+             style="background-image: url('https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=600');"
+             data-full="https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=1200"
+             data-title="Dolomites Dawn"
+             data-desc="Trentino -- UNESCO Heritage">
+          <div class="gallery-overlay">
+            <h4>Dolomites Dawn</h4>
+            <p>Trentino -- UNESCO Heritage</p>
+            <span class="view-btn">View</span>
+          </div>
+        </div>
+
+        <div class="gallery-item"
+             style="background-image: url('https://images.unsplash.com/photo-1525160354320-d8e92641c563?w=600');"
+             data-full="https://images.unsplash.com/photo-1525160354320-d8e92641c563?w=1200"
+             data-title="Langhe Vineyards"
+             data-desc="Piemonte -- Wine country rides">
+          <div class="gallery-overlay">
+            <h4>Langhe Vineyards</h4>
+            <p>Piemonte -- Wine country rides</p>
+            <span class="view-btn">View</span>
+          </div>
+        </div>
+
+        <div class="gallery-item g-wide"
+             style="background-image: url('https://images.unsplash.com/photo-1558618047-f4b511aae2de?w=600');"
+             data-full="https://images.unsplash.com/photo-1558618047-f4b511aae2de?w=1200"
+             data-title="National Rally 2025"
+             data-desc="500+ riders together">
+          <span class="gallery-cockade"></span>
+          <div class="gallery-overlay">
+            <h4>National Rally 2025</h4>
+            <p>500+ riders together</p>
+            <span class="view-btn">View</span>
+          </div>
+        </div>
+
+        <div class="gallery-item"
+             style="background-image: url('https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=600');"
+             data-full="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=1200"
+             data-title="Cinque Terre Coast"
+             data-desc="Liguria -- Coastal jewels">
+          <div class="gallery-overlay">
+            <h4>Cinque Terre Coast</h4>
+            <p>Liguria -- Coastal jewels</p>
+            <span class="view-btn">View</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="share-cta">
+    <div class="container">
+      <h2>Share Your Memories</h2>
+      <p>Took amazing photos on a ride or at an event? We would love to feature them in our gallery. Send us your best shots!</p>
+      <a href="contact.html" class="btn-white">Submit Photos</a>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightbox-close" aria-label="Close lightbox">&times;</button>
+      <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous image">&#8249;</button>
+      <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next image">&#8250;</button>
+      <img id="lightbox-img" src="" alt="Gallery image">
+      <div class="lightbox-caption">
+        <strong id="lightbox-title"></strong>
+        <span id="lightbox-desc"></span>
+      </div>
+    </div>
+  </div>
+
   <footer>
     <div class="container">
-      <div class="footer-tricolore">
-        <span style="background: var(--verde);"></span>
-        <span style="background: white;"></span>
-        <span style="background: var(--rosso);"></span>
+      <div class="footer-ribbon">
+        <span class="verde"></span>
+        <span class="bianco"></span>
+        <span class="rosso"></span>
       </div>
-      <div>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="events.html">Routes</a>
-        <a href="contact.html">Contact</a>
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <span class="logo-badge" style="width:28px;height:28px;"></span>
+            MotoItalia
+          </div>
+          <p>The passion for two wheels and the Bel Paese, since 2010.</p>
+          <p style="margin-top: 1rem;">Via Roma 42, Milano, Italia</p>
+          <p>info@motoitalia.example</p>
+          <p>+39 02 1234567</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook">Fb</a>
+            <a href="#" aria-label="Instagram">Ig</a>
+            <a href="#" aria-label="YouTube">Yt</a>
+          </div>
+        </div>
+        <div>
+          <h4>Navigate</h4>
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="events.html">Events</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div>
+          <h4>Community</h4>
+          <a href="#">Forum</a>
+          <a href="events.html">Events</a>
+          <a href="#">Rallies</a>
+          <a href="#">Newsletter</a>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <a href="contact.html">Write Us</a>
+          <a href="mailto:info@motoitalia.example">info@motoitalia.example</a>
+          <a href="tel:+390212345678">+39 02 1234567</a>
+        </div>
       </div>
-      <p>© 2026 MotoItalia • Tricolore Theme Demo</p>
+      <div class="footer-bottom">
+        <div class="footer-tricolore">
+          <span style="background: var(--verde);"></span>
+          <span style="background: white;"></span>
+          <span style="background: var(--rosso);"></span>
+        </div>
+        <p>&copy; 2026 MotoItalia. All rights reserved. Made with passion in Italy.</p>
+      </div>
     </div>
   </footer>
+
+  <script>
+    (function() {
+      var items = document.querySelectorAll('.gallery-item');
+      var lightbox = document.getElementById('lightbox');
+      var lbImg = document.getElementById('lightbox-img');
+      var lbTitle = document.getElementById('lightbox-title');
+      var lbDesc = document.getElementById('lightbox-desc');
+      var currentIndex = 0;
+
+      function openLightbox(index) {
+        currentIndex = index;
+        var item = items[index];
+        lbImg.src = item.getAttribute('data-full');
+        lbImg.alt = item.getAttribute('data-title');
+        lbTitle.textContent = item.getAttribute('data-title');
+        lbDesc.textContent = item.getAttribute('data-desc');
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      function navigate(dir) {
+        currentIndex = (currentIndex + dir + items.length) % items.length;
+        openLightbox(currentIndex);
+      }
+
+      items.forEach(function(item, i) {
+        item.addEventListener('click', function() { openLightbox(i); });
+      });
+
+      document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+      document.getElementById('lightbox-prev').addEventListener('click', function() { navigate(-1); });
+      document.getElementById('lightbox-next').addEventListener('click', function() { navigate(1); });
+
+      lightbox.addEventListener('click', function(e) {
+        if (e.target === lightbox) closeLightbox();
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (!lightbox.classList.contains('active')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') navigate(-1);
+        if (e.key === 'ArrowRight') navigate(1);
+      });
+    })();
+  </script>
 </body>
 </html>

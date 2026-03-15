@@ -17,19 +17,25 @@
     body { font-family: system-ui, -apple-system, sans-serif; background: var(--cream); color: var(--text); line-height: 1.6; }
     a { color: var(--forest); }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
-    
+
     /* Nav */
     nav { background: var(--forest); padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
     nav .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
     .logo { color: white; text-decoration: none; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; }
     .logo span { color: var(--accent); }
-    nav ul { list-style: none; display: flex; gap: 2rem; flex-wrap: wrap; }
-    nav ul a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 500; transition: color 0.2s; }
-    nav ul a:hover, nav ul a.active { color: var(--accent); }
-    
+    .nav-center { list-style: none; display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; }
+    .nav-center a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .nav-center a:hover, .nav-center a.active { color: var(--accent); }
+    .nav-cta {
+      display: inline-block; padding: 0.5rem 1.25rem; background: var(--accent); color: white;
+      text-decoration: none; font-weight: 700; border-radius: 2px; font-size: 0.9rem;
+      transition: all 0.3s ease; letter-spacing: 0.02em;
+    }
+    .nav-cta:hover { background: #ff6b0a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(232,93,4,0.3); }
+
     /* Header with diagonal */
-    .header { 
-      background: linear-gradient(135deg, var(--forest) 0%, #3d6b1e 100%); 
+    .header {
+      background: linear-gradient(135deg, var(--forest) 0%, #3d6b1e 100%);
       color: white; padding: 4rem 0 6rem; text-align: center;
       position: relative; overflow: hidden;
     }
@@ -40,58 +46,128 @@
     }
     .header h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; }
     .header p { opacity: 0.9; }
-    
+
     /* Section */
     .section { padding: 4rem 0; }
-    
-    /* Gallery Note */
-    .gallery-note { 
-      background: white; border-left: 4px solid var(--accent); 
-      padding: 1.25rem 1.5rem; margin-bottom: 2rem; 
-      display: flex; align-items: center; gap: 0.75rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+
+    /* Filter Buttons */
+    .filter-buttons {
+      display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem;
+      justify-content: center;
     }
-    .gallery-note p { color: var(--text-light); font-size: 0.95rem; }
-    .gallery-note strong { color: var(--forest); }
-    
+    .filter-btn {
+      padding: 0.5rem 1.25rem; border: 2px solid var(--forest); background: transparent;
+      color: var(--forest); font-weight: 600; font-size: 0.9rem; cursor: pointer;
+      border-radius: 2px; transition: all 0.3s ease; font-family: inherit;
+    }
+    .filter-btn:hover { background: var(--forest); color: white; }
+    .filter-btn.active { background: var(--forest); color: white; }
+
     /* Gallery Grid */
-    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-    .gallery-item { 
-      background: white; border-left: 4px solid var(--accent); 
-      padding: 1rem; text-align: center; 
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .gallery-item {
+      background: white; border-left: 4px solid var(--accent);
+      overflow: hidden; cursor: pointer;
       transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
-    .gallery-item:hover { 
-      transform: translateY(-4px); 
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
+    .gallery-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     }
-    .gallery-placeholder { 
-      background: linear-gradient(135deg, var(--forest), #3d6b1e); 
-      height: 180px; display: flex; align-items: center; justify-content: center; 
-      color: white; font-size: 3rem; margin-bottom: 1rem;
+    .gallery-item img {
+      width: 100%; height: 220px; object-fit: cover; display: block;
       transition: transform 0.3s ease;
     }
-    .gallery-item:hover .gallery-placeholder { transform: scale(1.02); }
-    .gallery-item h4 { color: var(--forest); margin-bottom: 0.3rem; font-weight: 700; }
-    .gallery-item p { color: var(--text-light); font-size: 0.85rem; }
-    
+    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-caption {
+      padding: 1rem 1.25rem;
+    }
+    .gallery-caption h4 { color: var(--forest); margin-bottom: 0.25rem; font-weight: 700; }
+    .gallery-caption p { color: var(--text-light); font-size: 0.85rem; }
+
+    /* Upload CTA */
+    .upload-cta {
+      background: linear-gradient(135deg, var(--earth), #7d3e15);
+      color: white; padding: 4rem 0; text-align: center; position: relative;
+    }
+    .upload-cta::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 60px; background: var(--cream);
+      clip-path: polygon(0 0, 100% 0, 100% 100%);
+    }
+    .upload-cta h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .upload-cta p { opacity: 0.9; margin-bottom: 1.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .btn {
+      display: inline-block; padding: 0.6rem 1.4rem; background: var(--forest);
+      color: white; text-decoration: none; font-weight: 700; border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .btn:hover { background: var(--accent); transform: translateY(-2px); }
+    .btn-accent { background: var(--accent); color: white; }
+    .btn-accent:hover { background: #ff6b0a; box-shadow: 0 4px 12px rgba(232,93,4,0.3); }
+
+    /* Lightbox */
+    .lightbox-overlay {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.9); z-index: 1000;
+      align-items: center; justify-content: center; flex-direction: column;
+    }
+    .lightbox-overlay.active { display: flex; }
+    .lightbox-overlay img {
+      max-width: 90vw; max-height: 80vh; object-fit: contain; border-radius: 2px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    .lightbox-caption {
+      color: white; margin-top: 1rem; font-size: 1.1rem; font-weight: 600; text-align: center;
+    }
+    .lightbox-close {
+      position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none;
+      color: white; font-size: 2rem; cursor: pointer; width: 48px; height: 48px;
+      display: flex; align-items: center; justify-content: center;
+      transition: color 0.2s;
+    }
+    .lightbox-close:hover { color: var(--accent); }
+    .lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: none; border: none; color: white; font-size: 2.5rem;
+      cursor: pointer; padding: 1rem; transition: color 0.2s;
+    }
+    .lightbox-nav:hover { color: var(--accent); }
+    .lightbox-prev { left: 1rem; }
+    .lightbox-next { right: 1rem; }
+
     /* Footer */
-    footer { background: #1a1a1a; color: #aaa; padding: 2rem 0; text-align: center; }
+    footer { background: #1a1a1a; color: #aaa; padding: 3rem 0 1.5rem; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+    footer h4 { color: white; margin-bottom: 1rem; font-weight: 700; }
     footer a { color: #aaa; text-decoration: none; transition: color 0.2s; }
     footer a:hover { color: var(--accent); }
+    footer ul { list-style: none; }
+    footer ul li { margin-bottom: 0.4rem; }
+    footer hr { border: none; border-top: 1px solid #333; margin-bottom: 1.5rem; }
+    .footer-copy { text-align: center; font-size: 0.85rem; color: #666; }
+    .social-links { display: flex; gap: 1rem; margin-top: 1rem; }
+    .social-links a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 50%; background: #333;
+      color: #aaa; text-decoration: none; font-size: 0.85rem; font-weight: 700;
+      transition: all 0.3s ease;
+    }
+    .social-links a:hover { background: var(--accent); color: white; }
   </style>
 </head>
 <body>
   <nav>
     <div class="container">
       <a href="index.html" class="logo">Green<span>Org</span></a>
-      <ul>
+      <ul class="nav-center">
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="events.html">Events</a></li>
         <li><a href="gallery.html" class="active">Gallery</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
+      <a href="contact.html" class="nav-cta">Join Us</a>
     </div>
   </nav>
 
@@ -102,51 +178,220 @@
 
   <section class="section">
     <div class="container">
-      <div class="gallery-note">
-        <span style="font-size: 1.5rem;">🌱</span>
-        <p><strong>Eco-Friendly Design:</strong> This gallery uses CSS placeholders instead of images to minimize bandwidth and environmental impact.</p>
+      <!-- Filter Buttons -->
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="events">Events</button>
+        <button class="filter-btn" data-filter="community">Community</button>
+        <button class="filter-btn" data-filter="nature">Nature</button>
+        <button class="filter-btn" data-filter="volunteer">Volunteer</button>
       </div>
-      
+
       <div class="gallery-grid">
-        <div class="gallery-item">
-          <div class="gallery-placeholder">🌱</div>
-          <h4>Community Garden</h4>
-          <p>Spring planting season 2025</p>
+        <div class="gallery-item" data-category="nature" data-index="0">
+          <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600" alt="Sunlight streaming through a dense forest canopy" data-full="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200">
+          <div class="gallery-caption">
+            <h4>Forest Conservation</h4>
+            <p>Preserving old-growth woodlands in our region</p>
+          </div>
         </div>
-        <div class="gallery-item">
-          <div class="gallery-placeholder">🌳</div>
-          <h4>Tree Planting</h4>
-          <p>100 trees planted in 2024</p>
+        <div class="gallery-item" data-category="volunteer" data-index="1">
+          <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600" alt="Hands planting a small seedling in rich soil" data-full="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1200">
+          <div class="gallery-caption">
+            <h4>Spring Planting</h4>
+            <p>Volunteers planting seedlings during our 2025 garden day</p>
+          </div>
         </div>
-        <div class="gallery-item">
-          <div class="gallery-placeholder">🌊</div>
-          <h4>River Cleanup</h4>
-          <p>50 volunteers, 200 lbs collected</p>
+        <div class="gallery-item" data-category="community" data-index="2">
+          <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600" alt="Community volunteers gathered for an outdoor event" data-full="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1200">
+          <div class="gallery-caption">
+            <h4>Community Outreach</h4>
+            <p>Bringing people together for a greener future</p>
+          </div>
         </div>
-        <div class="gallery-item">
-          <div class="gallery-placeholder">📚</div>
-          <h4>Workshop Series</h4>
-          <p>Sustainability education</p>
+        <div class="gallery-item" data-category="nature" data-index="3">
+          <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600" alt="Golden sunlight over a vast nature landscape with mountains" data-full="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200">
+          <div class="gallery-caption">
+            <h4>Nature Landscape</h4>
+            <p>The stunning vistas that inspire our conservation work</p>
+          </div>
         </div>
-        <div class="gallery-item">
-          <div class="gallery-placeholder">🤝</div>
-          <h4>Community Fair</h4>
-          <p>Annual celebration</p>
+        <div class="gallery-item" data-category="events" data-index="4">
+          <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=600" alt="Vibrant garden with wildflowers and lush greenery" data-full="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=1200">
+          <div class="gallery-caption">
+            <h4>Community Garden</h4>
+            <p>Our award-winning community garden in full bloom</p>
+          </div>
         </div>
-        <div class="gallery-item">
-          <div class="gallery-placeholder">♻️</div>
-          <h4>Recycling Drive</h4>
-          <p>Monthly collection events</p>
+        <div class="gallery-item" data-category="volunteer" data-index="5">
+          <img src="https://images.unsplash.com/photo-1497250681960-ef046c08a56e?w=600" alt="Collection of potted green plants on a wooden shelf" data-full="https://images.unsplash.com/photo-1497250681960-ef046c08a56e?w=1200">
+          <div class="gallery-caption">
+            <h4>Urban Gardening</h4>
+            <p>Bringing nature into urban spaces, one pot at a time</p>
+          </div>
+        </div>
+        <div class="gallery-item" data-category="nature" data-index="6">
+          <img src="https://images.unsplash.com/photo-1416169607655-0c2b3ce2e1cc?w=600" alt="Close-up of delicate wildflowers and morning dew" data-full="https://images.unsplash.com/photo-1416169607655-0c2b3ce2e1cc?w=1200">
+          <div class="gallery-caption">
+            <h4>Wildflower Meadow</h4>
+            <p>Native wildflowers thriving in our restored meadow</p>
+          </div>
+        </div>
+        <div class="gallery-item" data-category="events" data-index="7">
+          <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=600" alt="Sorted recyclable materials in bins" data-full="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=1200">
+          <div class="gallery-caption">
+            <h4>Recycling Drive</h4>
+            <p>Monthly collection events keeping waste out of landfills</p>
+          </div>
+        </div>
+        <div class="gallery-item" data-category="community" data-index="8">
+          <img src="https://images.unsplash.com/photo-1574263867128-a3d5c6cb42b0?w=600" alt="Group of volunteers working together on a community project" data-full="https://images.unsplash.com/photo-1574263867128-a3d5c6cb42b0?w=1200">
+          <div class="gallery-caption">
+            <h4>Teamwork in Action</h4>
+            <p>Volunteers building a community greenhouse together</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Share Your Memories CTA -->
+  <section class="upload-cta">
+    <div class="container">
+      <h2>Share Your Memories</h2>
+      <p>Were you part of one of our events? We would love to see your photos. Upload your best shots and help us tell our story.</p>
+      <a href="contact.html" class="btn btn-accent">Upload Photos</a>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox-overlay" id="lightbox">
+    <button class="lightbox-close" aria-label="Close lightbox">&times;</button>
+    <button class="lightbox-nav lightbox-prev" aria-label="Previous image">&#8249;</button>
+    <button class="lightbox-nav lightbox-next" aria-label="Next image">&#8250;</button>
+    <img src="" alt="" id="lightbox-img">
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+  </div>
+
   <footer>
     <div class="container">
-      <p>© 2026 GreenOrg • Terra Theme Demo</p>
-      <p style="margin-top: 0.5rem;"><a href="index.html">Home</a> · <a href="about.html">About</a> · <a href="contact.html">Contact</a></p>
+      <div class="footer-grid">
+        <div>
+          <h4>GreenOrg</h4>
+          <p style="font-size: 0.9rem; line-height: 1.8;">
+            789 Nature Way<br>
+            Green Valley<br>
+            <a href="mailto:info@greenorg.example">info@greenorg.example</a><br>
+            <a href="tel:+15554567890">+1 (555) 456-7890</a>
+          </p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook" title="Facebook">Fb</a>
+            <a href="#" aria-label="Instagram" title="Instagram">Ig</a>
+            <a href="#" aria-label="Twitter" title="Twitter">Tw</a>
+          </div>
+        </div>
+        <div>
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Sustainability Guide</a></li>
+            <li><a href="#">Partner Network</a></li>
+            <li><a href="#">Volunteer Handbook</a></li>
+            <li><a href="#">Annual Report</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <p class="footer-copy">&copy; 2026 GreenOrg &bull; Terra Theme Demo &bull; Built with minimal footprint</p>
     </div>
   </footer>
+
+  <script>
+    // Gallery filter functionality
+    document.querySelectorAll('.filter-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        var filter = this.getAttribute('data-filter');
+        document.querySelectorAll('.gallery-item').forEach(function(item) {
+          if (filter === 'all') {
+            item.style.display = '';
+          } else {
+            item.style.display = item.getAttribute('data-category') === filter ? '' : 'none';
+          }
+        });
+      });
+    });
+
+    // Lightbox functionality
+    var lightbox = document.getElementById('lightbox');
+    var lightboxImg = document.getElementById('lightbox-img');
+    var lightboxCaption = document.getElementById('lightbox-caption');
+    var currentIndex = 0;
+    var galleryItems = document.querySelectorAll('.gallery-item');
+
+    function getVisibleItems() {
+      var visible = [];
+      galleryItems.forEach(function(item) {
+        if (item.style.display !== 'none') visible.push(item);
+      });
+      return visible;
+    }
+
+    function openLightbox(item) {
+      var img = item.querySelector('img');
+      var caption = item.querySelector('h4');
+      lightboxImg.src = img.getAttribute('data-full') || img.src;
+      lightboxImg.alt = img.alt;
+      lightboxCaption.textContent = caption ? caption.textContent : '';
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      var visible = getVisibleItems();
+      for (var i = 0; i < visible.length; i++) {
+        if (visible[i] === item) { currentIndex = i; break; }
+      }
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function navigateLightbox(direction) {
+      var visible = getVisibleItems();
+      if (visible.length === 0) return;
+      currentIndex = (currentIndex + direction + visible.length) % visible.length;
+      openLightbox(visible[currentIndex]);
+    }
+
+    galleryItems.forEach(function(item) {
+      item.addEventListener('click', function() { openLightbox(this); });
+    });
+
+    document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+    document.querySelector('.lightbox-prev').addEventListener('click', function() { navigateLightbox(-1); });
+    document.querySelector('.lightbox-next').addEventListener('click', function() { navigateLightbox(1); });
+
+    lightbox.addEventListener('click', function(e) {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (!lightbox.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') navigateLightbox(-1);
+      if (e.key === 'ArrowRight') navigateLightbox(1);
+    });
+  </script>
 </body>
 </html>

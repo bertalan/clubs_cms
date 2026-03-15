@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags i18n %}
+
+{% block body_class %}page-federation{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<div class="page-federation">
+    <div class="container">
+        {# Header #}
+        <header class="page-federation__header">
+            <h1 class="page-federation__title">{{ page.title }}</h1>
+            {% if page.intro %}
+            <div class="page-federation__intro">
+                {{ page.intro|richtext }}
+            </div>
+            {% endif %}
+        </header>
+
+        {# Stats #}
+        {% if partner_count or event_count %}
+        <div class="page-federation__stats" aria-label="{% trans 'Federation statistics' %}">
+            <div class="page-federation__stat">
+                <span class="page-federation__stat-number">{{ partner_count }}</span>
+                <span class="page-federation__stat-label">{% trans "Partner Clubs" %}</span>
+            </div>
+            <div class="page-federation__stat">
+                <span class="page-federation__stat-number">{{ event_count }}</span>
+                <span class="page-federation__stat-label">{% trans "Shared Events" %}</span>
+            </div>
+        </div>
+        {% endif %}
+
+        {# How it works #}
+        {% if page.how_it_works %}
+        <section class="page-federation__section" aria-labelledby="how-heading">
+            <h2 id="how-heading" class="page-federation__section-title">{% trans "How It Works" %}</h2>
+            <div class="page-federation__steps">
+                {% for block in page.how_it_works %}
+                    {% include_block block %}
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {# CTA #}
+        {% if page.cta_text %}
+        <div class="page-federation__cta">
+            <a href="{% url 'federation_frontend:list' %}" class="btn btn-primary btn-lg">
+                {{ page.cta_text }}
+            </a>
+        </div>
+        {% endif %}
+
+        {# Partner clubs grid #}
+        {% if partner_clubs %}
+        <section class="page-federation__section" aria-labelledby="clubs-heading">
+            <h2 id="clubs-heading" class="page-federation__section-title">{% trans "Partner Clubs" %}</h2>
+            <div class="page-federation__grid">
+                {% for club in partner_clubs %}
+                <article class="federation-club-card">
+                    {% if club.logo_url %}
+                    <div class="federation-club-card__logo">
+                        <img src="{{ club.logo_url }}"
+                             alt="{{ club.name }}"
+                             loading="lazy">
+                    </div>
+                    {% else %}
+                    <div class="federation-club-card__logo federation-club-card__logo--placeholder" aria-hidden="true">
+                        <span>{{ club.name|truncatechars:2 }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="federation-club-card__content">
+                        <h3 class="federation-club-card__name">{{ club.name }}</h3>
+                        <span class="federation-club-card__code">{{ club.short_code }}</span>
+                        {% if club.description %}
+                        <p class="federation-club-card__description">{{ club.description }}</p>
+                        {% endif %}
+                        <div class="federation-club-card__stats">
+                            <span class="federation-club-card__stat">
+                                {{ club.event_count }} {% trans "events" %}
+                            </span>
+                            {% if club.created_at %}
+                            <span class="federation-club-card__stat">
+                                {% trans "since" %} {{ club.created_at|date:"M Y" }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        <div class="federation-club-card__actions">
+                            <a href="{% url 'federation_frontend:list' %}?club={{ club.short_code }}"
+                               class="federation-club-card__link">
+                                {% trans "View events" %} &rarr;
+                            </a>
+                            {% if club.base_url %}
+                            <a href="{{ club.base_url }}"
+                               target="_blank" rel="noopener noreferrer"
+                               class="federation-club-card__link federation-club-card__link--external">
+                                {% trans "Website" %} &#8599;
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {# FAQ #}
+        {% if page.faq %}
+        <section class="page-federation__section page-federation__faq" aria-labelledby="faq-heading">
+            <h2 id="faq-heading" class="page-federation__section-title">{% trans "Frequently Asked Questions" %}</h2>
+            {% for block in page.faq %}
+                {% include_block block %}
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        {# Body StreamField #}
+        {% if page.body %}
+        <div class="page-federation__body">
+            {% for block in page.body %}
+                {% include_block block %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

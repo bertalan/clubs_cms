@@ -100,16 +100,39 @@ class TestPasswordResetPage:
         assert response.status_code == 200
 
 
+@pytest.fixture
+def membership_plans_page():
+    """Create a published MembershipPlansPage under the root."""
+    from apps.website.models.pages import MembershipPlansPage
+    from wagtail.models import Page
+
+    if MembershipPlansPage.objects.exists():
+        return MembershipPlansPage.objects.first()
+    root = Page.objects.filter(depth=1).first()
+    home = root.get_children().first()
+    if home is None:
+        from wagtail.models import Site
+        home = root
+    page = MembershipPlansPage(
+        title="Diventa Socio",
+        slug="diventa-socio",
+        intro="<p>Test intro</p>",
+    )
+    home.add_child(instance=page)
+    page.save_revision().publish()
+    return page
+
+
 @pytest.mark.django_db
 class TestMembershipPlansPage:
-    """Membership plans page shows active products."""
+    """Membership plans Wagtail page shows active products."""
 
-    def test_plans_page_returns_200(self, client):
-        """GET /account/become-member/ returns 200."""
-        response = client.get("/it/account/become-member/")
+    def test_plans_page_returns_200(self, client, membership_plans_page):
+        """GET /diventa-socio/ returns 200."""
+        response = client.get(membership_plans_page.url)
         assert response.status_code == 200
 
-    def test_plans_page_shows_active_products(self, client):
+    def test_plans_page_shows_active_products(self, client, membership_plans_page):
         """Active products appear on the plans page."""
         from apps.website.models.snippets import Product
         Product.objects.create(
@@ -120,12 +143,12 @@ class TestMembershipPlansPage:
             name="Hidden Plan", slug="hidden", price=10,
             is_active=False,
         )
-        response = client.get("/it/account/become-member/")
+        response = client.get(membership_plans_page.url)
         content = response.content.decode()
         assert "Basic Card" in content
         assert "Hidden Plan" not in content
 
-    def test_plans_page_highlights_user_plan(self, client):
+    def test_plans_page_highlights_user_plan(self, client, membership_plans_page):
         """Logged-in user's current products are highlighted."""
         from apps.website.models.snippets import Product
         product = Product.objects.create(
@@ -135,23 +158,21 @@ class TestMembershipPlansPage:
         user = User.objects.create_user(
             username="memberuser", password="testpass123!"
         )
-        # Use reverse relation (standard M2M manager) since the forward
-        # ParentalManyToManyField manager defers writes to memory.
         product.members.add(user)
         client.force_login(user)
 
-        response = client.get("/it/account/become-member/")
+        response = client.get(membership_plans_page.url)
         content = response.content.decode()
         assert "pricing-card--active" in content
 
-    def test_plans_page_shows_signup_cta_for_anonymous(self, client):
+    def test_plans_page_shows_signup_cta_for_anonymous(self, client, membership_plans_page):
         """Anonymous users see signup CTA."""
         from apps.website.models.snippets import Product
         Product.objects.create(
             name="Basic", slug="basic", price=20,
             is_active=True, grants_events=True,
         )
-        response = client.get("/it/account/become-member/")
+        response = client.get(membership_plans_page.url)
         content = response.content.decode()
         assert "account_signup" in content or "Sign up" in content or "Registrati" in content
 
@@ -161,6 +182,7 @@ class TestLoginRedirectURL:
     """LOGIN_REDIRECT_URL is correctly set."""
 
     def test_login_redirect_url_is_profile(self):
-        """LOGIN_REDIRECT_URL points to /account/profile/."""
+        """LOGIN_REDIRECT_URL resolves to the account:profile URL."""
         from django.conf import settings
-        assert settings.LOGIN_REDIRECT_URL == "/account/profile/"
+        from django.urls import reverse
+        assert str(settings.LOGIN_REDIRECT_URL) == reverse("account:profile")

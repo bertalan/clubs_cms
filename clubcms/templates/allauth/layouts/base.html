@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% block head_title %}{% endblock head_title %} | {{ block.super }}{% endblock %}
+
+{% block body_class %}page-auth{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        {% block allauth_content %}
+        {% endblock allauth_content %}
+    </div>
+</div>
+{% endblock %}

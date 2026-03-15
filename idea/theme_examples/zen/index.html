@@ -5,19 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home - Zen Theme Demo</title>
   <style>
-    :root { 
-      --ink: #0a0a0a; 
-      --paper: #ffffff; 
+    :root {
+      --ink: #0a0a0a;
+      --paper: #ffffff;
       --gray: #f5f5f5;
       --pop: #FF3366;
       --pop-yellow: #FFD700;
       --pop-blue: #00BFFF;
+      --pop-green: #00E676;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--gray); color: var(--ink); line-height: 1.6; }
     .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
     a { color: var(--ink); }
-    
+
     /* === COMIC PANEL STYLES === */
     .panel {
       background: var(--paper);
@@ -26,33 +27,39 @@
       position: relative;
     }
     .panel-pop { border-color: var(--pop); box-shadow: 6px 6px 0 var(--pop); }
-    
+
     /* Halftone pattern */
     .halftone {
       background-image: radial-gradient(var(--ink) 1px, transparent 1px);
       background-size: 4px 4px;
     }
-    
+
     /* Speed lines */
     .speed-lines {
       background: repeating-linear-gradient(
-        90deg, transparent, transparent 10px, 
+        90deg, transparent, transparent 10px,
         rgba(0,0,0,0.03) 10px, rgba(0,0,0,0.03) 12px
       );
     }
-    
+
     /* === NAV === */
-    nav { 
-      background: var(--ink); color: var(--paper); padding: 1rem 0; 
+    nav {
+      background: var(--ink); color: var(--paper); padding: 1rem 0;
       border-bottom: 4px solid var(--pop);
     }
     nav .container { display: flex; justify-content: space-between; align-items: center; }
-    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav .nav-links { list-style: none; display: flex; gap: 2rem; align-items: center; }
     nav a { color: var(--paper); text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.85rem; }
     nav a:hover, nav a.active { color: var(--pop); }
     .logo { font-weight: 900; font-size: 1.3rem; text-decoration: none; color: var(--paper); letter-spacing: -0.02em; }
     .logo span { color: var(--pop); }
-    
+    .btn-nav-cta {
+      display: inline-block; padding: 0.5rem 1.2rem; background: var(--pop); color: var(--paper);
+      text-decoration: none; font-weight: 800; text-transform: uppercase; font-size: 0.8rem;
+      border: 2px solid var(--pop); transition: all 0.2s; margin-left: 1rem;
+    }
+    .btn-nav-cta:hover { background: var(--paper); color: var(--pop); }
+
     /* === HERO COMIC PANEL === */
     .hero { padding: 4rem 0; }
     .hero-panel {
@@ -68,13 +75,13 @@
     }
     .speech-bubble {
       display: inline-block; background: var(--pop-yellow); color: var(--ink);
-      padding: 0.4rem 1rem; font-size: 0.75rem; font-weight: 700; 
+      padding: 0.4rem 1rem; font-size: 0.75rem; font-weight: 700;
       text-transform: uppercase; letter-spacing: 0.1em;
       border: 2px solid var(--ink); border-radius: 20px;
       margin-bottom: 1.5rem; position: relative;
     }
-    .hero h1 { 
-      font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; 
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900;
       line-height: 1.1; margin-bottom: 1rem; letter-spacing: -0.03em;
       text-transform: uppercase;
     }
@@ -86,11 +93,12 @@
       border: 3px solid var(--ink); transition: all 0.2s;
     }
     .btn-comic:hover { background: var(--pop); border-color: var(--pop); transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--ink); }
-    
+
     /* === STATS PANELS === */
     .stats { padding: 3rem 0; }
-    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-    @media (max-width: 600px) { .stats-grid { grid-template-columns: 1fr; } }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    @media (max-width: 700px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 450px) { .stats-grid { grid-template-columns: 1fr; } }
     .stat-panel {
       background: var(--paper); border: 3px solid var(--ink);
       box-shadow: 5px 5px 0 var(--ink); padding: 2rem; text-align: center;
@@ -98,9 +106,10 @@
     }
     .stat-panel:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 var(--ink); }
     .stat-panel:nth-child(2) { background: var(--pop); color: var(--paper); border-color: var(--ink); }
+    .stat-panel:nth-child(4) { background: var(--pop-blue); border-color: var(--ink); }
     .stat-panel h3 { font-size: 3rem; font-weight: 900; line-height: 1; }
     .stat-panel p { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; margin-top: 0.5rem; }
-    
+
     /* === EVENTS MANGA STRIP === */
     .events { padding: 3rem 0; }
     .section-title {
@@ -125,16 +134,85 @@
     .manga-date {
       display: inline-block; background: var(--pop-yellow); color: var(--ink);
       padding: 0.2rem 0.5rem; font-size: 0.7rem; font-weight: 700;
-      border: 2px solid var(--ink); margin-bottom: 0.75rem;
+      border: 2px solid var(--ink); margin-bottom: 0.5rem;
     }
-    .manga-panel h3 { font-weight: 800; font-size: 1rem; margin-bottom: 0.5rem; }
+    .manga-tag {
+      display: inline-block; background: var(--ink); color: var(--paper);
+      padding: 0.15rem 0.5rem; font-size: 0.65rem; font-weight: 700;
+      text-transform: uppercase; margin-bottom: 0.5rem; margin-left: 0.25rem;
+    }
+    .manga-panel h3 { font-weight: 800; font-size: 1rem; margin-bottom: 0.35rem; }
     .manga-panel p { font-size: 0.85rem; color: #444; }
-    .manga-panel .action { 
-      display: inline-block; margin-top: 1rem; font-weight: 700; 
+    .manga-meta { font-size: 0.75rem; color: #666; margin-top: 0.35rem; }
+    .manga-price { display: inline-block; background: var(--pop-green); color: var(--ink); padding: 0.15rem 0.5rem; font-size: 0.7rem; font-weight: 700; border: 2px solid var(--ink); margin-top: 0.5rem; }
+    .manga-panel .action {
+      display: inline-block; margin-top: 0.75rem; font-weight: 700;
       color: var(--pop); text-decoration: none; font-size: 0.85rem;
     }
     .manga-panel .action:hover { text-decoration: underline; }
-    
+
+    /* === GALLERY PREVIEW === */
+    .gallery-preview { padding: 3rem 0; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    @media (max-width: 700px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+    .gallery-item {
+      border: 3px solid var(--ink); box-shadow: 4px 4px 0 var(--ink);
+      overflow: hidden; transition: all 0.2s; position: relative;
+    }
+    .gallery-item:hover { transform: translate(-2px, -2px) rotate(-1deg); box-shadow: 6px 6px 0 var(--ink); z-index: 5; }
+    .gallery-item img { width: 100%; height: 160px; object-fit: cover; display: block; }
+    .gallery-item .caption { padding: 0.5rem; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; background: var(--paper); border-top: 2px solid var(--ink); }
+    .gallery-link {
+      text-align: center; margin-top: 1.5rem;
+    }
+    .gallery-link a {
+      display: inline-block; padding: 0.8rem 2rem; background: var(--ink); color: var(--paper);
+      text-decoration: none; font-weight: 800; text-transform: uppercase; font-size: 0.9rem;
+      border: 3px solid var(--ink); transition: all 0.2s;
+    }
+    .gallery-link a:hover { background: var(--pop); border-color: var(--pop); transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--ink); }
+
+    /* === PARTNERS === */
+    .partners { padding: 3rem 0; }
+    .partners-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; align-items: center; }
+    @media (max-width: 700px) { .partners-grid { grid-template-columns: repeat(3, 1fr); } }
+    .partner-panel {
+      background: var(--paper); border: 3px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink); padding: 1.5rem;
+      text-align: center; transition: all 0.2s;
+    }
+    .partner-panel:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+    .partner-panel a { text-decoration: none; color: var(--ink); }
+    .partner-panel .partner-logo { font-size: 1.8rem; font-weight: 900; line-height: 1; }
+    .partner-panel .partner-name { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; margin-top: 0.3rem; color: #555; }
+
+    /* === NEWSLETTER === */
+    .newsletter { padding: 3rem 0; }
+    .newsletter-panel {
+      background: var(--pop-yellow); border: 4px solid var(--ink);
+      box-shadow: 8px 8px 0 var(--ink); padding: 3rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .newsletter-panel::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background-image: radial-gradient(var(--ink) 1px, transparent 1px);
+      background-size: 6px 6px; opacity: 0.04; pointer-events: none;
+    }
+    .newsletter-panel h2 { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .newsletter-panel p { color: #333; margin-bottom: 1.5rem; font-size: 1rem; }
+    .newsletter-form { display: flex; justify-content: center; gap: 0; max-width: 500px; margin: 0 auto; }
+    .newsletter-form input {
+      flex: 1; padding: 0.9rem 1rem; border: 3px solid var(--ink);
+      font-family: inherit; font-size: 1rem; border-right: none;
+    }
+    .newsletter-form input:focus { outline: none; box-shadow: inset 0 0 0 2px var(--pop); }
+    .newsletter-form button {
+      padding: 0.9rem 2rem; background: var(--ink); color: var(--paper);
+      border: 3px solid var(--ink); font-weight: 800; text-transform: uppercase;
+      font-size: 0.9rem; cursor: pointer; transition: all 0.2s; font-family: inherit;
+    }
+    .newsletter-form button:hover { background: var(--pop); border-color: var(--pop); }
+
     /* === CTA BURST === */
     .cta { padding: 3rem 0; }
     .burst-panel {
@@ -150,24 +228,42 @@
       border: 3px solid var(--ink);
     }
     .btn-light:hover { background: var(--pop-yellow); }
-    
+
     /* === FOOTER === */
-    footer { background: var(--ink); color: var(--paper); padding: 2.5rem 0; text-align: center; }
-    footer a { color: var(--paper); text-decoration: none; margin: 0 1rem; font-size: 0.9rem; }
-    footer a:hover { color: var(--pop); }
-    footer .copy { margin-top: 1rem; font-size: 0.8rem; opacity: 0.6; }
+    footer { background: var(--ink); color: var(--paper); padding: 3rem 0 2rem; }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    @media (max-width: 700px) { .footer-grid { grid-template-columns: 1fr; } }
+    .footer-brand .logo { font-size: 1.5rem; display: inline-block; margin-bottom: 0.75rem; }
+    .footer-brand p { font-size: 0.85rem; opacity: 0.7; margin-bottom: 0.25rem; }
+    .footer-brand a { color: var(--pop); text-decoration: none; }
+    .footer-brand a:hover { text-decoration: underline; }
+    .footer-nav h4, .footer-social h4 { font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; color: var(--pop); }
+    .footer-nav ul { list-style: none; }
+    .footer-nav ul li { margin-bottom: 0.5rem; }
+    .footer-nav a { color: var(--paper); text-decoration: none; font-size: 0.9rem; opacity: 0.8; }
+    .footer-nav a:hover { color: var(--pop); opacity: 1; }
+    .footer-social .social-links { display: flex; gap: 1rem; }
+    .footer-social .social-links a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border: 2px solid var(--paper);
+      color: var(--paper); text-decoration: none; font-weight: 700;
+      font-size: 0.75rem; transition: all 0.2s;
+    }
+    .footer-social .social-links a:hover { background: var(--pop); border-color: var(--pop); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 1.5rem; text-align: center; font-size: 0.8rem; opacity: 0.6; }
   </style>
 </head>
 <body>
   <nav>
     <div class="container">
       <a href="index.html" class="logo">MIND<span>FUL</span></a>
-      <ul>
+      <ul class="nav-links">
         <li><a href="index.html" class="active">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="events.html">Events</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="contact.html">Contact</a></li>
+        <li><a href="contact.html" class="btn-nav-cta">Join</a></li>
       </ul>
     </div>
   </nav>
@@ -175,7 +271,7 @@
   <section class="hero">
     <div class="container">
       <div class="hero-panel">
-        <span class="speech-bubble">✦ Since 2018</span>
+        <span class="speech-bubble">Since 2018</span>
         <h1>Less, But <span class="pop">Better</span></h1>
         <p>A community focused on intentional living, mindful practices, and meaningful connections.</p>
         <a href="about.html" class="btn-comic">Discover More</a>
@@ -192,11 +288,15 @@
         </div>
         <div class="stat-panel">
           <h3>8</h3>
-          <p>Years</p>
+          <p>Years Active</p>
         </div>
         <div class="stat-panel">
           <h3>24</h3>
           <p>Sessions/Year</p>
+        </div>
+        <div class="stat-panel">
+          <h3>6</h3>
+          <p>Partner Clubs</p>
         </div>
       </div>
     </div>
@@ -208,22 +308,118 @@
       <div class="manga-strip">
         <div class="manga-panel" data-num="01">
           <span class="manga-date">March 15</span>
+          <span class="manga-tag">Workshop</span>
           <h3>Mindfulness Workshop</h3>
           <p>Introduction to daily mindfulness practices.</p>
-          <a href="events.html" class="action">Join →</a>
+          <div class="manga-meta">10:00 - 12:00 | Community Room</div>
+          <span class="manga-price">Free for members</span>
+          <br><a href="events.html" class="action">Join</a>
         </div>
         <div class="manga-panel" data-num="02">
           <span class="manga-date">March 28</span>
+          <span class="manga-tag">Retreat</span>
           <h3>Silent Retreat</h3>
           <p>A day of quiet reflection and renewal.</p>
-          <a href="events.html" class="action">Reserve →</a>
+          <div class="manga-meta">8:00 - 18:00 | Retreat Center</div>
+          <span class="manga-price">EUR 25</span>
+          <br><a href="events.html" class="action">Reserve</a>
         </div>
         <div class="manga-panel" data-num="03">
           <span class="manga-date">April 12</span>
+          <span class="manga-tag">Circle</span>
           <h3>Discussion Circle</h3>
           <p>Monthly gathering for meaningful dialogue.</p>
-          <a href="events.html" class="action">Learn →</a>
+          <div class="manga-meta">19:00 - 21:00 | Library Hall</div>
+          <span class="manga-price">Free</span>
+          <br><a href="events.html" class="action">Learn</a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Preview -->
+  <section class="gallery-preview">
+    <div class="container">
+      <h2 class="section-title">Gallery</h2>
+      <div class="gallery-grid">
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600" alt="Group ride through scenic routes">
+          <div class="caption">Group Ride</div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600" alt="Open road with motorcycle">
+          <div class="caption">Open Road</div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1525160354320-d8e92641c563?w=600" alt="Club dinner gathering">
+          <div class="caption">Club Dinner</div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=600" alt="Annual awards ceremony">
+          <div class="caption">Awards Night</div>
+        </div>
+      </div>
+      <div class="gallery-link">
+        <a href="gallery.html">View Full Gallery</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partners / Sponsors -->
+  <section class="partners">
+    <div class="container">
+      <h2 class="section-title">Partners &amp; Sponsors</h2>
+      <div class="partners-grid">
+        <div class="partner-panel">
+          <a href="#">
+            <div class="partner-logo">MR</div>
+            <div class="partner-name">Moto Riders</div>
+          </a>
+        </div>
+        <div class="partner-panel">
+          <a href="#">
+            <div class="partner-logo">ZG</div>
+            <div class="partner-name">Zen Garage</div>
+          </a>
+        </div>
+        <div class="partner-panel">
+          <a href="#">
+            <div class="partner-logo">RP</div>
+            <div class="partner-name">Road Pros</div>
+          </a>
+        </div>
+        <div class="partner-panel">
+          <a href="#">
+            <div class="partner-logo">TW</div>
+            <div class="partner-name">Two Wheels</div>
+          </a>
+        </div>
+        <div class="partner-panel">
+          <a href="#">
+            <div class="partner-logo">SC</div>
+            <div class="partner-name">Steel Cafe</div>
+          </a>
+        </div>
+        <div class="partner-panel">
+          <a href="#">
+            <div class="partner-logo">BK</div>
+            <div class="partner-name">Biker Kit</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter">
+    <div class="container">
+      <div class="newsletter-panel">
+        <h2>Stay in the Loop</h2>
+        <p>Get our latest events, stories, and community updates delivered to your inbox.</p>
+        <form class="newsletter-form">
+          <input type="email" placeholder="your@email.example" aria-label="Email for newsletter" required>
+          <button type="submit">Subscribe</button>
+        </form>
       </div>
     </div>
   </section>
@@ -240,13 +436,36 @@
 
   <footer>
     <div class="container">
-      <div>
-        <a href="about.html">About</a>
-        <a href="events.html">Events</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="contact.html">Contact</a>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">MIND<span>FUL</span></a>
+          <p>123 Serenity Lane</p>
+          <p>Calm City, CC 10001</p>
+          <p style="margin-top: 0.5rem;"><a href="mailto:info@mindful.example">info@mindful.example</a></p>
+          <p><a href="tel:+15551234567">+1 (555) 123-4567</a></p>
+        </div>
+        <div class="footer-nav">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-social">
+          <h4>Follow Us</h4>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook">FB</a>
+            <a href="#" aria-label="Instagram">IG</a>
+            <a href="#" aria-label="Twitter">TW</a>
+          </div>
+        </div>
       </div>
-      <p class="copy">© 2026 Mindful • Zen Comic Theme</p>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Mindful. All rights reserved.</p>
+      </div>
     </div>
   </footer>
 </body>

@@ -1,4 +1,4 @@
-{% load static wagtailcore_tags wagtailimages_tags wagtailsettings_tags %}
+{% load static i18n wagtailcore_tags wagtailimages_tags wagtailsettings_tags %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE|default:'en' }}" {% if settings.website.SiteSettings.color_scheme.is_dark_mode %}class="dark-mode"{% endif %}>
 <head>
@@ -52,18 +52,30 @@
 <body class="{% block body_class %}{% endblock %}">
 
     {# Skip to content for accessibility #}
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a href="#main-content" class="skip-link">{% trans "Skip to main content" %}</a>
 
     {# Navbar #}
     {% include "includes/navbar.html" %}
 
     {# Main content #}
     <main id="main-content">
+        {% if messages %}
+        <div class="messages-container" role="status" aria-live="polite">
+            {% for message in messages %}
+            <div class="message message--{{ message.tags }}{% if message.tags == 'error' %} message--error{% endif %}" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
         {% block content %}{% endblock %}
     </main>
 
     {# Footer #}
     {% include "includes/footer.html" %}
+
+    {# Theme Switcher #}
+    <script src="{% static 'js/theme-switcher.js' %}"></script>
 
     {# PWA service worker registration #}
     {% if settings.website.SiteSettings.pwa_name %}

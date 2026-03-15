@@ -4,7 +4,7 @@
 {% block title %}{% trans "Notification Preferences" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container container--narrow">
     <h1>{% trans "Notification Preferences" %}</h1>
 
     {% if form.errors %}
@@ -20,10 +20,7 @@
             <legend>{% trans "Channels" %}</legend>
             {% for field in form %}
                 {% if field.name in "email_notifications,push_notifications" %}
-                <div class="form-group form-check">
-                    {{ field }}
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                </div>
+                    {% include "includes/_form_field.html" with field=field %}
                 {% endif %}
             {% endfor %}
         </fieldset>
@@ -32,10 +29,7 @@
             <legend>{% trans "What to notify" %}</legend>
             {% for field in form %}
                 {% if field.name in "news_updates,event_updates,event_reminders,membership_alerts,partner_updates,aid_requests,partner_events,partner_event_comments" %}
-                <div class="form-group form-check">
-                    {{ field }}
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                </div>
+                    {% include "includes/_form_field.html" with field=field %}
                 {% endif %}
             {% endfor %}
         </fieldset>
@@ -44,17 +38,7 @@
             <legend>{% trans "Digest" %}</legend>
             {% for field in form %}
                 {% if field.name == "digest_frequency" %}
-                <div class="form-group">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.errors %}
-                    <ul class="form-errors">
-                        {% for error in field.errors %}
-                        <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                </div>
+                    {% include "includes/_form_field.html" with field=field %}
                 {% endif %}
             {% endfor %}
         </fieldset>
@@ -62,4 +46,6 @@
         <button type="submit" class="btn btn-primary">{% trans "Save Preferences" %}</button>
     </form>
 </div>
+
+{% include "includes/_field_help_modal.html" %}
 {% endblock %}

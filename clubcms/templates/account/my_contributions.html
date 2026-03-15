@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "My Contributions" %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<section class="page-contributions" aria-labelledby="contributions-heading">
+    <div class="container container--narrow">
+        <header class="page-contributions__header">
+            <div>
+                <h1 id="contributions-heading" class="page-contributions__title">{% trans "My Contributions" %}</h1>
+                <p class="page-contributions__subtitle">{% trans "Stories, proposals, and announcements you have submitted." %}</p>
+            </div>
+            <a href="{% url 'account:submit_contribution' %}" class="btn btn--primary">
+                <svg class="btn__icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                {% trans "New Contribution" %}
+            </a>
+        </header>
+
+        {% if contributions %}
+        <div class="contributions-list" role="list">
+            {% for c in contributions %}
+            <article class="contribution-card contribution-card--{{ c.status }}" role="listitem"
+                     aria-label="{{ c.title }} — {{ c.get_status_display }}">
+                <div class="contribution-card__header">
+                    <span class="contribution-card__type badge badge--{{ c.contribution_type }}">
+                        {{ c.get_contribution_type_display }}
+                    </span>
+                    <span class="contribution-card__status badge badge--{{ c.status }}">
+                        {{ c.get_status_display }}
+                    </span>
+                </div>
+                <h2 class="contribution-card__title">{{ c.title }}</h2>
+                <p class="contribution-card__excerpt">{{ c.body|truncatewords:30 }}</p>
+                <footer class="contribution-card__footer">
+                    <time class="contribution-card__date" datetime="{{ c.created_at|date:'c' }}">
+                        {{ c.created_at|date:"d/m/Y H:i" }}
+                    </time>
+                </footer>
+                {% if c.moderation_note %}
+                <div class="contribution-card__note" role="note">
+                    <strong>{% trans "Moderator note" %}:</strong> {{ c.moderation_note }}
+                </div>
+                {% endif %}
+            </article>
+            {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+        <nav class="pagination" aria-label="{% trans 'Pagination' %}">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="pagination__link" aria-label="{% trans 'Previous page' %}">
+                <span aria-hidden="true">&laquo;</span> {% trans "Previous" %}
+            </a>
+            {% endif %}
+            <span class="pagination__current" aria-current="page">
+                {% blocktrans with current=page_obj.number total=paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}
+            </span>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="pagination__link" aria-label="{% trans 'Next page' %}">
+                {% trans "Next" %} <span aria-hidden="true">&raquo;</span>
+            </a>
+            {% endif %}
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <div class="empty-state" role="status">
+            <svg class="empty-state__icon" width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            <p class="empty-state__text">{% trans "You have not submitted any contributions yet." %}</p>
+            <a href="{% url 'account:submit_contribution' %}" class="btn btn--primary">{% trans "Submit your first contribution" %}</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

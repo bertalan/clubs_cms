@@ -1,4 +1,4 @@
-{% load i18n wagtailcore_tags wagtailimages_tags wagtailsettings_tags %}
+{% load i18n wagtailcore_tags wagtailimages_tags wagtailsettings_tags seo_tags %}
 
 {% with navbar=settings.website.SiteSettings.navbar %}
 <nav class="site-nav" role="navigation" aria-label="{% trans 'Main navigation' %}">
@@ -35,18 +35,18 @@
                                     type="button"
                                     aria-expanded="false"
                                     aria-haspopup="true">
-                                {{ item.label }}
+                                {% if item.link_page %}{{ item.link_page.localized.title }}{% else %}{{ item.label }}{% endif %}
                                 <span class="site-nav__dropdown-arrow" aria-hidden="true">&#9662;</span>
                             </button>
                             <ul class="site-nav__dropdown-menu" role="menu">
                                 {% for child in children %}
                                 <li role="none">
                                     {% if child.link_page %}
-                                        <a href="{% pageurl child.link_page %}"
+                                        <a href="{% pageurl child.link_page.localized %}"
                                            role="menuitem"
                                            {% if child.open_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
-                                           {% if request.path == child.link_page.url %}aria-current="page"{% endif %}>
-                                            {{ child.label }}
+                                           {% if request.path == child.link_page.localized.url %}aria-current="page"{% endif %}>
+                                            {{ child.link_page.localized.title }}
                                         </a>
                                     {% elif child.link_url %}
                                         <a href="{{ child.link_url }}"
@@ -62,11 +62,11 @@
                     {% else %}
                         {# SINGLE LINK #}
                         {% if item.link_page %}
-                            <a href="{% pageurl item.link_page %}"
-                               class="{% if item.is_cta %}site-nav__cta{% endif %}{% if request.path == item.link_page.url %} active{% endif %}"
+                            <a href="{% pageurl item.link_page.localized %}"
+                               class="{% if item.is_cta %}site-nav__cta{% endif %}{% if request.path == item.link_page.localized.url %} active{% endif %}"
                                {% if item.open_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
-                               {% if request.path == item.link_page.url %}aria-current="page"{% endif %}>
-                                {{ item.label }}
+                               {% if request.path == item.link_page.localized.url %}aria-current="page"{% endif %}>
+                                {{ item.link_page.localized.title }}
                             </a>
                         {% elif item.link_url %}
                             <a href="{{ item.link_url }}"
@@ -79,16 +79,22 @@
                     {% endwith %}
                 {% endfor %}
             {% endif %}
-
-            {# Search toggle #}
+          {# ---- Global site search ---- #}
             {% if navbar.show_search %}
-            <form action="/search/" method="get" class="site-nav__search" role="search">
-                <label for="nav-search-input" class="sr-only">{% trans "Search" %}</label>
-                <input type="search" id="nav-search-input" name="q" placeholder="{% trans 'Search...' %}" aria-label="{% trans 'Search the site' %}">
-                <button type="submit" aria-label="{% trans 'Submit search' %}">
-                    <span aria-hidden="true">&#128269;</span>
+            <div class="site-nav__search" id="nav-search">
+                <button type="button" class="site-nav__search-toggle" aria-expanded="false" aria-controls="nav-search-form" aria-label="{% trans 'Search' %}">
+                    <svg class="site-nav__search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 </button>
-            </form>
+                <form id="nav-search-form" method="get" action="{% url 'site-search' %}" class="site-nav__search-form" hidden>
+                    <label for="nav-search-q" class="sr-only">{% trans "Search" %}</label>
+                    <input type="search" id="nav-search-q" name="q" value=""
+                           placeholder="{% trans 'Search…' %}" class="site-nav__search-input"
+                           minlength="2" autocomplete="off">
+                    <button type="submit" class="site-nav__search-submit" aria-label="{% trans 'Confirm search' %}">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </button>
+                </form>
+            </div>
             {% endif %}
 
             {# ---- User menu ---- #}
@@ -124,6 +130,16 @@
                                     {% trans "My events" %}
                                 </a>
                             </li>
+                            <li role="none">
+                                <a href="{% url 'account:membership_requests' %}" role="menuitem">
+                                    {% trans "My membership requests" %}
+                                </a>
+                            </li>
+                            <li role="none">
+                                <a href="{% url 'account:my_contributions' %}" role="menuitem">
+                                    {% trans "My contributions" %}
+                                </a>
+                            </li>
                             {% if request.user.is_active_member %}
                             <li role="none">
                                 <a href="{% url 'account:directory' %}" role="menuitem">
@@ -132,6 +148,16 @@
                             </li>
                             {% endif %}
                             <li class="site-nav__dropdown-divider" role="separator" aria-hidden="true"></li>
+                            <li role="none">
+                                <a href="{% url 'account:aid' %}" role="menuitem">
+                                    {% trans "Roadside assistance" %}
+                                </a>
+                            </li>
+                            <li role="none">
+                                <a href="{% url 'account:notifications' %}" role="menuitem">
+                                    {% trans "Notifications" %}
+                                </a>
+                            </li>
                             <li role="none">
                                 <a href="{% url 'account:privacy' %}" role="menuitem">
                                     {% trans "Settings" %}
@@ -148,15 +174,10 @@
                         </ul>
                     </div>
                 {% else %}
-                    {# Anonymous user: login/signup links #}
+                    {# Anonymous user: login link only #}
                     {% if login_url %}
-                    <a href="{{ login_url }}" class="site-nav__login">
+                    <a href="{{ login_url }}" class="site-nav__cta">
                         {% trans "Log in" %}
-                    </a>
-                    {% endif %}
-                    {% if signup_url %}
-                    <a href="{{ signup_url }}" class="site-nav__cta">
-                        {% trans "Sign up" %}
                     </a>
                     {% endif %}
                 {% endif %}
@@ -164,7 +185,7 @@
 
             {# Language switcher #}
             {% get_current_language as LANGUAGE_CODE %}
-            {% get_available_languages as languages %}
+            {% get_active_locales as languages %}
             <div class="site-nav__lang" role="navigation" aria-label="{% trans 'Language' %}">
                 <button class="site-nav__lang-toggle" type="button" aria-expanded="false" aria-haspopup="true">
                     {{ LANGUAGE_CODE|upper }}
@@ -176,7 +197,7 @@
                         <form action="{% url 'set_language' %}" method="post" role="menuitem">
                             {% csrf_token %}
                             <input type="hidden" name="language" value="{{ lang_code }}">
-                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                            <input type="hidden" name="next" value="{% translate_url request.get_full_path lang_code %}">
                             <button type="submit" class="{% if lang_code == LANGUAGE_CODE %}active{% endif %}" {% if lang_code == LANGUAGE_CODE %}aria-current="true"{% endif %}>
                                 {{ lang_name }}
                             </button>
@@ -243,6 +264,7 @@
     // --- Language switcher ---
     var langToggle = document.querySelector('.site-nav__lang-toggle');
     var langMenu = document.querySelector('.site-nav__lang-menu');
+    var langWrapper = document.querySelector('.site-nav__lang');
     if (langToggle && langMenu) {
         langToggle.addEventListener('click', function(e) {
             e.preventDefault();
@@ -250,6 +272,21 @@
             var isOpen = langMenu.classList.contains('open');
             langMenu.classList.toggle('open', !isOpen);
             langToggle.setAttribute('aria-expanded', String(!isOpen));
+        });
+        // Close lang menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.site-nav__lang')) {
+                langMenu.classList.remove('open');
+                langToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+        // Escape closes lang menu
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && langMenu.classList.contains('open')) {
+                langMenu.classList.remove('open');
+                langToggle.setAttribute('aria-expanded', 'false');
+                langToggle.focus();
+            }
         });
     }
 
@@ -261,6 +298,39 @@
             var isOpen = navLinks.classList.contains('open');
             navLinks.classList.toggle('open', !isOpen);
             navToggle.setAttribute('aria-expanded', String(!isOpen));
+        });
+    }
+
+    // --- Navbar compact search toggle ---
+    var searchToggle = document.querySelector('.site-nav__search-toggle');
+    var searchForm = document.getElementById('nav-search-form');
+    var searchWrap = document.getElementById('nav-search');
+    if (searchToggle && searchForm && searchWrap) {
+        searchToggle.addEventListener('click', function() {
+            var isOpen = !searchForm.hidden;
+            searchForm.hidden = isOpen;
+            searchWrap.classList.toggle('open', !isOpen);
+            searchToggle.setAttribute('aria-expanded', String(!isOpen));
+            if (!isOpen) {
+                searchForm.querySelector('input[type="search"]').focus();
+            }
+        });
+        // Close on click outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('#nav-search')) {
+                searchForm.hidden = true;
+                searchWrap.classList.remove('open');
+                searchToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+        // Close on Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !searchForm.hidden) {
+                searchForm.hidden = true;
+                searchWrap.classList.remove('open');
+                searchToggle.setAttribute('aria-expanded', 'false');
+                searchToggle.focus();
+            }
         });
     }
 })();

@@ -1,0 +1,29 @@
+{% load wagtailcore_tags i18n website_tags %}
+
+<section {% block_attrs self.settings "block-table" %}>
+    <div class="container">
+        {% if self.title %}
+        <h2 class="block-table__title">{{ self.title }}</h2>
+        {% endif %}
+        <div class="block-table__wrapper">
+            <table class="block-table__table{% if self.striped %} block-table__table--striped{% endif %}">
+                <thead>
+                    <tr>
+                        {% for header in self.headers %}
+                        <th>{{ header }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in self.rows %}
+                    <tr>
+                        {% for cell in row.value.cells %}
+                        <td>{{ cell }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

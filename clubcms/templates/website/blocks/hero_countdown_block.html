@@ -1,7 +1,7 @@
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load i18n wagtailcore_tags wagtailimages_tags %}
 
 {% with event=self.event.specific %}
-<section class="block-hero-countdown" aria-label="Event countdown">
+<section class="block-hero-countdown" aria-label="{% trans 'Event countdown' %}">
     {% if self.background_image %}
         {% image self.background_image fill-1920x700 as bg_img %}
         <img src="{{ bg_img.url }}" alt="" loading="eager" width="{{ bg_img.width }}" height="{{ bg_img.height }}">
@@ -17,22 +17,22 @@
             </h2>
 
             {% if event.start_date %}
-            <div class="block-hero-countdown__timer" data-countdown="{{ event.start_date|date:'c' }}" aria-label="Countdown to event">
+            <div class="block-hero-countdown__timer" data-countdown="{{ event.start_date|date:'c' }}" aria-label="{% trans 'Countdown to event' %}">
                 <div class="block-hero-countdown__unit">
                     <span class="block-hero-countdown__value" data-days>--</span>
-                    <span class="block-hero-countdown__label">Days</span>
+                    <span class="block-hero-countdown__label">{% trans "Days" %}</span>
                 </div>
                 <div class="block-hero-countdown__unit">
                     <span class="block-hero-countdown__value" data-hours>--</span>
-                    <span class="block-hero-countdown__label">Hours</span>
+                    <span class="block-hero-countdown__label">{% trans "Hours" %}</span>
                 </div>
                 <div class="block-hero-countdown__unit">
                     <span class="block-hero-countdown__value" data-minutes>--</span>
-                    <span class="block-hero-countdown__label">Minutes</span>
+                    <span class="block-hero-countdown__label">{% trans "Minutes" %}</span>
                 </div>
                 <div class="block-hero-countdown__unit">
                     <span class="block-hero-countdown__value" data-seconds>--</span>
-                    <span class="block-hero-countdown__label">Seconds</span>
+                    <span class="block-hero-countdown__label">{% trans "Seconds" %}</span>
                 </div>
             </div>
             {% endif %}
@@ -48,9 +48,9 @@
             {% endif %}
 
             {% if self.show_registration_button and event.is_registration_open %}
-            <a href="{% pageurl event %}" class="btn btn-primary">Register Now</a>
+            <a href="{% pageurl event %}" class="btn btn-primary">{% trans "Register Now" %}</a>
             {% else %}
-            <a href="{% pageurl event %}" class="btn btn-outline-light">View Details</a>
+            <a href="{% pageurl event %}" class="btn btn-outline-light">{% trans "View Details" %}</a>
             {% endif %}
         </div>
     </div>
@@ -67,7 +67,7 @@
             var diff = target - now;
             if (diff < 0) {
                 clearInterval(interval);
-                timer.innerHTML = '<p>Event has started!</p>';
+                timer.innerHTML = '<p>{% trans "Event has started!" %}</p>';
                 return;
             }
             var d = Math.floor(diff / (1000 * 60 * 60 * 24));

@@ -6,6 +6,7 @@ before the Wagtail catch-all.
 """
 
 from django.urls import path
+from django.utils.translation import gettext_lazy as _
 
 from apps.website import views
 
@@ -14,36 +15,36 @@ app_name = "website"
 urlpatterns = [
     # Partner member verification
     path(
-        "partners/verify-member/",
+        _("partners/verify-member/"),
         views.VerifyMemberView.as_view(),
         name="verify_member",
     ),
     # Gallery photo upload
     path(
-        "upload-photo/",
+        _("upload-photo/"),
         views.PhotoUploadView.as_view(),
         name="upload_photo",
     ),
     # My uploads
     path(
-        "my-uploads/",
+        _("my-uploads/"),
         views.MyUploadsView.as_view(),
         name="my_uploads",
     ),
     # Moderation queue (staff only)
     path(
-        "moderation/",
+        _("moderation/"),
         views.ModerationQueueView.as_view(),
         name="moderation_queue",
     ),
     # Approve / reject photos (staff only, POST)
     path(
-        "moderation/approve/<int:pk>/",
+        _("moderation/approve/<int:pk>/"),
         views.ApprovePhotoView.as_view(),
         name="approve_photo",
     ),
     path(
-        "moderation/reject/<int:pk>/",
+        _("moderation/reject/<int:pk>/"),
         views.RejectPhotoView.as_view(),
         name="reject_photo",
     ),

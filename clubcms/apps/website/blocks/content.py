@@ -23,6 +23,8 @@ from wagtail.blocks import (
 )
 from wagtail.images.blocks import ImageChooserBlock
 
+from .common import BlockSettings
+
 
 # ---------------------------------------------------------------------------
 # CardBlock / CardsGridBlock
@@ -109,6 +111,7 @@ class CardsGridBlock(StructBlock):
         default="default",
         help_text=_("Visual style for the cards."),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/cards_grid_block.html"
@@ -165,6 +168,7 @@ class CTABlock(StructBlock):
         required=False,
         help_text=_("Background image (only used with 'Image background' style)."),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/cta_block.html"
@@ -225,6 +229,7 @@ class StatsBlock(StructBlock):
         ],
         default="default",
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/stats_block.html"
@@ -260,6 +265,7 @@ class QuoteBlock(StructBlock):
         required=False,
         help_text=_("Optional portrait of the author."),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/quote_block.html"
@@ -310,6 +316,7 @@ class TimelineBlock(StructBlock):
         min_num=1,
         label=_("Timeline entries"),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/timeline_block.html"
@@ -380,6 +387,7 @@ class TeamGridBlock(StructBlock):
         ],
         default="3",
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/team_grid_block.html"
@@ -420,6 +428,7 @@ class NewsletterSignupBlock(StructBlock):
         ],
         default="primary",
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/newsletter_signup_block.html"
@@ -456,8 +465,459 @@ class AlertBlock(StructBlock):
         required=False,
         help_text=_("Allow users to dismiss this alert."),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/alert_block.html"
         icon = "warning"
         label = _("Alert")
+
+
+# ---------------------------------------------------------------------------
+# PartnerBlock / PartnersGridBlock
+# ---------------------------------------------------------------------------
+
+
+class PartnerBlock(StructBlock):
+    """A single partner or sponsor card."""
+
+    name = CharBlock(
+        max_length=255,
+        required=True,
+        label=_("Partner name"),
+    )
+    description = CharBlock(
+        max_length=255,
+        required=False,
+        label=_("Description"),
+        help_text=_("Short description or partner type."),
+    )
+    logo = ImageChooserBlock(
+        required=False,
+        label=_("Logo"),
+    )
+    url = URLBlock(
+        required=False,
+        label=_("Website URL"),
+    )
+
+    class Meta:
+        icon = "globe"
+        label = _("Partner")
+
+
+class PartnersGridBlock(StructBlock):
+    """
+    Grid of partner / sponsor cards for the homepage or content pages.
+    """
+
+    title = CharBlock(
+        max_length=255,
+        required=False,
+        help_text=_("Optional section title (e.g. 'Our Partners')."),
+    )
+    subtitle = CharBlock(
+        max_length=255,
+        required=False,
+        help_text=_("Optional subtitle text."),
+    )
+    partners = ListBlock(
+        PartnerBlock(),
+        min_num=1,
+        label=_("Partners"),
+    )
+    columns = ChoiceBlock(
+        choices=[
+            ("2", _("2 columns")),
+            ("3", _("3 columns")),
+            ("4", _("4 columns")),
+        ],
+        default="3",
+        help_text=_("Number of columns on desktop."),
+    )
+    settings = BlockSettings(required=False)
+
+    class Meta:
+        template = "website/blocks/partners_grid_block.html"
+        icon = "globe"
+        label = _("Partners grid")
+
+
+# ---------------------------------------------------------------------------
+# TableBlock
+# ---------------------------------------------------------------------------
+
+
+class TableRowBlock(StructBlock):
+    """A single row of table cells."""
+
+    cells = ListBlock(
+        CharBlock(max_length=500),
+        min_num=1,
+        label=_("Cells"),
+    )
+
+    class Meta:
+        icon = "list-ul"
+        label = _("Row")
+
+
+class TableBlock(StructBlock):
+    """
+    Data table with header row and body rows.
+    """
+
+    title = CharBlock(
+        max_length=255,
+        required=False,
+        help_text=_("Optional table caption."),
+    )
+    headers = ListBlock(
+        CharBlock(max_length=255),
+        min_num=1,
+        label=_("Column headers"),
+    )
+    rows = ListBlock(
+        TableRowBlock(),
+        min_num=1,
+        label=_("Rows"),
+    )
+    striped = BooleanBlock(
+        default=True,
+        required=False,
+        help_text=_("Alternate row background colours."),
+    )
+    settings = BlockSettings(required=False)
+
+    class Meta:
+        template = "website/blocks/table_block.html"
+        icon = "list-ul"
+        label = _("Table")
+
+
+# ---------------------------------------------------------------------------
+# TestimonialsBlock
+# ---------------------------------------------------------------------------
+
+
+class TestimonialBlock(StructBlock):
+    """A single testimonial."""
+
+    quote = TextBlock(
+        required=True,
+        help_text=_("Testimonial text."),
+    )
+    name = CharBlock(
+        max_length=255,
+        required=True,
+    )
+    role = CharBlock(
+        max_length=255,
+        required=False,
+        help_text=_("Title or role."),
+    )
+    avatar = ImageChooserBlock(
+        required=False,
+    )
+
+    class Meta:
+        icon = "openquote"
+        label = _("Testimonial")
+
+
+class TestimonialsBlock(StructBlock):
+    """
+    Testimonials carousel or grid.
+    """
+
+    title = CharBlock(
+        max_length=255,
+        required=False,
+    )
+    testimonials = ListBlock(
+        TestimonialBlock(),
+        min_num=1,
+        label=_("Testimonials"),
+    )
+    layout = ChoiceBlock(
+        choices=[
+            ("carousel", _("Carousel")),
+            ("grid", _("Grid")),
+        ],
+        default="carousel",
+    )
+    settings = BlockSettings(required=False)
+
+    class Meta:
+        template = "website/blocks/testimonials_block.html"
+        icon = "openquote"
+        label = _("Testimonials")
+
+
+# ---------------------------------------------------------------------------
+# FeaturedPagesBlock
+# ---------------------------------------------------------------------------
+
+
+class FeaturedPageBlock(StructBlock):
+    """A single featured page selection."""
+
+    page = PageChooserBlock(required=True)
+    override_title = CharBlock(
+        max_length=255,
+        required=False,
+        help_text=_("Override the page title."),
+    )
+    override_image = ImageChooserBlock(
+        required=False,
+        help_text=_("Override the page's default image."),
+    )
+
+    class Meta:
+        icon = "doc-full"
+        label = _("Featured page")
+
+
+class FeaturedPagesBlock(StructBlock):
+    """
+    Manual selection of pages to highlight in a card grid.
+    """
+
+    title = CharBlock(
+        max_length=255,
+        required=False,
+    )
+    pages = ListBlock(
+        FeaturedPageBlock(),
+        min_num=1,
+        max_num=12,
+        label=_("Pages"),
+    )
+    columns = ChoiceBlock(
+        choices=[
+            ("2", _("2 columns")),
+            ("3", _("3 columns")),
+            ("4", _("4 columns")),
+        ],
+        default="3",
+    )
+    settings = BlockSettings(required=False)
+
+    class Meta:
+        template = "website/blocks/featured_pages_block.html"
+        icon = "doc-full"
+        label = _("Featured pages")
+
+
+# ---------------------------------------------------------------------------
+# FAQBlock
+# ---------------------------------------------------------------------------
+
+
+class FAQItemBlock(StructBlock):
+    """A single question/answer pair."""
+
+    question = CharBlock(
+        max_length=500,
+        required=True,
+    )
+    answer = RichTextBlock(
+        required=True,
+    )
+
+    class Meta:
+        icon = "help"
+        label = _("FAQ item")
+
+
+class FAQBlock(StructBlock):
+    """
+    FAQ section with accordion and schema.org FAQPage markup.
+    """
+
+    title = CharBlock(
+        max_length=255,
+        required=False,
+        default=_("Frequently asked questions"),
+    )
+    items = ListBlock(
+        FAQItemBlock(),
+        min_num=1,
+        label=_("Questions"),
+    )
+    settings = BlockSettings(required=False)
+
+    class Meta:
+        template = "website/blocks/faq_block.html"
+        icon = "help"
+        label = _("FAQ")
+
+
+# ---------------------------------------------------------------------------
+# PricingTableBlock
+# ---------------------------------------------------------------------------
+
+
+class PricingPlanBlock(StructBlock):
+    """A single pricing plan."""
+
+    name = CharBlock(
+        max_length=100,
+        required=True,
+    )
+    price = CharBlock(
+        max_length=50,
+        required=True,
+        help_text=_("Price text (e.g. '€50/year')."),
+    )
+    description = TextBlock(
+        required=False,
+    )
+    features = ListBlock(
+        CharBlock(max_length=255),
+        label=_("Features"),
+    )
+    cta_text = CharBlock(
+        max_length=120,
+        default=_("Choose plan"),
+    )
+    cta_link = PageChooserBlock(
+        required=False,
+    )
+    cta_url = URLBlock(
+        required=False,
+    )
+    highlighted = BooleanBlock(
+        default=False,
+        required=False,
+        help_text=_("Highlight this plan as recommended."),
+    )
+
+    class Meta:
+        icon = "tag"
+        label = _("Pricing plan")
+
+
+class PricingTableBlock(StructBlock):
+    """
+    Side-by-side pricing plans comparison.
+    """
+
+    title = CharBlock(
+        max_length=255,
+        required=False,
+    )
+    plans = ListBlock(
+        PricingPlanBlock(),
+        min_num=1,
+        max_num=4,
+        label=_("Plans"),
+    )
+    settings = BlockSettings(required=False)
+
+    class Meta:
+        template = "website/blocks/pricing_table_block.html"
+        icon = "tag"
+        label = _("Pricing table")
+
+
+# ---------------------------------------------------------------------------
+# CounterUpBlock
+# ---------------------------------------------------------------------------
+
+
+class CounterItemBlock(StructBlock):
+    """A single animated counter."""
+
+    value = IntegerBlock(
+        required=True,
+        help_text=_("Target number to count up to."),
+    )
+    suffix = CharBlock(
+        max_length=20,
+        required=False,
+        help_text=_("Text after number (e.g. '+', '%', 'k')."),
+    )
+    label = CharBlock(
+        max_length=100,
+        required=True,
+    )
+    icon = CharBlock(
+        max_length=50,
+        required=False,
+    )
+
+    class Meta:
+        icon = "order"
+        label = _("Counter")
+
+
+class CounterUpBlock(StructBlock):
+    """
+    Animated count-up counters section.
+    """
+
+    title = CharBlock(
+        max_length=255,
+        required=False,
+    )
+    counters = ListBlock(
+        CounterItemBlock(),
+        min_num=1,
+        label=_("Counters"),
+    )
+    background_style = ChoiceBlock(
+        choices=[
+            ("default", _("Default")),
+            ("primary", _("Primary colour")),
+            ("dark", _("Dark")),
+        ],
+        default="default",
+    )
+    settings = BlockSettings(required=False)
+
+    class Meta:
+        template = "website/blocks/counter_up_block.html"
+        icon = "order"
+        label = _("Animated counters")
+
+
+# ---------------------------------------------------------------------------
+# SocialFeedBlock
+# ---------------------------------------------------------------------------
+
+
+class SocialFeedBlock(StructBlock):
+    """
+    Embed social media feed or posts.
+    """
+
+    title = CharBlock(
+        max_length=255,
+        required=False,
+    )
+    platform = ChoiceBlock(
+        choices=[
+            ("instagram", _("Instagram")),
+            ("facebook", _("Facebook")),
+            ("twitter", _("X / Twitter")),
+            ("youtube", _("YouTube")),
+        ],
+        default="instagram",
+    )
+    embed_url = URLBlock(
+        required=True,
+        help_text=_("URL of the social profile or post to embed."),
+    )
+    max_posts = IntegerBlock(
+        default=6,
+        min_value=1,
+        max_value=12,
+        help_text=_("Maximum number of posts to display."),
+    )
+    settings = BlockSettings(required=False)
+
+    class Meta:
+        template = "website/blocks/social_feed_block.html"
+        icon = "site"
+        label = _("Social feed")

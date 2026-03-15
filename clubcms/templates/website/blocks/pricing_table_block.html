@@ -1,0 +1,30 @@
+{% load wagtailcore_tags i18n website_tags %}
+
+<section {% block_attrs self.settings "block-pricing" %}>
+    <div class="container">
+        {% if self.title %}
+        <h2 class="block-pricing__title">{{ self.title }}</h2>
+        {% endif %}
+        <div class="block-pricing__grid">
+            {% for plan in self.plans %}
+            <div class="block-pricing__plan{% if plan.value.highlighted %} block-pricing__plan--highlighted{% endif %}">
+                <h3 class="block-pricing__name">{{ plan.value.name }}</h3>
+                <div class="block-pricing__price">{{ plan.value.price }}</div>
+                {% if plan.value.description %}
+                <p class="block-pricing__description">{{ plan.value.description }}</p>
+                {% endif %}
+                <ul class="block-pricing__features">
+                    {% for feature in plan.value.features %}
+                    <li>{{ feature }}</li>
+                    {% endfor %}
+                </ul>
+                {% if plan.value.cta_link %}
+                <a class="block-pricing__cta btn" href="{% pageurl plan.value.cta_link %}">{{ plan.value.cta_text }}</a>
+                {% elif plan.value.cta_url %}
+                <a class="block-pricing__cta btn" href="{{ plan.value.cta_url }}">{{ plan.value.cta_text }}</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

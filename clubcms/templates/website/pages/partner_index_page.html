@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags i18n %}
 
 {% block body_class %}page-partners{% endblock %}
 
@@ -25,7 +25,7 @@
                 <li class="page-partners__filter-item">
                     <a href="{% pageurl page %}"
                        class="page-partners__filter-link" {% if not current_category %}data-active{% endif %}>
-                        All
+                        {% trans "All" %}
                     </a>
                 </li>
                 {% for cat in categories %}
@@ -83,7 +83,7 @@
 
         {% else %}
         <div class="page-partners__empty">
-            <p>No partners found.</p>
+            <p>{% trans "No partners found." %}</p>
         </div>
         {% endif %}
 

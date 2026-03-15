@@ -44,7 +44,7 @@ ClubCMS is a content management system built on Wagtail 7.x and Django 5.x, desi
 ```bash
 cd clubcms/
 docker compose up -d
-docker compose exec web python manage.py populate_demo
+docker compose exec web python manage.py populate_demo_it
 ```
 
 Then visit:
@@ -553,16 +553,21 @@ Federation allows multiple clubs to share events and coordinate activities throu
 
 ### Populating Demo Content
 
-```bash
-# First time setup with demo data
-docker compose exec web python manage.py populate_demo
+Two demo commands are available — choose the language for your default site:
 
-# Reset and repopulate
-docker compose exec web python manage.py populate_demo --flush
+```bash
+# Italian demo (default locale: IT, IT+EN pages)
+docker compose exec web python manage.py populate_demo_it
+
+# English demo (default locale: EN)
+docker compose exec web python manage.py populate_demo_en
+
+# Reset and repopulate (add --flush to either command)
+docker compose exec web python manage.py populate_demo_it --flush
+docker compose exec web python manage.py populate_demo_en --flush
 ```
 
-The command creates:
-- 1 ColorScheme ("Rosso Corsa")
+Both commands create:
 - 4 News categories, 5 Event categories, 3 Partner categories
 - 3 Membership products
 - 3 Testimonials
@@ -573,11 +578,14 @@ The command creates:
 - Navbar and Footer with menu items and social links
 - Complete Site Settings
 
+`populate_demo_it` additionally creates English copies of all pages as a starting point for translation.
+Other locales (DE, FR, ES) are activated later from the Wagtail admin.
+
 ### Demo Content Sources
 
-Event data is inspired by real motorcycle events:
-- **Guzzi Days** (YOUR_SERVER_HOST): Avviamento Motori, Lands of Pisa, Spring Franken Bayern Treffen
-- **HOG (Harley Owners Group)**: HOG Rally Garda
+Event data is inspired by real motorcycle club events from Northern Italy:
+- **Avviamento Motori, Lands of Pisa, Spring Bayern Treffen**: annual rallies
+- **Rally Lago di Garda**: lake touring event
 - **Club-organized**: Tour delle Orobie, Track Day Franciacorta, Ride for Children
 
 ---
@@ -588,7 +596,7 @@ Event data is inspired by real motorcycle events:
 
 **Site shows "Welcome to Wagtail" instead of demo content:**
 ```bash
-docker compose exec web python manage.py populate_demo
+docker compose exec web python manage.py populate_demo_it
 ```
 
 **Database migrations out of sync:**
@@ -612,7 +620,7 @@ docker compose down -v  # WARNING: deletes all data
 docker compose up -d
 docker compose exec web python manage.py migrate
 docker compose exec web python manage.py createsuperuser
-docker compose exec web python manage.py populate_demo
+docker compose exec web python manage.py populate_demo_it
 ```
 
 ### Checking System Health
@@ -646,8 +654,10 @@ For production, update `docker-compose.yml`:
 
 | Command | Description |
 |---------|-------------|
-| `populate_demo` | Create demo content |
-| `populate_demo --flush` | Reset and recreate demo content |
+| `populate_demo_it` | Create Italian demo content |
+| `populate_demo_it --flush` | Reset and recreate Italian demo content |
+| `populate_demo_en` | Create English demo content |
+| `populate_demo_en --flush` | Reset and recreate English demo content |
 | `createsuperuser` | Create admin user |
 | `migrate` | Apply database migrations |
 | `collectstatic` | Collect static files for production |

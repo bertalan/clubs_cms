@@ -1,10 +1,15 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n static %}
 
 {% block title %}{% trans "Mutual Aid Availability" %} | {{ block.super }}{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+{% endblock %}
+
 {% block content %}
-<div class="container">
+<div class="container container--narrow">
     <h1>{% trans "Mutual Aid Availability" %}</h1>
 
     <p>{% trans "Set your availability for the mutual aid network. When enabled, other members in need can see you are available to help within your specified radius." %}</p>
@@ -18,29 +23,46 @@
     <form method="post" novalidate>
         {% csrf_token %}
 
-        {% for field in form %}
-        <div class="form-group {% if field.field.widget.input_type == 'checkbox' %}form-check{% endif %}">
-            {% if field.field.widget.input_type == "checkbox" %}
-                {{ field }}
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {% else %}
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field }}
-            {% endif %}
-            {% if field.help_text %}
-            <small class="form-help">{{ field.help_text }}</small>
-            {% endif %}
-            {% if field.errors %}
-            <ul class="form-errors">
-                {% for error in field.errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
+        {# Availability toggle #}
+        {% include "includes/_form_field.html" with field=form.aid_available %}
+
+        {# City (auto-populated by geocoder, also editable) #}
+        {% include "includes/_form_field.html" with field=form.aid_location_city %}
+
+        {# Geocoder widget — populates aid_coordinates + aid_location_city #}
+        <div class="form-group">
+            <div class="form-label-row">
+                <label class="form-label">{% trans "Location" %}</label>
+            </div>
+            <p class="form-help-text">{% trans "Search an address, click the map, or use your GPS to set your position. You can also enter coordinates manually." %}</p>
+            <div data-geocoder-widget
+                 data-target-coordinates="#id_aid_coordinates"
+                 data-target-city="#id_aid_location_city"
+                 data-search-placeholder="{% trans 'Search address…' %}"
+                 {% if initial_lat and initial_lng %}
+                 data-initial-lat="{{ initial_lat }}"
+                 data-initial-lng="{{ initial_lng }}"
+                 {% endif %}>
+            </div>
+            {# Hidden coordinates field (populated by JS) #}
+            {{ form.aid_coordinates }}
         </div>
-        {% endfor %}
+
+        {# Radius #}
+        {% include "includes/_form_field.html" with field=form.aid_radius_km %}
+
+        {# Notes #}
+        {% include "includes/_form_field.html" with field=form.aid_notes %}
 
         <button type="submit" class="btn btn-primary">{% trans "Save Availability" %}</button>
     </form>
 </div>
+
+{% include "includes/_field_help_modal.html" %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="{% static 'js/geocoder-widget.js' %}"></script>
 {% endblock %}

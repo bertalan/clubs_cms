@@ -17,6 +17,8 @@ from wagtail.blocks import (
 )
 from wagtail.images.blocks import ImageChooserBlock
 
+from .common import BlockSettings
+
 
 # ---------------------------------------------------------------------------
 # AccordionBlock
@@ -57,6 +59,7 @@ class AccordionBlock(StructBlock):
         min_num=1,
         label=_("Panels"),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/accordion_block.html"
@@ -97,6 +100,7 @@ class TabsBlock(StructBlock):
         min_num=2,
         label=_("Tabs"),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/tabs_block.html"
@@ -133,6 +137,7 @@ class TwoColumnBlock(StructBlock):
         default="50-50",
         help_text=_("Column width ratio."),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/two_column_block.html"
@@ -186,6 +191,7 @@ class SectionBlock(StructBlock):
         default="md",
         help_text=_("Vertical padding."),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/section_block.html"
@@ -212,6 +218,7 @@ class DividerBlock(StructBlock):
         default="line",
         help_text=_("Separator visual style."),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/divider_block.html"
@@ -239,6 +246,7 @@ class SpacerBlock(StructBlock):
         default="md",
         help_text=_("Amount of vertical space."),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/spacer_block.html"

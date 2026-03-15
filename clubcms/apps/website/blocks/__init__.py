@@ -24,6 +24,9 @@ from django.utils.translation import gettext_lazy as _
 
 from wagtail.blocks import RichTextBlock
 
+# --- Common settings ---
+from .common import BlockSettings  # noqa: F401
+
 # --- Hero blocks ---
 from .hero import (
     HeroBannerBlock,
@@ -37,12 +40,21 @@ from .content import (
     AlertBlock,
     CardBlock,
     CardsGridBlock,
+    CounterUpBlock,
     CTABlock,
+    FAQBlock,
+    FeaturedPagesBlock,
     NewsletterSignupBlock,
+    PartnerBlock,
+    PartnersGridBlock,
+    PricingTableBlock,
     QuoteBlock,
+    SocialFeedBlock,
     StatsBlock,
+    TableBlock,
     TeamGridBlock,
     TeamMemberBlock,
+    TestimonialsBlock,
     TimelineBlock,
 )
 
@@ -94,6 +106,14 @@ CONTENT_BLOCKS = [
     ("team_grid", TeamGridBlock()),
     ("newsletter_signup", NewsletterSignupBlock()),
     ("alert", AlertBlock()),
+    ("partners_grid", PartnersGridBlock()),
+    ("table", TableBlock()),
+    ("testimonials", TestimonialsBlock()),
+    ("featured_pages", FeaturedPagesBlock()),
+    ("faq", FAQBlock()),
+    ("pricing_table", PricingTableBlock()),
+    ("counter_up", CounterUpBlock()),
+    ("social_feed", SocialFeedBlock()),
 ]
 
 MEDIA_BLOCKS = [
@@ -156,6 +176,15 @@ __all__ = [
     "TeamGridBlock",
     "NewsletterSignupBlock",
     "AlertBlock",
+    "PartnerBlock",
+    "PartnersGridBlock",
+    "TableBlock",
+    "TestimonialsBlock",
+    "FeaturedPagesBlock",
+    "FAQBlock",
+    "PricingTableBlock",
+    "CounterUpBlock",
+    "SocialFeedBlock",
     # Media
     "GalleryImageBlock",
     "GalleryBlock",
@@ -174,6 +203,8 @@ __all__ = [
     # Route
     "WaypointBlock",
     "RouteBlock",
+    # Common
+    "BlockSettings",
     # Block lists
     "HERO_BLOCKS",
     "CONTENT_BLOCKS",

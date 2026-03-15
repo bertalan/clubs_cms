@@ -1,14 +1,14 @@
 """
-Management command to populate the ClubCMS with realistic demo content.
+Management command to populate ClubCMS with realistic demo content in Italian (IT).
 
-Uses real motorcycle event data from Guzzi Days, Ducati, and HOG clubs.
+Uses real motorcycle event data inspired by Northern Italian motorcycle club events.
 Creates categories, snippets, pages, news, events, members, images
 and mutual-aid requests so the site is immediately visitable after running.
 
 Usage:
-    python manage.py populate_demo
-    docker compose exec web python manage.py populate_demo
-    docker compose exec web python manage.py populate_demo --flush
+    python manage.py populate_demo_it
+    docker compose exec web python manage.py populate_demo_it
+    docker compose exec web python manage.py populate_demo_it --flush
 """
 
 import io
@@ -24,11 +24,23 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 
 from wagtail.images.models import Image
-from wagtail.models import Page, Site
+from wagtail.models import Locale, Page, Site
 from wagtail.rich_text import RichText
 
-from apps.members.models import ClubUser
-from apps.mutual_aid.models import AidRequest
+from django.contrib.contenttypes.models import ContentType
+
+from apps.core.models import Activity, Comment, Contribution, Reaction
+from apps.events.models import EventFavorite, EventRegistration
+from apps.federation.models import (
+    ExternalEvent,
+    ExternalEventComment,
+    ExternalEventInterest,
+    FederatedClub,
+    FederationInfoPage,
+)
+from apps.members.models import ClubUser, MembershipRequest
+from apps.mutual_aid.models import AidRequest, FederatedHelper, MutualAidPage
+from apps.notifications.models import NotificationQueue
 from apps.website.models import (
     AboutPage,
     AidSkill,
@@ -50,6 +62,7 @@ from apps.website.models import (
     NewsCategory,
     NewsIndexPage,
     NewsPage,
+    MembershipPlansPage,
     PartnerCategory,
     PartnerIndexPage,
     PartnerPage,
@@ -74,14 +87,15 @@ IMAGE_SPECS = [
     # (filename, width, height, keywords, description)
     ("hero_homepage.jpg", 1920, 1080, "motorcycle,road", "Hero homepage - motorcycle on open road"),
     ("hero_about.jpg", 1920, 800, "motorcycle,group,riders", "About page cover - group of riders"),
+    ("hero_contact.jpg", 1920, 600, "motorcycle,garage,workshop", "Contact page hero - motorcycle garage"),
     ("event_mandello.jpg", 800, 600, "motorcycle,lake", "Event Mandello - motorcycle at lake"),
     ("event_pisa.jpg", 800, 600, "motorcycle,tuscany", "Event Pisa - motorcycle in Tuscany"),
     ("event_orobie.jpg", 800, 600, "motorcycle,mountains", "Event Orobie - mountain ride"),
     ("event_franciacorta.jpg", 800, 600, "motorcycle,racetrack", "Event Track Day"),
     ("event_children.jpg", 800, 600, "motorcycle,charity", "Event Ride for Children"),
-    ("event_garda.jpg", 800, 600, "motorcycle,lake,garda", "Event HOG Rally Garda"),
-    ("news_mandello.jpg", 800, 600, "moto,guzzi", "News Avviamento Motori"),
-    ("news_pisa.jpg", 800, 600, "motorcycle,italy", "News Moto Guzzi Lands Pisa"),
+    ("event_garda.jpg", 800, 600, "motorcycle,lake,garda", "Event Moto Rally Garda"),
+    ("news_mandello.jpg", 800, 600, "motorcycle,rally", "News Avviamento Motori"),
+    ("news_pisa.jpg", 800, 600, "motorcycle,italy", "News Moto moto Lands Pisa"),
     ("news_bayern.jpg", 800, 600, "motorcycle,germany", "News Bayern Treffen"),
     ("news_officina.jpg", 800, 600, "motorcycle,workshop", "News Officina Bergamo"),
     ("news_manutenzione.jpg", 800, 600, "motorcycle,engine,repair", "News Preparazione Stagione"),
@@ -148,7 +162,9 @@ class Command(BaseCommand):
         self._create_privacy_page(home_page)
         self._create_transparency_page(home_page)
         self._create_press_page(home_page)
+        self._create_membership_plans_page(home_page)
         partner_index = self._create_partner_index(home_page)
+        federation_page = self._create_federation_info_page(home_page)
 
         # Step 4: Content pages
         self._create_news_articles(news_index)
@@ -172,6 +188,27 @@ class Command(BaseCommand):
         # Step 9: Mutual-aid requests
         self._create_aid_requests(members)
 
+        # Step 10: Event registrations, favorites, pricing tiers
+        self._create_event_registrations(members)
+        self._create_event_favorites(members)
+
+        # Step 11: Social interactions (contributions, comments, reactions, activity)
+        self._create_contributions(members)
+        self._create_comments_and_reactions(members)
+        self._create_activity_log(members)
+
+        # Step 12: Membership requests
+        self._create_membership_requests(members)
+
+        # Step 13: Federation (partner clubs + external events)
+        self._create_federated_clubs(members)
+
+        # Step 14: Notifications
+        self._create_notifications(members)
+
+        # Step 15: English translations (starting point for editors)
+        self._create_en_translations(home_page)
+
         self.stdout.write(self.style.SUCCESS(
             "\nDemo content created successfully! "
             "Visit http://localhost:8888/ to see the site."
@@ -179,6 +216,16 @@ class Command(BaseCommand):
 
     def _flush(self):
         """Remove all demo-created content."""
+        # Remove transactional data first (FK dependencies)
+        NotificationQueue.objects.all().delete()
+        FederatedClub.objects.all().delete()  # cascades ExternalEvent, Interest, Comment
+        MembershipRequest.objects.all().delete()
+        Activity.objects.all().delete()
+        Reaction.objects.all().delete()
+        Comment.objects.all().delete()
+        Contribution.objects.all().delete()
+        EventRegistration.objects.all().delete()
+        EventFavorite.objects.all().delete()
         # Remove demo images
         Image.objects.filter(file__startswith="original_images/demo_").delete()
         # Remove demo members (cascade-deletes their aid requests)
@@ -222,14 +269,14 @@ class Command(BaseCommand):
     def _create_categories(self):
         # News categories
         news_cats = [
-            ("Club News", "club-news", "#B91C1C",
-             "News about our club activities and announcements"),
-            ("Events Recap", "events-recap", "#059669",
-             "Reports and photos from past events"),
-            ("Motorcycle World", "motorcycle-world", "#7C3AED",
-             "News from the motorcycle industry and community"),
-            ("Technical", "technical", "#2563EB",
-             "Technical articles, reviews, and maintenance tips"),
+            ("Notizie Club", "club-news", "#B91C1C",
+             "Notizie sulle attività e comunicazioni del club"),
+            ("Resoconti eventi", "events-recap", "#059669",
+             "Cronache e foto dagli eventi passati"),
+            ("Mondo moto", "motorcycle-world", "#7C3AED",
+             "Notizie dal mondo del motociclismo e dell'industria"),
+            ("Tecnica", "technical", "#2563EB",
+             "Articoli tecnici, recensioni e consigli di manutenzione"),
         ]
         self.news_categories = {}
         for name, slug, color, desc in news_cats:
@@ -244,10 +291,10 @@ class Command(BaseCommand):
         # Event categories
         event_cats = [
             ("Rally & Raduno", "rally", "rally"),
-            ("Touring Ride", "touring", "motorcycle"),
-            ("Social Meeting", "social-meeting", "meeting"),
+            ("Gita in moto", "touring", "motorcycle"),
+            ("Incontro sociale", "social-meeting", "meeting"),
             ("Track Day", "track-day", "race"),
-            ("Charity Ride", "charity-ride", "charity"),
+            ("Gita benefica", "charity-ride", "charity"),
         ]
         self.event_categories = {}
         for name, slug, icon in event_cats:
@@ -261,9 +308,9 @@ class Command(BaseCommand):
 
         # Partner categories
         partner_cats = [
-            ("Main Sponsor", "main-sponsor", "", 1),
-            ("Technical Partner", "technical-partner", "", 2),
-            ("Media Partner", "media-partner", "", 3),
+            ("Sponsor principale", "main-sponsor", "", 1),
+            ("Partner tecnico", "technical-partner", "", 2),
+            ("Partner media", "media-partner", "", 3),
         ]
         self.partner_categories = {}
         for name, slug, icon, order in partner_cats:
@@ -582,9 +629,14 @@ class Command(BaseCommand):
             return None
 
         # Delete Wagtail's default welcome page if it exists
-        Page.objects.filter(depth=2, slug="home").exclude(
+        default_pages = Page.objects.filter(depth=2, slug="home").exclude(
             content_type__model="homepage"
-        ).delete()
+        )
+        if default_pages.exists():
+            default_pages.delete()
+            Page.fix_tree()
+            # Re-fetch root after tree repair
+            root = Page.objects.filter(depth=1).first()
 
         home = HomePage(
             title="Moto Club Aquile Rosse",
@@ -620,7 +672,7 @@ class Command(BaseCommand):
                         "text": "Diventa socio del Moto Club Aquile Rosse e "
                                 "partecipa alle nostre avventure su strada.",
                         "button_text": "Scopri le Tessere",
-                        "button_url": "/about/",
+                        "button_url": "/diventa-socio/",
                         "style": "primary",
                     },
                 },
@@ -687,6 +739,7 @@ class Command(BaseCommand):
                 {
                     "type": "timeline",
                     "value": {
+                        "title": "Momenti Chiave",
                         "items": [
                             {"year": "1987", "title": "Fondazione",
                              "description": "12 amici fondano il Moto Club Aquile Rosse a Bergamo."},
@@ -725,7 +778,7 @@ class Command(BaseCommand):
                         "members": [
                             {"name": "Roberto Colombo", "role": "Presidente",
                              "bio": "Motociclista da 40 anni, guida il club dal 2015. "
-                                    "Appassionato di Moto Guzzi e viaggi lungo raggio."},
+                                    "Appassionato di Moto moto e viaggi lungo raggio."},
                             {"name": "Francesca Moretti", "role": "Vicepresidente",
                              "bio": "Ingegnere meccanico e istruttrice di guida sicura. "
                                     "Organizza i corsi di formazione del club."},
@@ -780,7 +833,7 @@ class Command(BaseCommand):
                 "title": "Avviamento Motori 2026: Si Riparte da Mandello!",
                 "slug": "avviamento-motori-2026",
                 "intro": "Il tradizionale raduno di apertura stagione torna a Mandello del Lario "
-                         "con novità e sorprese per tutti gli appassionati Guzzi.",
+                         "con novità e sorprese per tutti gli appassionati di moto.",
                 "display_date": today - timedelta(days=3),
                 "category": "club-news",
                 "body": json.dumps([
@@ -788,18 +841,18 @@ class Command(BaseCommand):
                         "type": "rich_text",
                         "value": "<p>Come ogni anno, la stagione motociclistica si apre "
                                  "con il tradizionale <strong>Avviamento Motori</strong> "
-                                 "a Mandello del Lario, la patria della Moto Guzzi.</p>"
+                                 "a Mandello del Lario, la patria della Moto moto.</p>"
                                  "<p>L'evento, organizzato dal Moto Club Le Aquile di Mandello "
-                                 "in collaborazione con Guzzi Days, prevede un programma ricco "
+                                 "prevede un programma ricco "
                                  "di attività: dalla sfilata lungo il lago alle visite guidate "
-                                 "al Museo Moto Guzzi, fino alla cena sociale presso il "
+                                 "al Museo Moto moto, fino alla cena sociale presso il "
                                  "Ristorante Il Griso.</p>"
                                  "<h3>Programma</h3>"
                                  "<ul>"
                                  "<li>Ore 9:00 - Ritrovo presso Piazza Garibaldi</li>"
                                  "<li>Ore 10:30 - Sfilata lungo il Lago di Como</li>"
                                  "<li>Ore 12:30 - Pranzo sociale</li>"
-                                 "<li>Ore 15:00 - Visita Museo Moto Guzzi</li>"
+                                 "<li>Ore 15:00 - Visita al museo della moto</li>"
                                  "<li>Ore 18:00 - Aperitivo e premiazioni</li>"
                                  "</ul>"
                                  "<p>Il Moto Club Aquile Rosse parteciperà con una "
@@ -809,9 +862,9 @@ class Command(BaseCommand):
                 ]),
             },
             {
-                "title": "1° Moto Guzzi Lands of Pisa: Nuovo Evento in Toscana",
-                "slug": "moto-guzzi-lands-pisa",
-                "intro": "Nasce un nuovo raduno guzzista a Pontedera, nella terra dove "
+                "title": "1° Moto Lands of Pisa: Nuovo Evento in Toscana",
+                "slug": "moto-lands-pisa",
+                "intro": "Nasce un nuovo raduno motociclistico a Pontedera, nella terra dove "
                          "nacque la Piaggio e a due passi dalla torre pendente.",
                 "display_date": today - timedelta(days=7),
                 "category": "motorcycle-world",
@@ -819,11 +872,11 @@ class Command(BaseCommand):
                     {
                         "type": "rich_text",
                         "value": "<p>Grandi novità dal panorama dei raduni motociclistici "
-                                 "italiani: è stato annunciato il <strong>1° Moto Guzzi "
+                                 "italiani: è stato annunciato il <strong>1° Moto moto "
                                  "Lands of Pisa</strong>, un evento che si terrà a Pontedera "
                                  "(PI) nella primavera 2026.</p>"
                                  "<p>L'evento è organizzato dal Moto Club Terre di Pisa "
-                                 "in collaborazione con la rete Guzzi Days e promette "
+                                 "in collaborazione con la rete moto Days e promette "
                                  "un weekend all'insegna della cultura motociclistica "
                                  "toscana, con percorsi tra le colline pisane, degustazioni "
                                  "di prodotti locali e un raduno statico nel centro storico.</p>"
@@ -854,7 +907,7 @@ class Command(BaseCommand):
                                  "provenienti da tutta Europa, ha offerto giornate di "
                                  "cavalcate nelle splendide strade della Franconia, "
                                  "birra bavarese e un'atmosfera di grande cameratismo.</p>"
-                                 "<p>Prossima trasferta internazionale: il Guzzi Days 2026 "
+                                 "<p>Prossima trasferta internazionale: il moto Days 2026 "
                                  "in Sudafrica!</p>",
                     },
                 ]),
@@ -986,7 +1039,7 @@ class Command(BaseCommand):
             {
                 "title": "Avviamento Motori 2026 - Mandello del Lario",
                 "slug": "avviamento-motori-mandello-2026",
-                "intro": "Il tradizionale raduno di apertura stagione nella patria della Moto Guzzi.",
+                "intro": "Il tradizionale raduno di apertura stagione a Mandello del Lario.",
                 "start_date": now + timedelta(days=30),
                 "end_date": now + timedelta(days=31),
                 "location_name": "Piazza Garibaldi, Mandello del Lario",
@@ -1005,20 +1058,20 @@ class Command(BaseCommand):
                              "il raduno che apre ufficialmente la stagione motociclistica "
                              "sulle sponde del Lago di Como.</p>"
                              "<p>Organizzato dal Moto Club Le Aquile di Mandello in "
-                             "collaborazione con la rete Guzzi Days, l'evento è aperto "
+                             "collaborazione con la rete moto Days, l'evento è aperto "
                              "a tutte le marche e modelli.</p>"
                              "<h3>Cosa Include</h3>"
                              "<ul>"
                              "<li>Sfilata panoramica lungo il Lago di Como</li>"
                              "<li>Pranzo sociale (incluso nella quota)</li>"
-                             "<li>Visita al Museo Moto Guzzi</li>"
+                             "<li>Visita al Museo Moto moto</li>"
                              "<li>Gadget commemorativo</li>"
                              "</ul>",
                 }]),
             },
             {
-                "title": "1° Moto Guzzi Lands of Pisa",
-                "slug": "moto-guzzi-lands-pisa-2026",
+                "title": "1° Moto Lands of Pisa",
+                "slug": "moto-lands-pisa-2026",
                 "intro": "Primo raduno guzzista nella terra di Pontedera, tra le colline toscane.",
                 "start_date": now + timedelta(days=60),
                 "end_date": now + timedelta(days=62),
@@ -1035,11 +1088,11 @@ class Command(BaseCommand):
                 "body": json.dumps([{
                     "type": "rich_text",
                     "value": "<p>Un weekend nella splendida Toscana per il primo "
-                             "<strong>Moto Guzzi Lands of Pisa</strong>.</p>"
+                             "<strong>Moto moto Lands of Pisa</strong>.</p>"
                              "<p>Il programma prevede tour guidati nelle colline "
                              "pisane, visita al Museo Piaggio di Pontedera, "
                              "degustazione di prodotti tipici e raduno statico "
-                             "in piazza con esposizione di Guzzi d'epoca e moderne.</p>",
+                             "in piazza con esposizione di moto d'epoca e moderne.</p>",
                 }]),
             },
             {
@@ -1126,9 +1179,9 @@ class Command(BaseCommand):
                 }]),
             },
             {
-                "title": "HOG Rally Garda 2026",
-                "slug": "hog-rally-garda-2026",
-                "intro": "Raduno HOG (Harley Owners Group) sul Lago di Garda con parata e concerti.",
+                "title": "Moto Rally Garda 2026",
+                "slug": "moto-rally-garda-2026",
+                "intro": "Raduno moto sul Lago di Garda con parata e concerti.",
                 "start_date": now + timedelta(days=90),
                 "end_date": now + timedelta(days=93),
                 "location_name": "Lungolago di Desenzano del Garda",
@@ -1143,10 +1196,10 @@ class Command(BaseCommand):
                 "member_discount_percent": 5,
                 "body": json.dumps([{
                     "type": "rich_text",
-                    "value": "<p>Il <strong>HOG Rally Garda</strong> è uno dei più grandi "
-                             "raduni Harley-Davidson del Nord Italia, organizzato dal "
-                             "Chapter HOG Lake Garda in collaborazione con il concessionario "
-                             "Harley-Davidson Brescia.</p>"
+                    "value": "<p>Il <strong>Moto Rally Garda</strong> è uno dei più grandi "
+                             "raduni moto del Nord Italia, organizzato dal "
+                             "Moto Club Lago di Garda in collaborazione con il concessionario locale."
+                             "</p>"
                              "<p>Quattro giorni di moto, musica, food truck e la celebre "
                              "Thunder Parade lungo le sponde del lago. Il nostro club "
                              "partecipa come ospite con uno stand informativo.</p>",
@@ -1195,11 +1248,24 @@ class Command(BaseCommand):
         contact = ContactPage(
             title="Contatti",
             slug="contatti",
+            # Hero section
+            hero_badge="Siamo qui per te",
+            # Content
             intro="<p>Hai domande? Vuoi sapere di più sul club? Scrivici!</p>",
             form_title="Inviaci un Messaggio",
             success_message="<p>Grazie per il tuo messaggio! Ti risponderemo entro 48 ore.</p>",
             captcha_enabled=True,
             captcha_provider="honeypot",
+            # Membership CTA
+            membership_title="Diventa Socio",
+            membership_description=(
+                "Unisciti alla nostra comunità di oltre 250 motociclisti. "
+                "Accesso a tutti gli eventi, sconti presso i partner, "
+                "assicurazione e assistenza stradale inclusi."
+            ),
+            membership_price="Quota annuale €80",
+            membership_cta_text="Iscriviti Ora",
+            # membership_cta_url left blank - set via admin with actual page URL
         )
         parent.add_child(instance=contact)
         contact.save_revision().publish()
@@ -1298,6 +1364,129 @@ class Command(BaseCommand):
         press.save_revision().publish()
         self.stdout.write("  Created PressPage")
 
+    def _create_membership_plans_page(self, parent):
+        if MembershipPlansPage.objects.exists():
+            self.stdout.write("  MembershipPlansPage already exists, skipping.")
+            return
+        page = MembershipPlansPage(
+            title="Diventa Socio",
+            slug="diventa-socio",
+            intro="<p>Scegli il piano di tesseramento più adatto alle tue esigenze. "
+                  "Combina più prodotti per personalizzare la tua esperienza.</p>",
+        )
+        parent.add_child(instance=page)
+        page.save_revision().publish()
+        self.stdout.write("  Created MembershipPlansPage")
+
+    def _create_federation_info_page(self, parent):
+        if FederationInfoPage.objects.exists():
+            self.stdout.write("  FederationInfoPage already exists, skipping.")
+            return FederationInfoPage.objects.first()
+
+        how_it_works = json.dumps([{
+            "type": "step",
+            "value": {
+                "title": "Come funziona la Federazione",
+                "items": [
+                    {"year": "1", "title": "Scopri i club partner",
+                     "description": "<p>Naviga la lista dei club federati e scopri "
+                                    "le loro attività, la loro storia e i servizi "
+                                    "che offrono ai soci.</p>"},
+                    {"year": "2", "title": "Esplora gli eventi condivisi",
+                     "description": "<p>Consulta gli eventi pubblicati dai club "
+                                    "partner. Puoi filtrarli per club, cercarli "
+                                    "per nome e vedere tutti i dettagli.</p>"},
+                    {"year": "3", "title": "Esprimi il tuo interesse",
+                     "description": "<p>Segna se sei interessato, indeciso o se "
+                                    "partecipi sicuramente. Il club organizzatore "
+                                    "riceve solo conteggi anonimi.</p>"},
+                    {"year": "4", "title": "Commenta con i soci",
+                     "description": "<p>Discuti gli eventi con gli altri soci del "
+                                    "tuo club. I commenti sono privati e non vengono "
+                                    "mai condivisi con il club partner.</p>"},
+                ],
+            },
+        }])
+
+        faq = json.dumps([{
+            "type": "faq",
+            "value": {
+                "title": "Domande frequenti sulla Federazione",
+                "items": [
+                    {"question": "Cos\u0027è la federazione dei club?",
+                     "answer": "<p>È una rete volontaria di club che condividono "
+                               "eventi e iniziative attraverso un protocollo sicuro. "
+                               "Ogni club mantiene la propria completa autonomia.</p>"},
+                    {"question": "Devo pagare per accedere agli eventi federati?",
+                     "answer": "<p>No. L\u0027accesso alla lista degli eventi partner "
+                               "è incluso nella tessera associativa. L\u0027iscrizione "
+                               "a un evento partner segue le regole del club "
+                               "organizzatore.</p>"},
+                    {"question": "I miei dati personali vengono condivisi?",
+                     "answer": "<p>No. La federazione scambia solo dati sugli eventi "
+                               "e conteggi aggregati anonimi. Nessun dato personale "
+                               "viene mai trasmesso ai club partner.</p>"},
+                    {"question": "Come viene garantita la sicurezza?",
+                     "answer": "<p>Ogni club partner dispone di chiavi API univoche. "
+                               "Le comunicazioni avvengono tramite HTTPS con "
+                               "autenticazione HMAC. I dati vengono validati e "
+                               "sanificati prima dell\u0027importazione.</p>"},
+                    {"question": "Posso partecipare agli eventi di un club partner?",
+                     "answer": "<p>Puoi esprimere interesse dalla nostra piattaforma. "
+                               "Per l\u0027iscrizione effettiva, segui le indicazioni "
+                               "sul sito del club organizzatore tramite il link nella "
+                               "pagina dell\u0027evento.</p>"},
+                    {"question": "I commenti sono visibili ai club partner?",
+                     "answer": "<p>No. I commenti sugli eventi partner sono visibili "
+                               "solo ai soci del nostro club. Sono uno strumento di "
+                               "discussione interna.</p>"},
+                ],
+            },
+        }])
+
+        body = json.dumps([{
+            "type": "rich_text",
+            "value": (
+                "<h2>Vantaggi della federazione</h2>"
+                "<p>Far parte di una rete federata di club significa ampliare "
+                "le opportunità per i soci senza rinunciare all\u0027autonomia:</p>"
+                "<ul>"
+                "<li><strong>Più eventi</strong> — Accedi a un calendario "
+                "condiviso con decine di appuntamenti dai club partner.</li>"
+                "<li><strong>Nuove amicizie</strong> — Conosci appassionati "
+                "di altri club con interessi simili ai tuoi.</li>"
+                "<li><strong>Privacy garantita</strong> — I tuoi dati personali "
+                "restano nel nostro club.</li>"
+                "<li><strong>Discussione riservata</strong> — Commenta e "
+                "organizzati con i soci del tuo club in modo privato.</li>"
+                "</ul>"
+                "<p>La federazione è un progetto aperto: qualsiasi club può "
+                "aderire rispettando il protocollo tecnico e i principi di "
+                "trasparenza e privacy.</p>"
+            ),
+        }])
+
+        page = FederationInfoPage(
+            title="Federazione",
+            slug="federazione",
+            intro=(
+                "<p>La nostra rete di club partner condivide eventi, iniziative "
+                "e opportunità per tutti i soci. Grazie alla federazione puoi "
+                "scoprire cosa succede nei club amici, esplorare i loro eventi "
+                "e partecipare alle iniziative della rete — tutto dalla "
+                "piattaforma del tuo club, in totale sicurezza.</p>"
+            ),
+            how_it_works=how_it_works,
+            faq=faq,
+            body=body,
+            cta_text="Scopri gli eventi partner",
+            cta_url="/eventi/partner/",
+        )
+        parent.add_child(instance=page)
+        page.save_revision().publish()
+        self.stdout.write("  Created FederationInfoPage")
+        return page
+
     # ------------------------------------------------------------------
     # Partner Index + Partners
     # ------------------------------------------------------------------
@@ -1333,6 +1522,8 @@ class Command(BaseCommand):
                 "phone": "+39 035 987 6543",
                 "address": "Via Seriate 42\n24124 Bergamo",
                 "contact_city": "Bergamo",
+                "latitude": 45.6950,
+                "longitude": 9.6700,
                 "is_featured": True,
                 "show_on_homepage": True,
                 "partnership_start": date(2023, 1, 1),
@@ -1346,21 +1537,23 @@ class Command(BaseCommand):
                 }]),
             },
             {
-                "title": "Moto Guzzi Concessionaria Lecco",
-                "slug": "moto-guzzi-lecco",
-                "intro": "Concessionaria ufficiale Moto Guzzi e main sponsor del club.",
+                "title": "Concessionaria Moto Lecco",
+                "slug": "concessionaria-lecco",
+                "intro": "Concessionaria di moto e main sponsor del club.",
                 "category": "main-sponsor",
-                "website": "https://www.example.com/guzzi-lecco",
-                "email": "info@guzzilecco.it",
+                "website": "https://www.example.com/concessionaria-lecco",
+                "email": "info@motorlecco.it",
                 "phone": "+39 0341 123 456",
                 "address": "Corso Matteotti 15\n23900 Lecco",
                 "contact_city": "Lecco",
+                "latitude": 45.8566,
+                "longitude": 9.3977,
                 "is_featured": True,
                 "show_on_homepage": True,
                 "partnership_start": date(2020, 6, 1),
                 "body": json.dumps([{
                     "type": "rich_text",
-                    "value": "<p>Concessionaria ufficiale Moto Guzzi per la provincia "
+                    "value": "<p>Concessionaria ufficiale Moto moto per la provincia "
                              "di Lecco. Main sponsor del club dal 2020, supporta i "
                              "nostri eventi con demo ride e assistenza tecnica.</p>",
                 }]),
@@ -1409,29 +1602,78 @@ class Command(BaseCommand):
             show_search=True,
         )
 
-        items = [
-            ("Home", home, False),
-            ("Chi Siamo", about, False),
-            ("News", news, False),
-            ("Eventi", events, False),
+        # NOTE: no "Home" item — the logo/brand already links to home
+        top_items = [
+            ("Chi Siamo", about),
+            ("News", news),
+            ("Eventi", events),
         ]
 
-        # Add gallery, contact, partner pages if they exist
         gallery = GalleryPage.objects.first()
         if gallery:
-            items.append(("Galleria", gallery, False))
-        contact = ContactPage.objects.first()
-        if contact:
-            items.append(("Contatti", contact, True))
+            top_items.append(("Galleria", gallery))
 
-        for i, (label, page, is_cta) in enumerate(items):
-            NavbarItem.objects.create(
+        # "Servizi" is a top-level dropdown without its own page
+        top_items.append(("Servizi", None))
+
+        # Create top-level items
+        nav_items = {}
+        for i, (label, page) in enumerate(top_items):
+            item = NavbarItem.objects.create(
                 navbar=navbar,
                 sort_order=i,
                 label=label,
                 link_page=page,
-                is_cta=is_cta,
+                is_cta=False,
             )
+            nav_items[label] = item
+
+        # Sub-items under "Chi Siamo" — institutional pages for members
+        if "Chi Siamo" in nav_items:
+            chi_siamo = nav_items["Chi Siamo"]
+            sub_items = [
+                ("Storia", about, ""),
+                ("Contatti", ContactPage.objects.first(), ""),
+                ("Diventa Socio", MembershipPlansPage.objects.first(), ""),
+                ("Consiglio Direttivo", BoardPage.objects.first(), ""),
+                ("Trasparenza", TransparencyPage.objects.first(), ""),
+                ("Tessera Socio", None, "/account/card/"),
+                ("Partner", PartnerIndexPage.objects.first(), ""),
+            ]
+            for i, (label, page, url) in enumerate(sub_items):
+                if page or url:
+                    NavbarItem.objects.create(
+                        navbar=navbar,
+                        parent=chi_siamo,
+                        sort_order=i,
+                        label=label,
+                        link_page=page,
+                        link_url=url,
+                        is_cta=False,
+                    )
+
+        # Sub-items under "Servizi" — club services
+        if "Servizi" in nav_items:
+            servizi = nav_items["Servizi"]
+            federation_page = FederationInfoPage.objects.first()
+            service_items = [
+                ("Soccorso Stradale", None, "/mutual-aid/"),
+                ("Federazione Eventi", federation_page, ""),
+                ("Contributi", None, "/account/contributions/"),
+                ("Notifiche", None, "/account/notifications/"),
+                ("Area Stampa", PressPage.objects.first(), ""),
+            ]
+            for i, (label, page, url) in enumerate(service_items):
+                if page or url:
+                    NavbarItem.objects.create(
+                        navbar=navbar,
+                        parent=servizi,
+                        sort_order=i,
+                        label=label,
+                        link_page=page,
+                        link_url=url,
+                        is_cta=False,
+                    )
 
         self.stdout.write("  Created Navbar with menu items")
         return navbar
@@ -1512,7 +1754,7 @@ class Command(BaseCommand):
             "per motociclisti di tutte le marche."
         )
         settings.theme = "velocity"
-        settings.color_scheme = self.color_scheme
+        settings.color_scheme = None  # Let theme CSS define its own colors
         settings.navbar = navbar
         settings.footer = footer
         settings.phone = "+39 035 123 4567"
@@ -1573,14 +1815,21 @@ class Command(BaseCommand):
             about.save_revision().publish()
             self.stdout.write("  AboutPage cover_image set")
 
+        # Contact hero
+        contact = ContactPage.objects.first()
+        if contact and "hero_contact" in images:
+            contact.hero_image = images["hero_contact"]
+            contact.save_revision().publish()
+            self.stdout.write("  ContactPage hero_image set")
+
         # Events cover images
         event_map = {
             "avviamento-motori-mandello-2026": "event_mandello",
-            "moto-guzzi-lands-pisa-2026": "event_pisa",
+            "moto-lands-pisa-2026": "event_pisa",
             "tour-orobie-2026": "event_orobie",
             "track-day-franciacorta-2026": "event_franciacorta",
             "ride-for-children-2026": "event_children",
-            "hog-rally-garda-2026": "event_garda",
+            "moto-rally-garda-2026": "event_garda",
         }
         for slug, img_key in event_map.items():
             event = EventDetailPage.objects.filter(slug=slug).first()
@@ -1592,7 +1841,7 @@ class Command(BaseCommand):
         # News cover images
         news_map = {
             "avviamento-motori-2026": "news_mandello",
-            "moto-guzzi-lands-pisa": "news_pisa",
+            "moto-lands-pisa": "news_pisa",
             "spring-franken-bayern-treffen": "news_bayern",
             "convenzione-officina-moto-bergamo": "news_officina",
             "preparazione-moto-stagione": "news_manutenzione",
@@ -1632,7 +1881,7 @@ class Command(BaseCommand):
                 "card_number": "AQR-2024-001",
                 "membership_date": date(2019, 1, 15),
                 "membership_expiry": date(2026, 12, 31),
-                "bio": "Motociclista dal 1998. Appassionato di Moto Guzzi V7 e strade di montagna. "
+                "bio": "Motociclista dal 1998. Appassionato di Moto moto V7 e strade di montagna. "
                        "Meccanico hobbista, sempre pronto a dare una mano ai compagni di viaggio.",
                 "aid_available": True,
                 "aid_radius_km": 30,
@@ -1662,7 +1911,7 @@ class Command(BaseCommand):
                 "card_number": "AQR-2024-002",
                 "membership_date": date(2021, 3, 1),
                 "membership_expiry": date(2026, 12, 31),
-                "bio": "Infermiera e motociclista. Guido una Ducati Monster 821. "
+                "bio": "Infermiera e motociclista. "
                        "Certificata primo soccorso, porto sempre il kit emergenza in moto.",
                 "aid_available": True,
                 "aid_radius_km": 50,
@@ -1692,13 +1941,13 @@ class Command(BaseCommand):
                 "card_number": "AQR-2024-003",
                 "membership_date": date(1987, 3, 15),
                 "membership_expiry": date(2026, 12, 31),
-                "bio": "Socio fondatore del club. Ex meccanico Moto Guzzi a Mandello. "
+                "bio": "Socio fondatore del club. Ex meccanico Moto moto a Mandello. "
                        "Ho un furgone attrezzato per trasporto moto. Guido una V85 TT.",
                 "aid_available": True,
                 "aid_radius_km": 100,
                 "aid_location_city": "Lecco",
                 "aid_coordinates": "45.8566,9.3977",
-                "aid_notes": "Furgone con rampa per trasporto moto. Meccanica avanzata Guzzi. "
+                "aid_notes": "Furgone con rampa per trasporto moto. Meccanica avanzata moto. "
                              "Disponibile quasi sempre, chiamare al cellulare.",
                 "show_in_directory": True,
                 "public_profile": True,
@@ -1723,7 +1972,7 @@ class Command(BaseCommand):
                 "card_number": "AQR-2024-004",
                 "membership_date": date(2020, 6, 1),
                 "membership_expiry": date(2026, 12, 31),
-                "bio": "Commercialista e tesoriere del club. Guido una BMW R 1250 GS. "
+                "bio": "Commercialista e tesoriere del club. Appassionato di grandi viaggi su due ruote. "
                        "Viaggio spesso in solitaria verso i passi alpini.",
                 "aid_available": True,
                 "aid_radius_km": 25,
@@ -1753,13 +2002,13 @@ class Command(BaseCommand):
                 "card_number": "AQR-2024-005",
                 "membership_date": date(2015, 1, 1),
                 "membership_expiry": date(2026, 12, 31),
-                "bio": "Presidente del moto club. 40 anni in sella, collezionista Guzzi d'epoca. "
+                "bio": "Presidente del moto club. 40 anni in sella, collezionista di moto d'epoca. "
                        "Organizzo i tour annuali del club su percorsi selezionati.",
                 "aid_available": True,
                 "aid_radius_km": 40,
                 "aid_location_city": "Bergamo",
                 "aid_coordinates": "45.6983,9.6773",
-                "aid_notes": "Ampia esperienza meccanica su Guzzi classiche e moderne. "
+                "aid_notes": "Ampia esperienza meccanica su moto classiche e moderne. "
                              "Attrezzi professionali in sede club.",
                 "show_in_directory": True,
                 "public_profile": True,
@@ -1823,7 +2072,7 @@ class Command(BaseCommand):
                 "requester_user": marco,
                 "issue_type": "breakdown",
                 "description": (
-                    "Moto Guzzi V7 in panne sulla SS38 tra Lecco e Colico, km 42. "
+                    "Moto in panne sulla SS38 tra Lecco e Colico, km 42. "
                     "La moto non parte, sembra un problema elettrico. "
                     "Sono al parcheggio del ristorante La Pergola."
                 ),
@@ -1839,7 +2088,7 @@ class Command(BaseCommand):
                 "requester_user": chiara,
                 "issue_type": "flat_tire",
                 "description": (
-                    "Foratura pneumatico posteriore BMW R 1250 GS sulla strada "
+                    "Foratura pneumatico posteriore sulla strada "
                     "del Passo della Presolana. Non ho kit riparazione tubeless. "
                     "Sono al Rifugio Magnolini."
                 ),
@@ -1871,7 +2120,7 @@ class Command(BaseCommand):
                 "requester_user": roberto,
                 "issue_type": "tow",
                 "description": (
-                    "Guzzi California d'epoca con rottura cambio al ritorno dal "
+                    "Moto d'epoca con rottura cambio al ritorno dal "
                     "raduno di Mandello. Serve trasporto moto con furgone fino "
                     "alla sede club a Bergamo (~60km)."
                 ),
@@ -1904,3 +2153,686 @@ class Command(BaseCommand):
                 f"  Created AidRequest: {data['issue_type']} - "
                 f"{data['requester_name']} -> {data['helper'].display_name}"
             )
+
+    # ------------------------------------------------------------------
+    # Event Registrations
+    # ------------------------------------------------------------------
+
+    def _create_event_registrations(self, members):
+        """Register demo members to upcoming events."""
+        self.stdout.write("\nCreating event registrations...")
+        if EventRegistration.objects.exists():
+            self.stdout.write("  EventRegistrations already exist, skipping.")
+            return
+
+        events = list(EventDetailPage.objects.live()[:4])
+        if not events or len(members) < 5:
+            return
+
+        marco, giulia, alessandro, chiara, roberto = members[:5]
+
+        registrations = [
+            # Mandello: 4 registered members
+            {"event": events[0], "user": marco, "status": "confirmed",
+             "payment_status": "paid", "payment_provider": "stripe",
+             "payment_amount": Decimal("22.50")},
+            {"event": events[0], "user": giulia, "status": "confirmed",
+             "payment_status": "paid", "payment_provider": "stripe",
+             "payment_amount": Decimal("22.50")},
+            {"event": events[0], "user": alessandro, "status": "registered",
+             "payment_status": "pending", "payment_amount": Decimal("25.00")},
+            {"event": events[0], "user": roberto, "status": "confirmed",
+             "payment_status": "paid", "payment_provider": "bank_transfer",
+             "payment_amount": Decimal("22.50")},
+            # Pisa: 2 members
+            {"event": events[1], "user": marco, "status": "registered",
+             "payment_status": "pending", "payment_amount": Decimal("40.00")},
+            {"event": events[1], "user": alessandro, "status": "confirmed",
+             "payment_status": "paid", "payment_provider": "paypal",
+             "payment_amount": Decimal("34.00")},
+            # Orobie: 3 members (free for members)
+            {"event": events[2], "user": giulia, "status": "confirmed",
+             "payment_status": "paid", "payment_provider": "free",
+             "payment_amount": Decimal("0.00")},
+            {"event": events[2], "user": chiara, "status": "confirmed",
+             "payment_status": "paid", "payment_provider": "free",
+             "payment_amount": Decimal("0.00")},
+            {"event": events[2], "user": roberto, "status": "confirmed",
+             "payment_status": "paid", "payment_provider": "free",
+             "payment_amount": Decimal("0.00")},
+            # Franciacorta: 2 members + 1 on waitlist
+            {"event": events[3], "user": marco, "status": "confirmed",
+             "payment_status": "paid", "payment_provider": "stripe",
+             "payment_amount": Decimal("102.00")},
+            {"event": events[3], "user": chiara, "status": "waitlist",
+             "payment_status": "pending", "payment_amount": Decimal("120.00")},
+        ]
+
+        for r in registrations:
+            EventRegistration.objects.create(**r)
+        self.stdout.write(f"  Created {len(registrations)} event registrations")
+
+    # ------------------------------------------------------------------
+    # Event Favorites
+    # ------------------------------------------------------------------
+
+    def _create_event_favorites(self, members):
+        """Members save events as favorites."""
+        self.stdout.write("\nCreating event favorites...")
+        if EventFavorite.objects.exists():
+            self.stdout.write("  EventFavorites already exist, skipping.")
+            return
+
+        events = list(EventDetailPage.objects.live()[:6])
+        if not events or len(members) < 5:
+            return
+
+        marco, giulia, alessandro, chiara, roberto = members[:5]
+        pairs = [
+            (marco, events[0]), (marco, events[2]), (marco, events[4]),
+            (giulia, events[0]), (giulia, events[1]), (giulia, events[4]),
+            (alessandro, events[0]), (alessandro, events[3]),
+            (chiara, events[2]), (chiara, events[5]),
+            (roberto, events[0]), (roberto, events[4]), (roberto, events[5]),
+        ]
+        count = 0
+        for user, event in pairs:
+            _, created = EventFavorite.objects.get_or_create(user=user, event=event)
+            if created:
+                count += 1
+        self.stdout.write(f"  Created {count} event favorites")
+
+    # ------------------------------------------------------------------
+    # Contributions
+    # ------------------------------------------------------------------
+
+    def _create_contributions(self, members):
+        """User-submitted stories, proposals, announcements."""
+        self.stdout.write("\nCreating contributions...")
+        if Contribution.objects.exists():
+            self.stdout.write("  Contributions already exist, skipping.")
+            return
+
+        if len(members) < 5:
+            return
+
+        marco, giulia, alessandro, chiara, roberto = members[:5]
+
+        contributions = [
+            {
+                "user": marco,
+                "contribution_type": "story",
+                "title": "La mia prima uscita con il club",
+                "body": (
+                    "Era un sabato di aprile 2019 quando ho fatto la prima uscita "
+                    "con il Moto Club Aquile Rosse. Non conoscevo nessuno, ero nervoso. "
+                    "Ma bastò fermarsi al primo bar per capire che questa era la mia gente. "
+                    "Da quel giorno non ho mai perso un'uscita."
+                ),
+                "status": "approved",
+            },
+            {
+                "user": giulia,
+                "contribution_type": "story",
+                "title": "Lo Stelvio in solitaria: paura e meraviglia",
+                "body": (
+                    "L'anno scorso ho deciso di affrontare lo Stelvio da sola. "
+                    "48 tornanti, nebbia improvvisa, e a metà salita un calo di pressione "
+                    "al posteriore. Ho chiamato il mutuo soccorso e in 30 minuti Alessandro "
+                    "era lì col furgone. Questo è il club."
+                ),
+                "status": "approved",
+            },
+            {
+                "user": roberto,
+                "contribution_type": "proposal",
+                "title": "Proposta: Tour Sardegna 5 giorni",
+                "body": (
+                    "Propongo un tour di 5 giorni in Sardegna per settembre 2026. "
+                    "Percorso: Olbia → Costa Smeralda → Barbagia → Cagliari → "
+                    "Oristano → Alghero → Porto Torres. Ho già contattato 3 B&B "
+                    "biker-friendly lungo il percorso. Budget stimato: €600 a persona "
+                    "tutto incluso (traghetto, pernottamenti, colazioni)."
+                ),
+                "status": "approved",
+            },
+            {
+                "user": chiara,
+                "contribution_type": "announcement",
+                "title": "Rinnovo tessere: scadenza 31 marzo",
+                "body": (
+                    "Ricordo a tutti i soci che il termine per il rinnovo della tessera "
+                    "2026 è il 31 marzo. Chi rinnova entro il 15 marzo avrà uno sconto "
+                    "del 10% sulla quota. Potete rinnovare online dal profilo personale "
+                    "o in sede durante gli orari di apertura."
+                ),
+                "status": "approved",
+            },
+            {
+                "user": alessandro,
+                "contribution_type": "story",
+                "title": "40 anni in sella: la mia collezione",
+                "body": (
+                    "Ho iniziato a collezionare moto nel 1987, anno di fondazione "
+                    "del club. Oggi nel mio garage ci sono 7 moto: una Le Mans III del "
+                    "'81, una Stornello Sport del '68, una V7 Classic, una California "
+                    "1400, una V85 TT, una V100 Mandello e una Griso 1200. "
+                    "Ognuna ha una storia, ognuna mi ha portato in posti incredibili."
+                ),
+                "status": "pending",
+            },
+        ]
+
+        for c in contributions:
+            Contribution.objects.create(**c)
+            self.stdout.write(f"  Created Contribution: {c['title'][:50]}")
+
+    # ------------------------------------------------------------------
+    # Comments and Reactions
+    # ------------------------------------------------------------------
+
+    def _create_comments_and_reactions(self, members):
+        """Comments and reactions on news and events."""
+        self.stdout.write("\nCreating comments and reactions...")
+        if Comment.objects.exists() or Reaction.objects.exists():
+            self.stdout.write("  Comments/Reactions already exist, skipping.")
+            return
+
+        if len(members) < 5:
+            return
+
+        marco, giulia, alessandro, chiara, roberto = members[:5]
+        news_ct = ContentType.objects.get_for_model(NewsPage)
+        event_ct = ContentType.objects.get_for_model(EventDetailPage)
+
+        news_pages = list(NewsPage.objects.live()[:3])
+        event_pages = list(EventDetailPage.objects.live()[:3])
+
+        if not news_pages or not event_pages:
+            return
+
+        # Comments on news
+        comments_data = [
+            (marco, news_ct, news_pages[0].pk,
+             "Grande notizia! Mandello è sempre un appuntamento imperdibile. "
+             "Chi viene col gruppo da Bergamo?", "approved"),
+            (giulia, news_ct, news_pages[0].pk,
+             "Io ci sarò! Chi mi fa compagnia per il giro del lago nel pomeriggio?",
+             "approved"),
+            (alessandro, news_ct, news_pages[0].pk,
+             "Presente come ogni anno. Porto anche la Le Mans III, "
+             "così facciamo colpo al parcheggio d'epoca.", "approved"),
+            (chiara, news_ct, news_pages[1].pk,
+             "La Toscana in moto è un sogno. Sto già organizzando "
+             "il viaggio con Giulia.", "approved"),
+            (roberto, news_ct, news_pages[2].pk,
+             "Il Bayern Treffen è stato fantastico. Le strade della "
+             "Franconia sono tra le migliori d'Europa.", "approved"),
+            (marco, event_ct, event_pages[0].pk,
+             "Iscritto! Qualcuno conosce un buon hotel a Mandello?",
+             "approved"),
+            (giulia, event_ct, event_pages[1].pk,
+             "La Toscana in primavera... non vedo l'ora!", "approved"),
+            (roberto, event_ct, event_pages[2].pk,
+             "Le Orobie in moto sono spettacolari. Percorso bellissimo.",
+             "pending"),
+        ]
+
+        for user, ct, obj_id, text, status in comments_data:
+            Comment.objects.create(
+                user=user, content=text,
+                content_type=ct, object_id=obj_id,
+                moderation_status=status,
+            )
+        self.stdout.write(f"  Created {len(comments_data)} comments")
+
+        # Reactions (likes/loves) on news and events
+        reactions_data = [
+            (marco, news_ct, news_pages[0].pk, "like"),
+            (giulia, news_ct, news_pages[0].pk, "love"),
+            (alessandro, news_ct, news_pages[0].pk, "like"),
+            (chiara, news_ct, news_pages[0].pk, "like"),
+            (roberto, news_ct, news_pages[0].pk, "love"),
+            (marco, news_ct, news_pages[1].pk, "like"),
+            (giulia, news_ct, news_pages[1].pk, "love"),
+            (chiara, news_ct, news_pages[2].pk, "like"),
+            (marco, event_ct, event_pages[0].pk, "love"),
+            (giulia, event_ct, event_pages[0].pk, "love"),
+            (alessandro, event_ct, event_pages[0].pk, "like"),
+            (roberto, event_ct, event_pages[1].pk, "love"),
+            (chiara, event_ct, event_pages[2].pk, "like"),
+        ]
+
+        for user, ct, obj_id, rtype in reactions_data:
+            Reaction.objects.create(
+                user=user, content_type=ct,
+                object_id=obj_id, reaction_type=rtype,
+            )
+        self.stdout.write(f"  Created {len(reactions_data)} reactions")
+
+    # ------------------------------------------------------------------
+    # Activity Log
+    # ------------------------------------------------------------------
+
+    def _create_activity_log(self, members):
+        """Recent activity log entries for demo members."""
+        self.stdout.write("\nCreating activity log...")
+        if Activity.objects.exists():
+            self.stdout.write("  Activity log already exists, skipping.")
+            return
+
+        if len(members) < 5:
+            return
+
+        marco, giulia, alessandro, chiara, roberto = members[:5]
+        event_ct = ContentType.objects.get_for_model(EventDetailPage)
+        events = list(EventDetailPage.objects.live()[:3])
+
+        activities = [
+            {"user": marco, "action": "login",
+             "target_title": "", "target_url": ""},
+            {"user": marco, "action": "register",
+             "target_content_type": event_ct, "target_id": events[0].pk if events else None,
+             "target_title": events[0].title if events else "",
+             "target_url": events[0].url if events else ""},
+            {"user": giulia, "action": "login",
+             "target_title": "", "target_url": ""},
+            {"user": giulia, "action": "profile_update",
+             "target_title": "Aggiornamento profilo", "target_url": "/account/profile/"},
+            {"user": alessandro, "action": "comment",
+             "target_title": "Avviamento Motori 2026", "target_url": ""},
+            {"user": chiara, "action": "login",
+             "target_title": "", "target_url": ""},
+            {"user": roberto, "action": "login",
+             "target_title": "", "target_url": ""},
+            {"user": roberto, "action": "reaction",
+             "target_title": "1° Moto Lands of Pisa", "target_url": ""},
+        ]
+
+        for a in activities:
+            Activity.objects.create(**{k: v for k, v in a.items() if v is not None})
+        self.stdout.write(f"  Created {len(activities)} activity log entries")
+
+    # ------------------------------------------------------------------
+    # Membership Requests
+    # ------------------------------------------------------------------
+
+    def _create_membership_requests(self, members):
+        """Sample membership requests in various states."""
+        self.stdout.write("\nCreating membership requests...")
+        if MembershipRequest.objects.exists():
+            self.stdout.write("  MembershipRequests already exist, skipping.")
+            return
+
+        products = list(Product.objects.order_by("order")[:3])
+        if not products or len(members) < 5:
+            return
+
+        marco, giulia, alessandro, chiara, roberto = members[:5]
+        admin = ClubUser.objects.filter(is_superuser=True).first()
+
+        requests_data = [
+            {
+                "user": marco, "product": products[2],
+                "status": "approved",
+                "notes": "Rinnovo tessera Premium. Stesso prodotto dell'anno scorso.",
+                "admin_notes": "Pagamento verificato via bonifico.",
+                "processed_by": admin,
+                "processed_at": timezone.now() - timedelta(days=10),
+            },
+            {
+                "user": giulia, "product": products[0],
+                "status": "approved",
+                "notes": "",
+                "processed_by": admin,
+                "processed_at": timezone.now() - timedelta(days=5),
+            },
+            {
+                "user": chiara, "product": products[2],
+                "status": "pending",
+                "notes": "Vorrei passare da Ordinario a Premium. È possibile pagare la differenza?",
+            },
+        ]
+
+        for r in requests_data:
+            MembershipRequest.objects.create(**r)
+        self.stdout.write(f"  Created {len(requests_data)} membership requests")
+
+    # ------------------------------------------------------------------
+    # Federated Clubs + External Events
+    # ------------------------------------------------------------------
+
+    def _create_federated_clubs(self, members):
+        """Partner clubs and their events for federation demo."""
+        self.stdout.write("\nCreating federated clubs and events...")
+        if FederatedClub.objects.exists():
+            self.stdout.write("  FederatedClubs already exist, skipping.")
+            return
+
+        if len(members) < 5:
+            return
+
+        marco, giulia, alessandro, chiara, roberto = members[:5]
+        admin = ClubUser.objects.filter(is_superuser=True).first()
+        now = timezone.now()
+
+        clubs = [
+            FederatedClub.objects.create(
+                name="Moto Club Le Aquile - Mandello del Lario",
+                short_code="MANDELLO",
+                base_url="https://api.motoclubmandello.it",
+                description=(
+                    "Club storico sulle rive del Lago di Como, punto di "
+                    "riferimento per gli appassionati di moto nella zona "
+                    "di Lecco. Organizzano raduni panoramici, giri del "
+                    "lago e incontri tecnici."
+                ),
+                api_key="demo_key_mandello_2026_abcdef1234567890",
+                is_active=True,
+                is_approved=True,
+                share_our_events=True,
+                last_sync=now - timedelta(hours=6),
+                created_by=admin,
+            ),
+            FederatedClub.objects.create(
+                name="Moto Club Terre di Pisa",
+                short_code="PISA",
+                base_url="https://api.mcterre-pisa.it",
+                description=(
+                    "Club attivo nella provincia di Pisa con focus su "
+                    "turismo in moto e cultura del territorio. Tour "
+                    "attraverso le colline toscane, eventi enogastronomici "
+                    "e uscite verso la costa tirrenica."
+                ),
+                api_key="demo_key_pisa_2026_abcdef1234567890",
+                is_active=True,
+                is_approved=True,
+                share_our_events=True,
+                last_sync=now - timedelta(hours=12),
+                created_by=admin,
+            ),
+            FederatedClub.objects.create(
+                name="Moto Club Lago di Garda",
+                short_code="MOTOGARDA",
+                base_url="https://api.motoclub-garda.it",
+                description=(
+                    "Club motociclistico del Lago di Garda. "
+                    "Raduni, charity ride e weekend touring sulle "
+                    "strade del Trentino e del Veneto."
+                ),
+                api_key="demo_key_garda_2026_abcdef1234567890",
+                is_active=True,
+                is_approved=False,
+                share_our_events=False,
+                created_by=admin,
+            ),
+        ]
+        self.stdout.write(f"  Created {len(clubs)} federated clubs")
+
+        # External events from partner clubs
+        ext_events = [
+            ExternalEvent.objects.create(
+                source_club=clubs[0],
+                external_id="mandello-apertura-2026",
+                event_name="Avviamento Motori 2026 - Mandello",
+                start_date=now + timedelta(days=28),
+                end_date=now + timedelta(days=29),
+                location_name="Piazza Garibaldi, Mandello del Lario",
+                location_address="23826 Mandello del Lario LC",
+                location_lat=45.9167,
+                location_lon=9.3167,
+                description=(
+                    "Tradizionale apertura di stagione a Mandello del Lario. "
+                    "Sfilata lungo il lago, visita museo e cena sociale."
+                ),
+                detail_url="https://motoclubmandello.it/eventi/avviamento-2026",
+                is_approved=True,
+            ),
+            ExternalEvent.objects.create(
+                source_club=clubs[0],
+                external_id="mandello-open-day",
+                event_name="Open Day Mandello",
+                start_date=now + timedelta(days=50),
+                end_date=now + timedelta(days=50),
+                location_name="Centro storico Mandello",
+                location_address="Via Parodi 57, 23826 Mandello del Lario LC",
+                location_lat=45.9200,
+                location_lon=9.3200,
+                description=(
+                    "Porte aperte allo stabilimento storico di Mandello. "
+                    "Visite guidate alla linea di produzione e al museo storico."
+                ),
+                detail_url="https://motoclubmandello.it/eventi/open-day-2026",
+                is_approved=True,
+            ),
+            ExternalEvent.objects.create(
+                source_club=clubs[1],
+                external_id="pisa-lands-2026",
+                event_name="1° Moto Lands of Pisa",
+                start_date=now + timedelta(days=58),
+                end_date=now + timedelta(days=60),
+                location_name="Pontedera, Centro Storico",
+                location_address="56025 Pontedera PI",
+                location_lat=43.6631,
+                location_lon=10.6322,
+                description=(
+                    "Primo raduno motociclistico nella terra di Pontedera. "
+                    "Tour colline pisane, visita Museo Piaggio, degustazioni."
+                ),
+                detail_url="https://mcterre-pisa.it/eventi/lands-of-pisa-2026",
+                is_approved=True,
+            ),
+        ]
+        self.stdout.write(f"  Created {len(ext_events)} external events")
+
+        # Interest and comments on external events
+        ExternalEventInterest.objects.create(
+            user=marco, external_event=ext_events[0], interest_level="going")
+        ExternalEventInterest.objects.create(
+            user=giulia, external_event=ext_events[0], interest_level="going")
+        ExternalEventInterest.objects.create(
+            user=alessandro, external_event=ext_events[0], interest_level="going")
+        ExternalEventInterest.objects.create(
+            user=roberto, external_event=ext_events[1], interest_level="interested")
+        ExternalEventInterest.objects.create(
+            user=marco, external_event=ext_events[2], interest_level="maybe")
+        ExternalEventInterest.objects.create(
+            user=chiara, external_event=ext_events[2], interest_level="interested")
+        self.stdout.write("  Created 6 external event interests")
+
+        ExternalEventComment.objects.create(
+            user=marco, external_event=ext_events[0],
+            content="Ci saremo con 4 moto da Bergamo! Chi si aggrega al gruppo?")
+        ExternalEventComment.objects.create(
+            user=giulia, external_event=ext_events[0],
+            content="Io vengo! Partiamo insieme sabato mattina?")
+        ExternalEventComment.objects.create(
+            user=alessandro, external_event=ext_events[1],
+            content="L'Open Day è sempre un'esperienza unica. Consiglio a tutti.")
+        self.stdout.write("  Created 3 external event comments")
+
+        # Federated helpers from partner clubs
+        federated_helpers = [
+            FederatedHelper(
+                source_club=clubs[0],
+                external_id="mandello-helper-01",
+                display_name="Luca M.",
+                city="Mandello del Lario",
+                latitude=45.9170,
+                longitude=9.3170,
+                radius_km=30,
+                notes="Meccanico esperto, disponibile con furgone attrezzato.",
+            ),
+            FederatedHelper(
+                source_club=clubs[0],
+                external_id="mandello-helper-02",
+                display_name="Stefano B.",
+                city="Lecco",
+                latitude=45.8530,
+                longitude=9.3900,
+                radius_km=40,
+                notes="Carro attrezzi per moto. Disponibile weekend.",
+            ),
+            FederatedHelper(
+                source_club=clubs[1],
+                external_id="pisa-helper-01",
+                display_name="Andrea P.",
+                city="Pontedera",
+                latitude=43.6631,
+                longitude=10.6322,
+                radius_km=35,
+                notes="Officina mobile, riparazioni su strada.",
+            ),
+            FederatedHelper(
+                source_club=clubs[1],
+                external_id="pisa-helper-02",
+                display_name="Marco T.",
+                city="Pisa",
+                latitude=43.7228,
+                longitude=10.4017,
+                radius_km=25,
+                notes="Trasporto moto con carrello. Disponibile h24.",
+            ),
+        ]
+        FederatedHelper.objects.bulk_create(federated_helpers)
+        self.stdout.write(f"  Created {len(federated_helpers)} federated helpers")
+
+        # Enable federation on MutualAidPage
+        aid_page = MutualAidPage.objects.live().first()
+        if aid_page and not aid_page.enable_federation:
+            aid_page.enable_federation = True
+            aid_page.save()
+            self.stdout.write("  Enabled federation on MutualAidPage")
+
+    # ------------------------------------------------------------------
+    # Notifications
+    # ------------------------------------------------------------------
+
+    def _create_notifications(self, members):
+        """Sample notifications for demo members."""
+        self.stdout.write("\nCreating notifications...")
+        if NotificationQueue.objects.exists():
+            self.stdout.write("  Notifications already exist, skipping.")
+            return
+
+        if len(members) < 5:
+            return
+
+        marco, giulia, alessandro, chiara, roberto = members[:5]
+        now = timezone.now()
+
+        notifications = [
+            {
+                "notification_type": "event_reminder",
+                "recipient": marco,
+                "channel": "in_app",
+                "title": "Promemoria: Tour delle Orobie tra 3 giorni",
+                "body": "Il Tour delle Orobie è previsto per sabato. "
+                        "Ritrovo alle 8:30 presso la sede del club.",
+                "url": "/eventi/tour-orobie-2026/",
+                "status": "sent",
+                "sent_at": now - timedelta(hours=2),
+            },
+            {
+                "notification_type": "event_reminder",
+                "recipient": giulia,
+                "channel": "in_app",
+                "title": "Promemoria: Tour delle Orobie tra 3 giorni",
+                "body": "Il Tour delle Orobie è previsto per sabato. "
+                        "Ritrovo alle 8:30 presso la sede del club.",
+                "url": "/eventi/tour-orobie-2026/",
+                "status": "sent",
+                "sent_at": now - timedelta(hours=2),
+            },
+            {
+                "notification_type": "comment_reply",
+                "recipient": marco,
+                "channel": "in_app",
+                "title": "Giulia ha risposto al tuo commento",
+                "body": "Giulia F. ha risposto al tuo commento su "
+                        "'Avviamento Motori 2026'.",
+                "url": "/news/avviamento-motori-2026/",
+                "status": "sent",
+                "sent_at": now - timedelta(hours=12),
+            },
+            {
+                "notification_type": "membership_approved",
+                "recipient": giulia,
+                "channel": "email",
+                "title": "La tua richiesta di tessera è stata approvata!",
+                "body": "La tua richiesta per la Tessera Socio Ordinario è stata "
+                        "approvata. La tessera digitale è disponibile nel tuo profilo.",
+                "url": "/account/card/",
+                "status": "sent",
+                "sent_at": now - timedelta(days=5),
+            },
+            {
+                "notification_type": "aid_request",
+                "recipient": alessandro,
+                "channel": "in_app",
+                "title": "Nuova richiesta di soccorso nella tua zona",
+                "body": "Roberto C. ha bisogno di trasporto moto da Mandello del Lario. "
+                        "Distanza: ~25km dalla tua posizione.",
+                "url": "/account/aid/",
+                "status": "sent",
+                "sent_at": now - timedelta(hours=36),
+            },
+            {
+                "notification_type": "new_event",
+                "recipient": chiara,
+                "channel": "in_app",
+                "title": "Nuovo evento: Track Day Franciacorta",
+                "body": "È stato pubblicato un nuovo evento: Track Day all'Autodromo "
+                        "di Franciacorta. Iscrizioni aperte!",
+                "url": "/eventi/track-day-franciacorta-2026/",
+                "status": "pending",
+            },
+            {
+                "notification_type": "contribution_approved",
+                "recipient": roberto,
+                "channel": "in_app",
+                "title": "La tua proposta è stata approvata",
+                "body": "La tua proposta 'Tour Sardegna 5 giorni' è stata approvata "
+                        "e pubblicata nella bacheca del club.",
+                "url": "/account/contributions/",
+                "status": "sent",
+                "sent_at": now - timedelta(days=1),
+            },
+        ]
+
+        for n in notifications:
+            NotificationQueue.objects.create(**n)
+        self.stdout.write(f"  Created {len(notifications)} notifications")
+
+    # ------------------------------------------------------------------
+    # English translations
+    # ------------------------------------------------------------------
+
+    def _create_en_translations(self, home_page):
+        """Create English copies of all IT pages as a starting point for translation.
+
+        Pages are created with the same content as the Italian originals.
+        Editors can then refine them via the Translations panel in the Wagtail admin.
+        Other locales (DE, FR, ES) are activated later from the admin settings.
+        """
+        en_locale, _ = Locale.objects.get_or_create(language_code="en")
+        self.stdout.write("Creating English page translations...")
+
+        # home_page first, then all descendants ordered by tree path (parents before children)
+        pages = [home_page] + list(
+            home_page.get_descendants().specific().order_by("path")
+        )
+
+        count = 0
+        skipped = 0
+        for page in pages:
+            try:
+                page.copy_for_translation(en_locale, copy_parents=True)
+                count += 1
+            except Exception:
+                skipped += 1
+
+        self.stdout.write(
+            f"  Created {count} English pages"
+            + (f" ({skipped} skipped / already exist)" if skipped else "")
+        )

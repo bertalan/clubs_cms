@@ -1,0 +1,79 @@
+{# Reusable help modal for form fields — include at the bottom of any form page #}
+{% load i18n %}
+
+<div id="field-help-modal" class="field-help-modal" hidden>
+    <div class="field-help-modal__backdrop"></div>
+    <div class="field-help-modal__content" role="dialog" aria-modal="true" aria-label="{% trans 'Field help' %}">
+        <button type="button" class="field-help-modal__close" aria-label="{% trans 'Close' %}">&times;</button>
+        <p id="field-help-modal-text"></p>
+    </div>
+</div>
+
+<script>
+(function() {
+    var modal = document.getElementById('field-help-modal');
+    var modalText = document.getElementById('field-help-modal-text');
+    var backdrop = modal.querySelector('.field-help-modal__backdrop');
+    var closeBtn = modal.querySelector('.field-help-modal__close');
+    var content = modal.querySelector('.field-help-modal__content');
+    var lastFocusedElement = null;
+
+    function getFocusableElements() {
+        return content.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+    }
+
+    function openHelp(text) {
+        lastFocusedElement = document.activeElement;
+        modalText.textContent = text;
+        modal.hidden = false;
+        closeBtn.focus();
+    }
+
+    function closeHelp() {
+        modal.hidden = true;
+        if (lastFocusedElement && lastFocusedElement.focus) {
+            lastFocusedElement.focus();
+        }
+    }
+
+    document.querySelectorAll('.field-help-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            openHelp(this.getAttribute('data-help'));
+        });
+    });
+    backdrop.addEventListener('click', closeHelp);
+    closeBtn.addEventListener('click', closeHelp);
+
+    document.addEventListener('keydown', function(e) {
+        if (modal.hidden) return;
+
+        if (e.key === 'Escape') {
+            closeHelp();
+            return;
+        }
+
+        // Focus trap: intercept Tab / Shift+Tab
+        if (e.key === 'Tab') {
+            var focusable = getFocusableElements();
+            if (focusable.length === 0) return;
+
+            var first = focusable[0];
+            var last = focusable[focusable.length - 1];
+
+            if (e.shiftKey) {
+                if (document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                }
+            } else {
+                if (document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+        }
+    });
+})();
+</script>

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load i18n wagtailcore_tags wagtailimages_tags %}
 
 {% block body_class %}page-news-detail{% endblock %}
 
@@ -38,7 +38,7 @@
                 {% endif %}
 
                 {% if page.reading_time %}
-                <span class="page-news-detail__reading-time">{{ page.reading_time }} min read</span>
+                <span class="page-news-detail__reading-time">{% blocktrans with mins=page.reading_time %}{{ mins }} min read{% endblocktrans %}</span>
                 {% endif %}
             </div>
         </header>
@@ -62,8 +62,8 @@
         {# Tags #}
         {% with tags=page.tags.all %}
         {% if tags %}
-        <div class="page-news-detail__tags" aria-label="Tags">
-            <span class="page-news-detail__tags-label">Tags:</span>
+        <div class="page-news-detail__tags" aria-label="{% trans 'Tags' %}">
+            <span class="page-news-detail__tags-label">{% trans "Tags:" %}</span>
             <ul class="page-news-detail__tags-list">
                 {% for tag in tags %}
                 <li class="page-news-detail__tags-item">
@@ -76,19 +76,19 @@
         {% endwith %}
 
         {# Navigation to adjacent posts #}
-        <nav class="page-news-detail__nav" aria-label="News navigation">
+        <nav class="page-news-detail__nav" aria-label="{% trans 'News navigation' %}">
             {% with prev=page.get_prev_siblings.live.first next=page.get_next_siblings.live.first %}
             {% if prev or next %}
             <div class="page-news-detail__nav-links">
                 {% if prev %}
                 <a href="{% pageurl prev %}" class="page-news-detail__nav-link" data-direction="prev">
-                    <span class="page-news-detail__nav-label">&laquo; Previous</span>
+                    <span class="page-news-detail__nav-label">&laquo; {% trans "Previous" %}</span>
                     <span class="page-news-detail__nav-title">{{ prev.title }}</span>
                 </a>
                 {% endif %}
                 {% if next %}
                 <a href="{% pageurl next %}" class="page-news-detail__nav-link" data-direction="next">
-                    <span class="page-news-detail__nav-label">Next &raquo;</span>
+                    <span class="page-news-detail__nav-label">{% trans "Next" %} &raquo;</span>
                     <span class="page-news-detail__nav-title">{{ next.title }}</span>
                 </a>
                 {% endif %}

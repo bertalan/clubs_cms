@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags website_tags %}
+{% load wagtailcore_tags wagtailimages_tags website_tags i18n %}
 
 {% block body_class %}page-home{% endblock %}
 
@@ -12,6 +12,9 @@
     {% endif %}
     <div class="block-hero-banner__overlay">
         <div class="block-hero-banner__content">
+            {% if page.hero_badge %}
+                <span class="block-hero-banner__badge">{{ page.hero_badge }}</span>
+            {% endif %}
             {% if page.hero_title %}
                 <h1 class="block-hero-banner__title">{{ page.hero_title }}</h1>
             {% endif %}
@@ -46,36 +49,75 @@
             </div>
         </div>
     </div>
+    <div class="block-hero-banner__scroll-indicator" aria-hidden="true">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+        </svg>
+    </div>
 </section>
 
-{# Upcoming Events — grid of up to 3 #}
+{# Upcoming Events — clubs-style minimal cards #}
 {% upcoming_events 3 as events_list %}
 {% if events_list %}
-<section class="block-cards-grid" aria-label="Upcoming events">
+<section class="home-events" aria-label="{% trans 'Upcoming events' %}">
     <div class="container">
-        <h2 class="block-cards-grid__title">{{ page.events_section_title|default:"Upcoming Events" }}</h2>
-        <div class="block-cards-grid__grid" data-columns="3">
+        <div class="home-events__header">
+            <div>
+                {% trans "Upcoming Events" as default_events_title %}
+                <p class="home-events__label">{{ page.events_section_title|default:default_events_title }}</p>
+                <h2 class="home-events__title">{% trans "News & Events" %}</h2>
+            </div>
+            {% events_index_url as ev_url %}
+            <a href="{{ ev_url }}" class="home-events__viewall">{% trans "All Events" %} &rarr;</a>
+        </div>
+        <div class="home-events__grid">
             {% for event in events_list %}
-            <article class="block-card">
+            <article class="home-events__card">
                 {% if event.cover_image %}
+                <div class="home-events__card-image">
                     {% image event.cover_image fill-600x400 as evt_img %}
-                    <div class="block-card__image">
-                        <img src="{{ evt_img.url }}" alt="{{ event.title }}" loading="lazy" width="{{ evt_img.width }}" height="{{ evt_img.height }}">
-                    </div>
+                    <img src="{{ evt_img.url }}" alt="{{ event.title }}" loading="lazy" width="{{ evt_img.width }}" height="{{ evt_img.height }}">
+                </div>
                 {% endif %}
                 {% if event.start_date %}
-                <span class="block-card__badge">{{ event.start_date|date:"d M Y" }}</span>
+                <p class="home-events__card-date">{{ event.start_date|date:"M j, Y" }}</p>
                 {% endif %}
-                <div class="block-card__body">
-                    <h3 class="block-card__title">
-                        <a href="{% pageurl event %}">{{ event.title }}</a>
-                    </h3>
-                    {% if event.intro %}
-                    <p class="block-card__text">{{ event.intro|truncatewords:25 }}</p>
-                    {% endif %}
-                    <a href="{% pageurl event %}" class="block-card__link">Details</a>
-                </div>
+                <h3 class="home-events__card-title">
+                    <a href="{% pageurl event %}">{{ event.title }}</a>
+                </h3>
+                {% if event.intro %}
+                <p class="home-events__card-text">{{ event.intro|truncatewords:25 }}</p>
+                {% endif %}
             </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{# Partners — from database #}
+{% homepage_partners 6 as partners_list %}
+{% if partners_list %}
+{% partner_index_url as partners_url %}
+<section class="home-partners" aria-label="{% trans 'Partners & Sponsors' %}">
+    <div class="container">
+        <p class="home-partners__label">{% trans "Our Network" %}</p>
+        <h2 class="home-partners__title">{% trans "Partners & Sponsors" %}</h2>
+        <div class="home-partners__grid">
+            {% for partner in partners_list %}
+            <a href="{% pageurl partner %}" class="home-partners__card">
+                {% if partner.logo %}
+                    {% image partner.logo fill-160x100 as p_logo %}
+                    <img src="{{ p_logo.url }}" alt="{{ partner.title }}" class="home-partners__logo" loading="lazy" width="{{ p_logo.width }}" height="{{ p_logo.height }}">
+                {% else %}
+                    <div class="home-partners__placeholder">
+                        <p class="home-partners__placeholder-name">{{ partner.title|truncatewords:1 }}</p>
+                        {% if partner.category %}
+                        <p class="home-partners__placeholder-cat">{{ partner.category.name }}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </a>
             {% endfor %}
         </div>
     </div>

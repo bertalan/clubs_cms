@@ -11,22 +11,18 @@
             {% trans "Join the club and access events, member directory, and more." %}
         </p>
 
-        <form method="post" action="{% url 'account_signup' %}">
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="message message--{{ message.tags }}" role="alert">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'account_signup' %}" novalidate>
             {% csrf_token %}
             {% for field in form %}
-            <div class="form-group {% if field.errors %}has-error{% endif %}">
-                <label for="{{ field.id_for_label }}">
-                    {{ field.label }}
-                    {% if field.field.required %}<span class="required" aria-hidden="true">*</span>{% endif %}
-                </label>
-                {{ field }}
-                {% if field.help_text %}
-                <small id="{{ field.id_for_label }}_help" class="form-help">{{ field.help_text }}</small>
-                {% endif %}
-                {% for error in field.errors %}
-                <span class="form-error" role="alert">{{ error }}</span>
-                {% endfor %}
-            </div>
+                {% include "includes/_form_field.html" with field=field %}
             {% endfor %}
             {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
@@ -42,4 +38,6 @@
         </p>
     </div>
 </div>
+
+{% include "includes/_field_help_modal.html" %}
 {% endblock %}

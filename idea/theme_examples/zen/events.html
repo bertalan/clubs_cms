@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Events - Zen Theme Demo</title>
   <style>
-    :root { 
-      --ink: #0a0a0a; 
-      --paper: #ffffff; 
+    :root {
+      --ink: #0a0a0a;
+      --paper: #ffffff;
       --gray: #f5f5f5;
       --pop: #FF3366;
       --pop-yellow: #FFD700;
@@ -18,16 +18,22 @@
     body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--gray); color: var(--ink); line-height: 1.6; }
     .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
     a { color: var(--ink); }
-    
+
     /* === NAV === */
     nav { background: var(--ink); color: var(--paper); padding: 1rem 0; border-bottom: 4px solid var(--pop); }
     nav .container { display: flex; justify-content: space-between; align-items: center; }
-    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav .nav-links { list-style: none; display: flex; gap: 2rem; align-items: center; }
     nav a { color: var(--paper); text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.85rem; }
     nav a:hover, nav a.active { color: var(--pop); }
     .logo { font-weight: 900; font-size: 1.3rem; text-decoration: none; color: var(--paper); }
     .logo span { color: var(--pop); }
-    
+    .btn-nav-cta {
+      display: inline-block; padding: 0.5rem 1.2rem; background: var(--pop); color: var(--paper);
+      text-decoration: none; font-weight: 800; text-transform: uppercase; font-size: 0.8rem;
+      border: 2px solid var(--pop); transition: all 0.2s; margin-left: 1rem;
+    }
+    .btn-nav-cta:hover { background: var(--paper); color: var(--pop); }
+
     /* === HEADER === */
     .header { padding: 3rem 0; }
     .header-panel {
@@ -35,11 +41,23 @@
       box-shadow: 8px 8px 0 var(--pop-yellow); padding: 3rem; text-align: center;
     }
     .header-panel h1 { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; }
-    
+
+    /* === FILTER TABS === */
+    .filter-section { padding: 0 0 2rem; }
+    .filter-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .filter-tab {
+      padding: 0.6rem 1.5rem; background: var(--paper); color: var(--ink);
+      border: 3px solid var(--ink); font-weight: 800; text-transform: uppercase;
+      font-size: 0.75rem; cursor: pointer; transition: all 0.2s;
+      font-family: inherit; letter-spacing: 0.05em;
+    }
+    .filter-tab:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+    .filter-tab.active { background: var(--ink); color: var(--paper); }
+
     /* === EVENTS COMIC STRIP === */
-    .section { padding: 2rem 0 3rem; }
+    .section { padding: 0 0 3rem; }
     .event-strip { display: flex; flex-direction: column; gap: 1.5rem; }
-    
+
     .event-panel {
       background: var(--paper); border: 3px solid var(--ink);
       box-shadow: 6px 6px 0 var(--ink);
@@ -47,11 +65,11 @@
       overflow: hidden; transition: all 0.2s;
     }
     .event-panel:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--ink); }
-    @media (max-width: 650px) { 
+    @media (max-width: 650px) {
       .event-panel { grid-template-columns: 1fr; }
       .event-date { border-right: none !important; border-bottom: 3px solid var(--ink); }
     }
-    
+
     /* Date badge - colored */
     .event-date {
       background: var(--pop-yellow); border-right: 3px solid var(--ink);
@@ -64,7 +82,7 @@
     .event-panel:nth-child(5) .event-date { background: var(--ink); color: var(--paper); }
     .event-date .day { font-size: 2rem; font-weight: 900; line-height: 1; }
     .event-date .month { font-size: 0.7rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.1em; }
-    
+
     /* Content */
     .event-content { padding: 1.5rem; }
     .event-tag {
@@ -74,14 +92,19 @@
     }
     .event-content h3 { font-weight: 800; font-size: 1.2rem; margin-bottom: 0.5rem; }
     .event-content p { color: #444; font-size: 0.95rem; margin-bottom: 0.5rem; }
-    .event-meta { font-size: 0.8rem; color: #666; }
-    
+    .event-meta { font-size: 0.8rem; color: #666; margin-bottom: 0.4rem; }
+    .event-price {
+      display: inline-block; background: var(--pop-green); color: var(--ink);
+      padding: 0.2rem 0.6rem; font-size: 0.7rem; font-weight: 700;
+      border: 2px solid var(--ink); margin-top: 0.25rem;
+    }
+
     /* Action button */
     .event-action {
       padding: 1.5rem; display: flex; align-items: center; justify-content: center;
       border-left: 3px solid var(--ink);
     }
-    @media (max-width: 650px) { 
+    @media (max-width: 650px) {
       .event-action { border-left: none; border-top: 3px solid var(--ink); justify-content: flex-start; padding: 1rem 1.5rem; }
     }
     .btn-action {
@@ -90,24 +113,63 @@
       border: 2px solid var(--ink); transition: all 0.2s;
     }
     .btn-action:hover { background: var(--pop); border-color: var(--pop); }
-    
+
+    /* === ORGANIZE CTA === */
+    .organize-cta { padding: 0 0 3rem; }
+    .organize-panel {
+      background: var(--pop); border: 4px solid var(--ink);
+      box-shadow: 8px 8px 0 var(--ink); padding: 3rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .organize-panel::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background-image: radial-gradient(var(--paper) 1px, transparent 1px);
+      background-size: 6px 6px; opacity: 0.06; pointer-events: none;
+    }
+    .organize-panel h2 { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; color: var(--paper); margin-bottom: 0.5rem; }
+    .organize-panel p { color: rgba(255,255,255,0.9); margin-bottom: 1.5rem; font-size: 1rem; }
+    .btn-organize {
+      display: inline-block; padding: 1rem 2.5rem; background: var(--paper); color: var(--ink);
+      text-decoration: none; font-weight: 800; text-transform: uppercase;
+      border: 3px solid var(--ink); font-size: 1rem; transition: all 0.2s;
+    }
+    .btn-organize:hover { background: var(--pop-yellow); transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--ink); }
+
     /* === FOOTER === */
-    footer { background: var(--ink); color: var(--paper); padding: 2.5rem 0; text-align: center; }
-    footer a { color: var(--paper); text-decoration: none; margin: 0 1rem; font-size: 0.9rem; }
-    footer a:hover { color: var(--pop); }
-    footer .copy { margin-top: 1rem; font-size: 0.8rem; opacity: 0.6; }
+    footer { background: var(--ink); color: var(--paper); padding: 3rem 0 2rem; }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    @media (max-width: 700px) { .footer-grid { grid-template-columns: 1fr; } }
+    .footer-brand .logo { font-size: 1.5rem; display: inline-block; margin-bottom: 0.75rem; }
+    .footer-brand p { font-size: 0.85rem; opacity: 0.7; margin-bottom: 0.25rem; }
+    .footer-brand a { color: var(--pop); text-decoration: none; }
+    .footer-brand a:hover { text-decoration: underline; }
+    .footer-nav h4, .footer-social h4 { font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; color: var(--pop); }
+    .footer-nav ul { list-style: none; }
+    .footer-nav ul li { margin-bottom: 0.5rem; }
+    .footer-nav a { color: var(--paper); text-decoration: none; font-size: 0.9rem; opacity: 0.8; }
+    .footer-nav a:hover { color: var(--pop); opacity: 1; }
+    .footer-social .social-links { display: flex; gap: 1rem; }
+    .footer-social .social-links a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border: 2px solid var(--paper);
+      color: var(--paper); text-decoration: none; font-weight: 700;
+      font-size: 0.75rem; transition: all 0.2s;
+    }
+    .footer-social .social-links a:hover { background: var(--pop); border-color: var(--pop); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 1.5rem; text-align: center; font-size: 0.8rem; opacity: 0.6; }
   </style>
 </head>
 <body>
   <nav>
     <div class="container">
       <a href="index.html" class="logo">MIND<span>FUL</span></a>
-      <ul>
+      <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="events.html" class="active">Events</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="contact.html">Contact</a></li>
+        <li><a href="contact.html" class="btn-nav-cta">Join</a></li>
       </ul>
     </div>
   </nav>
@@ -120,10 +182,24 @@
     </div>
   </section>
 
+  <!-- Filter Tabs -->
+  <section class="filter-section">
+    <div class="container">
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">All</button>
+        <button class="filter-tab" data-filter="upcoming">Upcoming</button>
+        <button class="filter-tab" data-filter="past">Past</button>
+        <button class="filter-tab" data-filter="workshop">Workshop</button>
+        <button class="filter-tab" data-filter="retreat">Retreat</button>
+        <button class="filter-tab" data-filter="social">Social</button>
+      </div>
+    </div>
+  </section>
+
   <section class="section">
     <div class="container">
       <div class="event-strip">
-        <article class="event-panel">
+        <article class="event-panel" data-category="upcoming workshop">
           <div class="event-date">
             <span class="day">15</span>
             <span class="month">March</span>
@@ -132,14 +208,15 @@
             <span class="event-tag">Workshop</span>
             <h3>Mindfulness Workshop</h3>
             <p>An introduction to daily mindfulness practices. Learn simple techniques to bring more presence into your everyday life.</p>
-            <span class="event-meta">10:00 – 12:00 • Community Room</span>
+            <span class="event-meta">10:00 - 12:00 | Community Room</span>
+            <br><span class="event-price">Free for members / EUR 15 for guests</span>
           </div>
           <div class="event-action">
             <a href="#" class="btn-action">Join</a>
           </div>
         </article>
 
-        <article class="event-panel">
+        <article class="event-panel" data-category="upcoming retreat">
           <div class="event-date">
             <span class="day">28</span>
             <span class="month">March</span>
@@ -148,14 +225,15 @@
             <span class="event-tag">Retreat</span>
             <h3>Silent Retreat</h3>
             <p>A full day of quiet reflection, meditation, and renewal. Meals provided. Suitable for beginners.</p>
-            <span class="event-meta">8:00 – 18:00 • Retreat Center</span>
+            <span class="event-meta">8:00 - 18:00 | Retreat Center</span>
+            <br><span class="event-price">EUR 25 / EUR 15 for members</span>
           </div>
           <div class="event-action">
             <a href="#" class="btn-action">Reserve</a>
           </div>
         </article>
 
-        <article class="event-panel">
+        <article class="event-panel" data-category="upcoming social">
           <div class="event-date">
             <span class="day">12</span>
             <span class="month">April</span>
@@ -164,14 +242,15 @@
             <span class="event-tag">Circle</span>
             <h3>Discussion Circle</h3>
             <p>Monthly gathering for meaningful dialogue on topics of intentional living. This month: "The Art of Slowing Down."</p>
-            <span class="event-meta">19:00 – 21:00 • Library Hall</span>
+            <span class="event-meta">19:00 - 21:00 | Library Hall</span>
+            <br><span class="event-price">Free</span>
           </div>
           <div class="event-action">
             <a href="#" class="btn-action">RSVP</a>
           </div>
         </article>
 
-        <article class="event-panel">
+        <article class="event-panel" data-category="upcoming social">
           <div class="event-date">
             <span class="day">26</span>
             <span class="month">April</span>
@@ -180,42 +259,119 @@
             <span class="event-tag">Outdoor</span>
             <h3>Walking Meditation</h3>
             <p>A gentle practice of mindful walking through nature. Meet at the park entrance. Bring comfortable shoes.</p>
-            <span class="event-meta">7:00 – 8:30 • Riverside Park</span>
+            <span class="event-meta">7:00 - 8:30 | Riverside Park</span>
+            <br><span class="event-price">Free</span>
           </div>
           <div class="event-action">
             <a href="#" class="btn-action">Sign Up</a>
           </div>
         </article>
 
-        <article class="event-panel">
+        <article class="event-panel" data-category="upcoming workshop">
           <div class="event-date">
             <span class="day">10</span>
             <span class="month">May</span>
           </div>
           <div class="event-content">
             <span class="event-tag">Reading</span>
-            <h3>Reading & Reflection</h3>
+            <h3>Reading &amp; Reflection</h3>
             <p>Guided reading and discussion of selected texts on simplicity and mindful living.</p>
-            <span class="event-meta">15:00 – 17:00 • Community Room</span>
+            <span class="event-meta">15:00 - 17:00 | Community Room</span>
+            <br><span class="event-price">Free for members / EUR 5 for guests</span>
           </div>
           <div class="event-action">
             <a href="#" class="btn-action">Join</a>
+          </div>
+        </article>
+
+        <article class="event-panel" data-category="past retreat">
+          <div class="event-date">
+            <span class="day">20</span>
+            <span class="month">Jan</span>
+          </div>
+          <div class="event-content">
+            <span class="event-tag">Retreat</span>
+            <h3>New Year Intention Retreat</h3>
+            <p>Set mindful intentions for the year ahead with guided meditation, journaling, and group reflection.</p>
+            <span class="event-meta">9:00 - 17:00 | Retreat Center</span>
+            <br><span class="event-price">EUR 30 / EUR 20 for members</span>
+          </div>
+          <div class="event-action">
+            <a href="#" class="btn-action" style="opacity: 0.5; pointer-events: none;">Ended</a>
           </div>
         </article>
       </div>
     </div>
   </section>
 
+  <!-- Organize an Event CTA -->
+  <section class="organize-cta">
+    <div class="container">
+      <div class="organize-panel">
+        <h2>Want to Organize an Event?</h2>
+        <p>Have an idea for a workshop, ride, or gathering? We would love to hear from you. Reach out and let us make it happen together.</p>
+        <a href="contact.html" class="btn-organize">Contact Us</a>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <div class="container">
-      <div>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="contact.html">Contact</a>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">MIND<span>FUL</span></a>
+          <p>123 Serenity Lane</p>
+          <p>Calm City, CC 10001</p>
+          <p style="margin-top: 0.5rem;"><a href="mailto:info@mindful.example">info@mindful.example</a></p>
+          <p><a href="tel:+15551234567">+1 (555) 123-4567</a></p>
+        </div>
+        <div class="footer-nav">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-social">
+          <h4>Follow Us</h4>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook">FB</a>
+            <a href="#" aria-label="Instagram">IG</a>
+            <a href="#" aria-label="Twitter">TW</a>
+          </div>
+        </div>
       </div>
-      <p class="copy">© 2026 Mindful • Zen Comic Theme</p>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Mindful. All rights reserved.</p>
+      </div>
     </div>
   </footer>
+
+  <script>
+    // Filter Tabs
+    var filterTabs = document.querySelectorAll('.filter-tab');
+    var eventPanels = document.querySelectorAll('.event-panel');
+
+    filterTabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        var filter = this.getAttribute('data-filter');
+        // Update active tab
+        filterTabs.forEach(function(t) { t.classList.remove('active'); });
+        this.classList.add('active');
+        // Filter events
+        eventPanels.forEach(function(panel) {
+          var categories = panel.getAttribute('data-category');
+          if (filter === 'all' || categories.indexOf(filter) !== -1) {
+            panel.style.display = '';
+          } else {
+            panel.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>

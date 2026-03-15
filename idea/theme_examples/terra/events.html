@@ -17,19 +17,25 @@
     body { font-family: system-ui, -apple-system, sans-serif; background: var(--cream); color: var(--text); line-height: 1.6; }
     a { color: var(--forest); }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
-    
+
     /* Nav */
     nav { background: var(--forest); padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
     nav .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
     .logo { color: white; text-decoration: none; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; }
     .logo span { color: var(--accent); }
-    nav ul { list-style: none; display: flex; gap: 2rem; flex-wrap: wrap; }
-    nav ul a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 500; transition: color 0.2s; }
-    nav ul a:hover, nav ul a.active { color: var(--accent); }
-    
+    .nav-center { list-style: none; display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; }
+    .nav-center a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .nav-center a:hover, .nav-center a.active { color: var(--accent); }
+    .nav-cta {
+      display: inline-block; padding: 0.5rem 1.25rem; background: var(--accent); color: white;
+      text-decoration: none; font-weight: 700; border-radius: 2px; font-size: 0.9rem;
+      transition: all 0.3s ease; letter-spacing: 0.02em;
+    }
+    .nav-cta:hover { background: #ff6b0a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(232,93,4,0.3); }
+
     /* Header with diagonal */
-    .header { 
-      background: linear-gradient(135deg, var(--forest) 0%, #3d6b1e 100%); 
+    .header {
+      background: linear-gradient(135deg, var(--forest) 0%, #3d6b1e 100%);
       color: white; padding: 4rem 0 6rem; text-align: center;
       position: relative; overflow: hidden;
     }
@@ -40,141 +46,308 @@
     }
     .header h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; }
     .header p { opacity: 0.9; }
-    
+
     /* Section */
     .section { padding: 4rem 0; }
-    
-    /* Event Cards with racing stripe */
+
+    /* Filter Tabs */
+    .filter-tabs {
+      display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem;
+      justify-content: center;
+    }
+    .filter-tab {
+      padding: 0.5rem 1.25rem; border: 2px solid var(--forest); background: transparent;
+      color: var(--forest); font-weight: 600; font-size: 0.9rem; cursor: pointer;
+      border-radius: 2px; transition: all 0.3s ease; font-family: inherit;
+    }
+    .filter-tab:hover { background: var(--forest); color: white; }
+    .filter-tab.active { background: var(--forest); color: white; }
+
+    /* Event Cards with racing stripe + image */
     .event-list { display: flex; flex-direction: column; gap: 1.5rem; }
-    .event-card { 
+    .event-card {
       background: white; border-left: 4px solid var(--accent);
-      display: grid; grid-template-columns: auto 1fr auto; gap: 1.5rem; padding: 1.5rem; 
-      align-items: center; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      display: grid; grid-template-columns: 200px auto 1fr auto; gap: 0;
+      align-items: stretch; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      overflow: hidden;
     }
-    .event-card:hover { 
-      transform: translateX(4px); 
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
+    .event-card:hover {
+      transform: translateX(4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     }
-    @media (max-width: 600px) { .event-card { grid-template-columns: 1fr; text-align: center; } }
-    
+    .event-card-img {
+      width: 100%; height: 100%; min-height: 160px; object-fit: cover; display: block;
+    }
+    .event-date-col {
+      display: flex; align-items: center; justify-content: center;
+    }
+    .event-content-col {
+      padding: 1.5rem; display: flex; flex-direction: column; justify-content: center;
+    }
+    .event-action-col {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 1.5rem; gap: 0.75rem;
+    }
+    @media (max-width: 768px) {
+      .event-card { grid-template-columns: 1fr; }
+      .event-card-img { height: 180px; }
+      .event-action-col { flex-direction: row; padding: 0 1.5rem 1.5rem; }
+    }
+
     /* Date Badge */
-    .event-date { 
+    .event-date {
       background: var(--accent); color: white; padding: 1rem; text-align: center; min-width: 80px;
     }
     .event-date .day { font-size: 1.8rem; font-weight: 900; line-height: 1; }
     .event-date .month { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
-    
-    .event-content h3 { color: var(--forest); margin-bottom: 0.3rem; font-weight: 700; }
-    .event-content p { color: var(--text-light); font-size: 0.95rem; }
+
+    .event-content-col h3 { color: var(--forest); margin-bottom: 0.3rem; font-weight: 700; }
+    .event-content-col p { color: var(--text-light); font-size: 0.95rem; }
     .event-meta { font-size: 0.85rem; color: var(--earth); margin-top: 0.5rem; font-weight: 500; }
-    
+
     /* Tag */
-    .tag { 
-      display: inline-block; background: var(--accent); color: white; 
-      padding: 0.2rem 0.6rem; font-size: 0.75rem; font-weight: 700; 
+    .tag {
+      display: inline-block; background: var(--accent); color: white;
+      padding: 0.2rem 0.6rem; font-size: 0.75rem; font-weight: 700;
       margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.03em;
     }
-    
+
+    /* Price badge */
+    .price-badge {
+      display: inline-block; background: var(--forest); color: white;
+      padding: 0.35rem 0.8rem; font-size: 0.85rem; font-weight: 700;
+      border-radius: 2px; white-space: nowrap;
+    }
+
     /* Button */
-    .btn { 
-      display: inline-block; padding: 0.6rem 1.4rem; background: var(--forest); 
+    .btn {
+      display: inline-block; padding: 0.6rem 1.4rem; background: var(--forest);
       color: white; text-decoration: none; font-weight: 700; border-radius: 2px;
-      transition: all 0.3s ease;
+      transition: all 0.3s ease; text-align: center;
     }
     .btn:hover { background: var(--accent); transform: translateY(-2px); }
-    
+
+    /* Organize CTA */
+    .organize-cta {
+      background: linear-gradient(135deg, var(--forest), #3d6b1e);
+      color: white; padding: 4rem 0; text-align: center; position: relative;
+      margin-top: 2rem;
+    }
+    .organize-cta::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 60px; background: var(--cream);
+      clip-path: polygon(0 0, 100% 0, 100% 100%);
+    }
+    .organize-cta h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .organize-cta p { opacity: 0.9; margin-bottom: 1.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .btn-accent { background: var(--accent); color: white; }
+    .btn-accent:hover { background: #ff6b0a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(232,93,4,0.3); }
+
     /* Footer */
-    footer { background: #1a1a1a; color: #aaa; padding: 2rem 0; text-align: center; }
+    footer { background: #1a1a1a; color: #aaa; padding: 3rem 0 1.5rem; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+    footer h4 { color: white; margin-bottom: 1rem; font-weight: 700; }
     footer a { color: #aaa; text-decoration: none; transition: color 0.2s; }
     footer a:hover { color: var(--accent); }
+    footer ul { list-style: none; }
+    footer ul li { margin-bottom: 0.4rem; }
+    footer hr { border: none; border-top: 1px solid #333; margin-bottom: 1.5rem; }
+    .footer-copy { text-align: center; font-size: 0.85rem; color: #666; }
+    .social-links { display: flex; gap: 1rem; margin-top: 1rem; }
+    .social-links a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 50%; background: #333;
+      color: #aaa; text-decoration: none; font-size: 0.85rem; font-weight: 700;
+      transition: all 0.3s ease;
+    }
+    .social-links a:hover { background: var(--accent); color: white; }
   </style>
 </head>
 <body>
   <nav>
     <div class="container">
       <a href="index.html" class="logo">Green<span>Org</span></a>
-      <ul>
+      <ul class="nav-center">
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="events.html" class="active">Events</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
+      <a href="contact.html" class="nav-cta">Join Us</a>
     </div>
   </nav>
 
   <section class="header">
-    <h1>Events & Initiatives</h1>
+    <h1>Events &amp; Initiatives</h1>
     <p>Join us in making a difference</p>
   </section>
 
   <section class="section">
     <div class="container">
+      <!-- Filter Tabs -->
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">All</button>
+        <button class="filter-tab" data-filter="upcoming">Upcoming</button>
+        <button class="filter-tab" data-filter="past">Past</button>
+        <button class="filter-tab" data-filter="gardening">Gardening</button>
+        <button class="filter-tab" data-filter="workshop">Workshop</button>
+        <button class="filter-tab" data-filter="cleanup">Cleanup</button>
+      </div>
+
       <div class="event-list">
-        <article class="event-card">
-          <div class="event-date">
-            <div class="day">22</div>
-            <div class="month">Mar</div>
+        <article class="event-card" data-category="upcoming gardening">
+          <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600" alt="Volunteers planting seedlings in a community garden" class="event-card-img">
+          <div class="event-date-col">
+            <div class="event-date">
+              <div class="day">22</div>
+              <div class="month">Mar</div>
+            </div>
           </div>
-          <div class="event-content">
-            <span class="tag">🌱 Gardening</span>
+          <div class="event-content-col">
+            <span class="tag">Gardening</span>
             <h3>Community Garden Day</h3>
             <p>Join us for a day of planting and nurturing our community garden. All skill levels welcome. Tools and refreshments provided.</p>
-            <p class="event-meta">📍 Central Park Garden • 9:00 AM - 3:00 PM</p>
+            <p class="event-meta">Central Park Garden &bull; 9:00 AM - 3:00 PM</p>
           </div>
-          <a href="#" class="btn">Register</a>
+          <div class="event-action-col">
+            <span class="price-badge">Free</span>
+            <a href="#" class="btn">Register</a>
+          </div>
         </article>
 
-        <article class="event-card">
-          <div class="event-date">
-            <div class="day">10</div>
-            <div class="month">Apr</div>
+        <article class="event-card" data-category="upcoming workshop">
+          <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=600" alt="Lush sustainable garden with blooming flowers" class="event-card-img">
+          <div class="event-date-col">
+            <div class="event-date">
+              <div class="day">10</div>
+              <div class="month">Apr</div>
+            </div>
           </div>
-          <div class="event-content">
-            <span class="tag">📚 Workshop</span>
+          <div class="event-content-col">
+            <span class="tag">Workshop</span>
             <h3>Sustainable Living Workshop</h3>
             <p>Practical tips for reducing your carbon footprint at home. Learn about composting, energy efficiency, and eco-friendly products.</p>
-            <p class="event-meta">📍 Community Center • 2:00 PM - 5:00 PM</p>
+            <p class="event-meta">Community Center &bull; 2:00 PM - 5:00 PM</p>
           </div>
-          <a href="#" class="btn">Sign Up</a>
+          <div class="event-action-col">
+            <span class="price-badge">&euro;10 donation</span>
+            <a href="#" class="btn">Sign Up</a>
+          </div>
         </article>
 
-        <article class="event-card">
-          <div class="event-date">
-            <div class="day">05</div>
-            <div class="month">May</div>
+        <article class="event-card" data-category="upcoming cleanup">
+          <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600" alt="Sunlit nature landscape with rolling hills" class="event-card-img">
+          <div class="event-date-col">
+            <div class="event-date">
+              <div class="day">05</div>
+              <div class="month">May</div>
+            </div>
           </div>
-          <div class="event-content">
-            <span class="tag">🌊 Cleanup</span>
+          <div class="event-content-col">
+            <span class="tag">Cleanup</span>
             <h3>River Cleanup Drive</h3>
             <p>Help restore our local waterways. We'll provide all equipment, gloves, and bags. Family-friendly event.</p>
-            <p class="event-meta">📍 Riverside Park • 8:00 AM - 12:00 PM</p>
+            <p class="event-meta">Riverside Park &bull; 8:00 AM - 12:00 PM</p>
           </div>
-          <a href="#" class="btn">Volunteer</a>
+          <div class="event-action-col">
+            <span class="price-badge">Free</span>
+            <a href="#" class="btn">Volunteer</a>
+          </div>
         </article>
 
-        <article class="event-card">
-          <div class="event-date">
-            <div class="day">20</div>
-            <div class="month">Jun</div>
+        <article class="event-card" data-category="upcoming gardening">
+          <img src="https://images.unsplash.com/photo-1574263867128-a3d5c6cb42b0?w=600" alt="Community members working together outdoors" class="event-card-img">
+          <div class="event-date-col">
+            <div class="event-date">
+              <div class="day">20</div>
+              <div class="month">Jun</div>
+            </div>
           </div>
-          <div class="event-content">
-            <span class="tag">🌳 Tree Planting</span>
+          <div class="event-content-col">
+            <span class="tag">Tree Planting</span>
             <h3>Summer Tree Planting</h3>
             <p>Help us reach our goal of 100 new trees this summer. Learn proper planting techniques from our experts.</p>
-            <p class="event-meta">📍 Various Locations • All Day Event</p>
+            <p class="event-meta">Various Locations &bull; All Day Event</p>
           </div>
-          <a href="#" class="btn">Join</a>
+          <div class="event-action-col">
+            <span class="price-badge">&euro;5 donation</span>
+            <a href="#" class="btn">Join</a>
+          </div>
         </article>
       </div>
     </div>
   </section>
 
+  <!-- Organize CTA -->
+  <section class="organize-cta">
+    <div class="container">
+      <h2>Want to Organize an Event?</h2>
+      <p>Have an idea for a community initiative? We would love to help you bring it to life. Get in touch with our team.</p>
+      <a href="contact.html" class="btn btn-accent">Contact Us</a>
+    </div>
+  </section>
+
   <footer>
     <div class="container">
-      <p>© 2026 GreenOrg • Terra Theme Demo</p>
-      <p style="margin-top: 0.5rem;"><a href="index.html">Home</a> · <a href="about.html">About</a> · <a href="contact.html">Contact</a></p>
+      <div class="footer-grid">
+        <div>
+          <h4>GreenOrg</h4>
+          <p style="font-size: 0.9rem; line-height: 1.8;">
+            789 Nature Way<br>
+            Green Valley<br>
+            <a href="mailto:info@greenorg.example">info@greenorg.example</a><br>
+            <a href="tel:+15554567890">+1 (555) 456-7890</a>
+          </p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook" title="Facebook">Fb</a>
+            <a href="#" aria-label="Instagram" title="Instagram">Ig</a>
+            <a href="#" aria-label="Twitter" title="Twitter">Tw</a>
+          </div>
+        </div>
+        <div>
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Sustainability Guide</a></li>
+            <li><a href="#">Partner Network</a></li>
+            <li><a href="#">Volunteer Handbook</a></li>
+            <li><a href="#">Annual Report</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <p class="footer-copy">&copy; 2026 GreenOrg &bull; Terra Theme Demo &bull; Built with minimal footprint</p>
     </div>
   </footer>
+
+  <script>
+    // Filter tab functionality
+    document.querySelectorAll('.filter-tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.filter-tab').forEach(function(t) { t.classList.remove('active'); });
+        this.classList.add('active');
+        var filter = this.getAttribute('data-filter');
+        document.querySelectorAll('.event-card').forEach(function(card) {
+          if (filter === 'all') {
+            card.style.display = '';
+          } else {
+            var categories = card.getAttribute('data-category') || '';
+            card.style.display = categories.indexOf(filter) !== -1 ? '' : 'none';
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>

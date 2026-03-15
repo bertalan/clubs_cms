@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailimages_tags %}
+{% load i18n wagtailimages_tags %}
 
 {% block body_class %}page-moderation{% endblock %}
 
@@ -7,9 +7,9 @@
 <div class="page-moderation">
     <div class="page-moderation__container">
         <header class="page-moderation__header">
-            <h1 class="page-moderation__title">Photo Moderation Queue</h1>
+            <h1 class="page-moderation__title">{% trans "Photo Moderation Queue" %}</h1>
             <p class="page-moderation__description">
-                Review and approve or reject member-uploaded photos.
+                {% trans "Review and approve or reject member-uploaded photos." %}
             </p>
         </header>
 
@@ -29,21 +29,21 @@
                     <h3 class="moderation-card__title">{{ upload.image.title }}</h3>
 
                     <p class="moderation-card__meta">
-                        Uploaded by: {{ upload.uploaded_by.display_name|default:upload.uploaded_by.username }}
+                        {% blocktrans with name=upload.uploaded_by.display_name|default:upload.uploaded_by.username %}Uploaded by: {{ name }}{% endblocktrans %}
                     </p>
                     <p class="moderation-card__meta">
-                        Date: {{ upload.uploaded_at|date:"F j, Y H:i" }}
+                        {% blocktrans with date=upload.uploaded_at|date:"F j, Y H:i" %}Date: {{ date }}{% endblocktrans %}
                     </p>
 
                     {% if upload.event %}
                     <p class="moderation-card__meta">
-                        Event: {{ upload.event.title }}
+                        {% blocktrans with event_title=upload.event.title %}Event: {{ event_title }}{% endblocktrans %}
                     </p>
                     {% endif %}
 
                     {% if upload.tags.all %}
                     <p class="moderation-card__tags">
-                        Tags:
+                        {% trans "Tags:" %}
                         {% for tag in upload.tags.all %}
                             <span class="moderation-card__tag">{{ tag.name }}</span>
                         {% endfor %}
@@ -57,7 +57,7 @@
                           class="moderation-card__form moderation-card__form--approve">
                         {% csrf_token %}
                         <button type="submit" class="moderation-card__btn moderation-card__btn--approve">
-                            Approve
+                            {% trans "Approve" %}
                         </button>
                     </form>
 
@@ -67,16 +67,16 @@
                         {% csrf_token %}
                         <div class="moderation-card__reject-reason">
                             <label for="reason-{{ upload.pk }}" class="moderation-card__label">
-                                Reason (optional):
+                                {% trans "Reason (optional):" %}
                             </label>
                             <input type="text"
                                    name="reason"
                                    id="reason-{{ upload.pk }}"
                                    class="moderation-card__input"
-                                   placeholder="Reason for rejection">
+                                   placeholder="{% trans 'Reason for rejection' %}">
                         </div>
                         <button type="submit" class="moderation-card__btn moderation-card__btn--reject">
-                            Reject
+                            {% trans "Reject" %}
                         </button>
                     </form>
                 </div>
@@ -86,16 +86,16 @@
 
         {# Pagination #}
         {% if is_paginated %}
-        <nav class="page-moderation__pagination" aria-label="Pagination">
+        <nav class="page-moderation__pagination" aria-label="{% trans 'Pagination' %}">
             <ul class="pagination">
                 {% if page_obj.has_previous %}
-                <li><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                <li><a href="?page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a></li>
                 {% endif %}
                 <li class="pagination__current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}
                 </li>
                 {% if page_obj.has_next %}
-                <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                <li><a href="?page={{ page_obj.next_page_number }}">{% trans "Next" %}</a></li>
                 {% endif %}
             </ul>
         </nav>
@@ -103,7 +103,7 @@
 
         {% else %}
         <div class="page-moderation__empty">
-            <p>No photos pending moderation.</p>
+            <p>{% trans "No photos pending moderation." %}</p>
         </div>
         {% endif %}
     </div>

@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gallery - Zen Theme Demo</title>
   <style>
-    :root { 
-      --ink: #0a0a0a; 
-      --paper: #ffffff; 
+    :root {
+      --ink: #0a0a0a;
+      --paper: #ffffff;
       --gray: #f5f5f5;
       --pop: #FF3366;
       --pop-yellow: #FFD700;
@@ -18,16 +18,22 @@
     body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--gray); color: var(--ink); line-height: 1.6; }
     .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
     a { color: var(--ink); }
-    
+
     /* === NAV === */
     nav { background: var(--ink); color: var(--paper); padding: 1rem 0; border-bottom: 4px solid var(--pop); }
     nav .container { display: flex; justify-content: space-between; align-items: center; }
-    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav .nav-links { list-style: none; display: flex; gap: 2rem; align-items: center; }
     nav a { color: var(--paper); text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.85rem; }
     nav a:hover, nav a.active { color: var(--pop); }
     .logo { font-weight: 900; font-size: 1.3rem; text-decoration: none; color: var(--paper); }
     .logo span { color: var(--pop); }
-    
+    .btn-nav-cta {
+      display: inline-block; padding: 0.5rem 1.2rem; background: var(--pop); color: var(--paper);
+      text-decoration: none; font-weight: 800; text-transform: uppercase; font-size: 0.8rem;
+      border: 2px solid var(--pop); transition: all 0.2s; margin-left: 1rem;
+    }
+    .btn-nav-cta:hover { background: var(--paper); color: var(--pop); }
+
     /* === HEADER === */
     .header { padding: 3rem 0; }
     .header-panel {
@@ -36,77 +42,72 @@
     }
     .header-panel h1 { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; }
     .header-panel p { opacity: 0.7; margin-top: 0.5rem; }
-    
+
+    /* === FILTER BUTTONS === */
+    .filter-section { padding: 0 0 2rem; }
+    .filter-buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .filter-btn {
+      padding: 0.6rem 1.5rem; background: var(--paper); color: var(--ink);
+      border: 3px solid var(--ink); font-weight: 800; text-transform: uppercase;
+      font-size: 0.75rem; cursor: pointer; transition: all 0.2s;
+      font-family: inherit; letter-spacing: 0.05em;
+    }
+    .filter-btn:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+    .filter-btn.active { background: var(--ink); color: var(--paper); }
+
     /* === COMIC STRIP GALLERY === */
-    .section { padding: 2rem 0 3rem; }
+    .section { padding: 0 0 3rem; }
     .comic-page {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(3, minmax(180px, auto));
+      grid-template-rows: repeat(3, minmax(220px, auto));
       gap: 1rem;
     }
-    @media (max-width: 700px) { 
+    @media (max-width: 700px) {
       .comic-page { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
     }
-    @media (max-width: 500px) { 
+    @media (max-width: 500px) {
       .comic-page { grid-template-columns: 1fr; }
     }
-    
+
     /* Panel base */
     .comic-panel {
       background: var(--paper); border: 3px solid var(--ink);
       box-shadow: 5px 5px 0 var(--ink);
       position: relative; overflow: hidden;
       display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 1.25rem; transition: all 0.2s;
+      transition: all 0.2s; cursor: pointer;
     }
     .comic-panel:hover { transform: translate(-3px, -3px) rotate(-1deg); box-shadow: 8px 8px 0 var(--ink); z-index: 10; }
-    
+
     /* Panel image area */
     .panel-image {
       position: absolute; top: 0; left: 0; right: 0; bottom: 60px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 4rem;
+      background-size: cover; background-position: center;
     }
-    
+
     /* Halftone pattern overlay */
     .halftone .panel-image::after {
       content: ''; position: absolute; inset: 0;
       background-image: radial-gradient(var(--ink) 1px, transparent 1px);
       background-size: 4px 4px; opacity: 0.1;
     }
-    
-    /* Speed lines */
+
+    /* Speed lines overlay */
     .speed-lines .panel-image::after {
       content: ''; position: absolute; inset: 0;
       background: repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(0,0,0,0.05) 8px, rgba(0,0,0,0.05) 10px);
     }
-    
-    /* Panel text */
+
+    /* Panel caption */
     .panel-caption {
-      background: var(--paper); padding: 0.5rem 0 0;
-      border-top: 2px solid var(--ink); margin-top: auto;
+      background: var(--paper); padding: 0.6rem 1rem;
+      border-top: 3px solid var(--ink); margin-top: auto;
       position: relative; z-index: 5;
     }
-    .panel-caption h4 { font-weight: 800; font-size: 0.9rem; text-transform: uppercase; }
-    .panel-caption p { font-size: 0.75rem; color: #555; margin: 0; }
-    
-    /* Special panels with color */
-    .panel-yellow { background: var(--pop-yellow); }
-    .panel-pink { background: var(--pop); }
-    .panel-pink .panel-caption { color: var(--paper); border-color: rgba(255,255,255,0.3); }
-    .panel-pink .panel-caption p { color: rgba(255,255,255,0.8); }
-    .panel-blue { background: var(--pop-blue); }
-    .panel-green { background: var(--pop-green); }
-    
-    /* Large feature panel */
-    .panel-large { grid-column: span 2; }
-    @media (max-width: 500px) { .panel-large { grid-column: span 1; } }
-    
-    /* Tall panel */
-    .panel-tall { grid-row: span 2; }
-    @media (max-width: 700px) { .panel-tall { grid-row: span 1; } }
-    
+    .panel-caption h4 { font-weight: 800; font-size: 0.85rem; text-transform: uppercase; }
+    .panel-caption p { font-size: 0.7rem; color: #555; margin: 0; }
+
     /* Speech bubble on panel */
     .speech-bubble {
       position: absolute; top: 15px; left: 15px;
@@ -119,24 +120,113 @@
       border-left: 8px solid transparent; border-right: 8px solid transparent;
       border-top: 8px solid var(--ink);
     }
-    
+
+    /* Category tags on panels */
+    .panel-tag {
+      position: absolute; top: 15px; right: 15px;
+      background: var(--ink); color: var(--paper);
+      padding: 0.2rem 0.6rem; font-size: 0.6rem; font-weight: 700;
+      text-transform: uppercase; z-index: 10; letter-spacing: 0.05em;
+    }
+
+    /* Large feature panel */
+    .panel-large { grid-column: span 2; }
+    @media (max-width: 500px) { .panel-large { grid-column: span 1; } }
+
+    /* Tall panel */
+    .panel-tall { grid-row: span 2; }
+    @media (max-width: 700px) { .panel-tall { grid-row: span 1; } }
+
+    /* === LIGHTBOX === */
+    .lightbox {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(10,10,10,0.95); z-index: 9999;
+      align-items: center; justify-content: center; flex-direction: column;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img {
+      max-width: 90%; max-height: 80vh; border: 4px solid var(--paper);
+      box-shadow: 0 0 60px rgba(255,51,102,0.3);
+    }
+    .lightbox-caption {
+      color: var(--paper); margin-top: 1rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.9rem;
+    }
+    .lightbox-close {
+      position: absolute; top: 2rem; right: 2rem;
+      background: var(--pop); color: var(--paper); border: 3px solid var(--paper);
+      width: 50px; height: 50px; font-size: 1.5rem; font-weight: 900;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .lightbox-close:hover { background: var(--paper); color: var(--pop); }
+    .lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: var(--ink); color: var(--paper); border: 3px solid var(--paper);
+      width: 50px; height: 50px; font-size: 1.5rem; font-weight: 900;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .lightbox-nav:hover { background: var(--pop); }
+    .lightbox-prev { left: 2rem; }
+    .lightbox-next { right: 2rem; }
+
+    /* === SHARE MEMORIES CTA === */
+    .upload-cta { padding: 0 0 3rem; }
+    .upload-panel {
+      background: var(--pop-yellow); border: 4px solid var(--ink);
+      box-shadow: 8px 8px 0 var(--ink); padding: 3rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .upload-panel::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background-image: radial-gradient(var(--ink) 1px, transparent 1px);
+      background-size: 6px 6px; opacity: 0.04; pointer-events: none;
+    }
+    .upload-panel h2 { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .upload-panel p { color: #333; margin-bottom: 1.5rem; font-size: 1rem; }
+    .btn-upload {
+      display: inline-block; padding: 1rem 2.5rem; background: var(--ink); color: var(--paper);
+      text-decoration: none; font-weight: 800; text-transform: uppercase;
+      border: 3px solid var(--ink); font-size: 1rem; transition: all 0.2s;
+    }
+    .btn-upload:hover { background: var(--pop); border-color: var(--pop); transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--ink); }
+
     /* === FOOTER === */
-    footer { background: var(--ink); color: var(--paper); padding: 2.5rem 0; text-align: center; }
-    footer a { color: var(--paper); text-decoration: none; margin: 0 1rem; font-size: 0.9rem; }
-    footer a:hover { color: var(--pop); }
-    footer .copy { margin-top: 1rem; font-size: 0.8rem; opacity: 0.6; }
+    footer { background: var(--ink); color: var(--paper); padding: 3rem 0 2rem; }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    @media (max-width: 700px) { .footer-grid { grid-template-columns: 1fr; } }
+    .footer-brand .logo { font-size: 1.5rem; display: inline-block; margin-bottom: 0.75rem; }
+    .footer-brand p { font-size: 0.85rem; opacity: 0.7; margin-bottom: 0.25rem; }
+    .footer-brand a { color: var(--pop); text-decoration: none; }
+    .footer-brand a:hover { text-decoration: underline; }
+    .footer-nav h4, .footer-social h4 { font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; color: var(--pop); }
+    .footer-nav ul { list-style: none; }
+    .footer-nav ul li { margin-bottom: 0.5rem; }
+    .footer-nav a { color: var(--paper); text-decoration: none; font-size: 0.9rem; opacity: 0.8; }
+    .footer-nav a:hover { color: var(--pop); opacity: 1; }
+    .footer-social .social-links { display: flex; gap: 1rem; }
+    .footer-social .social-links a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border: 2px solid var(--paper);
+      color: var(--paper); text-decoration: none; font-weight: 700;
+      font-size: 0.75rem; transition: all 0.2s;
+    }
+    .footer-social .social-links a:hover { background: var(--pop); border-color: var(--pop); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 1.5rem; text-align: center; font-size: 0.8rem; opacity: 0.6; }
   </style>
 </head>
 <body>
   <nav>
     <div class="container">
       <a href="index.html" class="logo">MIND<span>FUL</span></a>
-      <ul>
+      <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="events.html">Events</a></li>
         <li><a href="gallery.html" class="active">Gallery</a></li>
         <li><a href="contact.html">Contact</a></li>
+        <li><a href="contact.html" class="btn-nav-cta">Join</a></li>
       </ul>
     </div>
   </nav>
@@ -150,79 +240,263 @@
     </div>
   </section>
 
+  <!-- Filter Buttons -->
+  <section class="filter-section">
+    <div class="container">
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="events">Events</button>
+        <button class="filter-btn" data-filter="club-life">Club Life</button>
+        <button class="filter-btn" data-filter="rides">Rides</button>
+        <button class="filter-btn" data-filter="members">Members</button>
+      </div>
+    </div>
+  </section>
+
   <section class="section">
     <div class="container">
       <div class="comic-page">
-        <!-- Large feature panel -->
-        <div class="comic-panel panel-large halftone">
-          <span class="speech-bubble">PEACE!</span>
-          <div class="panel-image" style="background: linear-gradient(135deg, #e0e0e0, #f5f5f5);">○</div>
+        <!-- Panel 1: Large feature panel - Group Ride -->
+        <div class="comic-panel panel-large halftone" data-category="rides" data-img="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600" data-title="Group Ride at Dawn">
+          <span class="speech-bubble">RIDE!</span>
+          <span class="panel-tag">Rides</span>
+          <div class="panel-image" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600');"></div>
           <div class="panel-caption">
-            <h4>Morning Meditation</h4>
-            <p>Weekly practice • Finding stillness</p>
+            <h4>Group Ride at Dawn</h4>
+            <p>Weekend ride through mountain roads</p>
           </div>
         </div>
-        
-        <!-- Tall colored panel -->
-        <div class="comic-panel panel-tall panel-yellow">
-          <div class="panel-image">◇</div>
+
+        <!-- Panel 2: Tall panel - Open Road -->
+        <div class="comic-panel panel-tall speed-lines" data-category="rides" data-img="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600" data-title="The Open Road">
+          <span class="panel-tag">Rides</span>
+          <div class="panel-image" style="background-image: url('https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600');"></div>
           <div class="panel-caption">
-            <h4>Discussion Circle</h4>
-            <p>Monthly gathering</p>
+            <h4>The Open Road</h4>
+            <p>Freedom on two wheels</p>
           </div>
         </div>
-        
-        <!-- Regular panel -->
-        <div class="comic-panel speed-lines">
-          <div class="panel-image" style="background: linear-gradient(180deg, #f0f0f0, #e0e0e0);">△</div>
+
+        <!-- Panel 3: Regular - Scenic Ride -->
+        <div class="comic-panel" data-category="rides" data-img="https://images.unsplash.com/photo-1558980664-769d59546b3d?w=600" data-title="Scenic Sunset Ride">
+          <div class="panel-image" style="background-image: url('https://images.unsplash.com/photo-1558980664-769d59546b3d?w=600');"></div>
           <div class="panel-caption">
-            <h4>Silent Retreat</h4>
-            <p>Quarterly renewal</p>
+            <h4>Scenic Sunset Ride</h4>
+            <p>Chasing the golden hour</p>
           </div>
         </div>
-        
-        <!-- Pink accent panel -->
-        <div class="comic-panel panel-pink">
-          <span class="speech-bubble" style="background: var(--pop-yellow);">NOW!</span>
-          <div class="panel-image" style="color: var(--paper);">□</div>
+
+        <!-- Panel 4: Regular - Classic Motorcycle -->
+        <div class="comic-panel halftone" data-category="members" data-img="https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=600" data-title="Member Spotlight">
+          <span class="speech-bubble" style="background: var(--pop-yellow);">WOW!</span>
+          <span class="panel-tag">Members</span>
+          <div class="panel-image" style="background-image: url('https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=600');"></div>
           <div class="panel-caption">
-            <h4>Walking Meditation</h4>
-            <p>Nature practice</p>
+            <h4>Member Spotlight</h4>
+            <p>Our riders and their machines</p>
           </div>
         </div>
-        
-        <!-- Blue panel -->
-        <div class="comic-panel panel-blue">
-          <div class="panel-image">◎</div>
+
+        <!-- Panel 5: Classic vintage -->
+        <div class="comic-panel" data-category="club-life" data-img="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=600" data-title="Heritage Collection">
+          <span class="panel-tag">Club Life</span>
+          <div class="panel-image" style="background-image: url('https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=600');"></div>
           <div class="panel-caption">
-            <h4>Reading Group</h4>
-            <p>Shared learning</p>
+            <h4>Heritage Collection</h4>
+            <p>Classic bikes on display</p>
           </div>
         </div>
-        
-        <!-- Large bottom panel -->
-        <div class="comic-panel panel-large panel-green">
+
+        <!-- Panel 6: Tour -->
+        <div class="comic-panel speed-lines" data-category="rides" data-img="https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=600" data-title="Spring Tour 2025">
+          <span class="panel-tag">Rides</span>
+          <div class="panel-image" style="background-image: url('https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=600');"></div>
+          <div class="panel-caption">
+            <h4>Spring Tour 2025</h4>
+            <p>Three-day coastal tour</p>
+          </div>
+        </div>
+
+        <!-- Panel 7: Club Dinner -->
+        <div class="comic-panel" data-category="events" data-img="https://images.unsplash.com/photo-1525160354320-d8e92641c563?w=600" data-title="Annual Club Dinner">
           <span class="speech-bubble">TOGETHER!</span>
-          <div class="panel-image">∞</div>
+          <span class="panel-tag">Events</span>
+          <div class="panel-image" style="background-image: url('https://images.unsplash.com/photo-1525160354320-d8e92641c563?w=600');"></div>
           <div class="panel-caption">
-            <h4>Community</h4>
-            <p>Ongoing connection • Growing together</p>
+            <h4>Annual Club Dinner</h4>
+            <p>Community gathering and celebration</p>
+          </div>
+        </div>
+
+        <!-- Panel 8: Workshop -->
+        <div class="comic-panel halftone" data-category="events" data-img="https://images.unsplash.com/photo-1558618047-f4b511aae2de?w=600" data-title="Maintenance Workshop">
+          <span class="panel-tag">Events</span>
+          <div class="panel-image" style="background-image: url('https://images.unsplash.com/photo-1558618047-f4b511aae2de?w=600');"></div>
+          <div class="panel-caption">
+            <h4>Maintenance Workshop</h4>
+            <p>Learn to care for your ride</p>
+          </div>
+        </div>
+
+        <!-- Panel 9: Large bottom - Awards -->
+        <div class="comic-panel panel-large" data-category="club-life" data-img="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=600" data-title="Awards Ceremony">
+          <span class="speech-bubble" style="background: var(--pop-yellow);">BRAVO!</span>
+          <span class="panel-tag">Club Life</span>
+          <div class="panel-image" style="background-image: url('https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=600');"></div>
+          <div class="panel-caption">
+            <h4>Awards Ceremony</h4>
+            <p>Recognizing our best riders and contributors</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Share Your Memories CTA -->
+  <section class="upload-cta">
+    <div class="container">
+      <div class="upload-panel">
+        <h2>Share Your Memories</h2>
+        <p>Got photos from a ride or club event? We would love to feature them in our gallery. Upload your best shots and become part of the story.</p>
+        <a href="contact.html" class="btn-upload">Upload Photos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close">X</button>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev">&lt;</button>
+    <button class="lightbox-nav lightbox-next" id="lightbox-next">&gt;</button>
+    <img src="" alt="" id="lightbox-img">
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+  </div>
+
   <footer>
     <div class="container">
-      <div>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="events.html">Events</a>
-        <a href="contact.html">Contact</a>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">MIND<span>FUL</span></a>
+          <p>123 Serenity Lane</p>
+          <p>Calm City, CC 10001</p>
+          <p style="margin-top: 0.5rem;"><a href="mailto:info@mindful.example">info@mindful.example</a></p>
+          <p><a href="tel:+15551234567">+1 (555) 123-4567</a></p>
+        </div>
+        <div class="footer-nav">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-social">
+          <h4>Follow Us</h4>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook">FB</a>
+            <a href="#" aria-label="Instagram">IG</a>
+            <a href="#" aria-label="Twitter">TW</a>
+          </div>
+        </div>
       </div>
-      <p class="copy">© 2026 Mindful • Zen Comic Theme</p>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Mindful. All rights reserved.</p>
+      </div>
     </div>
   </footer>
+
+  <script>
+    // ============ FILTER BUTTONS ============
+    var filterBtns = document.querySelectorAll('.filter-btn');
+    var panels = document.querySelectorAll('.comic-panel');
+
+    filterBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var filter = this.getAttribute('data-filter');
+        // Update active button
+        filterBtns.forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        // Filter panels
+        panels.forEach(function(panel) {
+          if (filter === 'all' || panel.getAttribute('data-category') === filter) {
+            panel.style.display = '';
+          } else {
+            panel.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // ============ LIGHTBOX ============
+    var lightbox = document.getElementById('lightbox');
+    var lightboxImg = document.getElementById('lightbox-img');
+    var lightboxCaption = document.getElementById('lightbox-caption');
+    var lightboxClose = document.getElementById('lightbox-close');
+    var lightboxPrev = document.getElementById('lightbox-prev');
+    var lightboxNext = document.getElementById('lightbox-next');
+    var currentIndex = 0;
+    var visiblePanels = [];
+
+    function getVisiblePanels() {
+      visiblePanels = [];
+      panels.forEach(function(panel) {
+        if (panel.style.display !== 'none') {
+          visiblePanels.push(panel);
+        }
+      });
+    }
+
+    function openLightbox(index) {
+      getVisiblePanels();
+      currentIndex = index;
+      var panel = visiblePanels[currentIndex];
+      lightboxImg.src = panel.getAttribute('data-img');
+      lightboxImg.alt = panel.getAttribute('data-title');
+      lightboxCaption.textContent = panel.getAttribute('data-title');
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function navigateLightbox(direction) {
+      getVisiblePanels();
+      currentIndex = (currentIndex + direction + visiblePanels.length) % visiblePanels.length;
+      var panel = visiblePanels[currentIndex];
+      lightboxImg.src = panel.getAttribute('data-img');
+      lightboxImg.alt = panel.getAttribute('data-title');
+      lightboxCaption.textContent = panel.getAttribute('data-title');
+    }
+
+    panels.forEach(function(panel, idx) {
+      panel.addEventListener('click', function() {
+        getVisiblePanels();
+        var visibleIdx = visiblePanels.indexOf(panel);
+        if (visibleIdx !== -1) {
+          openLightbox(visibleIdx);
+        }
+      });
+    });
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxPrev.addEventListener('click', function(e) { e.stopPropagation(); navigateLightbox(-1); });
+    lightboxNext.addEventListener('click', function(e) { e.stopPropagation(); navigateLightbox(1); });
+
+    lightbox.addEventListener('click', function(e) {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (!lightbox.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') navigateLightbox(-1);
+      if (e.key === 'ArrowRight') navigateLightbox(1);
+    });
+  </script>
 </body>
 </html>

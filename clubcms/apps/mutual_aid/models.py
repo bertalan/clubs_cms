@@ -59,6 +59,7 @@ class MutualAidPage(Page):
         blank=True,
         use_json_field=True,
         verbose_name=_("Emergency contacts"),
+        help_text=_("Contatti di emergenza configurabili dall'admin."),
     )
     default_radius_km = models.PositiveIntegerField(
         default=50,
@@ -110,22 +111,27 @@ class AidPrivacySettings(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="aid_privacy",
+        help_text=_("Utente a cui si applicano le impostazioni privacy."),
     )
     show_phone_on_aid = models.BooleanField(
         default=False,
         verbose_name=_("Show phone number"),
+        help_text=_("Mostra il telefono fisso nella scheda aiuto."),
     )
     show_mobile_on_aid = models.BooleanField(
         default=False,
         verbose_name=_("Show mobile number"),
+        help_text=_("Mostra il cellulare nella scheda aiuto."),
     )
     show_whatsapp_on_aid = models.BooleanField(
         default=False,
         verbose_name=_("Show WhatsApp availability"),
+        help_text=_("Mostra la disponibilità WhatsApp."),
     )
     show_email_on_aid = models.BooleanField(
         default=False,
         verbose_name=_("Show email address"),
+        help_text=_("Mostra l'email nella scheda aiuto."),
     )
     show_exact_location = models.BooleanField(
         default=False,
@@ -135,14 +141,17 @@ class AidPrivacySettings(models.Model):
     show_photo_on_aid = models.BooleanField(
         default=False,
         verbose_name=_("Show profile photo"),
+        help_text=_("Mostra la foto profilo nella scheda aiuto."),
     )
     show_bio_on_aid = models.BooleanField(
         default=False,
         verbose_name=_("Show bio"),
+        help_text=_("Mostra la bio nella scheda aiuto."),
     )
     show_hours_on_aid = models.BooleanField(
         default=False,
         verbose_name=_("Show availability hours"),
+        help_text=_("Mostra gli orari di disponibilità."),
     )
 
     class Meta:
@@ -196,19 +205,23 @@ class AidRequest(models.Model):
         on_delete=models.CASCADE,
         related_name="aid_requests_received",
         verbose_name=_("Helper"),
+        help_text=_("Soccorritore a cui è indirizzata la richiesta."),
     )
     requester_name = models.CharField(
         max_length=100,
         verbose_name=_("Requester name"),
+        help_text=_("Nome di chi richiede aiuto."),
     )
     requester_phone = models.CharField(
         max_length=30,
         blank=True,
         verbose_name=_("Requester phone"),
+        help_text=_("Telefono di chi richiede aiuto."),
     )
     requester_email = models.EmailField(
         blank=True,
         verbose_name=_("Requester email"),
+        help_text=_("Email di chi richiede aiuto."),
     )
     requester_user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -217,6 +230,7 @@ class AidRequest(models.Model):
         on_delete=models.SET_NULL,
         related_name="aid_requests_sent",
         verbose_name=_("Requester (if member)"),
+        help_text=_("Socio richiedente (se autenticato)."),
     )
 
     issue_type = models.CharField(
@@ -224,6 +238,7 @@ class AidRequest(models.Model):
         choices=ISSUE_TYPE_CHOICES,
         default="other",
         verbose_name=_("Issue type"),
+        help_text=_("Tipo di problema riscontrato."),
     )
     description = models.TextField(
         verbose_name=_("Description"),
@@ -240,18 +255,21 @@ class AidRequest(models.Model):
         choices=URGENCY_CHOICES,
         default="medium",
         verbose_name=_("Urgency"),
+        help_text=_("Livello di urgenza della richiesta."),
     )
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
         default="open",
         verbose_name=_("Status"),
+        help_text=_("Stato corrente della richiesta di aiuto."),
     )
 
     # Federation fields
     is_from_federation = models.BooleanField(
         default=False,
         verbose_name=_("From federation"),
+        help_text=_("La richiesta proviene da un club federato."),
     )
     federation_access = models.ForeignKey(
         "mutual_aid.FederatedAidAccess",
@@ -260,10 +278,15 @@ class AidRequest(models.Model):
         on_delete=models.SET_NULL,
         related_name="aid_requests",
         verbose_name=_("Federation access"),
+        help_text=_("Accesso federato che ha generato la richiesta."),
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True,
+        help_text=_("Data e ora di invio della richiesta."),
+    )
+    updated_at = models.DateTimeField(auto_now=True,
+        help_text=_("Data e ora dell'ultimo aggiornamento."),
+    )
 
     class Meta:
         verbose_name = _("Aid Request")
@@ -302,14 +325,17 @@ class FederatedAidAccess(models.Model):
         on_delete=models.CASCADE,
         related_name="aid_access_grants",
         verbose_name=_("Source club"),
+        help_text=_("Club federato che ha concesso l'accesso."),
     )
     external_user_id = models.CharField(
         max_length=100,
         verbose_name=_("External user ID"),
+        help_text=_("ID dell'utente nel sistema del club partner."),
     )
     external_display_name = models.CharField(
         max_length=100,
         verbose_name=_("External display name"),
+        help_text=_("Nome visualizzato dell'utente federato."),
     )
     contacts_unlocked = models.PositiveIntegerField(
         default=0,
@@ -321,8 +347,11 @@ class FederatedAidAccess(models.Model):
         choices=ACCESS_LEVEL_CHOICES,
         default="view_list",
         verbose_name=_("Access level"),
+        help_text=_("Livello di accesso alla directory soccorritori."),
     )
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True,
+        help_text=_("L'accesso è attualmente attivo."),
+    )
     approved_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,
@@ -330,12 +359,16 @@ class FederatedAidAccess(models.Model):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Approved by"),
+        help_text=_("Amministratore che ha approvato l'accesso."),
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True,
+        help_text=_("Data di concessione dell'accesso."),
+    )
     expires_at = models.DateTimeField(
         null=True,
         blank=True,
         verbose_name=_("Expires at"),
+        help_text=_("Scadenza dell'accesso. Vuoto = nessuna scadenza."),
     )
 
     class Meta:
@@ -371,6 +404,7 @@ class FederatedAidAccessRequest(models.Model):
         on_delete=models.CASCADE,
         related_name="access_requests",
         verbose_name=_("Federated access"),
+        help_text=_("Accesso federato di riferimento."),
     )
     message = models.TextField(
         blank=True,
@@ -382,6 +416,7 @@ class FederatedAidAccessRequest(models.Model):
         choices=STATUS_CHOICES,
         default="pending",
         verbose_name=_("Status"),
+        help_text=_("Stato della richiesta di accesso."),
     )
     reviewed_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -390,13 +425,17 @@ class FederatedAidAccessRequest(models.Model):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Reviewed by"),
+        help_text=_("Amministratore che ha valutato la richiesta."),
     )
     reviewed_at = models.DateTimeField(
         null=True,
         blank=True,
         verbose_name=_("Reviewed at"),
+        help_text=_("Data e ora della valutazione."),
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True,
+        help_text=_("Data e ora di invio della richiesta."),
+    )
 
     class Meta:
         verbose_name = _("Federated Aid Access Request")
@@ -428,14 +467,18 @@ class ContactUnlock(models.Model):
         on_delete=models.CASCADE,
         related_name="contact_unlocks",
         verbose_name=_("Federated access"),
+        help_text=_("Accesso federato che ha sbloccato il contatto."),
     )
     helper = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="contact_unlocks_received",
         verbose_name=_("Helper"),
+        help_text=_("Soccorritore il cui contatto è stato sbloccato."),
     )
-    unlocked_at = models.DateTimeField(auto_now_add=True)
+    unlocked_at = models.DateTimeField(auto_now_add=True,
+        help_text=_("Data e ora dello sblocco."),
+    )
 
     class Meta:
         verbose_name = _("Contact Unlock")
@@ -464,3 +507,51 @@ class ContactUnlock(models.Model):
             unlocked_at__gte=window_start,
         ).count()
         return recent_count < cls.UNLOCK_LIMIT
+
+
+# ---------------------------------------------------------------------------
+# FederatedHelper — cached helper data from partner clubs
+# ---------------------------------------------------------------------------
+
+
+class FederatedHelper(models.Model):
+    """
+    Cached helper data from a federated partner club.
+
+    Follows the same pattern as ExternalEvent: data is synced
+    periodically from partner club APIs and displayed alongside
+    local helpers. No personal data (email, phone) is ever stored.
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    source_club = models.ForeignKey(
+        "federation.FederatedClub",
+        on_delete=models.CASCADE,
+        related_name="federated_helpers",
+        verbose_name=_("Source club"),
+    )
+    external_id = models.CharField(
+        max_length=100,
+        verbose_name=_("External ID"),
+        help_text=_("Helper ID on the partner system."),
+    )
+    display_name = models.CharField(max_length=100, verbose_name=_("Display name"))
+    city = models.CharField(max_length=100, blank=True, verbose_name=_("City"))
+    latitude = models.FloatField(null=True, blank=True, verbose_name=_("Latitude"))
+    longitude = models.FloatField(null=True, blank=True, verbose_name=_("Longitude"))
+    radius_km = models.PositiveIntegerField(default=25, verbose_name=_("Radius (km)"))
+    notes = models.TextField(blank=True, verbose_name=_("Notes"))
+    photo_url = models.URLField(blank=True, verbose_name=_("Photo URL"))
+    is_approved = models.BooleanField(default=True)
+    is_hidden = models.BooleanField(default=False)
+    fetched_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _("Federated Helper")
+        verbose_name_plural = _("Federated Helpers")
+        unique_together = [("source_club", "external_id")]
+        ordering = ["city", "display_name"]
+
+    def __str__(self):
+        return f"{self.display_name} ({self.source_club.short_code})"

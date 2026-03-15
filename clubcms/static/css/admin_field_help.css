@@ -1,0 +1,99 @@
+/**
+ * Admin Field Help Tooltip — transforms Wagtail .w-field__help into
+ * interactive tooltips with an info icon.
+ *
+ * Uses Wagtail's own CSS custom properties (--w-color-*) for visual
+ * coherence with the admin theme.
+ */
+
+/* ---- Hide original help text, show via tooltip instead ---- */
+.w-field__help.has-tooltip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+    font-size: 0;       /* hide original text visually */
+    line-height: 0;
+    color: transparent;
+    overflow: visible;
+}
+
+/* ---- Info button ---- */
+.field-help-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    padding: 0;
+    border: 1.5px solid var(--w-color-grey-200, #d4d4d8);
+    border-radius: 50%;
+    background: var(--w-color-white, #fff);
+    color: var(--w-color-primary, #007d7e);
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    flex-shrink: 0;
+}
+
+.field-help-trigger:hover,
+.field-help-trigger:focus-visible {
+    background: var(--w-color-primary, #007d7e);
+    border-color: var(--w-color-primary, #007d7e);
+    color: var(--w-color-white, #fff);
+    outline: 2px solid var(--w-color-primary-200, #99d6d6);
+    outline-offset: 1px;
+}
+
+/* ---- Tooltip bubble ---- */
+.field-help-tooltip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    left: 0;
+    z-index: 1000;
+    min-width: 14rem;
+    max-width: 22rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--w-color-grey-600, #27272a);
+    color: var(--w-color-white, #fff);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.45;
+    border-radius: 0.375rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    pointer-events: auto;
+}
+
+/* arrow */
+.field-help-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 1rem;
+    border: 6px solid transparent;
+    border-top-color: var(--w-color-grey-600, #27272a);
+}
+
+/* visible state */
+.field-help-tooltip[aria-hidden="false"] {
+    display: block;
+}
+
+/* ---- Responsive: on small screens position tooltip differently ---- */
+@media (max-width: 640px) {
+    .field-help-tooltip {
+        left: auto;
+        right: 0;
+        min-width: 12rem;
+        max-width: calc(100vw - 4rem);
+    }
+
+    .field-help-tooltip::after {
+        left: auto;
+        right: 1rem;
+    }
+}

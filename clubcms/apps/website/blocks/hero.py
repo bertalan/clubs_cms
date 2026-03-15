@@ -22,6 +22,8 @@ from wagtail.blocks import (
 )
 from wagtail.images.blocks import ImageChooserBlock
 
+from .common import BlockSettings
+
 
 # ---------------------------------------------------------------------------
 # HeroSliderBlock
@@ -106,6 +108,7 @@ class HeroSliderBlock(StructBlock):
         required=False,
         help_text=_("Show dot indicators."),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/hero_slider_block.html"
@@ -199,6 +202,7 @@ class HeroBannerBlock(StructBlock):
         ],
         default="75vh",
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/hero_banner_block.html"
@@ -236,6 +240,7 @@ class HeroCountdownBlock(StructBlock):
         required=False,
         help_text=_("Show a registration CTA button if registration is open."),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/hero_countdown_block.html"
@@ -292,6 +297,7 @@ class HeroVideoBlock(StructBlock):
         required=False,
         help_text=_("Loop the video."),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/hero_video_block.html"

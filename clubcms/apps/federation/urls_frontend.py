@@ -1,10 +1,12 @@
 """
 Federation frontend URL patterns.
 
-Included at /eventi/partner/ when FEDERATION_ENABLED is True.
+Included at /events/partner/ (translated per-language) when
+FEDERATION_ENABLED is True.
 """
 
 from django.urls import path
+from django.utils.translation import gettext_lazy as _
 
 from apps.federation.views import (
     AddCommentView,

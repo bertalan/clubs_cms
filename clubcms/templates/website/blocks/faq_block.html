@@ -1,0 +1,19 @@
+{% load wagtailcore_tags i18n website_tags %}
+
+<section {% block_attrs self.settings "block-faq" %} itemscope itemtype="https://schema.org/FAQPage">
+    <div class="container">
+        {% if self.title %}
+        <h2 class="block-faq__title">{{ self.title }}</h2>
+        {% endif %}
+        <div class="block-faq__list">
+            {% for item in self.items %}
+            <details class="block-faq__item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <summary class="block-faq__question" itemprop="name">{{ item.question }}</summary>
+                <div class="block-faq__answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text">{{ item.answer|richtext }}</div>
+                </div>
+            </details>
+            {% endfor %}
+        </div>
+    </div>
+</section>

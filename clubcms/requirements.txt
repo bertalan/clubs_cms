@@ -11,10 +11,11 @@ django-taggit>=5.0
 django-modelcluster>=6.0
 bleach>=6.0
 
-# Members (QR, barcode, auth)
+# Members (QR, barcode, auth, PDF)
 qrcode>=7.4
 python-barcode>=0.15
 django-allauth>=0.60
+reportlab>=4.0
 
 # Notifications (queue, push)
 django-q2>=1.6

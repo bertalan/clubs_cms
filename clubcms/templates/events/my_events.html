@@ -1,73 +1,129 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n website_tags %}
 
 {% block title %}{% trans "My Favorite Events" %} | {{ block.super }}{% endblock %}
+{% block body_class %}page-my-events{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>{% trans "My Favorite Events" %}</h1>
+<section class="page-my-events" aria-labelledby="my-events-title">
+    <div class="container">
+        <header class="page-my-events__header">
+            <h1 id="my-events-title" class="page-my-events__title">{% trans "My Favorite Events" %}</h1>
+        </header>
 
-    <nav class="subnav">
-        <a href="{% url 'events:my_events' %}" class="active">{% trans "Upcoming" %}</a>
-        <a href="{% url 'events:my_events_archive' %}">{% trans "Archive" %}</a>
-        <a href="{% url 'events:my_registrations' %}">{% trans "My Registrations" %}</a>
-    </nav>
+        <nav class="page-my-events__nav" aria-label="{% trans 'Events navigation' %}">
+            <a href="{% url 'events:my_events' %}" class="page-my-events__nav-link page-my-events__nav-link--active" aria-current="page">
+                <svg class="page-my-events__nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                {% trans "Upcoming" %}
+            </a>
+            <a href="{% url 'events:my_events_archive' %}" class="page-my-events__nav-link">
+                <svg class="page-my-events__nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><line x1="10" y1="12" x2="14" y2="12"/>
+                </svg>
+                {% trans "Archive" %}
+            </a>
+            <a href="{% url 'events:my_registrations' %}" class="page-my-events__nav-link">
+                <svg class="page-my-events__nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+                {% trans "My Registrations" %}
+            </a>
+        </nav>
 
-    <!-- Map placeholder -->
-    <div class="map-placeholder" id="events-map" aria-label="{% trans 'Events map' %}">
-        <p class="text-muted">{% trans "Map view of your favorite events" %}</p>
-    </div>
+        <div class="page-my-events__map" id="events-map" role="img" aria-label="{% trans 'Events map' %}">
+            <p class="page-my-events__map-placeholder">{% trans "Map view of your favorite events" %}</p>
+        </div>
 
-    {% if favorites %}
-    <ul class="event-list">
-        {% for fav in favorites %}
-        <li class="event-card">
-            <h3>
-                <a href="{{ fav.event.url }}">{{ fav.event.title }}</a>
-            </h3>
-            <p class="event-date">{{ fav.event.start_date }}</p>
+        {% if favorites %}
+        <ul class="page-my-events__list" role="list">
+            {% for fav in favorites %}
+            <li class="page-my-events__item">
+                <article class="page-my-events__card" aria-labelledby="event-{{ fav.event.pk }}">
+                    <header class="page-my-events__card-header">
+                        <h2 id="event-{{ fav.event.pk }}" class="page-my-events__card-title">
+                            <a href="{{ fav.event.url }}" class="page-my-events__card-link">{{ fav.event.title }}</a>
+                        </h2>
+                    </header>
+                    <div class="page-my-events__card-meta">
+                        <time class="page-my-events__card-date" datetime="{{ fav.event.start_date|date:'Y-m-d' }}">
+                            <svg class="page-my-events__meta-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            {{ fav.event.start_date }}
+                        </time>
+                        {% if fav.event.location_name %}
+                        <span class="page-my-events__card-location">
+                            <svg class="page-my-events__meta-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                            </svg>
+                            {{ fav.event.location_name }}
+                        </span>
+                        {% endif %}
+                    </div>
+                    <footer class="page-my-events__card-actions">
+                        <form method="post" action="{% url 'events:toggle_favorite' fav.event.pk %}" class="page-my-events__action-form">
+                            {% csrf_token %}
+                            <button type="submit" class="page-my-events__btn page-my-events__btn--outline" aria-label="{% trans 'Remove from favorites' %}">
+                                <svg class="page-my-events__btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                                </svg>
+                                {% trans "Remove" %}
+                            </button>
+                        </form>
+                        <a href="{% url 'events:event_ics' fav.event.pk %}" class="page-my-events__btn page-my-events__btn--outline" aria-label="{% trans 'Download calendar file' %}">
+                            <svg class="page-my-events__btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            {% trans "ICS" %}
+                        </a>
+                        {% if fav.event.is_registration_open %}
+                        <a href="{% url 'events:register' fav.event.pk %}" class="page-my-events__btn page-my-events__btn--primary">
+                            <svg class="page-my-events__btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/>
+                            </svg>
+                            {% trans "Register" %}
+                        </a>
+                        {% endif %}
+                    </footer>
+                </article>
+            </li>
+            {% endfor %}
+        </ul>
 
-            {% if fav.event.location_name %}
-            <p class="event-location">{{ fav.event.location_name }}</p>
+        {% if is_paginated %}
+        <nav class="page-my-events__pagination" aria-label="{% trans 'Pagination' %}">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="page-my-events__pagination-link page-my-events__pagination-link--prev" aria-label="{% trans 'Previous page' %}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+                {% trans "Previous" %}
+            </a>
             {% endif %}
-
-            <div class="event-actions">
-                <form method="post" action="{% url 'events:toggle_favorite' fav.event.pk %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-sm btn-outline" title="{% trans 'Remove from favorites' %}">
-                        {% trans "Remove" %}
-                    </button>
-                </form>
-
-                <a href="{% url 'events:event_ics' fav.event.pk %}" class="btn btn-sm btn-outline"
-                   title="{% trans 'Download calendar file' %}">
-                    {% trans "ICS" %}
-                </a>
-
-                {% if fav.event.is_registration_open %}
-                <a href="{% url 'events:register' fav.event.pk %}" class="btn btn-sm btn-primary">
-                    {% trans "Register" %}
-                </a>
-                {% endif %}
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
-
-    {% if is_paginated %}
-    <nav class="pagination" aria-label="{% trans 'Pagination' %}">
-        {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a>
+            <span class="page-my-events__pagination-info" aria-current="page">{% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}</span>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="page-my-events__pagination-link page-my-events__pagination-link--next" aria-label="{% trans 'Next page' %}">
+                {% trans "Next" %}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <polyline points="9 18 15 12 9 6"/>
+                </svg>
+            </a>
+            {% endif %}
+        </nav>
         {% endif %}
-        <span>{% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}</span>
-        {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
-        {% endif %}
-    </nav>
-    {% endif %}
 
-    {% else %}
-    <p>{% trans "You have not added any events to your favorites yet." %}</p>
-    {% endif %}
-</div>
+        {% else %}
+        <div class="page-my-events__empty" role="status">
+            <svg class="page-my-events__empty-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+            </svg>
+            <p class="page-my-events__empty-text">{% trans "You have not added any events to your favorites yet." %}</p>
+            {% events_index_url as events_url %}
+            <a href="{{ events_url }}" class="page-my-events__btn page-my-events__btn--primary">{% trans "Browse Events" %}</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
 {% endblock %}

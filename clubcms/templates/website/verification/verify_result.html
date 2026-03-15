@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block body_class %}page-verification-result{% endblock %}
 
@@ -6,28 +7,28 @@
 <div class="page-verification-result">
     <div class="page-verification-result__container">
         <header class="page-verification-result__header">
-            <h1 class="page-verification-result__title">Verification Result</h1>
+            <h1 class="page-verification-result__title">{% trans "Verification Result" %}</h1>
         </header>
 
         <div class="page-verification-result__card page-verification-result__card--{{ result }}">
             {% if result == "success" %}
             <div class="page-verification-result__status page-verification-result__status--success" role="alert">
-                <h2>Member Verified</h2>
+                <h2>{% trans "Member Verified" %}</h2>
                 <p>{{ message }}</p>
             </div>
 
             <div class="page-verification-result__details">
                 <dl class="page-verification-result__info">
-                    <dt>Display Name</dt>
+                    <dt>{% trans "Display Name" %}</dt>
                     <dd>{{ member_display_name }}</dd>
 
                     {% if member_valid_until %}
-                    <dt>Valid Until</dt>
+                    <dt>{% trans "Valid Until" %}</dt>
                     <dd>{{ member_valid_until|date:"F j, Y" }}</dd>
                     {% endif %}
 
                     {% if member_since %}
-                    <dt>Member Since</dt>
+                    <dt>{% trans "Member Since" %}</dt>
                     <dd>{{ member_since|date:"F j, Y" }}</dd>
                     {% endif %}
                 </dl>
@@ -35,25 +36,25 @@
 
             {% elif result == "not_found" %}
             <div class="page-verification-result__status page-verification-result__status--error" role="alert">
-                <h2>Not Found</h2>
+                <h2>{% trans "Not Found" %}</h2>
                 <p>{{ message }}</p>
             </div>
 
             {% elif result == "expired" %}
             <div class="page-verification-result__status page-verification-result__status--warning" role="alert">
-                <h2>Expired Membership</h2>
+                <h2>{% trans "Expired Membership" %}</h2>
                 <p>{{ message }}</p>
             </div>
 
             {% elif result == "wrong_data" %}
             <div class="page-verification-result__status page-verification-result__status--error" role="alert">
-                <h2>Verification Failed</h2>
+                <h2>{% trans "Verification Failed" %}</h2>
                 <p>{{ message }}</p>
             </div>
 
             {% elif result == "rate_limited" %}
             <div class="page-verification-result__status page-verification-result__status--warning" role="alert">
-                <h2>Rate Limited</h2>
+                <h2>{% trans "Rate Limited" %}</h2>
                 <p>{{ message }}</p>
             </div>
             {% endif %}
@@ -61,7 +62,7 @@
 
         <div class="page-verification-result__actions">
             <a href="{% url 'website:verify_member' %}" class="page-verification-result__back-link">
-                Verify Another Member
+                {% trans "Verify Another Member" %}
             </a>
         </div>
     </div>

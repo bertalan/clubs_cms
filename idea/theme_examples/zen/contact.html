@@ -5,28 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact - Zen Theme Demo</title>
   <style>
-    :root { 
-      --ink: #0a0a0a; 
-      --paper: #ffffff; 
+    :root {
+      --ink: #0a0a0a;
+      --paper: #ffffff;
       --gray: #f5f5f5;
       --pop: #FF3366;
       --pop-yellow: #FFD700;
       --pop-blue: #00BFFF;
+      --pop-green: #00E676;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--gray); color: var(--ink); line-height: 1.6; }
     .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
     a { color: var(--ink); }
-    
+
     /* === NAV === */
     nav { background: var(--ink); color: var(--paper); padding: 1rem 0; border-bottom: 4px solid var(--pop); }
     nav .container { display: flex; justify-content: space-between; align-items: center; }
-    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav .nav-links { list-style: none; display: flex; gap: 2rem; align-items: center; }
     nav a { color: var(--paper); text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.85rem; }
     nav a:hover, nav a.active { color: var(--pop); }
     .logo { font-weight: 900; font-size: 1.3rem; text-decoration: none; color: var(--paper); }
     .logo span { color: var(--pop); }
-    
+    .btn-nav-cta {
+      display: inline-block; padding: 0.5rem 1.2rem; background: var(--pop); color: var(--paper);
+      text-decoration: none; font-weight: 800; text-transform: uppercase; font-size: 0.8rem;
+      border: 2px solid var(--pop); transition: all 0.2s; margin-left: 1rem;
+    }
+    .btn-nav-cta:hover { background: var(--paper); color: var(--pop); }
+
     /* === HEADER === */
     .header { padding: 3rem 0; }
     .header-panel {
@@ -34,12 +41,12 @@
       box-shadow: 8px 8px 0 var(--ink); padding: 3rem; text-align: center;
     }
     .header-panel h1 { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; }
-    
+
     /* === CONTACT GRID === */
     .section { padding: 2rem 0 3rem; }
     .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
     @media (max-width: 700px) { .contact-grid { grid-template-columns: 1fr; } }
-    
+
     /* Form Panel */
     .form-panel {
       background: var(--paper); border: 3px solid var(--ink);
@@ -52,30 +59,42 @@
     .form-panel h2::before {
       content: ''; width: 8px; height: 100%; min-height: 24px; background: var(--pop);
     }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
     .form-group { margin-bottom: 1.25rem; }
-    .form-group label { 
-      display: block; margin-bottom: 0.4rem; font-weight: 700; 
+    .form-group label {
+      display: block; margin-bottom: 0.4rem; font-weight: 700;
       font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;
     }
-    .form-group input, .form-group textarea { 
+    .form-group label .required { color: var(--pop); font-weight: 900; }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
       width: 100%; padding: 0.9rem; border: 3px solid var(--ink);
       background: var(--paper); font-family: inherit; font-size: 1rem;
       transition: all 0.2s;
     }
-    .form-group input:focus, .form-group textarea:focus { 
-      outline: none; border-color: var(--pop); 
+    .form-group select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%230a0a0a' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none; border-color: var(--pop);
       box-shadow: 4px 4px 0 var(--pop);
     }
+    .checkbox-group { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .checkbox-group input[type="checkbox"] { width: auto; margin-top: 0.3rem; accent-color: var(--pop); transform: scale(1.2); }
+    .checkbox-group label { font-size: 0.85rem; font-weight: 400; text-transform: none; letter-spacing: 0; }
+    .checkbox-group label a { color: var(--pop); font-weight: 600; }
     .btn-submit {
       display: inline-block; padding: 1rem 2.5rem; background: var(--ink); color: var(--paper);
       border: 3px solid var(--ink); font-weight: 800; text-transform: uppercase;
       font-size: 1rem; cursor: pointer; transition: all 0.2s;
     }
-    .btn-submit:hover { 
-      background: var(--pop); border-color: var(--pop); 
+    .btn-submit:hover {
+      background: var(--pop); border-color: var(--pop);
       transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--ink);
     }
-    
+
     /* Info Panels */
     .info-stack { display: flex; flex-direction: column; gap: 1rem; }
     .info-panel {
@@ -86,12 +105,29 @@
     .info-panel:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
     .info-panel:nth-child(1) { background: var(--pop-yellow); }
     .info-panel:nth-child(2) { background: var(--pop-blue); }
-    .info-panel h4 { 
+    .info-panel:nth-child(3) { background: var(--pop-green); }
+    .info-panel h4 {
       font-weight: 800; font-size: 0.85rem; text-transform: uppercase;
       margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;
     }
     .info-panel p { font-size: 0.95rem; color: #333; margin: 0; }
-    
+
+    /* Office Hours Panel */
+    .hours-panel {
+      background: var(--paper); border: 3px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink); padding: 1.5rem;
+      transition: all 0.2s;
+    }
+    .hours-panel:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+    .hours-panel h4 {
+      font-weight: 800; font-size: 0.85rem; text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .hours-table { width: 100%; border-collapse: collapse; }
+    .hours-table td { padding: 0.35rem 0; font-size: 0.9rem; }
+    .hours-table td:first-child { font-weight: 700; width: 50%; }
+    .hours-table tr + tr td { border-top: 1px solid rgba(0,0,0,0.1); }
+
     /* CTA Panel */
     .cta-panel {
       background: var(--ink); color: var(--paper); border: 3px solid var(--ink);
@@ -99,24 +135,91 @@
     }
     .cta-panel h4 { font-weight: 900; text-transform: uppercase; margin-bottom: 0.5rem; }
     .cta-panel p { font-size: 0.9rem; opacity: 0.8; margin: 0; }
-    
+
+    /* === MAP PLACEHOLDER === */
+    .map-section { padding: 0 0 3rem; }
+    .map-placeholder {
+      background: var(--paper); border: 3px solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink); padding: 4rem 2rem;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .map-placeholder::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background-image: radial-gradient(var(--ink) 1px, transparent 1px);
+      background-size: 8px 8px; opacity: 0.05; pointer-events: none;
+    }
+    .map-placeholder .map-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .map-placeholder p { font-weight: 700; text-transform: uppercase; font-size: 0.9rem; color: #666; }
+
+    /* === FAQ SECTION === */
+    .faq-section { padding: 0 0 3rem; }
+    .section-title {
+      font-size: 1.8rem; font-weight: 900; text-transform: uppercase;
+      margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;
+    }
+    .section-title::after { content: ''; flex: 1; height: 4px; background: var(--ink); }
+    .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .faq-item {
+      background: var(--paper); border: 3px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink); overflow: hidden;
+      transition: all 0.2s;
+    }
+    .faq-item:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+    .faq-question {
+      padding: 1.25rem 1.5rem; cursor: pointer; font-weight: 800;
+      text-transform: uppercase; font-size: 0.9rem; display: flex;
+      justify-content: space-between; align-items: center;
+      background: none; border: none; width: 100%; text-align: left;
+      font-family: inherit; color: var(--ink);
+    }
+    .faq-question::after { content: '+'; font-size: 1.5rem; font-weight: 900; color: var(--pop); transition: transform 0.3s; }
+    .faq-item.open .faq-question::after { content: '-'; transform: rotate(180deg); }
+    .faq-answer {
+      max-height: 0; overflow: hidden; transition: max-height 0.3s ease;
+    }
+    .faq-answer-inner {
+      padding: 0 1.5rem 1.25rem; font-size: 0.95rem; color: #444;
+      border-top: 2px solid var(--ink);
+    }
+    .faq-item.open .faq-answer { max-height: 300px; }
+    .faq-item:nth-child(odd) { border-left: 6px solid var(--pop); }
+    .faq-item:nth-child(even) { border-left: 6px solid var(--pop-yellow); }
+
     /* === FOOTER === */
-    footer { background: var(--ink); color: var(--paper); padding: 2.5rem 0; text-align: center; }
-    footer a { color: var(--paper); text-decoration: none; margin: 0 1rem; font-size: 0.9rem; }
-    footer a:hover { color: var(--pop); }
-    footer .copy { margin-top: 1rem; font-size: 0.8rem; opacity: 0.6; }
+    footer { background: var(--ink); color: var(--paper); padding: 3rem 0 2rem; }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    @media (max-width: 700px) { .footer-grid { grid-template-columns: 1fr; } }
+    .footer-brand .logo { font-size: 1.5rem; display: inline-block; margin-bottom: 0.75rem; }
+    .footer-brand p { font-size: 0.85rem; opacity: 0.7; margin-bottom: 0.25rem; }
+    .footer-brand a { color: var(--pop); text-decoration: none; }
+    .footer-brand a:hover { text-decoration: underline; }
+    .footer-nav h4, .footer-social h4 { font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; color: var(--pop); }
+    .footer-nav ul { list-style: none; }
+    .footer-nav ul li { margin-bottom: 0.5rem; }
+    .footer-nav a { color: var(--paper); text-decoration: none; font-size: 0.9rem; opacity: 0.8; }
+    .footer-nav a:hover { color: var(--pop); opacity: 1; }
+    .footer-social .social-links { display: flex; gap: 1rem; }
+    .footer-social .social-links a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border: 2px solid var(--paper);
+      color: var(--paper); text-decoration: none; font-weight: 700;
+      font-size: 0.75rem; transition: all 0.2s;
+    }
+    .footer-social .social-links a:hover { background: var(--pop); border-color: var(--pop); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 1.5rem; text-align: center; font-size: 0.8rem; opacity: 0.6; }
   </style>
 </head>
 <body>
   <nav>
     <div class="container">
       <a href="index.html" class="logo">MIND<span>FUL</span></a>
-      <ul>
+      <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="events.html">Events</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="contact.html" class="active">Contact</a></li>
+        <li><a href="contact.html" class="btn-nav-cta">Join</a></li>
       </ul>
     </div>
   </nav>
@@ -135,34 +238,67 @@
         <div class="form-panel">
           <h2>Send a Message</h2>
           <form>
-            <div class="form-group">
-              <label>Name</label>
-              <input type="text" placeholder="Your name">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="contact-firstname">First Name <span class="required">*</span></label>
+                <input type="text" id="contact-firstname" name="firstname" placeholder="Your first name" required aria-label="First name">
+              </div>
+              <div class="form-group">
+                <label for="contact-lastname">Last Name <span class="required">*</span></label>
+                <input type="text" id="contact-lastname" name="lastname" placeholder="Your last name" required aria-label="Last name">
+              </div>
             </div>
             <div class="form-group">
-              <label>Email</label>
-              <input type="email" placeholder="your@email.example">
+              <label for="contact-email">Email <span class="required">*</span></label>
+              <input type="email" id="contact-email" name="email" placeholder="your@email.example" required aria-label="Email address">
             </div>
             <div class="form-group">
-              <label>Message</label>
-              <textarea rows="5" placeholder="What's on your mind?"></textarea>
+              <label for="contact-phone">Phone (optional)</label>
+              <input type="tel" id="contact-phone" name="phone" placeholder="+1 (555) 000-0000" aria-label="Phone number">
             </div>
-            <button type="submit" class="btn-submit">Send →</button>
+            <div class="form-group">
+              <label for="contact-subject">Subject <span class="required">*</span></label>
+              <select id="contact-subject" name="subject" required aria-label="Subject of inquiry">
+                <option value="" disabled selected>Select a subject...</option>
+                <option value="general">General Inquiry</option>
+                <option value="membership">Membership</option>
+                <option value="events">Events</option>
+                <option value="partnership">Partnership</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="contact-message">Message <span class="required">*</span></label>
+              <textarea id="contact-message" name="message" rows="5" placeholder="What's on your mind?" required aria-label="Your message"></textarea>
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="contact-privacy" name="privacy" required aria-label="Privacy policy consent">
+              <label for="contact-privacy">I agree to the <a href="#">Privacy Policy</a> and consent to the processing of my personal data in accordance with GDPR. <span class="required">*</span></label>
+            </div>
+            <button type="submit" class="btn-submit">Send Message</button>
           </form>
         </div>
 
         <div class="info-stack">
           <div class="info-panel">
-            <h4>📍 Location</h4>
-            <p>321 Quiet Street<br>Stillwater, SW 54321</p>
+            <h4>Location</h4>
+            <p>123 Serenity Lane<br>Calm City, CC 10001</p>
           </div>
           <div class="info-panel">
-            <h4>✉️ Email</h4>
-            <p>hello@mindful.example</p>
+            <h4>Email</h4>
+            <p><a href="mailto:info@mindful.example" style="color: #333;">info@mindful.example</a></p>
           </div>
           <div class="info-panel">
-            <h4>🕐 Hours</h4>
-            <p>By appointment only</p>
+            <h4>Phone</h4>
+            <p><a href="tel:+15551234567" style="color: #333;">+1 (555) 123-4567</a></p>
+          </div>
+          <div class="hours-panel">
+            <h4>Office Hours</h4>
+            <table class="hours-table">
+              <tr><td>Monday - Friday</td><td>9:00 AM - 6:00 PM</td></tr>
+              <tr><td>Saturday</td><td>10:00 AM - 2:00 PM</td></tr>
+              <tr><td>Sunday</td><td>Closed</td></tr>
+            </table>
           </div>
           <div class="cta-panel">
             <h4>Ready to Begin?</h4>
@@ -173,16 +309,119 @@
     </div>
   </section>
 
+  <!-- Map Placeholder -->
+  <section class="map-section">
+    <div class="container">
+      <div class="map-placeholder">
+        <div class="map-icon">&#9872;</div>
+        <p>Map placeholder - OpenStreetMap</p>
+        <p style="font-weight: 400; font-size: 0.8rem; margin-top: 0.5rem; text-transform: none;">123 Serenity Lane, Calm City</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-1">How do I join the club?</button>
+          <div class="faq-answer" id="faq-1">
+            <div class="faq-answer-inner">
+              Joining Mindful is easy! Fill out the membership form on our contact page or visit us during office hours. We welcome riders of all experience levels. You can also attend one of our open events to get a feel for the community before committing to membership.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-2">What are the membership fees?</button>
+          <div class="faq-answer" id="faq-2">
+            <div class="faq-answer-inner">
+              Annual membership is EUR 60 per year, which includes access to all club rides, use of club facilities, member discounts on events, and our quarterly newsletter. There is also a family membership option at EUR 90 per year. New members receive a welcome kit with club merchandise.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-3">What are the office hours?</button>
+          <div class="faq-answer" id="faq-3">
+            <div class="faq-answer-inner">
+              Our office is open Monday through Friday from 9:00 AM to 6:00 PM, and Saturday from 10:00 AM to 2:00 PM. We are closed on Sundays and public holidays. You can also reach us anytime via email at info@mindful.example.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-4">How can I participate in events?</button>
+          <div class="faq-answer" id="faq-4">
+            <div class="faq-answer-inner">
+              Check our Events page for upcoming activities. Most events are open to both members and non-members, though members enjoy reduced fees or free entry. Simply click the registration link on any event, or contact us directly to reserve your spot. Group rides typically meet at the clubhouse.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-5">What is the cancellation policy?</button>
+          <div class="faq-answer" id="faq-5">
+            <div class="faq-answer-inner">
+              For paid events, cancellations made at least 48 hours in advance receive a full refund. Cancellations within 48 hours receive a 50% refund or credit toward a future event. Membership cancellations can be made at any time, with a pro-rated refund for the remaining months of the year.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <div class="container">
-      <div>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="events.html">Events</a>
-        <a href="gallery.html">Gallery</a>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">MIND<span>FUL</span></a>
+          <p>123 Serenity Lane</p>
+          <p>Calm City, CC 10001</p>
+          <p style="margin-top: 0.5rem;"><a href="mailto:info@mindful.example">info@mindful.example</a></p>
+          <p><a href="tel:+15551234567">+1 (555) 123-4567</a></p>
+        </div>
+        <div class="footer-nav">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-social">
+          <h4>Follow Us</h4>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook">FB</a>
+            <a href="#" aria-label="Instagram">IG</a>
+            <a href="#" aria-label="Twitter">TW</a>
+          </div>
+        </div>
       </div>
-      <p class="copy">© 2026 Mindful • Zen Comic Theme</p>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Mindful. All rights reserved.</p>
+      </div>
     </div>
   </footer>
+
+  <script>
+    // FAQ Accordion
+    document.querySelectorAll('.faq-question').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var item = this.closest('.faq-item');
+        var isOpen = item.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(function(el) {
+          el.classList.remove('open');
+          el.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+        });
+        // Toggle current
+        if (!isOpen) {
+          item.classList.add('open');
+          this.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  </script>
 </body>
 </html>

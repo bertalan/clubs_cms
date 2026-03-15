@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags i18n %}
 
 {% block body_class %}page-press{% endblock %}
 
@@ -20,8 +20,8 @@
 
         {# Press contact information #}
         {% if page.press_contact or page.press_email or page.press_phone %}
-        <section class="page-press__contact" aria-label="Press contact">
-            <h2 class="page-press__section-title">Press Contact</h2>
+        <section class="page-press__contact" aria-label="{% trans 'Press contact' %}">
+            <h2 class="page-press__section-title">{% trans "Press Contact" %}</h2>
             <div class="page-press__contact-card">
                 {% if page.press_contact %}
                 <p class="page-press__contact-name">{{ page.press_contact }}</p>
@@ -42,8 +42,8 @@
 
         {# Press releases #}
         {% if press_releases %}
-        <section class="page-press__releases" aria-label="Press releases">
-            <h2 class="page-press__section-title">Press Releases</h2>
+        <section class="page-press__releases" aria-label="{% trans 'Press releases' %}">
+            <h2 class="page-press__section-title">{% trans "Press Releases" %}</h2>
             <div class="page-press__releases-list">
                 {% for release in press_releases %}
                 <article class="press-release-card">
@@ -58,8 +58,8 @@
                     </div>
                     {% if release.attachment %}
                     <div class="press-release-card__download">
-                        <a href="{{ release.attachment.url }}" class="btn btn-secondary" download>
-                            Download ({{ release.attachment.file_extension|upper }})
+                        <a href="{{ release.attachment.url }}" class="btn btn-secondary" download aria-label="{% blocktrans with title=release.title %}Download {{ title }}{% endblocktrans %}">
+                            {% trans "Download" %} ({{ release.attachment.file_extension|upper }})
                         </a>
                     </div>
                     {% endif %}
@@ -71,8 +71,8 @@
 
         {# Brand assets #}
         {% if brand_assets %}
-        <section class="page-press__assets" aria-label="Brand assets">
-            <h2 class="page-press__section-title">Brand Assets</h2>
+        <section class="page-press__assets" aria-label="{% trans 'Brand assets' %}">
+            <h2 class="page-press__section-title">{% trans "Brand Assets" %}</h2>
             <div class="page-press__assets-grid">
                 {% for asset in brand_assets %}
                 <div class="brand-asset-card">
@@ -89,8 +89,8 @@
                         <p class="brand-asset-card__description">{{ asset.description|truncatewords:20 }}</p>
                         {% endif %}
                         {% if asset.file %}
-                        <a href="{{ asset.file.url }}" class="btn btn-secondary" download>
-                            Download
+                        <a href="{{ asset.file.url }}" class="btn btn-secondary" download aria-label="{% blocktrans with name=asset.name %}Download {{ name }}{% endblocktrans %}">
+                            {% trans "Download" %}
                         </a>
                         {% endif %}
                     </div>

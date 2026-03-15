@@ -4,75 +4,98 @@
 {% block title %}{% trans "My Registrations" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>{% trans "My Registrations" %}</h1>
+<section class="page-registrations" aria-labelledby="registrations-heading">
+    <div class="container">
+        <header class="page-registrations__header">
+            <h1 id="registrations-heading" class="page-registrations__title">{% trans "My Registrations" %}</h1>
+            <p class="page-registrations__subtitle">{% trans "Manage your event registrations" %}</p>
+        </header>
 
-    {% if registrations %}
-    <table class="table">
-        <thead>
-            <tr>
-                <th>{% trans "Event" %}</th>
-                <th>{% trans "Date" %}</th>
-                <th>{% trans "Status" %}</th>
-                <th>{% trans "Payment" %}</th>
-                <th>{% trans "Registered" %}</th>
-                <th>{% trans "Actions" %}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for reg in registrations %}
-            <tr>
-                <td>
-                    <a href="{{ reg.event.url }}">{{ reg.event.title }}</a>
-                </td>
-                <td>{{ reg.event.start_date }}</td>
-                <td>
-                    <span class="badge badge-{{ reg.status }}">
-                        {{ reg.get_status_display }}
-                    </span>
-                </td>
-                <td>
-                    <span class="badge badge-{{ reg.payment_status }}">
-                        {{ reg.get_payment_status_display }}
-                    </span>
-                </td>
-                <td>{{ reg.registered_at }}</td>
-                <td>
-                    {% if reg.status != "cancelled" %}
-                    <form method="post" action="{% url 'events:cancel' reg.pk %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-danger"
-                                onclick="return confirm('{% trans "Are you sure you want to cancel this registration?" %}')">
-                            {% trans "Cancel" %}
-                        </button>
-                    </form>
-                    {% else %}
-                    <span class="text-muted">{% trans "Cancelled" %}</span>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        {% if registrations %}
+        <div class="page-registrations__content">
+            <div class="table-responsive">
+                <table class="page-registrations__table data-table" role="grid">
+                    <thead>
+                        <tr>
+                            <th scope="col">{% trans "Event" %}</th>
+                            <th scope="col">{% trans "Date" %}</th>
+                            <th scope="col">{% trans "Status" %}</th>
+                            <th scope="col">{% trans "Payment" %}</th>
+                            <th scope="col">{% trans "Registered" %}</th>
+                            <th scope="col">{% trans "Actions" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reg in registrations %}
+                        <tr class="page-registrations__row">
+                            <td class="page-registrations__cell page-registrations__cell--event">
+                                <a href="{{ reg.event.url }}" class="page-registrations__event-link">{{ reg.event.title }}</a>
+                            </td>
+                            <td class="page-registrations__cell page-registrations__cell--date">
+                                <time datetime="{{ reg.event.start_date|date:'Y-m-d' }}">{{ reg.event.start_date }}</time>
+                            </td>
+                            <td class="page-registrations__cell page-registrations__cell--status">
+                                <span class="badge badge--{{ reg.status }}" role="status">
+                                    {{ reg.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="page-registrations__cell page-registrations__cell--payment">
+                                <span class="badge badge--{{ reg.payment_status }}" role="status">
+                                    {{ reg.get_payment_status_display }}
+                                </span>
+                            </td>
+                            <td class="page-registrations__cell page-registrations__cell--registered">
+                                <time datetime="{{ reg.registered_at|date:'Y-m-d' }}">{{ reg.registered_at }}</time>
+                            </td>
+                            <td class="page-registrations__cell page-registrations__cell--actions">
+                                {% if reg.status != "cancelled" %}
+                                <form method="post" action="{% url 'events:cancel' reg.pk %}" class="page-registrations__cancel-form">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn--danger btn--sm"
+                                            onclick="return confirm('{% trans "Are you sure you want to cancel this registration?" %}')">
+                                        {% trans "Cancel" %}
+                                    </button>
+                                </form>
+                                {% else %}
+                                <span class="page-registrations__cancelled">{% trans "Cancelled" %}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
-    {% if is_paginated %}
-    <nav class="pagination" aria-label="{% trans 'Pagination' %}">
-        {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a>
+            {% if is_paginated %}
+            <nav class="page-registrations__pagination pagination" aria-label="{% trans 'Pagination' %}">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="pagination__link pagination__link--prev">
+                    <span aria-hidden="true">&larr;</span> {% trans "Previous" %}
+                </a>
+                {% endif %}
+                <span class="pagination__info">{% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}</span>
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="pagination__link pagination__link--next">
+                    {% trans "Next" %} <span aria-hidden="true">&rarr;</span>
+                </a>
+                {% endif %}
+            </nav>
+            {% endif %}
+        </div>
+
+        {% else %}
+        <div class="page-registrations__empty" role="status">
+            <svg class="page-registrations__empty-icon" width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <p class="page-registrations__empty-text">{% trans "You have not registered for any events yet." %}</p>
+            <a href="{% url 'wagtail_serve' '' %}" class="btn btn--primary">{% trans "Browse Events" %}</a>
+        </div>
         {% endif %}
-        <span>{% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}</span>
-        {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
-        {% endif %}
-    </nav>
-    {% endif %}
 
-    {% else %}
-    <p>{% trans "You have not registered for any events yet." %}</p>
-    {% endif %}
-
-    <div class="actions">
-        <a href="{% url 'events:my_events' %}" class="btn btn-secondary">{% trans "My Favorite Events" %}</a>
+        <footer class="page-registrations__footer">
+            <a href="{% url 'events:my_events' %}" class="btn btn--secondary">{% trans "My Favorite Events" %}</a>
+        </footer>
     </div>
-</div>
+</section>
 {% endblock %}

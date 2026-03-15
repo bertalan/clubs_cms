@@ -36,10 +36,10 @@
         <p class="auth-switch">
             <a href="{% url 'account_reset_password' %}">{% trans "Forgot your password?" %}</a>
         </p>
-        <p class="auth-switch">
-            {% trans "Don't have an account?" %}
-            <a href="{% url 'account_signup' %}">{% trans "Sign up" %}</a>
-        </p>
+        <div class="auth-signup-cta">
+            <p>{% trans "Don't have an account?" %}</p>
+            <a href="{% url 'account_signup' %}" class="btn btn-secondary btn-block">{% trans "Sign up" %}</a>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -2,6 +2,8 @@
 
 > **Documentation for a complete Wagtail 7.x CMS for clubs and associations**
 
+**[Installation Guide](INSTALL.md)** — Step-by-step setup for development and production environments.
+
 This repository contains comprehensive documentation for building a feature-rich motorcycle club website using **Wagtail 7.x** and **Django 5.x**.
 
 ## 📂 Repository Structure
@@ -30,6 +32,26 @@ docs/rebuild/
 2. **Explore the architecture:** [`idea/01-PROJECT-STRUCTURE.md`](idea/01-PROJECT-STRUCTURE.md)
 3. **Check dependencies:** [`idea/02-DEPENDENCIES.md`](idea/02-DEPENDENCIES.md)
 4. **Review the checklist:** [`idea/60-CHECKLIST.md`](idea/60-CHECKLIST.md)
+
+### Demo Content
+
+Two commands populate the site with realistic demo data — choose the language for your default site:
+
+```bash
+cd clubcms/
+docker compose up -d
+docker compose exec web python manage.py migrate
+
+# Italian demo site (IT default, EN copies included)
+docker compose exec web python manage.py populate_demo_it
+
+# English demo site (EN default, IT copies included)
+docker compose exec web python manage.py populate_demo_en
+```
+
+Both commands create a full page hierarchy, 6 news articles, 6 events, 3 partners, members, and navigation.
+The IT command creates EN page copies as a translation starting point; the EN command does the same for IT.
+Other locales (DE, FR, ES) are activated from the Wagtail admin when needed.
 
 ### For Club Members
 
@@ -156,7 +178,9 @@ This documentation is available under the terms specified in [`idea/LICENSE`](id
 
 ## 🏍️ Built With Love for Motorcycle Communities
 
-This project is designed specifically for motorcycle clubs, with features that address the unique needs of rider communities: event coordination, group rides, member networking, roadside assistance, and inter-club collaboration.
+This project is designed specifically for motorcycle clubs, with features that address the unique needs of rider communities: event coordination, group rides, member networking, roadside assistance, and inter-club collaboration. 
+
+It can also be applied to other organizations that require local research and effective collaboration.
 
 ---
 

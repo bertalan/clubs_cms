@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags %}
+
+{% block title %}{{ page.title }} | {{ block.super }}{% endblock %}
+
+{% block body_class %}page-membership-plans{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<section class="page-membership-plans">
+    <div class="container">
+        <header class="page-membership-plans__header">
+            <h1 class="page-membership-plans__title">{{ page.title }}</h1>
+            {% if page.intro %}
+            <div class="page-membership-plans__intro">{{ page.intro|richtext }}</div>
+            {% endif %}
+        </header>
+
+        <div class="pricing-grid">
+            {% for product in products %}
+            <div class="pricing-card {% if product.pk in user_products %}pricing-card--active{% endif %}">
+                {% if product.pk in user_products %}
+                    <span class="pricing-card__badge">{% trans "Your plan" %}</span>
+                {% endif %}
+                <h2 class="pricing-card__name">{{ product.name }}</h2>
+                <div class="pricing-card__price">
+                    &euro;{{ product.price }}
+                    <small>/ {% trans "year" %}</small>
+                </div>
+                {% if product.description %}
+                <p class="pricing-card__desc">{{ product.description }}</p>
+                {% endif %}
+                <ul class="pricing-card__features">
+                    {% if product.grants_events %}
+                    <li>{% trans "Event registration" %}</li>
+                    {% endif %}
+                    {% if product.grants_vote %}
+                    <li>{% trans "Voting rights" %}</li>
+                    {% endif %}
+                    {% if product.grants_upload %}
+                    <li>{% trans "Gallery upload" %}</li>
+                    {% endif %}
+                    {% if product.grants_discount %}
+                    <li>{% blocktrans with percent=product.discount_percent %}{{ percent }}% discount on events{% endblocktrans %}</li>
+                    {% endif %}
+                </ul>
+                {% if not request.user.is_authenticated %}
+                    <a href="{% url 'account_signup' %}" class="btn btn-primary btn-block">
+                        {% trans "Sign up" %}
+                    </a>
+                {% elif product.pk not in user_products %}
+                    <a href="{% url 'account:membership_request' product.pk %}" class="btn btn-primary btn-block">
+                        {% trans "Request this membership" %}
+                    </a>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div class="page-membership-plans__empty">
+                <p>{% trans "No membership plans available at this time." %}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if not request.user.is_authenticated %}
+        <div class="page-membership-plans__footer">
+            <p>
+                {% trans "After submitting your request, the club administration will review it and contact you with payment instructions." %}
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

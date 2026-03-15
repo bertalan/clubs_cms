@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags i18n static %}
+
+{% block body_class %}page-search{% endblock %}
+{% block title %}{% trans "Search" %} — {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/search.css' %}">
+{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<div class="page-search">
+    <div class="container">
+
+        {# ── Search header ────────────────────────────────────────────── #}
+        <header class="page-search__header">
+            <h1 class="page-search__title">{% trans "Search" %}</h1>
+        </header>
+
+        {# ── Main search form ─────────────────────────────────────────── #}
+        <form method="get" action="{% url 'site-search' %}" class="search-form" id="search-form">
+            <div class="search-form__row">
+                <div class="search-form__input-wrap">
+                    <label for="search-q" class="sr-only">{% trans "Search" %}</label>
+                    <input type="search" id="search-q" name="q" value="{{ search_query }}"
+                           placeholder="{% trans 'Search events, news, pages…' %}"
+                           class="search-form__input" autocomplete="off">
+                    <button type="submit" class="search-form__btn">
+                        <span aria-hidden="true">&#128269;</span>
+                        <span class="sr-only">{% trans "Search" %}</span>
+                    </button>
+                </div>
+            </div>
+
+            {# ── Type filter tabs ─────────────────────────────────────── #}
+            <div class="search-form__tabs" role="tablist" aria-label="{% trans 'Result type' %}">
+                <a href="?q={{ search_query }}&type=all{% if geo_active %}&lat={{ user_lat }}&lng={{ user_lng }}&radius={{ radius }}{% endif %}"
+                   class="search-form__tab {% if result_type == 'all' %}search-form__tab--active{% endif %}">
+                    {% trans "All" %}
+                </a>
+                <a href="?q={{ search_query }}&type=events{% if geo_active %}&lat={{ user_lat }}&lng={{ user_lng }}&radius={{ radius }}{% endif %}"
+                   class="search-form__tab {% if result_type == 'events' %}search-form__tab--active{% endif %}">
+                    {% trans "Events" %}{% if events_count %} ({{ events_count }}){% endif %}
+                </a>
+                <a href="?q={{ search_query }}&type=news{% if geo_active %}&lat={{ user_lat }}&lng={{ user_lng }}&radius={{ radius }}{% endif %}"
+                   class="search-form__tab {% if result_type == 'news' %}search-form__tab--active{% endif %}">
+                    {% trans "News" %}
+                </a>
+                <a href="?q={{ search_query }}&type=pages{% if geo_active %}&lat={{ user_lat }}&lng={{ user_lng }}&radius={{ radius }}{% endif %}"
+                   class="search-form__tab {% if result_type == 'pages' %}search-form__tab--active{% endif %}">
+                    {% trans "Pages" %}
+                </a>
+            </div>
+
+            {# ── Geo proximity controls ───────────────────────────────── #}
+            <div class="search-geo" id="search-geo">
+                <div class="search-geo__toggle">
+                    <button type="button" id="geo-locate-btn" class="search-geo__btn {% if geo_active %}search-geo__btn--active{% endif %}">
+                        <span aria-hidden="true">📍</span>
+                        {% trans "Near me" %}
+                    </button>
+                    <span class="search-geo__status" id="geo-status">
+                        {% if geo_active %}
+                            {% blocktrans with r=radius %}Within {{ r }} km{% endblocktrans %}
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="search-geo__controls {% if not geo_active %}search-geo__controls--hidden{% endif %}" id="geo-controls">
+                    <label for="geo-radius" class="search-geo__label">{% trans "Radius" %}:</label>
+                    <div class="search-geo__radius-chips">
+                        {% for r in radius_choices %}
+                        <label class="search-geo__chip {% if radius == r %}search-geo__chip--active{% endif %}">
+                            <input type="radio" name="radius" value="{{ r }}" {% if radius == r %}checked{% endif %}>
+                            {{ r }} km
+                        </label>
+                        {% endfor %}
+                    </div>
+                    <button type="button" id="geo-clear-btn" class="search-geo__clear">
+                        {% trans "Clear location" %}
+                    </button>
+                </div>
+
+                {# Hidden lat/lng fields populated by JS #}
+                <input type="hidden" name="lat" id="geo-lat" value="{% if user_lat %}{{ user_lat }}{% endif %}">
+                <input type="hidden" name="lng" id="geo-lng" value="{% if user_lng %}{{ user_lng }}{% endif %}">
+            </div>
+        </form>
+
+        {# ── Results ──────────────────────────────────────────────────── #}
+        {% if search_query or geo_active %}
+            <div class="search-results__header">
+                <p class="search-results__count">
+                    {% blocktrans count counter=result_count %}
+                        {{ counter }} result found
+                    {% plural %}
+                        {{ counter }} results found
+                    {% endblocktrans %}
+                </p>
+                
+                {# Per page selector #}
+                <div class="search-results__per-page">
+                    <label for="per-page-select">{% trans "Show" %}:</label>
+                    <select id="per-page-select" onchange="updatePerPage(this.value)">
+                        {% for choice in per_page_choices %}
+                        <option value="{{ choice }}" {% if per_page == choice %}selected{% endif %}>{{ choice }}</option>
+                        {% endfor %}
+                    </select>
+                    <span>{% trans "per page" %}</span>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if results %}
+        <div class="search-results">
+            {% for item in results %}
+            {% with item_type=item|default:"" %}
+            <article class="search-result {% if item.start_date %}search-result--event{% elif item.event_name %}search-result--external{% endif %}">
+                {# Distance badge for geo results #}
+                {% if item.distance_km is not None %}
+                <span class="search-result__distance">
+                    {{ item.distance_km }} km
+                </span>
+                {% endif %}
+
+                {# Result type indicator - with specific styling per type #}
+                {% if item.start_date %}
+                    <span class="search-result__type search-result__type--event">
+                        <span aria-hidden="true">📅</span> {% trans "Event" %}
+                    </span>
+                {% elif item.event_name %}
+                    <span class="search-result__type search-result__type--external">
+                        <span aria-hidden="true">🌐</span> {% trans "Partner Event" %}
+                    </span>
+                {% else %}
+                    <span class="search-result__type search-result__type--page">
+                        <span aria-hidden="true">📄</span> {% trans "Page" %}
+                    </span>
+                {% endif %}
+
+                {# Title #}
+                {% if item.url %}
+                    <h2 class="search-result__title">
+                        <a href="{% pageurl item %}">{{ item.title }}</a>
+                    </h2>
+                {% elif item.detail_url %}
+                    <h2 class="search-result__title">
+                        <a href="{{ item.detail_url }}" target="_blank" rel="noopener">
+                            {{ item.event_name }}
+                            <span class="search-result__external" aria-label="{% trans 'External link' %}">↗</span>
+                        </a>
+                    </h2>
+                {% endif %}
+
+                {# Snippet / excerpt #}
+                <div class="search-result__excerpt">
+                    {% if item.search_description %}
+                        {{ item.search_description|truncatewords:30 }}
+                    {% elif item.intro %}
+                        {{ item.intro|truncatewords:30 }}
+                    {% elif item.description %}
+                        {{ item.description|striptags|truncatewords:30 }}
+                    {% endif %}
+                </div>
+
+                {# Meta: date + location #}
+                {% if item.start_date or item.location_name %}
+                <div class="search-result__meta">
+                    {% if item.start_date %}
+                    <span class="search-result__date">
+                        {{ item.start_date|date:"j M Y" }}
+                    </span>
+                    {% endif %}
+                    {% if item.location_name %}
+                    <span class="search-result__location">
+                        {{ item.location_name }}
+                    </span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </article>
+            {% endwith %}
+            {% endfor %}
+        </div>
+
+        {# Pagination with search params preserved #}
+        {% if paginator.num_pages > 1 %}
+        <nav class="pagination" aria-label="{% trans 'Page navigation' %}">
+            <ul class="pagination__list">
+                {# Previous #}
+                {% if page_obj.has_previous %}
+                <li class="pagination__item pagination__item--prev">
+                    <a href="?q={{ search_query|urlencode }}&type={{ result_type }}&per_page={{ per_page }}{% if geo_active %}&lat={{ user_lat }}&lng={{ user_lng }}&radius={{ radius }}{% endif %}&page={{ page_obj.previous_page_number }}" class="pagination__link" aria-label="{% trans 'Previous page' %}">
+                        &laquo; {% trans "Previous" %}
+                    </a>
+                </li>
+                {% else %}
+                <li class="pagination__item pagination__item--prev pagination__item--disabled">
+                    <span class="pagination__link" aria-disabled="true">&laquo; {% trans "Previous" %}</span>
+                </li>
+                {% endif %}
+
+                {# Page numbers #}
+                {% for num in paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="pagination__item pagination__item--active">
+                        <span class="pagination__link pagination__link--current" aria-current="page">{{ num }}</span>
+                    </li>
+                    {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+                    <li class="pagination__item">
+                        <a href="?q={{ search_query|urlencode }}&type={{ result_type }}&per_page={{ per_page }}{% if geo_active %}&lat={{ user_lat }}&lng={{ user_lng }}&radius={{ radius }}{% endif %}&page={{ num }}" class="pagination__link" aria-label="{% trans 'Page' %} {{ num }}">
+                            {{ num }}
+                        </a>
+                    </li>
+                    {% elif num == page_obj.number|add:"-3" or num == page_obj.number|add:"3" %}
+                    <li class="pagination__item pagination__item--ellipsis">
+                        <span class="pagination__ellipsis">&hellip;</span>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+
+                {# Next #}
+                {% if page_obj.has_next %}
+                <li class="pagination__item pagination__item--next">
+                    <a href="?q={{ search_query|urlencode }}&type={{ result_type }}&per_page={{ per_page }}{% if geo_active %}&lat={{ user_lat }}&lng={{ user_lng }}&radius={{ radius }}{% endif %}&page={{ page_obj.next_page_number }}" class="pagination__link" aria-label="{% trans 'Next page' %}">
+                        {% trans "Next" %} &raquo;
+                    </a>
+                </li>
+                {% else %}
+                <li class="pagination__item pagination__item--next pagination__item--disabled">
+                    <span class="pagination__link" aria-disabled="true">{% trans "Next" %} &raquo;</span>
+                </li>
+                {% endif %}
+            </ul>
+
+            <p class="pagination__info">
+                {% blocktrans with current=page_obj.number total=paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}
+            </p>
+        </nav>
+        {% endif %}
+
+        {% elif search_query or geo_active %}
+        <div class="search-results__empty">
+            <p>{% trans "No results found. Try a different search term or broaden your location radius." %}</p>
+        </div>
+        {% else %}
+        <div class="search-results__hint">
+            <p>{% trans "Enter a search term above, or use \"Near me\" to discover events near your location." %}</p>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/geo-search.js' %}"></script>
+<script>
+function updatePerPage(value) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('per_page', value);
+    url.searchParams.delete('page'); // Reset to page 1
+    window.location.href = url.toString();
+}
+</script>
+{% endblock %}

@@ -1,90 +1,7 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailimages_tags %}
 
 {% block title %}{{ helper.get_visible_name }} | {% trans "Mutual Aid" %}{% endblock %}
-
-{% block extra_css %}
-<style>
-    .helper-detail {
-        max-width: 700px;
-        margin: 0 auto;
-        padding: 2rem 1rem;
-    }
-    .helper-detail .breadcrumb {
-        margin-bottom: 1.5rem;
-        font-size: 0.875rem;
-    }
-    .helper-detail .breadcrumb a {
-        color: var(--color-primary, #1e40af);
-        text-decoration: none;
-    }
-    .helper-profile {
-        display: flex;
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-        align-items: flex-start;
-    }
-    .helper-profile img {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-    .helper-info h1 {
-        margin: 0 0 0.5rem 0;
-    }
-    .helper-info .meta {
-        color: var(--color-text-muted, #6b7280);
-        font-size: 0.9rem;
-    }
-    .info-section {
-        background: var(--color-bg-secondary, #f8f9fa);
-        padding: 1.25rem;
-        border-radius: 0.5rem;
-        margin-bottom: 1.5rem;
-    }
-    .info-section h3 {
-        margin-top: 0;
-        margin-bottom: 0.75rem;
-    }
-    .info-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 0.375rem 0;
-        border-bottom: 1px solid var(--color-border, #e5e7eb);
-    }
-    .info-row:last-child {
-        border-bottom: none;
-    }
-    .info-label {
-        font-weight: 600;
-        font-size: 0.9rem;
-    }
-    .info-value {
-        font-size: 0.9rem;
-    }
-    .btn-primary {
-        display: inline-block;
-        padding: 0.75rem 1.5rem;
-        background: var(--color-primary, #1e40af);
-        color: #fff;
-        text-decoration: none;
-        border-radius: 0.375rem;
-        font-weight: 600;
-        border: none;
-        cursor: pointer;
-    }
-    .radius-badge {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
-        background: #dbeafe;
-        color: #1e40af;
-        border-radius: 9999px;
-        font-size: 0.85rem;
-        font-weight: 600;
-    }
-</style>
-{% endblock %}
 
 {% block content %}
 <div class="helper-detail">
@@ -94,80 +11,164 @@
         <span>{{ helper.get_visible_name }}</span>
     </nav>
 
-    <div class="helper-profile">
-        {% if privacy.show_photo_on_aid and helper.photo %}
-            {% load wagtailimages_tags %}
-            {% image helper.photo fill-100x100 as photo_img %}
-            <img src="{{ photo_img.url }}" alt="{{ helper.get_visible_name }}">
-        {% endif %}
-        <div class="helper-info">
-            <h1>{{ helper.get_visible_name }}</h1>
-            <div class="meta">
-                <span>{{ helper.aid_location_city }}</span>
-                <span class="radius-badge">{{ helper.aid_radius_km }} km</span>
-            </div>
+    {# Emergency banner — always visible #}
+    <div class="helper-detail__emergency" role="alert">
+        <h2>{% trans "Need immediate help?" %}</h2>
+        <p>{% trans "If you are in danger, call emergency services immediately." %}</p>
+        <div class="helper-detail__emergency-numbers">
+            <a href="tel:112" class="helper-detail__call-btn helper-detail__call-btn--emergency">
+                <span aria-hidden="true">&#9742;</span>
+                112 — {% trans "Emergency" %}
+            </a>
+            <a href="tel:803116" class="helper-detail__call-btn helper-detail__call-btn--emergency">
+                <span aria-hidden="true">&#9742;</span>
+                803 116 — {% trans "ACI Roadside" %}
+            </a>
         </div>
     </div>
 
-    {# Aid info #}
-    <div class="info-section">
-        <h3>{% trans "Availability" %}</h3>
-        <div class="info-row">
-            <span class="info-label">{% trans "City" %}</span>
-            <span class="info-value">{{ helper.aid_location_city }}</span>
-        </div>
-        <div class="info-row">
-            <span class="info-label">{% trans "Radius" %}</span>
-            <span class="info-value">{{ helper.aid_radius_km }} km</span>
-        </div>
-        {% if helper.aid_notes and privacy.show_bio_on_aid %}
-            <div class="info-row">
-                <span class="info-label">{% trans "Notes" %}</span>
-                <span class="info-value">{{ helper.aid_notes }}</span>
-            </div>
-        {% endif %}
-    </div>
-
-    {# Contact info (based on privacy settings) #}
-    {% if privacy.show_phone_on_aid or privacy.show_mobile_on_aid or privacy.show_email_on_aid or privacy.show_whatsapp_on_aid %}
-        <div class="info-section">
-            <h3>{% trans "Contact" %}</h3>
-            {% if privacy.show_phone_on_aid and helper.phone %}
-                <div class="info-row">
-                    <span class="info-label">{% trans "Phone" %}</span>
-                    <span class="info-value"><a href="tel:{{ helper.phone }}">{{ helper.phone }}</a></span>
-                </div>
-            {% endif %}
-            {% if privacy.show_mobile_on_aid and helper.mobile %}
-                <div class="info-row">
-                    <span class="info-label">{% trans "Mobile" %}</span>
-                    <span class="info-value"><a href="tel:{{ helper.mobile }}">{{ helper.mobile }}</a></span>
-                </div>
-            {% endif %}
-            {% if privacy.show_whatsapp_on_aid and helper.mobile %}
-                <div class="info-row">
-                    <span class="info-label">{% trans "WhatsApp" %}</span>
-                    <span class="info-value">
-                        <a href="https://wa.me/{{ helper.mobile }}" target="_blank" rel="noopener noreferrer">
-                            {% trans "Send message" %}
-                        </a>
+    {# Emergency contacts from MutualAidPage (admin-configured) #}
+    {% if aid_page and aid_page.body %}
+        <div class="helper-detail__club-contacts">
+            <h3>{% trans "Club emergency contacts" %}</h3>
+            {% for block in aid_page.body %}
+                <div class="helper-detail__club-contact">
+                    <span class="helper-detail__club-contact-name">
+                        {{ block.value.name }}
+                        {% if block.value.role %}<small>— {{ block.value.role }}</small>{% endif %}
                     </span>
+                    <a href="tel:{{ block.value.phone }}" class="helper-detail__call-btn">
+                        <span aria-hidden="true">&#9742;</span> {{ block.value.phone }}
+                    </a>
                 </div>
-            {% endif %}
-            {% if privacy.show_email_on_aid and helper.email %}
-                <div class="info-row">
-                    <span class="info-label">{% trans "Email" %}</span>
-                    <span class="info-value"><a href="mailto:{{ helper.email }}">{{ helper.email }}</a></span>
-                </div>
-            {% endif %}
+            {% endfor %}
         </div>
     {% endif %}
 
-    {# Action buttons #}
-    {% if is_active_member %}
-        <a href="{% url 'mutual_aid:contact_form' pk=helper.pk %}" class="btn-primary">
-            {% trans "Send Aid Request" %}
-        </a>
+    {% if not is_active_member %}
+        {# Non-member: show restricted view with instructions #}
+        <div class="helper-detail__restricted">
+            <h2>{% trans "Membership required" %}</h2>
+            <p>{% trans "To view helper details and request roadside assistance, you need an active club membership." %}</p>
+            <div class="helper-detail__steps">
+                <h3>{% trans "What you can do:" %}</h3>
+                <ol>
+                    <li>{% trans "Use the emergency numbers above for immediate help" %}</li>
+                    <li>{% trans "Go back to the map to find other helpers" %}</li>
+                    <li>{% trans "Become a member to access the full mutual aid network" %}</li>
+                </ol>
+            </div>
+            <div class="helper-detail__actions">
+                <a href="{% url 'mutual_aid:map' %}" class="btn btn-outline">
+                    {% trans "Back to map" %}
+                </a>
+                <a href="/" class="btn btn-primary">
+                    {% trans "Become a member" %}
+                </a>
+            </div>
+        </div>
+    {% else %}
+        {# Active member: full helper profile #}
+        <div class="helper-detail__profile">
+            <div class="helper-detail__header">
+                {% if privacy.show_photo_on_aid and helper.photo %}
+                    {% image helper.photo fill-100x100 as photo_img %}
+                    <img src="{{ photo_img.url }}" alt="{{ helper.get_visible_name }}" class="helper-detail__avatar">
+                {% endif %}
+                <div>
+                    <h1>{{ helper.get_visible_name }}</h1>
+                    <div class="helper-detail__meta">
+                        <span>{{ helper.aid_location_city }}</span>
+                        <span class="helper-detail__radius-badge">{{ helper.aid_radius_km }} km</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Quick actions #}
+        <div class="helper-detail__quick-actions">
+            <h2>{% trans "Contact this helper" %}</h2>
+            {% if privacy.show_mobile_on_aid and helper.mobile %}
+                <a href="tel:{{ helper.mobile }}" class="helper-detail__call-btn helper-detail__call-btn--primary">
+                    <span aria-hidden="true">&#9742;</span> {% trans "Call" %} {{ helper.mobile }}
+                </a>
+                {% if privacy.show_whatsapp_on_aid %}
+                    <a href="https://wa.me/{{ helper.mobile }}" target="_blank" rel="noopener noreferrer"
+                       class="helper-detail__call-btn helper-detail__call-btn--whatsapp">
+                        {% trans "WhatsApp" %}
+                    </a>
+                {% endif %}
+            {% elif privacy.show_phone_on_aid and helper.phone %}
+                <a href="tel:{{ helper.phone }}" class="helper-detail__call-btn helper-detail__call-btn--primary">
+                    <span aria-hidden="true">&#9742;</span> {% trans "Call" %} {{ helper.phone }}
+                </a>
+            {% endif %}
+            <a href="{% url 'mutual_aid:contact_form' pk=helper.pk %}" class="btn btn-primary">
+                {% trans "Send Aid Request" %}
+            </a>
+        </div>
+
+        {# Availability details #}
+        <div class="helper-detail__info-section">
+            <h3>{% trans "Availability" %}</h3>
+            <div class="helper-detail__info-row">
+                <span class="helper-detail__info-label">{% trans "City" %}</span>
+                <span class="helper-detail__info-value">{{ helper.aid_location_city }}</span>
+            </div>
+            <div class="helper-detail__info-row">
+                <span class="helper-detail__info-label">{% trans "Radius" %}</span>
+                <span class="helper-detail__info-value">{{ helper.aid_radius_km }} km</span>
+            </div>
+            {% if helper.aid_notes and privacy.show_bio_on_aid %}
+                <div class="helper-detail__info-row">
+                    <span class="helper-detail__info-label">{% trans "Notes" %}</span>
+                    <span class="helper-detail__info-value">{{ helper.aid_notes }}</span>
+                </div>
+            {% endif %}
+        </div>
+
+        {# Contact details #}
+        {% if privacy.show_phone_on_aid or privacy.show_mobile_on_aid or privacy.show_email_on_aid %}
+            <div class="helper-detail__info-section">
+                <h3>{% trans "Contact details" %}</h3>
+                {% if privacy.show_phone_on_aid and helper.phone %}
+                    <div class="helper-detail__info-row">
+                        <span class="helper-detail__info-label">{% trans "Phone" %}</span>
+                        <span class="helper-detail__info-value"><a href="tel:{{ helper.phone }}">{{ helper.phone }}</a></span>
+                    </div>
+                {% endif %}
+                {% if privacy.show_mobile_on_aid and helper.mobile %}
+                    <div class="helper-detail__info-row">
+                        <span class="helper-detail__info-label">{% trans "Mobile" %}</span>
+                        <span class="helper-detail__info-value"><a href="tel:{{ helper.mobile }}">{{ helper.mobile }}</a></span>
+                    </div>
+                {% endif %}
+                {% if privacy.show_email_on_aid and helper.email %}
+                    <div class="helper-detail__info-row">
+                        <span class="helper-detail__info-label">{% trans "Email" %}</span>
+                        <span class="helper-detail__info-value"><a href="mailto:{{ helper.email }}">{{ helper.email }}</a></span>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {# Guidance steps #}
+        <div class="helper-detail__guidance">
+            <h3>{% trans "What to do while you wait" %}</h3>
+            <ol>
+                <li>{% trans "Move to a safe location away from traffic" %}</li>
+                <li>{% trans "Turn on hazard lights and place warning triangle if available" %}</li>
+                <li>{% trans "Wear a reflective vest if you have one" %}</li>
+                <li>{% trans "Share your location with the helper via phone or WhatsApp" %}</li>
+                <li>{% trans "If on a highway, stay behind the guardrail" %}</li>
+            </ol>
+        </div>
+
+        <div class="helper-detail__actions">
+            <a href="{% url 'mutual_aid:map' %}" class="btn btn-outline">
+                {% trans "Back to map" %}
+            </a>
+        </div>
     {% endif %}
 </div>
 {% endblock %}

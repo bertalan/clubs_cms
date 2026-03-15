@@ -5,132 +5,261 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home - Velocity Theme Demo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Open+Sans&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            neon: '#39FF14',
+            dark: { 950: '#0a0a0f', 900: '#111118', 800: '#1a1a24', 700: '#252530' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
-    :root { --primary: #0F172A; --secondary: #F59E0B; --accent: #8B5CF6; }
-    body { font-family: 'Open Sans', sans-serif; }
-    h1, h2, h3, h4 { font-family: 'Inter', sans-serif; }
+    body { font-family: 'Inter', sans-serif; background: #0a0a0f; }
+    h1, h2, h3, h4 { font-family: 'Rajdhani', 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.05em; }
+    .neon-glow { box-shadow: 0 0 20px rgba(57, 255, 20, 0.3); }
+    .neon-glow-sm { box-shadow: 0 0 10px rgba(57, 255, 20, 0.2); }
+    .neon-text-glow { text-shadow: 0 0 20px rgba(57, 255, 20, 0.5); }
+    .neon-border { border-color: rgba(57, 255, 20, 0.3); }
+    .card-hover:hover { box-shadow: 0 0 25px rgba(57, 255, 20, 0.15); transform: translateY(-4px); }
   </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-dark-950 text-gray-300">
+
   <!-- Navbar -->
-  <nav class="fixed w-full bg-slate-900/95 backdrop-blur z-50">
+  <nav class="fixed w-full bg-dark-950/95 backdrop-blur-md z-50 border-b border-neon/10">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-      <a href="index.html" class="text-2xl font-black text-white">Club<span class="text-amber-500">Hub</span></a>
-      <div class="hidden md:flex gap-8 text-white">
-        <a href="index.html" class="text-amber-500">Home</a>
-        <a href="about.html" class="hover:text-amber-500 transition">About</a>
-        <a href="events.html" class="hover:text-amber-500 transition">Events</a>
-        <a href="gallery.html" class="hover:text-amber-500 transition">Gallery</a>
-        <a href="contact.html" class="hover:text-amber-500 transition">Contact</a>
+      <a href="index.html" class="text-2xl font-black text-white font-heading uppercase tracking-wider" style="font-family:'Rajdhani',sans-serif;">
+        Club<span class="text-neon">Hub</span>
+      </a>
+      <div class="hidden md:flex gap-8 text-sm uppercase tracking-wider font-semibold">
+        <a href="index.html" class="text-neon">Home</a>
+        <a href="about.html" class="text-gray-400 hover:text-neon transition">About</a>
+        <a href="events.html" class="text-gray-400 hover:text-neon transition">Events</a>
+        <a href="gallery.html" class="text-gray-400 hover:text-neon transition">Gallery</a>
+        <a href="contact.html" class="text-gray-400 hover:text-neon transition">Contact</a>
       </div>
-      <a href="contact.html" class="bg-amber-500 text-slate-900 px-5 py-2 rounded-full font-bold hover:scale-105 transition">Join Us</a>
+      <a href="contact.html" class="bg-neon text-dark-950 px-5 py-2 rounded font-bold text-sm uppercase tracking-wider hover:shadow-[0_0_20px_rgba(57,255,20,0.4)] transition">Join Us</a>
     </div>
   </nav>
 
   <!-- Hero -->
-  <section class="relative h-screen flex items-center justify-center">
-    <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920" class="absolute inset-0 w-full h-full object-cover" alt="Community">
-    <div class="absolute inset-0 bg-gradient-to-b from-slate-900/70 to-slate-900/40"></div>
+  <section class="relative h-screen flex items-center justify-center overflow-hidden">
+    <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920" class="absolute inset-0 w-full h-full object-cover opacity-30" alt="Community">
+    <div class="absolute inset-0 bg-gradient-to-b from-dark-950/80 via-dark-950/50 to-dark-950"></div>
     <div class="relative z-10 text-center text-white px-6">
-      <span class="inline-block bg-amber-500 text-slate-900 px-4 py-1 rounded-full text-sm font-bold mb-6">Est. 2010</span>
-      <h1 class="text-5xl md:text-7xl font-black mb-6 drop-shadow-lg">Your Community, Your Passion</h1>
-      <p class="text-xl md:text-2xl text-white max-w-2xl mx-auto mb-8">Join a thriving community of enthusiasts. Connect, share, and grow together.</p>
+      <span class="inline-block bg-neon/10 text-neon border border-neon/30 px-4 py-1 rounded text-sm font-bold uppercase tracking-widest mb-6">Est. 2010</span>
+      <h1 class="text-5xl md:text-7xl font-black mb-6 neon-text-glow">Your Community, Your Passion</h1>
+      <p class="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto mb-8">Join a thriving community of enthusiasts. Connect, share, and grow together.</p>
       <div class="flex gap-4 justify-center flex-wrap">
-        <a href="events.html" class="bg-amber-500 text-slate-900 px-8 py-4 rounded-full font-bold hover:scale-105 transition inline-flex items-center gap-2">
-          Upcoming Events →
+        <a href="events.html" class="bg-neon text-dark-950 px-8 py-4 rounded font-bold hover:shadow-[0_0_25px_rgba(57,255,20,0.5)] transition inline-flex items-center gap-2 uppercase tracking-wider">
+          Upcoming Events &rarr;
         </a>
-        <a href="about.html" class="border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-slate-900 transition">Learn More</a>
+        <a href="about.html" class="border-2 border-neon/50 text-neon px-8 py-4 rounded font-bold hover:bg-neon/10 transition uppercase tracking-wider">Learn More</a>
       </div>
     </div>
   </section>
 
   <!-- Stats -->
-  <section class="bg-slate-900 py-16">
+  <section class="bg-dark-900 py-16 border-y border-neon/10">
     <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-      <div><span class="text-4xl font-black text-amber-500">500+</span><p class="text-white/70 mt-2">Active Members</p></div>
-      <div><span class="text-4xl font-black text-amber-500">15</span><p class="text-white/70 mt-2">Years Active</p></div>
-      <div><span class="text-4xl font-black text-amber-500">24</span><p class="text-white/70 mt-2">Annual Events</p></div>
-      <div><span class="text-4xl font-black text-amber-500">12</span><p class="text-white/70 mt-2">Partner Clubs</p></div>
+      <div>
+        <span class="text-4xl font-black text-neon neon-text-glow">500+</span>
+        <p class="text-gray-400 mt-2 uppercase tracking-wider text-sm">Active Members</p>
+      </div>
+      <div>
+        <span class="text-4xl font-black text-neon neon-text-glow">15</span>
+        <p class="text-gray-400 mt-2 uppercase tracking-wider text-sm">Years Active</p>
+      </div>
+      <div>
+        <span class="text-4xl font-black text-neon neon-text-glow">24</span>
+        <p class="text-gray-400 mt-2 uppercase tracking-wider text-sm">Annual Events</p>
+      </div>
+      <div>
+        <span class="text-4xl font-black text-neon neon-text-glow">12</span>
+        <p class="text-gray-400 mt-2 uppercase tracking-wider text-sm">Partner Clubs</p>
+      </div>
     </div>
   </section>
 
   <!-- Featured Events -->
-  <section class="py-20 bg-slate-50">
+  <section class="py-20">
     <div class="max-w-7xl mx-auto px-6">
-      <h2 class="text-4xl font-black text-slate-900 text-center mb-12">Upcoming Events</h2>
+      <h2 class="text-4xl font-black text-white text-center mb-4">Upcoming Events</h2>
+      <p class="text-gray-400 text-center mb-12 uppercase tracking-wider text-sm">Don't miss what's next</p>
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-          <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600" class="w-full h-48 object-cover" alt="Conference">
+        <article class="bg-dark-800 rounded-lg overflow-hidden border border-dark-700 card-hover transition-all duration-300">
+          <div class="relative">
+            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600" class="w-full h-48 object-cover" alt="Conference">
+            <div class="absolute top-4 right-4 bg-neon text-dark-950 px-3 py-1 rounded text-xs font-bold uppercase">Conference</div>
+          </div>
           <div class="p-6">
-            <span class="text-amber-500 text-sm font-bold">Mar 15, 2026</span>
-            <h3 class="text-xl font-bold text-slate-900 mt-2">Annual Conference</h3>
-            <p class="text-slate-600 mt-2">Join us for our biggest event of the year with keynote speakers and workshops.</p>
-            <a href="events.html" class="inline-flex items-center gap-2 text-amber-500 font-bold mt-4 hover:gap-3 transition-all">Details →</a>
+            <span class="text-neon text-sm font-bold uppercase tracking-wider">Mar 15, 2026</span>
+            <h3 class="text-xl font-bold text-white mt-2">Annual Conference</h3>
+            <p class="text-gray-400 mt-2">Join us for our biggest event of the year with keynote speakers and workshops.</p>
+            <a href="events.html" class="inline-flex items-center gap-2 text-neon font-bold mt-4 hover:gap-3 transition-all uppercase text-sm tracking-wider">Details &rarr;</a>
           </div>
         </article>
-        <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-          <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600" class="w-full h-48 object-cover" alt="Workshop">
+        <article class="bg-dark-800 rounded-lg overflow-hidden border border-dark-700 card-hover transition-all duration-300">
+          <div class="relative">
+            <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600" class="w-full h-48 object-cover" alt="Workshop">
+            <div class="absolute top-4 right-4 bg-neon text-dark-950 px-3 py-1 rounded text-xs font-bold uppercase">Workshop</div>
+          </div>
           <div class="p-6">
-            <span class="text-amber-500 text-sm font-bold">Apr 8, 2026</span>
-            <h3 class="text-xl font-bold text-slate-900 mt-2">Spring Workshop</h3>
-            <p class="text-slate-600 mt-2">Hands-on learning experience with industry experts.</p>
-            <a href="events.html" class="inline-flex items-center gap-2 text-amber-500 font-bold mt-4 hover:gap-3 transition-all">Register →</a>
+            <span class="text-neon text-sm font-bold uppercase tracking-wider">Apr 8, 2026</span>
+            <h3 class="text-xl font-bold text-white mt-2">Spring Workshop</h3>
+            <p class="text-gray-400 mt-2">Hands-on learning experience with industry experts.</p>
+            <a href="events.html" class="inline-flex items-center gap-2 text-neon font-bold mt-4 hover:gap-3 transition-all uppercase text-sm tracking-wider">Register &rarr;</a>
           </div>
         </article>
-        <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-          <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=600" class="w-full h-48 object-cover" alt="Meetup">
+        <article class="bg-dark-800 rounded-lg overflow-hidden border border-dark-700 card-hover transition-all duration-300">
+          <div class="relative">
+            <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=600" class="w-full h-48 object-cover" alt="Meetup">
+            <div class="absolute top-4 right-4 bg-neon text-dark-950 px-3 py-1 rounded text-xs font-bold uppercase">Retreat</div>
+          </div>
           <div class="p-6">
-            <span class="text-amber-500 text-sm font-bold">May 20-22, 2026</span>
-            <h3 class="text-xl font-bold text-slate-900 mt-2">Summer Retreat</h3>
-            <p class="text-slate-600 mt-2">Three days of networking, activities, and community building.</p>
-            <a href="events.html" class="inline-flex items-center gap-2 text-amber-500 font-bold mt-4 hover:gap-3 transition-all">Book Now →</a>
+            <span class="text-neon text-sm font-bold uppercase tracking-wider">May 20-22, 2026</span>
+            <h3 class="text-xl font-bold text-white mt-2">Summer Retreat</h3>
+            <p class="text-gray-400 mt-2">Three days of networking, activities, and community building.</p>
+            <a href="events.html" class="inline-flex items-center gap-2 text-neon font-bold mt-4 hover:gap-3 transition-all uppercase text-sm tracking-wider">Book Now &rarr;</a>
           </div>
         </article>
       </div>
       <div class="text-center mt-12">
-        <a href="events.html" class="border-2 border-slate-900 text-slate-900 px-8 py-3 rounded-full font-bold hover:bg-slate-900 hover:text-white transition">View All Events</a>
+        <a href="events.html" class="border-2 border-neon/50 text-neon px-8 py-3 rounded font-bold hover:bg-neon/10 transition uppercase tracking-wider text-sm">View All Events</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Preview -->
+  <section class="py-20 bg-dark-900 border-y border-neon/10">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2 class="text-4xl font-black text-white text-center mb-4">Gallery Highlights</h2>
+      <p class="text-gray-400 text-center mb-12 uppercase tracking-wider text-sm">Moments captured from our community</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="aspect-square overflow-hidden rounded-lg border border-dark-700 group">
+          <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100" alt="Community Gathering">
+        </div>
+        <div class="aspect-square overflow-hidden rounded-lg border border-dark-700 group">
+          <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100" alt="Conference">
+        </div>
+        <div class="aspect-square overflow-hidden rounded-lg border border-dark-700 group">
+          <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100" alt="Workshop">
+        </div>
+        <div class="aspect-square overflow-hidden rounded-lg border border-dark-700 group">
+          <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=400" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100" alt="Retreat">
+        </div>
+      </div>
+      <div class="text-center mt-10">
+        <a href="gallery.html" class="border-2 border-neon/50 text-neon px-8 py-3 rounded font-bold hover:bg-neon/10 transition uppercase tracking-wider text-sm">View Full Gallery</a>
       </div>
     </div>
   </section>
 
   <!-- CTA -->
-  <section class="bg-gradient-to-r from-violet-600 to-amber-500 py-20">
-    <div class="max-w-4xl mx-auto px-6 text-center text-white">
-      <h2 class="text-4xl font-black mb-6">Ready to Join?</h2>
-      <p class="text-xl mb-8 text-white">Annual membership €50 • Full access • Exclusive benefits</p>
-      <a href="contact.html" class="bg-white text-slate-900 px-10 py-4 rounded-full font-bold text-lg hover:scale-105 transition inline-flex items-center gap-2">
-        Become a Member →
+  <section class="relative py-20 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-r from-neon/10 to-dark-950"></div>
+    <div class="absolute left-0 top-0 w-1 h-full bg-neon"></div>
+    <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+      <h2 class="text-4xl font-black text-white mb-6">Ready to Join?</h2>
+      <p class="text-xl mb-8 text-gray-300">Annual membership &euro;50 &bull; Full access &bull; Exclusive benefits</p>
+      <a href="contact.html" class="bg-neon text-dark-950 px-10 py-4 rounded font-bold text-lg hover:shadow-[0_0_30px_rgba(57,255,20,0.5)] transition inline-flex items-center gap-2 uppercase tracking-wider">
+        Become a Member &rarr;
       </a>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="bg-slate-900 text-white/70 py-12">
-    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
-      <div>
-        <h3 class="text-xl font-bold text-white mb-4">ClubHub</h3>
-        <p>123 Community Street</p>
-        <p>hello@clubhub.example</p>
-      </div>
-      <div>
-        <h3 class="text-xl font-bold text-white mb-4">Links</h3>
-        <ul class="space-y-2">
-          <li><a href="about.html" class="hover:text-amber-500">About Us</a></li>
-          <li><a href="events.html" class="hover:text-amber-500">Events</a></li>
-          <li><a href="contact.html" class="hover:text-amber-500">Contact</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3 class="text-xl font-bold text-white mb-4">Follow Us</h3>
-        <div class="flex gap-4">
-          <span class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">FB</span>
-          <span class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">IG</span>
-          <span class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">YT</span>
+  <!-- Newsletter -->
+  <section class="py-20 bg-dark-900 border-y border-neon/10">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <h2 class="text-4xl font-black text-white mb-4">Stay in the Loop</h2>
+      <p class="text-gray-400 mb-8 uppercase tracking-wider text-sm">Subscribe to our newsletter for the latest updates, events, and community news</p>
+      <form class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+        <input type="email" placeholder="Enter your email address" aria-label="Email for newsletter" required
+          class="flex-1 px-5 py-4 rounded bg-dark-800 border border-dark-700 text-white placeholder-gray-500 focus:border-neon focus:outline-none focus:ring-1 focus:ring-neon/50 transition">
+        <button type="submit" class="bg-neon text-dark-950 px-8 py-4 rounded font-bold uppercase tracking-wider hover:shadow-[0_0_20px_rgba(57,255,20,0.4)] transition whitespace-nowrap">
+          Subscribe
+        </button>
+      </form>
+      <p class="text-gray-500 text-xs mt-4">No spam. Unsubscribe anytime. We respect your privacy.</p>
+    </div>
+  </section>
+
+  <!-- Partners / Sponsors -->
+  <section class="py-20">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2 class="text-4xl font-black text-white text-center mb-4">Our Partners</h2>
+      <p class="text-gray-400 text-center mb-12 uppercase tracking-wider text-sm">Trusted by leading organizations</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+        <div class="bg-dark-800 border border-dark-700 rounded-lg p-6 flex items-center justify-center h-24 hover:border-neon/30 transition">
+          <span class="text-gray-500 font-bold uppercase tracking-wider text-sm">Partner 1</span>
+        </div>
+        <div class="bg-dark-800 border border-dark-700 rounded-lg p-6 flex items-center justify-center h-24 hover:border-neon/30 transition">
+          <span class="text-gray-500 font-bold uppercase tracking-wider text-sm">Partner 2</span>
+        </div>
+        <div class="bg-dark-800 border border-dark-700 rounded-lg p-6 flex items-center justify-center h-24 hover:border-neon/30 transition">
+          <span class="text-gray-500 font-bold uppercase tracking-wider text-sm">Partner 3</span>
+        </div>
+        <div class="bg-dark-800 border border-dark-700 rounded-lg p-6 flex items-center justify-center h-24 hover:border-neon/30 transition">
+          <span class="text-gray-500 font-bold uppercase tracking-wider text-sm">Partner 4</span>
+        </div>
+        <div class="bg-dark-800 border border-dark-700 rounded-lg p-6 flex items-center justify-center h-24 hover:border-neon/30 transition">
+          <span class="text-gray-500 font-bold uppercase tracking-wider text-sm">Partner 5</span>
+        </div>
+        <div class="bg-dark-800 border border-dark-700 rounded-lg p-6 flex items-center justify-center h-24 hover:border-neon/30 transition">
+          <span class="text-gray-500 font-bold uppercase tracking-wider text-sm">Partner 6</span>
         </div>
       </div>
     </div>
-    <div class="border-t border-white/10 mt-8 pt-8 text-center text-sm">© 2026 ClubHub • Velocity Theme Demo</div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark-950 border-t border-neon/10 text-gray-400 py-16">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div>
+          <a href="index.html" class="text-2xl font-bold text-white uppercase tracking-wider" style="font-family:'Rajdhani',sans-serif;">
+            Club<span class="text-neon">Hub</span>
+          </a>
+          <p class="mt-4 text-sm">Your community, your passion.<br>Dark sporty energy since 2010.</p>
+        </div>
+        <div>
+          <h4 class="text-white font-bold uppercase tracking-wider mb-4" style="font-family:'Rajdhani',sans-serif;">Contact</h4>
+          <ul class="space-y-2 text-sm">
+            <li>123 Community Street</li>
+            <li>City, Country 12345</li>
+            <li>hello@clubhub.example</li>
+            <li>+1 234 567 890</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-bold uppercase tracking-wider mb-4" style="font-family:'Rajdhani',sans-serif;">Navigation</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="index.html" class="hover:text-neon transition">Home</a></li>
+            <li><a href="about.html" class="hover:text-neon transition">About</a></li>
+            <li><a href="events.html" class="hover:text-neon transition">Events</a></li>
+            <li><a href="gallery.html" class="hover:text-neon transition">Gallery</a></li>
+            <li><a href="contact.html" class="hover:text-neon transition">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-bold uppercase tracking-wider mb-4" style="font-family:'Rajdhani',sans-serif;">Follow Us</h4>
+          <div class="flex gap-3">
+            <a href="#" class="w-10 h-10 bg-dark-800 hover:bg-neon hover:text-dark-950 rounded flex items-center justify-center transition text-sm font-bold">FB</a>
+            <a href="#" class="w-10 h-10 bg-dark-800 hover:bg-neon hover:text-dark-950 rounded flex items-center justify-center transition text-sm font-bold">IG</a>
+            <a href="#" class="w-10 h-10 bg-dark-800 hover:bg-neon hover:text-dark-950 rounded flex items-center justify-center transition text-sm font-bold">YT</a>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-dark-700 mt-12 pt-8 text-center text-sm text-gray-500">
+        &copy; 2026 ClubHub &bull; Velocity Theme Demo
+      </div>
+    </div>
   </footer>
+
 </body>
 </html>

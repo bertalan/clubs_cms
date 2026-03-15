@@ -25,6 +25,10 @@
     .btn-outline-navy { border: 2px solid var(--navy); color: var(--navy); }
     .btn-outline-navy:hover { background: var(--navy); color: white; }
     .nav-link.active { color: var(--gold) !important; }
+    .nav-tabs .nav-link { color: var(--navy); font-weight: 600; border: none; border-bottom: 3px solid transparent; }
+    .nav-tabs .nav-link:hover { border-bottom-color: var(--gold); color: var(--navy); }
+    .nav-tabs .nav-link.active { color: var(--navy) !important; border-bottom-color: var(--gold); background: transparent; }
+    .price-tag { background: rgba(212,165,32,0.15); color: var(--navy); font-weight: 700; border-radius: 4px; padding: 2px 8px; font-size: 0.85rem; }
     /* Footer */
     .footer-title { font-family: 'Playfair Display', serif; color: white; }
     .footer-text { color: var(--text-light); }
@@ -60,89 +64,316 @@
     </div>
   </section>
 
-  <!-- Events -->
+  <!-- Filter Tabs -->
+  <section class="py-4 border-bottom">
+    <div class="container">
+      <ul class="nav nav-tabs justify-content-center" id="eventTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all-events" type="button" role="tab" aria-controls="all-events" aria-selected="true">All</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="upcoming-tab" data-bs-toggle="tab" data-bs-target="#upcoming-events" type="button" role="tab" aria-controls="upcoming-events" aria-selected="false">Upcoming</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="past-tab" data-bs-toggle="tab" data-bs-target="#past-events" type="button" role="tab" aria-controls="past-events" aria-selected="false">Past</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="category-tab" data-bs-toggle="tab" data-bs-target="#category-events" type="button" role="tab" aria-controls="category-events" aria-selected="false">By Category</button>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Events Content -->
   <section class="py-5">
     <div class="container py-4">
-      <div class="row g-4">
-        <div class="col-lg-6">
-          <article class="card h-100 border border-gold">
-            <div class="row g-0">
-              <div class="col-md-5">
-                <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=400" class="img-fluid rounded-start h-100 object-fit-cover" alt="Gala">
-              </div>
-              <div class="col-md-7">
+      <div class="tab-content" id="eventTabsContent">
+
+        <!-- All Events Tab -->
+        <div class="tab-pane fade show active" id="all-events" role="tabpanel" aria-labelledby="all-tab">
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <article class="card h-100 border border-gold">
+                <div class="row g-0">
+                  <div class="col-md-5">
+                    <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=400" class="img-fluid rounded-start h-100 object-fit-cover" alt="Spring Gala event">
+                  </div>
+                  <div class="col-md-7">
+                    <div class="card-body">
+                      <span class="badge" style="background: var(--gold); color: var(--navy);">Gala</span>
+                      <span class="text-muted small ms-2">March 20, 2026</span>
+                      <h5 class="card-title mt-2">Spring Gala</h5>
+                      <p class="card-text text-muted small">An elegant evening of dining, dancing, and distinguished company at the Grand Ballroom.</p>
+                      <p class="mb-2"><small class="text-muted">Grand Ballroom</small></p>
+                      <p class="mb-3"><span class="price-tag">&euro;120 / Free for members</span></p>
+                      <a href="#" class="btn btn-outline-navy btn-sm">Reserve Tickets</a>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="col-lg-6">
+              <article class="card h-100 border border-gold">
+                <div class="row g-0">
+                  <div class="col-md-5">
+                    <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=400" class="img-fluid rounded-start h-100 object-fit-cover" alt="Distinguished Lecture event">
+                  </div>
+                  <div class="col-md-7">
+                    <div class="card-body">
+                      <span class="badge" style="background: var(--navy); color: white;">Lecture</span>
+                      <span class="text-muted small ms-2">April 5, 2026</span>
+                      <h5 class="card-title mt-2">Distinguished Lecture Series</h5>
+                      <p class="card-text text-muted small">Featuring Dr. Helena Shaw on "The Future of Cultural Preservation."</p>
+                      <p class="mb-2"><small class="text-muted">Heritage Hall</small></p>
+                      <p class="mb-3"><span class="price-tag">Free / Open to all</span></p>
+                      <a href="#" class="btn btn-outline-navy btn-sm">Register</a>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="col-lg-6">
+              <article class="card h-100 border border-gold">
+                <div class="row g-0">
+                  <div class="col-md-5">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400" class="img-fluid rounded-start h-100 object-fit-cover" alt="Members Dinner event">
+                  </div>
+                  <div class="col-md-7">
+                    <div class="card-body">
+                      <span class="badge" style="background: #8B1538; color: white;">Dinner</span>
+                      <span class="text-muted small ms-2">May 15, 2026</span>
+                      <h5 class="card-title mt-2">Members' Dinner</h5>
+                      <p class="card-text text-muted small">An intimate gathering for members to connect over fine cuisine.</p>
+                      <p class="mb-2"><small class="text-muted">Private Dining Room</small></p>
+                      <p class="mb-3"><span class="price-tag">&euro;50 / Free for members</span></p>
+                      <a href="#" class="btn btn-outline-navy btn-sm">RSVP</a>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="col-lg-6">
+              <article class="card h-100 border border-gold">
+                <div class="row g-0">
+                  <div class="col-md-5">
+                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400" class="img-fluid rounded-start h-100 object-fit-cover" alt="Annual Conference event">
+                  </div>
+                  <div class="col-md-7">
+                    <div class="card-body">
+                      <span class="badge" style="background: var(--gold); color: var(--navy);">Conference</span>
+                      <span class="text-muted small ms-2">June 10-12, 2026</span>
+                      <h5 class="card-title mt-2">Annual Conference</h5>
+                      <p class="card-text text-muted small">Three days of panels, workshops, and networking opportunities.</p>
+                      <p class="mb-2"><small class="text-muted">Convention Center</small></p>
+                      <p class="mb-3"><span class="price-tag">&euro;200 / &euro;75 for members</span></p>
+                      <a href="#" class="btn btn-outline-navy btn-sm">Learn More</a>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming Events Tab -->
+        <div class="tab-pane fade" id="upcoming-events" role="tabpanel" aria-labelledby="upcoming-tab">
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <article class="card h-100 border border-gold">
+                <div class="row g-0">
+                  <div class="col-md-5">
+                    <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=400" class="img-fluid rounded-start h-100 object-fit-cover" alt="Spring Gala event">
+                  </div>
+                  <div class="col-md-7">
+                    <div class="card-body">
+                      <span class="badge" style="background: var(--gold); color: var(--navy);">Gala</span>
+                      <span class="text-muted small ms-2">March 20, 2026</span>
+                      <h5 class="card-title mt-2">Spring Gala</h5>
+                      <p class="card-text text-muted small">An elegant evening of dining, dancing, and distinguished company at the Grand Ballroom.</p>
+                      <p class="mb-3"><span class="price-tag">&euro;120 / Free for members</span></p>
+                      <a href="#" class="btn btn-outline-navy btn-sm">Reserve Tickets</a>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="col-lg-6">
+              <article class="card h-100 border border-gold">
+                <div class="row g-0">
+                  <div class="col-md-5">
+                    <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=400" class="img-fluid rounded-start h-100 object-fit-cover" alt="Distinguished Lecture event">
+                  </div>
+                  <div class="col-md-7">
+                    <div class="card-body">
+                      <span class="badge" style="background: var(--navy); color: white;">Lecture</span>
+                      <span class="text-muted small ms-2">April 5, 2026</span>
+                      <h5 class="card-title mt-2">Distinguished Lecture Series</h5>
+                      <p class="card-text text-muted small">Featuring Dr. Helena Shaw on "The Future of Cultural Preservation."</p>
+                      <p class="mb-3"><span class="price-tag">Free / Open to all</span></p>
+                      <a href="#" class="btn btn-outline-navy btn-sm">Register</a>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="col-lg-6">
+              <article class="card h-100 border border-gold">
+                <div class="row g-0">
+                  <div class="col-md-5">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400" class="img-fluid rounded-start h-100 object-fit-cover" alt="Members Dinner event">
+                  </div>
+                  <div class="col-md-7">
+                    <div class="card-body">
+                      <span class="badge" style="background: #8B1538; color: white;">Dinner</span>
+                      <span class="text-muted small ms-2">May 15, 2026</span>
+                      <h5 class="card-title mt-2">Members' Dinner</h5>
+                      <p class="card-text text-muted small">An intimate gathering for members to connect over fine cuisine.</p>
+                      <p class="mb-3"><span class="price-tag">&euro;50 / Free for members</span></p>
+                      <a href="#" class="btn btn-outline-navy btn-sm">RSVP</a>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="col-lg-6">
+              <article class="card h-100 border border-gold">
+                <div class="row g-0">
+                  <div class="col-md-5">
+                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400" class="img-fluid rounded-start h-100 object-fit-cover" alt="Annual Conference event">
+                  </div>
+                  <div class="col-md-7">
+                    <div class="card-body">
+                      <span class="badge" style="background: var(--gold); color: var(--navy);">Conference</span>
+                      <span class="text-muted small ms-2">June 10-12, 2026</span>
+                      <h5 class="card-title mt-2">Annual Conference</h5>
+                      <p class="card-text text-muted small">Three days of panels, workshops, and networking opportunities.</p>
+                      <p class="mb-3"><span class="price-tag">&euro;200 / &euro;75 for members</span></p>
+                      <a href="#" class="btn btn-outline-navy btn-sm">Learn More</a>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <!-- Past Events Tab -->
+        <div class="tab-pane fade" id="past-events" role="tabpanel" aria-labelledby="past-tab">
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <article class="card h-100 border border-gold" style="opacity: 0.75;">
+                <div class="row g-0">
+                  <div class="col-md-5">
+                    <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=400" class="img-fluid rounded-start h-100 object-fit-cover" alt="Winter Charity Gala event">
+                  </div>
+                  <div class="col-md-7">
+                    <div class="card-body">
+                      <span class="badge bg-secondary">Past</span>
+                      <span class="text-muted small ms-2">December 15, 2025</span>
+                      <h5 class="card-title mt-2">Winter Charity Gala</h5>
+                      <p class="card-text text-muted small">An unforgettable evening raising funds for cultural preservation.</p>
+                      <p class="mb-3"><span class="price-tag">&euro;100 / Free for members</span></p>
+                      <a href="#" class="btn btn-outline-navy btn-sm disabled">Event Ended</a>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="col-lg-6">
+              <article class="card h-100 border border-gold" style="opacity: 0.75;">
+                <div class="row g-0">
+                  <div class="col-md-5">
+                    <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=400" class="img-fluid rounded-start h-100 object-fit-cover" alt="Autumn Gathering event">
+                  </div>
+                  <div class="col-md-7">
+                    <div class="card-body">
+                      <span class="badge bg-secondary">Past</span>
+                      <span class="text-muted small ms-2">October 8, 2025</span>
+                      <h5 class="card-title mt-2">Autumn Gathering</h5>
+                      <p class="card-text text-muted small">Members came together for an afternoon of fellowship and reflection.</p>
+                      <p class="mb-3"><span class="price-tag">Free / Members only</span></p>
+                      <a href="#" class="btn btn-outline-navy btn-sm disabled">Event Ended</a>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <!-- By Category Tab -->
+        <div class="tab-pane fade" id="category-events" role="tabpanel" aria-labelledby="category-tab">
+          <div class="row g-4 mb-4">
+            <div class="col-12">
+              <h4 class="mb-3" style="border-bottom: 2px solid var(--gold); padding-bottom: 0.5rem;">Galas &amp; Dinners</h4>
+            </div>
+            <div class="col-lg-6">
+              <article class="card h-100 border border-gold">
                 <div class="card-body">
                   <span class="badge" style="background: var(--gold); color: var(--navy);">Gala</span>
                   <span class="text-muted small ms-2">March 20, 2026</span>
                   <h5 class="card-title mt-2">Spring Gala</h5>
-                  <p class="card-text text-muted small">An elegant evening of dining, dancing, and distinguished company at the Grand Ballroom.</p>
-                  <p class="mb-2"><small class="text-muted">📍 Grand Ballroom</small></p>
-                  <a href="#" class="btn btn-outline-navy btn-sm">Reserve Tickets</a>
+                  <p class="card-text text-muted small">An elegant evening of dining, dancing, and distinguished company.</p>
+                  <p class="mb-0"><span class="price-tag">&euro;120 / Free for members</span></p>
                 </div>
-              </div>
+              </article>
             </div>
-          </article>
-        </div>
-        
-        <div class="col-lg-6">
-          <article class="card h-100 border border-gold">
-            <div class="row g-0">
-              <div class="col-md-5">
-                <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=400" class="img-fluid rounded-start h-100 object-fit-cover" alt="Lecture">
-              </div>
-              <div class="col-md-7">
-                <div class="card-body">
-                  <span class="badge" style="background: var(--navy); color: white;">Lecture</span>
-                  <span class="text-muted small ms-2">April 5, 2026</span>
-                  <h5 class="card-title mt-2">Distinguished Lecture Series</h5>
-                  <p class="card-text text-muted small">Featuring Dr. Helena Shaw on "The Future of Cultural Preservation."</p>
-                  <p class="mb-2"><small class="text-muted">📍 Heritage Hall</small></p>
-                  <a href="#" class="btn btn-outline-navy btn-sm">Register</a>
-                </div>
-              </div>
-            </div>
-          </article>
-        </div>
-        
-        <div class="col-lg-6">
-          <article class="card h-100 border border-gold">
-            <div class="row g-0">
-              <div class="col-md-5">
-                <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400" class="img-fluid rounded-start h-100 object-fit-cover" alt="Dinner">
-              </div>
-              <div class="col-md-7">
+            <div class="col-lg-6">
+              <article class="card h-100 border border-gold">
                 <div class="card-body">
                   <span class="badge" style="background: #8B1538; color: white;">Dinner</span>
                   <span class="text-muted small ms-2">May 15, 2026</span>
                   <h5 class="card-title mt-2">Members' Dinner</h5>
                   <p class="card-text text-muted small">An intimate gathering for members to connect over fine cuisine.</p>
-                  <p class="mb-2"><small class="text-muted">📍 Private Dining Room</small></p>
-                  <a href="#" class="btn btn-outline-navy btn-sm">RSVP</a>
+                  <p class="mb-0"><span class="price-tag">&euro;50 / Free for members</span></p>
                 </div>
-              </div>
+              </article>
             </div>
-          </article>
-        </div>
-        
-        <div class="col-lg-6">
-          <article class="card h-100 border border-gold">
-            <div class="row g-0">
-              <div class="col-md-5">
-                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400" class="img-fluid rounded-start h-100 object-fit-cover" alt="Conference">
-              </div>
-              <div class="col-md-7">
+          </div>
+          <div class="row g-4 mb-4">
+            <div class="col-12">
+              <h4 class="mb-3" style="border-bottom: 2px solid var(--gold); padding-bottom: 0.5rem;">Lectures &amp; Conferences</h4>
+            </div>
+            <div class="col-lg-6">
+              <article class="card h-100 border border-gold">
+                <div class="card-body">
+                  <span class="badge" style="background: var(--navy); color: white;">Lecture</span>
+                  <span class="text-muted small ms-2">April 5, 2026</span>
+                  <h5 class="card-title mt-2">Distinguished Lecture Series</h5>
+                  <p class="card-text text-muted small">Featuring Dr. Helena Shaw on "The Future of Cultural Preservation."</p>
+                  <p class="mb-0"><span class="price-tag">Free / Open to all</span></p>
+                </div>
+              </article>
+            </div>
+            <div class="col-lg-6">
+              <article class="card h-100 border border-gold">
                 <div class="card-body">
                   <span class="badge" style="background: var(--gold); color: var(--navy);">Conference</span>
                   <span class="text-muted small ms-2">June 10-12, 2026</span>
                   <h5 class="card-title mt-2">Annual Conference</h5>
                   <p class="card-text text-muted small">Three days of panels, workshops, and networking opportunities.</p>
-                  <p class="mb-2"><small class="text-muted">📍 Convention Center</small></p>
-                  <a href="#" class="btn btn-outline-navy btn-sm">Learn More</a>
+                  <p class="mb-0"><span class="price-tag">&euro;200 / &euro;75 for members</span></p>
                 </div>
-              </div>
+              </article>
             </div>
-          </article>
+          </div>
         </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-5 bg-navy text-white text-center">
+    <div class="container py-4">
+      <h2 class="display-5 text-white mb-3">Don't Miss Our Next Event</h2>
+      <p class="lead mb-4" style="color: var(--text-light);">Members enjoy exclusive access, preferential pricing, and early registration for all Society events.</p>
+      <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <a href="contact.html" class="btn btn-gold btn-lg px-5">Become a Member</a>
+        <a href="contact.html" class="btn btn-outline-light btn-lg px-5">Contact Us</a>
       </div>
     </div>
   </section>
@@ -151,29 +382,39 @@
   <footer class="py-5 bg-navy">
     <div class="container">
       <div class="row g-4">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <h5 class="footer-title mb-3">The <span class="text-gold">Society</span></h5>
           <p class="footer-text mb-1">456 Heritage Lane</p>
-          <p class="footer-text">info@thesociety.example</p>
+          <p class="footer-text mb-1">info@thesociety.example</p>
+          <p class="footer-text">+1 (555) 789-0123</p>
         </div>
-        <div class="col-md-4">
-          <h5 class="footer-title mb-3">Quick Links</h5>
+        <div class="col-md-3">
+          <h5 class="footer-title mb-3">Navigation</h5>
           <ul class="list-unstyled">
-            <li><a href="about.html" class="footer-link">About</a></li>
-            <li><a href="events.html" class="footer-link">Events</a></li>
-            <li><a href="contact.html" class="footer-link">Contact</a></li>
+            <li class="mb-1"><a href="index.html" class="footer-link">Home</a></li>
+            <li class="mb-1"><a href="about.html" class="footer-link">About</a></li>
+            <li class="mb-1"><a href="events.html" class="footer-link">Events</a></li>
+            <li class="mb-1"><a href="gallery.html" class="footer-link">Gallery</a></li>
+            <li class="mb-1"><a href="contact.html" class="footer-link">Contact</a></li>
           </ul>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <h5 class="footer-title mb-3">Connect</h5>
-          <div class="d-flex gap-2">
-            <a href="#" class="btn btn-outline-light btn-sm">Facebook</a>
-            <a href="#" class="btn btn-outline-light btn-sm">LinkedIn</a>
+          <div class="d-flex flex-column gap-2">
+            <a href="#" class="footer-link">Facebook</a>
+            <a href="#" class="footer-link">LinkedIn</a>
+            <a href="#" class="footer-link">Twitter</a>
           </div>
+        </div>
+        <div class="col-md-3">
+          <h5 class="footer-title mb-3">Office Hours</h5>
+          <p class="footer-text mb-1">Mon - Fri: 9:00 - 17:00</p>
+          <p class="footer-text mb-1">Saturday: By appointment</p>
+          <p class="footer-text">Sunday: Closed</p>
         </div>
       </div>
       <hr class="my-4" style="border-color: rgba(255,255,255,0.2);">
-      <p class="text-center footer-muted small mb-0">© 2026 The Society • Heritage Theme Demo</p>
+      <p class="text-center footer-muted small mb-0">&copy; 2026 The Society. All rights reserved.</p>
     </div>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

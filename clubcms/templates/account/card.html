@@ -4,60 +4,146 @@
 {% block title %}{% trans "Membership Card" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>{% trans "Membership Card" %}</h1>
+<section class="page-card" aria-labelledby="card-heading">
+    <div class="page-card__container">
+        <header class="page-card__header">
+            <h1 id="card-heading" class="page-card__title">{% trans "Membership Card" %}</h1>
+            <p class="page-card__subtitle">{% trans "Your digital membership credentials" %}</p>
+        </header>
 
-    {% if user.card_number %}
-    <div class="card membership-card">
-        <div class="card-header">
-            <h2>{{ club_name }}</h2>
-        </div>
-        <div class="card-body">
-            <p class="card-member-name">{{ user.get_full_name }}</p>
-            <p class="card-number">
-                <strong>{% trans "Card No." %}:</strong> {{ user.card_number }}
-            </p>
-            {% if user.membership_date %}
-            <p>
-                <strong>{% trans "Member since" %}:</strong>
-                {{ user.membership_date }}
-            </p>
-            {% endif %}
-            {% if user.membership_expiry %}
-            <p>
-                <strong>{% trans "Expires" %}:</strong>
-                {{ user.membership_expiry }}
-            </p>
-            {% endif %}
-
-            {% if qr_url %}
-            <div class="card-qr">
-                <img src="{{ qr_url }}" alt="{% trans 'QR Code' %}" width="200" height="200">
+        {% if user.card_number %}
+        {# ---- Digital Card Display ---- #}
+        <article class="membership-card" aria-label="{% trans 'Digital membership card' %}">
+            <div class="membership-card__header">
+                <span class="membership-card__logo">{{ club_name }}</span>
+                <span class="membership-card__type">{% trans "Member" %}</span>
             </div>
-            {% endif %}
-
-            {% if barcode_url %}
-            <div class="card-barcode">
-                <img src="{{ barcode_url }}" alt="{% trans 'Barcode' %}">
+            <div class="membership-card__body">
+                <p class="membership-card__member-name">{{ user.get_full_name }}</p>
+                <p class="membership-card__number" aria-label="{% trans 'Card number' %}">{{ user.card_number }}</p>
+                <div class="membership-card__dates">
+                    {% if user.membership_date %}
+                    <div class="membership-card__date-group">
+                        <span class="membership-card__date-label">{% trans "Member since" %}</span>
+                        <time class="membership-card__date-value" datetime="{{ user.membership_date|date:'Y-m-d' }}">{{ user.membership_date }}</time>
+                    </div>
+                    {% endif %}
+                    {% if user.membership_expiry %}
+                    <div class="membership-card__date-group">
+                        <span class="membership-card__date-label">{% trans "Expires" %}</span>
+                        <time class="membership-card__date-value" datetime="{{ user.membership_expiry|date:'Y-m-d' }}">{{ user.membership_expiry }}</time>
+                    </div>
+                    {% endif %}
+                </div>
             </div>
-            {% endif %}
-        </div>
-        <div class="card-actions">
-            <a href="{% url 'account:card_pdf' %}" class="btn btn-secondary">
+            <div class="membership-card__footer">
+                {% if qr_url %}
+                <div class="membership-card__qr">
+                    <img src="{{ qr_url }}" alt="{% trans 'QR Code for membership verification' %}" width="56" height="56">
+                </div>
+                {% endif %}
+                {% if barcode_url %}
+                <div class="membership-card__barcode">
+                    <img src="{{ barcode_url }}" alt="{% trans 'Barcode for membership verification' %}" width="180" height="48">
+                </div>
+                {% endif %}
+            </div>
+        </article>
+
+        <nav class="membership-card__actions" aria-label="{% trans 'Card actions' %}">
+            <a href="{% url 'account:card_pdf' %}" class="btn btn--primary" download>
+                <svg class="btn__icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
                 {% trans "Download PDF" %}
             </a>
-            <a href="{% url 'account:card_qr' %}" class="btn btn-secondary">
+            <a href="{% url 'account:card_qr' %}" class="btn btn--outline" aria-label="{% trans 'Download QR code image' %}" download>
                 {% trans "QR Code" %}
             </a>
-            <a href="{% url 'account:card_barcode' %}" class="btn btn-secondary">
+            <a href="{% url 'account:card_barcode' %}" class="btn btn--outline" aria-label="{% trans 'Download barcode image' %}" download>
                 {% trans "Barcode" %}
             </a>
+        </nav>
+
+        {# ---- User's Current Products ---- #}
+        {% if user_products %}
+        <section class="page-card__plans" aria-labelledby="current-plans-heading">
+            <h2 id="current-plans-heading" class="page-card__plans-title">{% trans "Your Membership Products" %}</h2>
+            <div class="pricing-grid" role="list">
+                {% for product in user_products %}
+                <article class="pricing-card pricing-card--active" role="listitem">
+                    <span class="pricing-card__badge">{% trans "Active" %}</span>
+                    <h3 class="pricing-card__name">{{ product.name }}</h3>
+                    <div class="pricing-card__price" aria-label="{% blocktrans with price=product.price %}{{ price }} euros per year{% endblocktrans %}">&euro;{{ product.price }}<small>/ {% trans "year" %}</small></div>
+                    {% if product.description %}
+                    <p class="pricing-card__desc">{{ product.description }}</p>
+                    {% endif %}
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% else %}
+        {# ---- No Card Yet ---- #}
+        <div class="page-card__no-card" role="status">
+            <svg class="page-card__no-card-icon" width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            </svg>
+            <p class="page-card__no-card-text">{% trans "No membership card has been issued yet." %}</p>
+            <p class="page-card__no-card-text page-card__no-card-text--muted">{% trans "Choose a membership plan below to request your membership card." %}</p>
         </div>
+        {% endif %}
+
+        {# ---- Link to My Requests ---- #}
+        <div class="page-card__requests-link">
+            <a href="{% url 'account:membership_requests' %}" class="btn btn--outline">
+                <svg class="btn__icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                {% trans "View My Requests" %}
+            </a>
+        </div>
+
+        {# ---- Available Products ---- #}
+        {% if available_products %}
+        <section class="page-card__plans" aria-labelledby="available-plans-heading">
+            <h2 id="available-plans-heading" class="page-card__plans-title">{% trans "Available Membership Plans" %}</h2>
+            <div class="pricing-grid" role="list">
+                {% for product in available_products %}
+                <article class="pricing-card {% if product in user_products %}pricing-card--active{% endif %}" role="listitem">
+                    {% if product in user_products %}
+                    <span class="pricing-card__badge">{% trans "Your plan" %}</span>
+                    {% endif %}
+                    <h3 class="pricing-card__name">{{ product.name }}</h3>
+                    <div class="pricing-card__price" aria-label="{% blocktrans with price=product.price %}{{ price }} euros per year{% endblocktrans %}">&euro;{{ product.price }}<small>/ {% trans "year" %}</small></div>
+                    {% if product.description %}
+                    <p class="pricing-card__desc">{{ product.description }}</p>
+                    {% endif %}
+                    <ul class="pricing-card__features" aria-label="{% trans 'Plan features' %}">
+                        {% if product.grants_events %}
+                        <li>{% trans "Event registration" %}</li>
+                        {% endif %}
+                        {% if product.grants_vote %}
+                        <li>{% trans "Voting rights" %}</li>
+                        {% endif %}
+                        {% if product.grants_upload %}
+                        <li>{% trans "Gallery upload" %}</li>
+                        {% endif %}
+                        {% if product.grants_discount %}
+                        <li>{% blocktrans with percent=product.discount_percent %}{{ percent }}% discount on events{% endblocktrans %}</li>
+                        {% endif %}
+                    </ul>
+                    {% if product not in user_products %}
+                    <a href="{% url 'account:membership_request' product.pk %}" class="btn btn--primary btn--block">
+                        {% trans "Request this membership" %}
+                    </a>
+                    {% endif %}
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
     </div>
-    {% else %}
-    <div class="alert alert-info">
-        <p>{% trans "No membership card has been issued yet. Please contact the club administration." %}</p>
-    </div>
-    {% endif %}
-</div>
+</section>
 {% endblock %}

@@ -39,12 +39,14 @@ class PartnerIndexPage(Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
+        help_text=_("Testo introduttivo sopra l'elenco dei partner."),
     )
     body = StreamField(
         BODY_BLOCKS,
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
+        help_text=_("Contenuto aggiuntivo sotto l'introduzione."),
     )
 
     # --- Wagtail config ---
@@ -123,6 +125,7 @@ class PartnerPage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Logo"),
+        help_text=_("Logo del partner, mostrato nei listing e nella pagina."),
     )
     category = models.ForeignKey(
         "website.PartnerCategory",
@@ -131,6 +134,7 @@ class PartnerPage(Page):
         on_delete=models.SET_NULL,
         related_name="partner_pages",
         verbose_name=_("Category"),
+        help_text=_("Categoria del partner (es. Sponsor, Tecnico)."),
     )
     intro = models.TextField(
         blank=True,
@@ -142,30 +146,36 @@ class PartnerPage(Page):
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
+        help_text=_("Descrizione completa del partner."),
     )
 
     # --- Contact fields ---
     website = models.URLField(
         blank=True,
         verbose_name=_("Website"),
+        help_text=_("Sito web del partner."),
     )
     email = models.EmailField(
         blank=True,
         verbose_name=_("Email"),
+        help_text=_("Email di contatto del partner."),
     )
     phone = models.CharField(
         max_length=30,
         blank=True,
         verbose_name=_("Phone"),
+        help_text=_("Numero di telefono del partner."),
     )
     address = models.TextField(
         blank=True,
         verbose_name=_("Address"),
+        help_text=_("Indirizzo fisico del partner."),
     )
     contact_city = models.CharField(
         max_length=100,
         blank=True,
         verbose_name=_("City"),
+        help_text=_("Città di riferimento del partner."),
     )
     country = models.CharField(
         max_length=2,
@@ -173,27 +183,44 @@ class PartnerPage(Page):
         verbose_name=_("Country"),
         help_text=_("ISO 3166-1 alpha-2 country code."),
     )
+    latitude = models.FloatField(
+        null=True,
+        blank=True,
+        verbose_name=_("Latitude"),
+        help_text=_("Latitudine per la mappa (es. 45.6950)."),
+    )
+    longitude = models.FloatField(
+        null=True,
+        blank=True,
+        verbose_name=_("Longitude"),
+        help_text=_("Longitudine per la mappa (es. 9.6700)."),
+    )
 
     # --- Social fields ---
     facebook_url = models.URLField(
         blank=True,
         verbose_name=_("Facebook URL"),
+        help_text=_("URL pagina Facebook del partner."),
     )
     instagram_url = models.URLField(
         blank=True,
         verbose_name=_("Instagram URL"),
+        help_text=_("URL profilo Instagram del partner."),
     )
     linkedin_url = models.URLField(
         blank=True,
         verbose_name=_("LinkedIn URL"),
+        help_text=_("URL pagina LinkedIn del partner."),
     )
     youtube_url = models.URLField(
         blank=True,
         verbose_name=_("YouTube URL"),
+        help_text=_("URL canale YouTube del partner."),
     )
     twitter_url = models.URLField(
         blank=True,
         verbose_name=_("Twitter / X URL"),
+        help_text=_("URL profilo Twitter/X del partner."),
     )
 
     # --- Ownership fields ---
@@ -226,11 +253,13 @@ class PartnerPage(Page):
     show_on_homepage = models.BooleanField(
         default=False,
         verbose_name=_("Show on homepage"),
+        help_text=_("Mostra il logo del partner nella homepage."),
     )
     partnership_start = models.DateField(
         null=True,
         blank=True,
         verbose_name=_("Partnership start"),
+        help_text=_("Data di inizio della partnership."),
     )
     partnership_end = models.DateField(
         null=True,
@@ -261,6 +290,12 @@ class PartnerPage(Page):
                 FieldPanel("address"),
                 FieldPanel("contact_city"),
                 FieldPanel("country"),
+                FieldRowPanel(
+                    [
+                        FieldPanel("latitude"),
+                        FieldPanel("longitude"),
+                    ]
+                ),
             ],
             heading=_("Contact information"),
         ),

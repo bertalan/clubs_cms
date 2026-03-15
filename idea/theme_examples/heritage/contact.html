@@ -23,7 +23,11 @@
     .btn-gold { background: var(--gold); color: var(--navy); border: none; font-weight: 600; }
     .btn-gold:hover { background: var(--gold-hover); color: var(--navy); }
     .nav-link.active { color: var(--gold) !important; }
-    .form-control:focus { border-color: var(--gold); box-shadow: 0 0 0 0.2rem rgba(212,165,32,0.25); }
+    .form-control:focus, .form-select:focus { border-color: var(--gold); box-shadow: 0 0 0 0.2rem rgba(212,165,32,0.25); }
+    .form-check-input:checked { background-color: var(--gold); border-color: var(--gold); }
+    .accordion-button:not(.collapsed) { background-color: rgba(30,58,95,0.05); color: var(--navy); }
+    .accordion-button:focus { box-shadow: 0 0 0 0.2rem rgba(212,165,32,0.25); }
+    .required-star { color: #dc3545; font-weight: bold; }
     /* Footer */
     .footer-title { font-family: 'Playfair Display', serif; color: white; }
     .footer-text { color: var(--text-light); }
@@ -69,29 +73,43 @@
             <form>
               <div class="row g-3">
                 <div class="col-md-6">
-                  <label class="form-label">First Name</label>
-                  <input type="text" class="form-control">
+                  <label for="contact-first-name" class="form-label">First Name <span class="required-star">*</span></label>
+                  <input type="text" class="form-control" id="contact-first-name" name="first_name" placeholder="Enter your first name" aria-label="First Name" required>
                 </div>
                 <div class="col-md-6">
-                  <label class="form-label">Last Name</label>
-                  <input type="text" class="form-control">
+                  <label for="contact-last-name" class="form-label">Last Name <span class="required-star">*</span></label>
+                  <input type="text" class="form-control" id="contact-last-name" name="last_name" placeholder="Enter your last name" aria-label="Last Name" required>
                 </div>
                 <div class="col-12">
-                  <label class="form-label">Email</label>
-                  <input type="email" class="form-control">
+                  <label for="contact-email" class="form-label">Email <span class="required-star">*</span></label>
+                  <input type="email" class="form-control" id="contact-email" name="email" placeholder="Enter your email address" aria-label="Email" required>
                 </div>
                 <div class="col-12">
-                  <label class="form-label">Subject</label>
-                  <select class="form-select">
-                    <option>General Inquiry</option>
-                    <option>Membership</option>
-                    <option>Events</option>
-                    <option>Partnership</option>
+                  <label for="contact-subject" class="form-label">Subject <span class="required-star">*</span></label>
+                  <select class="form-select" id="contact-subject" name="subject" aria-label="Subject" required>
+                    <option value="" disabled selected>Select a subject</option>
+                    <option value="general">General Inquiry</option>
+                    <option value="membership">Membership</option>
+                    <option value="events">Events</option>
+                    <option value="partnership">Partnership</option>
+                    <option value="other">Other</option>
                   </select>
                 </div>
                 <div class="col-12">
-                  <label class="form-label">Message</label>
-                  <textarea class="form-control" rows="5"></textarea>
+                  <label for="contact-phone" class="form-label">Phone</label>
+                  <input type="tel" class="form-control" id="contact-phone" name="phone" placeholder="Enter your phone number (optional)" aria-label="Phone">
+                </div>
+                <div class="col-12">
+                  <label for="contact-message" class="form-label">Message <span class="required-star">*</span></label>
+                  <textarea class="form-control" id="contact-message" name="message" rows="5" placeholder="Write your message here..." aria-label="Message" required></textarea>
+                </div>
+                <div class="col-12">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="contact-privacy" name="privacy" aria-label="Privacy policy consent" required>
+                    <label class="form-check-label" for="contact-privacy">
+                      I have read and accept the <a href="#" class="text-gold">privacy policy</a>. <span class="required-star">*</span>
+                    </label>
+                  </div>
                 </div>
                 <div class="col-12">
                   <button type="submit" class="btn btn-gold px-5 py-2">Send Message</button>
@@ -112,13 +130,98 @@
           </div>
           <div class="mb-4">
             <h6 class="fw-bold">Phone</h6>
-            <p class="text-muted">+1 234 567 890</p>
+            <p class="text-muted">+1 (555) 789-0123</p>
           </div>
-          <div class="p-4 bg-navy text-white rounded">
+          <div class="p-4 bg-navy text-white rounded mb-4">
             <h6 class="fw-bold mb-3">Office Hours</h6>
             <p class="mb-1 small">Monday - Friday: 9:00 - 17:00</p>
             <p class="mb-1 small">Saturday: By appointment</p>
             <p class="mb-0 small">Sunday: Closed</p>
+          </div>
+
+          <!-- Map Placeholder -->
+          <div class="border border-gold rounded overflow-hidden">
+            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 220px;">
+              <div class="text-center text-muted">
+                <div style="font-size: 2.5rem;">&#9873;</div>
+                <p class="mb-1 fw-bold">456 Heritage Lane</p>
+                <p class="small mb-0">Map placeholder - Integrate Google Maps or similar</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-5" style="background: #f0ece2;">
+    <div class="container py-4">
+      <h2 class="display-5 text-center mb-3">Frequently Asked Questions</h2>
+      <p class="text-center text-muted mb-5">Find answers to the most common questions about The Society</p>
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="accordion" id="faqAccordion">
+            <div class="accordion-item border border-gold mb-2">
+              <h2 class="accordion-header" id="faqHeadingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseOne" aria-expanded="true" aria-controls="faqCollapseOne">
+                  How do I become a member of The Society?
+                </button>
+              </h2>
+              <div id="faqCollapseOne" class="accordion-collapse collapse show" aria-labelledby="faqHeadingOne" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-muted">
+                  Membership is open to all who share our values of tradition, excellence, and community. Simply fill out the contact form on this page with "Membership" as the subject, and our membership committee will get in touch with you within 5 business days to guide you through the application process.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item border border-gold mb-2">
+              <h2 class="accordion-header" id="faqHeadingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseTwo" aria-expanded="false" aria-controls="faqCollapseTwo">
+                  What are the annual membership fees?
+                </button>
+              </h2>
+              <div id="faqCollapseTwo" class="accordion-collapse collapse" aria-labelledby="faqHeadingTwo" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-muted">
+                  Annual membership fees vary depending on the type of membership selected. Individual memberships start at $150 per year, while family memberships begin at $250. Student and senior discounts are available. All memberships include access to our exclusive events, lecture series, and networking opportunities.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item border border-gold mb-2">
+              <h2 class="accordion-header" id="faqHeadingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseThree" aria-expanded="false" aria-controls="faqCollapseThree">
+                  Can non-members attend events?
+                </button>
+              </h2>
+              <div id="faqCollapseThree" class="accordion-collapse collapse" aria-labelledby="faqHeadingThree" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-muted">
+                  Yes, many of our events are open to non-members, though members enjoy preferential pricing and early registration access. Public events such as our Distinguished Lecture Series and Annual Conference welcome all attendees. Members-only events are clearly marked in our events calendar.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item border border-gold mb-2">
+              <h2 class="accordion-header" id="faqHeadingFour">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseFour" aria-expanded="false" aria-controls="faqCollapseFour">
+                  How can I volunteer or get involved?
+                </button>
+              </h2>
+              <div id="faqCollapseFour" class="accordion-collapse collapse" aria-labelledby="faqHeadingFour" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-muted">
+                  We welcome volunteers with open arms. Whether you're interested in event planning, cultural programming, mentorship, or community outreach, there's a place for you. Reach out to us through the contact form and select "General Inquiry" to learn more about our volunteer opportunities.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item border border-gold mb-2">
+              <h2 class="accordion-header" id="faqHeadingFive">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapseFive" aria-expanded="false" aria-controls="faqCollapseFive">
+                  Does The Society have chapters in other cities?
+                </button>
+              </h2>
+              <div id="faqCollapseFive" class="accordion-collapse collapse" aria-labelledby="faqHeadingFive" data-bs-parent="#faqAccordion">
+                <div class="accordion-body text-muted">
+                  Yes, The Society currently operates eight chapters across different cities. Each chapter hosts its own local events while also participating in our larger annual gatherings. Contact us to find out if there's a chapter near you, or to inquire about starting a new chapter in your area.
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -129,29 +232,39 @@
   <footer class="py-5 bg-navy">
     <div class="container">
       <div class="row g-4">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <h5 class="footer-title mb-3">The <span class="text-gold">Society</span></h5>
           <p class="footer-text mb-1">456 Heritage Lane</p>
-          <p class="footer-text">info@thesociety.example</p>
+          <p class="footer-text mb-1">info@thesociety.example</p>
+          <p class="footer-text">+1 (555) 789-0123</p>
         </div>
-        <div class="col-md-4">
-          <h5 class="footer-title mb-3">Quick Links</h5>
+        <div class="col-md-3">
+          <h5 class="footer-title mb-3">Navigation</h5>
           <ul class="list-unstyled">
-            <li><a href="about.html" class="footer-link">About</a></li>
-            <li><a href="events.html" class="footer-link">Events</a></li>
-            <li><a href="contact.html" class="footer-link">Contact</a></li>
+            <li class="mb-1"><a href="index.html" class="footer-link">Home</a></li>
+            <li class="mb-1"><a href="about.html" class="footer-link">About</a></li>
+            <li class="mb-1"><a href="events.html" class="footer-link">Events</a></li>
+            <li class="mb-1"><a href="gallery.html" class="footer-link">Gallery</a></li>
+            <li class="mb-1"><a href="contact.html" class="footer-link">Contact</a></li>
           </ul>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <h5 class="footer-title mb-3">Connect</h5>
-          <div class="d-flex gap-2">
-            <a href="#" class="btn btn-outline-light btn-sm">Facebook</a>
-            <a href="#" class="btn btn-outline-light btn-sm">LinkedIn</a>
+          <div class="d-flex flex-column gap-2">
+            <a href="#" class="footer-link">Facebook</a>
+            <a href="#" class="footer-link">LinkedIn</a>
+            <a href="#" class="footer-link">Twitter</a>
           </div>
+        </div>
+        <div class="col-md-3">
+          <h5 class="footer-title mb-3">Office Hours</h5>
+          <p class="footer-text mb-1">Mon - Fri: 9:00 - 17:00</p>
+          <p class="footer-text mb-1">Saturday: By appointment</p>
+          <p class="footer-text">Sunday: Closed</p>
         </div>
       </div>
       <hr class="my-4" style="border-color: rgba(255,255,255,0.2);">
-      <p class="text-center footer-muted small mb-0">© 2026 The Society • Heritage Theme Demo</p>
+      <p class="text-center footer-muted small mb-0">&copy; 2026 The Society. All rights reserved.</p>
     </div>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

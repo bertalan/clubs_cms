@@ -12,7 +12,7 @@ done
 echo "Database ready."
 
 echo "Running migrations..."
-python manage.py migrate --noinput
+python manage.py migrate --noinput || echo "WARNING: migrate failed, app may need manual migration"
 
 echo "Creating cache table..."
 python manage.py createcachetable --database default 2>/dev/null || true

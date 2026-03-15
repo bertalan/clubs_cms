@@ -6,6 +6,8 @@ Common settings shared across all environments.
 import os
 from pathlib import Path
 
+from django.urls import reverse_lazy
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -51,6 +53,8 @@ INSTALLED_APPS = [
     # Utilities
     "taggit",
     "modelcluster",
+    # Background tasks
+    "django_q",
     # Project apps
     "apps.core",
     "apps.website",
@@ -186,7 +190,7 @@ try:
         "password1*",
         "password2*",
     ]
-    ACCOUNT_EMAIL_VERIFICATION = "optional"
+    ACCOUNT_EMAIL_VERIFICATION = "mandatory"
     ACCOUNT_SESSION_REMEMBER = True
     ACCOUNT_UNIQUE_EMAIL = True
     ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
@@ -202,7 +206,7 @@ except ImportError:
 # Internationalization
 # --------------------------------------------------------------------------
 
-LANGUAGE_CODE = "it"
+LANGUAGE_CODE = "en"
 TIME_ZONE = "Europe/Rome"
 USE_I18N = True
 USE_L10N = True
@@ -210,11 +214,11 @@ USE_TZ = True
 
 WAGTAIL_I18N_ENABLED = True
 WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
-    ("it", "Italiano"),
     ("en", "English"),
+    ("it", "Italiano"),
     ("de", "Deutsch"),
-    ("fr", "Francais"),
-    ("es", "Espanol"),
+    ("fr", "Français"),
+    ("es", "Español"),
 ]
 
 LOCALE_PATHS = [BASE_DIR / "locale"]
@@ -304,5 +308,6 @@ WEBPUSH_SETTINGS = {
 # Login / Logout
 # --------------------------------------------------------------------------
 
-LOGIN_REDIRECT_URL = "/account/profile/"
+LOGIN_URL = reverse_lazy("account_login")
+LOGIN_REDIRECT_URL = reverse_lazy("account:profile")
 LOGOUT_REDIRECT_URL = "/"

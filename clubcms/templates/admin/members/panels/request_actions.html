@@ -1,0 +1,185 @@
+{% load i18n %}
+
+<div class="w-panel">
+    <div class="w-panel__header">
+        <h2 class="w-panel__heading w-panel__heading--label">{% trans "Request Summary" %}</h2>
+    </div>
+    <div class="w-panel__content" style="padding: 1rem;">
+        {% if instance %}
+            {# Status Badge #}
+            <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                <span style="font-weight: 600; color: var(--w-color-text-label);">{% trans "Status" %}:</span>
+                {% if status == 'pending' %}
+                    <span style="display: inline-block; padding: 0.375rem 0.75rem; background: var(--w-color-warning-50); color: var(--w-color-warning-100); border-radius: 6px; font-size: 0.875rem; font-weight: 600;">
+                        ⏳ {{ status_display }}
+                    </span>
+                {% elif status == 'approved' %}
+                    <span style="display: inline-block; padding: 0.375rem 0.75rem; background: var(--w-color-positive-50); color: var(--w-color-positive-100); border-radius: 6px; font-size: 0.875rem; font-weight: 600;">
+                        ✓ {{ status_display }}
+                    </span>
+                {% elif status == 'rejected' %}
+                    <span style="display: inline-block; padding: 0.375rem 0.75rem; background: var(--w-color-critical-50); color: var(--w-color-critical-100); border-radius: 6px; font-size: 0.875rem; font-weight: 600;">
+                        ✕ {{ status_display }}
+                    </span>
+                {% else %}
+                    <span style="display: inline-block; padding: 0.375rem 0.75rem; background: var(--w-color-surface-container); border-radius: 6px; font-size: 0.875rem; font-weight: 600;">
+                        {{ status_display }}
+                    </span>
+                {% endif %}
+            </div>
+
+            {# Two column layout for user and product #}
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                
+                {# User Info Card #}
+                <div style="padding: 1rem; background: var(--w-color-surface-container); border-radius: 8px; border-left: 4px solid var(--w-color-primary);">
+                    <h3 style="margin: 0 0 0.75rem; font-size: 0.875rem; font-weight: 600; color: var(--w-color-text-label); text-transform: uppercase; letter-spacing: 0.05em;">
+                        {% trans "Member" %}
+                    </h3>
+                    <div style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">
+                        {{ user_full_name }}
+                    </div>
+                    <div style="font-size: 0.875rem; color: var(--w-color-text-label); margin-bottom: 0.75rem;">
+                        {{ user_email }}
+                    </div>
+                    
+                    {# Current membership status #}
+                    <div style="padding: 0.75rem; background: var(--w-color-surface-container-low); border-radius: 6px; margin-bottom: 0.75rem;">
+                        {% if user_has_card %}
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                                <span style="color: var(--w-color-text-label);">{% trans "Card" %}:</span>
+                                <span style="font-family: monospace; font-weight: 600;">{{ user_card_number }}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                                <span style="color: var(--w-color-text-label);">{% trans "Expires" %}:</span>
+                                <span>{{ user_membership_expiry|default:"-" }}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: var(--w-color-text-label);">{% trans "Status" %}:</span>
+                                {% if user_is_active_member %}
+                                    <span style="color: var(--w-color-positive-100); font-weight: 600;">{% trans "Active" %}</span>
+                                {% else %}
+                                    <span style="color: var(--w-color-critical-100); font-weight: 600;">{% trans "Expired" %}</span>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <span style="color: var(--w-color-text-label); font-style: italic;">
+                                {% trans "No membership card yet" %}
+                            </span>
+                        {% endif %}
+                    </div>
+                    
+                    <a href="{{ user_edit_url }}" class="button button-small button-secondary" style="font-size: 0.75rem;">
+                        <svg class="icon icon-user" aria-hidden="true" style="width: 1rem; height: 1rem;"><use href="#icon-user"></use></svg>
+                        {% trans "View Member Profile" %}
+                    </a>
+                </div>
+                
+                {# Product Info Card #}
+                <div style="padding: 1rem; background: var(--w-color-surface-container); border-radius: 8px; border-left: 4px solid var(--w-color-secondary);">
+                    <h3 style="margin: 0 0 0.75rem; font-size: 0.875rem; font-weight: 600; color: var(--w-color-text-label); text-transform: uppercase; letter-spacing: 0.05em;">
+                        {% trans "Product Requested" %}
+                    </h3>
+                    <div style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">
+                        {{ product_name }}
+                    </div>
+                    
+                    <div style="padding: 0.75rem; background: var(--w-color-surface-container-low); border-radius: 6px; margin-bottom: 0.75rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                            <span style="color: var(--w-color-text-label);">{% trans "Price" %}:</span>
+                            <span style="font-weight: 600; color: var(--w-color-positive-100);">€{{ product_price }}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                            <span style="color: var(--w-color-text-label);">{% trans "Validity" %}:</span>
+                            <span>{{ product_validity_days }} {% trans "days" %}</span>
+                        </div>
+                        {% if product_available_from or product_available_until %}
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                            <span style="color: var(--w-color-text-label);">{% trans "Available" %}:</span>
+                            <span>
+                                {% if product_available_from %}{{ product_available_from }}{% else %}...{% endif %}
+                                →
+                                {% if product_available_until %}{{ product_available_until }}{% else %}...{% endif %}
+                            </span>
+                        </div>
+                        {% endif %}
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--w-color-text-label);">{% trans "Purchasable" %}:</span>
+                            {% if product_is_purchasable %}
+                                <span style="color: var(--w-color-positive-100); font-weight: 600;">{% trans "Yes" %}</span>
+                            {% else %}
+                                <span style="color: var(--w-color-critical-100); font-weight: 600;">{% trans "No" %}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Warnings #}
+            {% if user_has_product %}
+            <div style="margin-bottom: 1.5rem; padding: 1rem; background: var(--w-color-warning-50); border: 1px solid var(--w-color-warning-100); border-radius: 8px;">
+                <strong style="color: var(--w-color-warning-100);">⚠️ {% trans "Warning" %}:</strong>
+                <span style="color: var(--w-color-warning-100);">
+                    {% trans "This member already has this product assigned." %}
+                </span>
+            </div>
+            {% endif %}
+            
+            {% if not product_is_purchasable and is_pending %}
+            <div style="margin-bottom: 1.5rem; padding: 1rem; background: var(--w-color-critical-50); border: 1px solid var(--w-color-critical-100); border-radius: 8px;">
+                <strong style="color: var(--w-color-critical-100);">⚠️ {% trans "Warning" %}:</strong>
+                <span style="color: var(--w-color-critical-100);">
+                    {% trans "This product is no longer available for purchase." %}
+                </span>
+            </div>
+            {% endif %}
+
+            {# Action Buttons #}
+            {% if is_pending %}
+                <div style="padding-top: 1rem; border-top: 1px solid var(--w-color-border-furniture);">
+                    <h3 style="margin: 0 0 1rem; font-size: 0.875rem; font-weight: 600; color: var(--w-color-text-label);">
+                        {% trans "Actions" %}
+                    </h3>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
+                        <form method="post" action="{{ approve_url }}">
+                            {% csrf_token %}
+                            <button type="submit" class="button" style="background: var(--w-color-positive-100); border-color: var(--w-color-positive-100);">
+                                <svg class="icon icon-success" aria-hidden="true"><use href="#icon-success"></use></svg>
+                                {% trans "Approve & Issue Card" %}
+                            </button>
+                        </form>
+                        
+                        <form method="post" action="{{ reject_url }}" style="display: flex; gap: 0.5rem; align-items: flex-end;">
+                            {% csrf_token %}
+                            <div>
+                                <label for="rejection_reason" style="display: block; font-size: 0.75rem; color: var(--w-color-text-label); margin-bottom: 0.25rem;">
+                                    {% trans "Reason (optional)" %}
+                                </label>
+                                <input type="text" name="reason" id="rejection_reason" class="w-field__input" style="width: 200px;" placeholder="{% trans 'e.g., Duplicate request' %}">
+                            </div>
+                            <button type="submit" class="button" style="background: var(--w-color-critical-100); border-color: var(--w-color-critical-100);">
+                                <svg class="icon icon-cross" aria-hidden="true"><use href="#icon-cross"></use></svg>
+                                {% trans "Reject" %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <div style="padding-top: 1rem; border-top: 1px solid var(--w-color-border-furniture);">
+                    <p style="color: var(--w-color-text-label); font-style: italic; margin: 0;">
+                        {% trans "This request has already been processed." %}
+                        {% if status == 'approved' and user_has_card %}
+                            <a href="{{ user_edit_url }}#tab-iscrizione" style="margin-left: 0.5rem;">
+                                {% trans "View membership details →" %}
+                            </a>
+                        {% endif %}
+                    </p>
+                </div>
+            {% endif %}
+        {% else %}
+            <p style="color: var(--w-color-text-label); font-style: italic;">
+                {% trans "Save the request first to enable actions." %}
+            </p>
+        {% endif %}
+    </div>
+</div>

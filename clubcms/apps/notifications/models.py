@@ -102,6 +102,7 @@ class NotificationQueue(models.Model):
         max_length=50,
         choices=NOTIFICATION_TYPE_CHOICES,
         db_index=True,
+        help_text=_("Tipo di notifica da inviare."),
     )
 
     # Generic relation to the triggering content object (optional)
@@ -111,11 +112,13 @@ class NotificationQueue(models.Model):
         null=True,
         blank=True,
         verbose_name=_("content type"),
+        help_text=_("Tipo di contenuto che ha generato la notifica."),
     )
     object_id = models.PositiveIntegerField(
         _("object ID"),
         null=True,
         blank=True,
+        help_text=_("ID dell'oggetto che ha generato la notifica."),
     )
     content_object = GenericForeignKey("content_type", "object_id")
 
@@ -124,12 +127,14 @@ class NotificationQueue(models.Model):
         on_delete=models.CASCADE,
         related_name="notifications",
         verbose_name=_("recipient"),
+        help_text=_("Destinatario della notifica."),
     )
 
     channel = models.CharField(
         _("channel"),
         max_length=10,
         choices=CHANNEL_CHOICES,
+        help_text=_("Canale di invio: email, push o in-app."),
     )
 
     status = models.CharField(
@@ -138,11 +143,18 @@ class NotificationQueue(models.Model):
         choices=STATUS_CHOICES,
         default="pending",
         db_index=True,
+        help_text=_("Stato di invio della notifica."),
     )
 
-    title = models.CharField(_("title"), max_length=255)
-    body = models.TextField(_("body"))
-    url = models.CharField(_("URL"), max_length=500, blank=True, default="")
+    title = models.CharField(_("title"), max_length=255,
+        help_text=_("Titolo della notifica."),
+    )
+    body = models.TextField(_("body"),
+        help_text=_("Corpo del messaggio della notifica."),
+    )
+    url = models.CharField(_("URL"), max_length=500, blank=True, default="",
+        help_text=_("URL di destinazione quando si clicca la notifica."),
+    )
 
     scheduled_for = models.DateTimeField(
         _("scheduled for"),
@@ -151,10 +163,16 @@ class NotificationQueue(models.Model):
         db_index=True,
         help_text=_("If set, notification will not be sent before this time."),
     )
-    sent_at = models.DateTimeField(_("sent at"), null=True, blank=True)
-    created_at = models.DateTimeField(_("created at"), auto_now_add=True)
+    sent_at = models.DateTimeField(_("sent at"), null=True, blank=True,
+        help_text=_("Data e ora di invio effettivo."),
+    )
+    created_at = models.DateTimeField(_("created at"), auto_now_add=True,
+        help_text=_("Data e ora di creazione nella coda."),
+    )
 
-    error_message = models.TextField(_("error message"), blank=True, default="")
+    error_message = models.TextField(_("error message"), blank=True, default="",
+        help_text=_("Messaggio di errore in caso di invio fallito."),
+    )
 
     class Meta:
         ordering = ["-created_at"]
@@ -180,6 +198,7 @@ class PushSubscription(models.Model):
         on_delete=models.CASCADE,
         related_name="push_subscriptions",
         verbose_name=_("user"),
+        help_text=_("Utente proprietario della sottoscrizione push."),
     )
     endpoint = models.TextField(
         _("endpoint"),
@@ -193,10 +212,18 @@ class PushSubscription(models.Model):
         _("auth key"),
         help_text=_("Client auth secret"),
     )
-    is_active = models.BooleanField(_("active"), default=True)
-    created_at = models.DateTimeField(_("created at"), auto_now_add=True)
-    last_used = models.DateTimeField(_("last used"), null=True, blank=True)
-    user_agent = models.TextField(_("user agent"), blank=True, default="")
+    is_active = models.BooleanField(_("active"), default=True,
+        help_text=_("La sottoscrizione è attiva e valida."),
+    )
+    created_at = models.DateTimeField(_("created at"), auto_now_add=True,
+        help_text=_("Data di registrazione della sottoscrizione."),
+    )
+    last_used = models.DateTimeField(_("last used"), null=True, blank=True,
+        help_text=_("Ultima volta che la sottoscrizione è stata usata."),
+    )
+    user_agent = models.TextField(_("user agent"), blank=True, default="",
+        help_text=_("Browser e dispositivo dell'utente."),
+    )
 
     class Meta:
         unique_together = [("user", "endpoint")]
@@ -217,18 +244,23 @@ class UnsubscribeToken(models.Model):
         on_delete=models.CASCADE,
         related_name="unsubscribe_tokens",
         verbose_name=_("user"),
+        help_text=_("Utente che può disiscriversi con questo token."),
     )
     notification_type = models.CharField(
         _("notification type"),
         max_length=50,
         choices=NOTIFICATION_TYPE_CHOICES,
+        help_text=_("Tipo di notifica da cui disiscriversi."),
     )
     token = models.CharField(
         _("token"),
         max_length=64,
         unique=True,
+        help_text=_("Token univoco HMAC per la disiscrizione."),
     )
-    created_at = models.DateTimeField(_("created at"), auto_now_add=True)
+    created_at = models.DateTimeField(_("created at"), auto_now_add=True,
+        help_text=_("Data di generazione del token."),
+    )
 
     class Meta:
         unique_together = [("user", "notification_type")]

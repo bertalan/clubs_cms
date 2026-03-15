@@ -17,6 +17,8 @@ from wagtail.blocks import (
     TextBlock,
 )
 
+from .common import BlockSettings
+
 
 # ---------------------------------------------------------------------------
 # WaypointBlock
@@ -132,6 +134,7 @@ class RouteBlock(StructBlock):
         default=500,
         help_text=_("Map height in pixels."),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/route_block.html"

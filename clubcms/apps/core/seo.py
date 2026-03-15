@@ -350,11 +350,19 @@ def get_item_list_schema(page, items, request):
 
     *items* should be a queryset or iterable of Wagtail pages.
     """
+    # Paginator Page objects have .paginator.count for the total
+    if hasattr(items, "paginator"):
+        total = items.paginator.count
+    elif hasattr(items, "__len__"):
+        total = len(items)
+    else:
+        total = 0
+
     schema = {
         "@type": "ItemList",
         "name": page.title,
         "url": request.build_absolute_uri(page.url),
-        "numberOfItems": len(items) if hasattr(items, "__len__") else 0,
+        "numberOfItems": total,
     }
 
     elements = []

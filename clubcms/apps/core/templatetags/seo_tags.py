@@ -7,8 +7,12 @@ Load in templates with::
     {% load seo_tags %}
 """
 
+import re
+
 from django import template
+from django.conf import settings
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext as _
 
 from apps.core.seo import (
     _get_site_settings,
@@ -74,9 +78,9 @@ def json_ld_tag(context):
         # Try to get child items for the list schema
         items = []
         if cls == "newsindexpage":
-            items = context.get("news_items", [])
+            items = context.get("news_pages", context.get("news_items", []))
         elif cls == "eventspage":
-            items = context.get("events", [])
+            items = context.get("event_pages", context.get("events", []))
         data = get_item_list_schema(page, items, request)
     else:
         # Generic WebPage fallback
@@ -238,9 +242,125 @@ def feed_discovery_tag(context):
     else:
         site_name = "Club CMS"
 
+    news_rss = _("News (RSS)")
+    news_atom = _("News (Atom)")
+    events_rss = _("Events (RSS)")
     lines = [
-        f'<link rel="alternate" type="application/rss+xml" title="{site_name} - News (RSS)" href="/feed/rss/">',
-        f'<link rel="alternate" type="application/atom+xml" title="{site_name} - News (Atom)" href="/feed/atom/">',
-        f'<link rel="alternate" type="application/rss+xml" title="{site_name} - Events (RSS)" href="/feed/events/rss/">',
+        f'<link rel="alternate" type="application/rss+xml" title="{site_name} - {news_rss}" href="/feed/rss/">',
+        f'<link rel="alternate" type="application/atom+xml" title="{site_name} - {news_atom}" href="/feed/atom/">',
+        f'<link rel="alternate" type="application/rss+xml" title="{site_name} - {events_rss}" href="/feed/events/rss/">',
     ]
     return mark_safe("\n".join(lines))
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 8. strip_language_prefix filter (for language switcher)
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+@register.filter
+def strip_language_prefix(path):
+    """
+    Remove the language prefix from a URL path.
+
+    Example:
+        {{ "/it/chi-siamo/"|strip_language_prefix }}  -> "/chi-siamo/"
+        {{ "/en/about/"|strip_language_prefix }}      -> "/about/"
+
+    This is useful for the language switcher where we need the path
+    without the current language prefix so Django can add the new one.
+    """
+    if not path:
+        return path
+
+    # Build pattern from available languages
+    lang_codes = [code for code, _ in settings.LANGUAGES]
+    pattern = r"^/(" + "|".join(re.escape(code) for code in lang_codes) + r")/"
+
+    # Strip the language prefix
+    stripped = re.sub(pattern, "/", path)
+    return stripped
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 8b. translate_url tag — resolve URL in target language
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+@register.simple_tag
+def translate_url(path, lang_code):
+    """
+    Return the equivalent URL path in the given language.
+
+    Activates the source language (detected from the URL prefix) before
+    resolving, then reverses under the target language so translated URL
+    segments are handled (e.g. /it/eventi/miei-eventi/ → /en/events/my-events/).
+
+    For Wagtail catch-all pages it falls back to swapping the language prefix.
+
+    Usage:
+        {% translate_url request.get_full_path "en" %}
+    """
+    from django.urls import resolve, reverse
+    from django.utils.translation import override
+
+    # Detect the source language from the URL prefix
+    lang_codes = [code for code, _ in settings.LANGUAGES]
+    source_lang = None
+    for code in lang_codes:
+        if path.startswith(f"/{code}/"):
+            source_lang = code
+            break
+
+    # Try to resolve and reverse in the target language
+    try:
+        with override(source_lang or settings.LANGUAGE_CODE):
+            match = resolve(path)
+        to_be_reversed = (
+            f"{match.namespace}:{match.url_name}" if match.namespace
+            else match.url_name
+        )
+        with override(lang_code):
+            return reverse(to_be_reversed, args=match.args, kwargs=match.kwargs)
+    except Exception:
+        pass
+
+    # Fallback: swap language prefix (covers Wagtail catch-all pages)
+    prefix_pattern = r"^/(" + "|".join(re.escape(c) for c in lang_codes) + r")/"
+    return re.sub(prefix_pattern, f"/{lang_code}/", path)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 9. get_active_locales - return Wagtail Locales for language switcher
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+@register.simple_tag
+def get_active_locales():
+    """
+    Return list of active Wagtail Locales as (language_code, language_name) tuples.
+
+    This uses the Locale model from Wagtail to get only the languages
+    that are actually configured in the CMS, rather than all languages
+    defined in settings.LANGUAGES.
+
+    Usage in templates:
+        {% get_active_locales as locales %}
+        {% for lang_code, lang_name in locales %}
+            ...
+        {% endfor %}
+    """
+    from wagtail.models import Locale
+
+    # Build a lookup dict from settings.LANGUAGES
+    lang_names = dict(settings.LANGUAGES)
+
+    # Get active locales from Wagtail; fall back to settings.LANGUAGES
+    # if no Locale records exist (e.g. fresh install).
+    locales = Locale.objects.all().order_by("language_code")
+    if locales.exists():
+        return [
+            (locale.language_code, lang_names.get(locale.language_code, locale.language_code))
+            for locale in locales
+        ]
+    return list(settings.LANGUAGES)

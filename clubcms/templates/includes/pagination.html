@@ -1,16 +1,17 @@
+{% load i18n %}
 {% if paginator.num_pages > 1 %}
-<nav class="pagination" aria-label="Page navigation">
+<nav class="pagination" aria-label="{% trans 'Page navigation' %}">
     <ul class="pagination__list">
         {# Previous #}
         {% if page_obj.has_previous %}
         <li class="pagination__item pagination__item--prev">
-            <a href="?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.tag %}tag={{ request.GET.tag }}&{% endif %}{% if request.GET.show %}show={{ request.GET.show }}&{% endif %}page={{ page_obj.previous_page_number }}" class="pagination__link" aria-label="Previous page">
-                &laquo; Previous
+            <a href="?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.tag %}tag={{ request.GET.tag }}&{% endif %}{% if request.GET.show %}show={{ request.GET.show }}&{% endif %}page={{ page_obj.previous_page_number }}" class="pagination__link" aria-label="{% trans 'Previous page' %}">
+                &laquo; {% trans "Previous" %}
             </a>
         </li>
         {% else %}
         <li class="pagination__item pagination__item--prev pagination__item--disabled">
-            <span class="pagination__link" aria-disabled="true">&laquo; Previous</span>
+            <span class="pagination__link" aria-disabled="true">&laquo; {% trans "Previous" %}</span>
         </li>
         {% endif %}
 
@@ -36,19 +37,19 @@
         {# Next #}
         {% if page_obj.has_next %}
         <li class="pagination__item pagination__item--next">
-            <a href="?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.tag %}tag={{ request.GET.tag }}&{% endif %}{% if request.GET.show %}show={{ request.GET.show }}&{% endif %}page={{ page_obj.next_page_number }}" class="pagination__link" aria-label="Next page">
-                Next &raquo;
+            <a href="?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.tag %}tag={{ request.GET.tag }}&{% endif %}{% if request.GET.show %}show={{ request.GET.show }}&{% endif %}page={{ page_obj.next_page_number }}" class="pagination__link" aria-label="{% trans 'Next page' %}">
+                {% trans "Next" %} &raquo;
             </a>
         </li>
         {% else %}
         <li class="pagination__item pagination__item--next pagination__item--disabled">
-            <span class="pagination__link" aria-disabled="true">Next &raquo;</span>
+            <span class="pagination__link" aria-disabled="true">{% trans "Next" %} &raquo;</span>
         </li>
         {% endif %}
     </ul>
 
     <p class="pagination__info">
-        Page {{ page_obj.number }} of {{ paginator.num_pages }}
+        {% blocktrans with current=page_obj.number total=paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}
     </p>
 </nav>
 {% endif %}

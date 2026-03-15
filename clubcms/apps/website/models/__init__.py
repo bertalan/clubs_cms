@@ -8,6 +8,7 @@ from .pages import (  # noqa: F401
     EventsPage,
     GalleryPage,
     HomePage,
+    MembershipPlansPage,
     NewsIndexPage,
     NewsPage,
     NewsPageTag,

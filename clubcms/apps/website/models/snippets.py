@@ -20,7 +20,7 @@ from modelcluster.models import ClusterableModel
 
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.fields import RichTextField
-from wagtail.models import Orderable
+from wagtail.models import Orderable, TranslatableMixin, Locale
 from wagtail.snippets.models import register_snippet
 
 
@@ -38,7 +38,10 @@ class ColorScheme(models.Model):
     properties through the ``get_css_variables()`` helper.
     """
 
-    name = models.CharField(max_length=100, verbose_name=_("Name"))
+    name = models.CharField(
+        max_length=100, verbose_name=_("Name"),
+        help_text=_("Nome identificativo dello schema colore."),
+    )
     primary = models.CharField(
         max_length=7, default="#0F172A", verbose_name=_("Primary colour"),
         help_text=_("Main brand colour (hex)."),
@@ -131,7 +134,9 @@ class Navbar(ClusterableModel):
     to the site through SiteSettings.
     """
 
-    name = models.CharField(max_length=100, verbose_name=_("Name"))
+    name = models.CharField(max_length=100, verbose_name=_("Name"),
+        help_text=_("Nome identificativo della barra di navigazione."),
+    )
     logo = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
@@ -139,9 +144,11 @@ class Navbar(ClusterableModel):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Logo"),
+        help_text=_("Logo mostrato nella barra di navigazione."),
     )
     show_search = models.BooleanField(
         default=True, verbose_name=_("Show search"),
+        help_text=_("Mostra il campo di ricerca nella navbar."),
     )
 
     panels = [
@@ -178,7 +185,9 @@ class NavbarItem(Orderable):
         verbose_name=_("Parent item"),
         help_text=_("Leave empty for top-level items. Select a parent for dropdown sub-items."),
     )
-    label = models.CharField(max_length=100, verbose_name=_("Label"))
+    label = models.CharField(max_length=100, verbose_name=_("Label"),
+        help_text=_("Testo del link mostrato nel menu."),
+    )
     link_page = models.ForeignKey(
         "wagtailcore.Page",
         null=True,
@@ -186,6 +195,7 @@ class NavbarItem(Orderable):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Link page"),
+        help_text=_("Pagina interna a cui punta il link."),
     )
     link_url = models.URLField(
         blank=True, verbose_name=_("External URL"),
@@ -193,6 +203,7 @@ class NavbarItem(Orderable):
     )
     open_new_tab = models.BooleanField(
         default=False, verbose_name=_("Open in new tab"),
+        help_text=_("Apri il link in una nuova scheda del browser."),
     )
     is_cta = models.BooleanField(
         default=False, verbose_name=_("Is CTA"),
@@ -233,17 +244,26 @@ class Footer(ClusterableModel):
     selected through SiteSettings.
     """
 
-    name = models.CharField(max_length=100, verbose_name=_("Name"))
+    name = models.CharField(max_length=100, verbose_name=_("Name"),
+        help_text=_("Nome identificativo del footer."),
+    )
     description = RichTextField(
         blank=True, verbose_name=_("Description"),
         help_text=_("Short 'about' text displayed in the footer."),
     )
     copyright_text = models.CharField(
         max_length=255, blank=True, verbose_name=_("Copyright text"),
+        help_text=_("Testo copyright mostrato in fondo (es. '© 2025 Club')."),
     )
-    phone = models.CharField(max_length=30, blank=True, verbose_name=_("Phone"))
-    email = models.EmailField(blank=True, verbose_name=_("Email"))
-    address = models.TextField(blank=True, verbose_name=_("Address"))
+    phone = models.CharField(max_length=30, blank=True, verbose_name=_("Phone"),
+        help_text=_("Numero di telefono mostrato nel footer."),
+    )
+    email = models.EmailField(blank=True, verbose_name=_("Email"),
+        help_text=_("Indirizzo email mostrato nel footer."),
+    )
+    address = models.TextField(blank=True, verbose_name=_("Address"),
+        help_text=_("Indirizzo fisico mostrato nel footer."),
+    )
 
     panels = [
         FieldPanel("name"),
@@ -275,7 +295,9 @@ class FooterMenuItem(Orderable):
     footer = ParentalKey(
         Footer, on_delete=models.CASCADE, related_name="menu_items",
     )
-    label = models.CharField(max_length=100, verbose_name=_("Label"))
+    label = models.CharField(max_length=100, verbose_name=_("Label"),
+        help_text=_("Testo del link mostrato nel menu footer."),
+    )
     link_page = models.ForeignKey(
         "wagtailcore.Page",
         null=True,
@@ -283,6 +305,7 @@ class FooterMenuItem(Orderable):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Link page"),
+        help_text=_("Pagina interna a cui punta il link."),
     )
     link_url = models.URLField(
         blank=True, verbose_name=_("External URL"),
@@ -309,8 +332,11 @@ class FooterSocialLink(Orderable):
         max_length=20,
         choices=SOCIAL_PLATFORM_CHOICES,
         verbose_name=_("Platform"),
+        help_text=_("Piattaforma social di riferimento."),
     )
-    url = models.URLField(verbose_name=_("URL"))
+    url = models.URLField(verbose_name=_("URL"),
+        help_text=_("URL completo del profilo social."),
+    )
 
     panels = [
         FieldPanel("platform"),
@@ -330,8 +356,12 @@ class FooterSocialLink(Orderable):
 class FAQ(models.Model):
     """Frequently-asked-question item for accordion/listing display."""
 
-    question = models.CharField(max_length=255, verbose_name=_("Question"))
-    answer = RichTextField(verbose_name=_("Answer"))
+    question = models.CharField(max_length=255, verbose_name=_("Question"),
+        help_text=_("Domanda mostrata nell'intestazione dell'accordion."),
+    )
+    answer = RichTextField(verbose_name=_("Answer"),
+        help_text=_("Risposta mostrata quando si espande la FAQ."),
+    )
     category = models.CharField(
         max_length=100, blank=True, verbose_name=_("Category"),
         help_text=_("Optional grouping label for the FAQ."),
@@ -366,10 +396,15 @@ class FAQ(models.Model):
 class Testimonial(models.Model):
     """Member/supporter testimonial quote."""
 
-    quote = models.TextField(verbose_name=_("Quote"))
-    author_name = models.CharField(max_length=100, verbose_name=_("Author name"))
+    quote = models.TextField(verbose_name=_("Quote"),
+        help_text=_("Testo della testimonianza o citazione."),
+    )
+    author_name = models.CharField(max_length=100, verbose_name=_("Author name"),
+        help_text=_("Nome completo dell'autore della testimonianza."),
+    )
     author_role = models.CharField(
         max_length=100, blank=True, verbose_name=_("Author role"),
+        help_text=_("Ruolo o qualifica (es. 'Presidente', 'Socio')."),
     )
     author_photo = models.ForeignKey(
         "wagtailimages.Image",
@@ -378,9 +413,11 @@ class Testimonial(models.Model):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Author photo"),
+        help_text=_("Foto dell'autore mostrata accanto alla citazione."),
     )
     date = models.DateField(
         null=True, blank=True, verbose_name=_("Date"),
+        help_text=_("Data della testimonianza, usata per l'ordinamento."),
     )
     featured = models.BooleanField(
         default=False, verbose_name=_("Featured"),
@@ -418,9 +455,15 @@ class Testimonial(models.Model):
 class NewsCategory(models.Model):
     """Category for NewsPage grouping/filtering."""
 
-    name = models.CharField(max_length=100, verbose_name=_("Name"))
-    slug = models.SlugField(unique=True, verbose_name=_("Slug"))
-    description = models.TextField(blank=True, verbose_name=_("Description"))
+    name = models.CharField(max_length=100, verbose_name=_("Name"),
+        help_text=_("Nome della categoria mostrato nei filtri e badge."),
+    )
+    slug = models.SlugField(unique=True, verbose_name=_("Slug"),
+        help_text=_("Identificativo URL-safe, auto-generato dal nome."),
+    )
+    description = models.TextField(blank=True, verbose_name=_("Description"),
+        help_text=_("Descrizione opzionale della categoria."),
+    )
     color = models.CharField(
         max_length=7, default="#000000", verbose_name=_("Colour"),
         help_text=_("Badge/label colour (hex)."),
@@ -460,13 +503,18 @@ EVENT_ICON_CHOICES = [
 class EventCategory(models.Model):
     """Category for EventDetailPage grouping/filtering."""
 
-    name = models.CharField(max_length=100, verbose_name=_("Name"))
-    slug = models.SlugField(unique=True, verbose_name=_("Slug"))
+    name = models.CharField(max_length=100, verbose_name=_("Name"),
+        help_text=_("Nome della categoria evento."),
+    )
+    slug = models.SlugField(unique=True, verbose_name=_("Slug"),
+        help_text=_("Identificativo URL-safe, auto-generato dal nome."),
+    )
     icon = models.CharField(
         max_length=20,
         choices=EVENT_ICON_CHOICES,
         blank=True,
         verbose_name=_("Icon"),
+        help_text=_("Icona associata alla categoria evento."),
     )
 
     panels = [
@@ -493,8 +541,12 @@ class EventCategory(models.Model):
 class PhotoTag(models.Model):
     """Tag for gallery photos, used in batch uploads."""
 
-    name = models.CharField(max_length=100, verbose_name=_("Name"))
-    slug = models.SlugField(unique=True, verbose_name=_("Slug"))
+    name = models.CharField(max_length=100, verbose_name=_("Name"),
+        help_text=_("Nome del tag per classificare le foto."),
+    )
+    slug = models.SlugField(unique=True, verbose_name=_("Slug"),
+        help_text=_("Identificativo URL-safe, auto-generato dal nome."),
+    )
 
     panels = [
         FieldPanel("name"),
@@ -519,9 +571,15 @@ class PhotoTag(models.Model):
 class PartnerCategory(models.Model):
     """Category for Partner grouping (Main Sponsor, Technical, etc.)."""
 
-    name = models.CharField(max_length=100, verbose_name=_("Name"))
-    slug = models.SlugField(unique=True, verbose_name=_("Slug"))
-    description = models.TextField(blank=True, verbose_name=_("Description"))
+    name = models.CharField(max_length=100, verbose_name=_("Name"),
+        help_text=_("Nome della categoria partner."),
+    )
+    slug = models.SlugField(unique=True, verbose_name=_("Slug"),
+        help_text=_("Identificativo URL-safe, auto-generato dal nome."),
+    )
+    description = models.TextField(blank=True, verbose_name=_("Description"),
+        help_text=_("Descrizione opzionale della categoria partner."),
+    )
     icon = models.CharField(
         max_length=50, blank=True, verbose_name=_("Icon"),
         help_text=_("Optional icon class name."),
@@ -557,9 +615,15 @@ class PartnerCategory(models.Model):
 class PressRelease(models.Model):
     """Press release managed by the press office."""
 
-    title = models.CharField(max_length=255, verbose_name=_("Title"))
-    date = models.DateField(verbose_name=_("Date"))
-    body = RichTextField(verbose_name=_("Body"))
+    title = models.CharField(max_length=255, verbose_name=_("Title"),
+        help_text=_("Titolo del comunicato stampa."),
+    )
+    date = models.DateField(verbose_name=_("Date"),
+        help_text=_("Data di pubblicazione del comunicato."),
+    )
+    body = RichTextField(verbose_name=_("Body"),
+        help_text=_("Contenuto completo del comunicato stampa."),
+    )
     attachment = models.ForeignKey(
         "wagtaildocs.Document",
         null=True,
@@ -571,6 +635,7 @@ class PressRelease(models.Model):
     )
     is_archived = models.BooleanField(
         default=False, verbose_name=_("Archived"),
+        help_text=_("Archivia per nasconderlo dalla lista pubblica."),
     )
 
     panels = [
@@ -606,11 +671,14 @@ BRAND_ASSET_CATEGORY_CHOICES = [
 class BrandAsset(models.Model):
     """Downloadable brand asset (logo, font, template, etc.)."""
 
-    name = models.CharField(max_length=100, verbose_name=_("Name"))
+    name = models.CharField(max_length=100, verbose_name=_("Name"),
+        help_text=_("Nome identificativo dell'asset (es. 'Logo principale')."),
+    )
     category = models.CharField(
         max_length=20,
         choices=BRAND_ASSET_CATEGORY_CHOICES,
         verbose_name=_("Category"),
+        help_text=_("Tipo di asset: logo, font, foto o template."),
     )
     file = models.ForeignKey(
         "wagtaildocs.Document",
@@ -619,6 +687,7 @@ class BrandAsset(models.Model):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("File"),
+        help_text=_("File scaricabile dell'asset."),
     )
     preview = models.ForeignKey(
         "wagtailimages.Image",
@@ -627,8 +696,11 @@ class BrandAsset(models.Model):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Preview image"),
+        help_text=_("Anteprima visiva dell'asset."),
     )
-    description = models.TextField(blank=True, verbose_name=_("Description"))
+    description = models.TextField(blank=True, verbose_name=_("Description"),
+        help_text=_("Descrizione e istruzioni d'uso dell'asset."),
+    )
     order = models.IntegerField(
         default=0, verbose_name=_("Order"),
         help_text=_("Lower numbers appear first."),
@@ -669,9 +741,15 @@ AID_SKILL_CATEGORY_CHOICES = [
 class AidSkill(models.Model):
     """Skill category for the mutual-aid system."""
 
-    name = models.CharField(max_length=100, verbose_name=_("Name"))
-    slug = models.SlugField(unique=True, verbose_name=_("Slug"))
-    description = models.TextField(blank=True, verbose_name=_("Description"))
+    name = models.CharField(max_length=100, verbose_name=_("Name"),
+        help_text=_("Nome della competenza o abilità."),
+    )
+    slug = models.SlugField(unique=True, verbose_name=_("Slug"),
+        help_text=_("Identificativo URL-safe, auto-generato dal nome."),
+    )
+    description = models.TextField(blank=True, verbose_name=_("Description"),
+        help_text=_("Descrizione dettagliata della competenza."),
+    )
     icon = models.CharField(
         max_length=50, blank=True, verbose_name=_("Icon"),
         help_text=_("Optional icon class name."),
@@ -681,6 +759,7 @@ class AidSkill(models.Model):
         choices=AID_SKILL_CATEGORY_CHOICES,
         default="other",
         verbose_name=_("Category"),
+        help_text=_("Macro-categoria della competenza."),
     )
     order = models.IntegerField(
         default=0, verbose_name=_("Order"),
@@ -711,19 +790,31 @@ class AidSkill(models.Model):
 
 
 @register_snippet
-class Product(models.Model):
+class Product(TranslatableMixin, models.Model):
     """
     Purchasable product / membership tier.
 
     The ``grants_*`` flags determine which member privileges are unlocked
     when a member purchases this product.
+    
+    Uses TranslatableMixin for multilingual support:
+    - name, description: translated per locale
+    - all other fields: synchronized across locales
     """
 
-    name = models.CharField(max_length=200, verbose_name=_("Name"))
-    slug = models.SlugField(unique=True, verbose_name=_("Slug"))
-    description = models.TextField(blank=True, verbose_name=_("Description"))
+    name = models.CharField(max_length=200, verbose_name=_("Name"),
+        help_text=_("Nome del prodotto mostrato nel catalogo."),
+    )
+    slug = models.SlugField(
+        verbose_name=_("Slug"),
+        help_text=_("Identificativo URL-safe, unico per lingua."),
+    )  # unique per locale via Meta
+    description = models.TextField(blank=True, verbose_name=_("Description"),
+        help_text=_("Descrizione del prodotto e dei benefici inclusi."),
+    )
     price = models.DecimalField(
         max_digits=8, decimal_places=2, verbose_name=_("Price"),
+        help_text=_("Prezzo in EUR. Usa il punto come separatore decimale."),
     )
     is_active = models.BooleanField(
         default=True, verbose_name=_("Active"),
@@ -737,19 +828,40 @@ class Product(models.Model):
     # Privilege flags
     grants_vote = models.BooleanField(
         default=False, verbose_name=_("Grants voting rights"),
+        help_text=_("Il prodotto conferisce diritto di voto in assemblea."),
     )
     grants_upload = models.BooleanField(
         default=False, verbose_name=_("Grants gallery upload"),
+        help_text=_("Permette il caricamento foto in galleria."),
     )
     grants_events = models.BooleanField(
         default=False, verbose_name=_("Grants event access"),
+        help_text=_("Permette la registrazione agli eventi."),
     )
     grants_discount = models.BooleanField(
         default=False, verbose_name=_("Grants discount"),
+        help_text=_("Conferisce sconti sugli eventi."),
     )
     discount_percent = models.IntegerField(
         default=0, verbose_name=_("Discount percent"),
         help_text=_("Percentage discount on events when grants_discount is on."),
+    )
+
+    # Validity configuration
+    validity_days = models.IntegerField(
+        default=365,
+        verbose_name=_("Validity days"),
+        help_text=_("Number of days the membership is valid after purchase."),
+    )
+    available_from = models.DateField(
+        null=True, blank=True,
+        verbose_name=_("Available from"),
+        help_text=_("First date this product can be purchased. Leave empty for no limit."),
+    )
+    available_until = models.DateField(
+        null=True, blank=True,
+        verbose_name=_("Available until"),
+        help_text=_("Last date this product can be purchased. Leave empty for no limit."),
     )
 
     panels = [
@@ -774,12 +886,34 @@ class Product(models.Model):
             ],
             heading=_("Member privileges"),
         ),
+        MultiFieldPanel(
+            [
+                FieldPanel("validity_days"),
+                FieldPanel("available_from"),
+                FieldPanel("available_until"),
+            ],
+            heading=_("Validity settings"),
+        ),
     ]
 
     class Meta:
         ordering = ["order", "name"]
         verbose_name = _("product")
         verbose_name_plural = _("products")
+        unique_together = [("translation_key", "locale"), ("locale", "slug")]
 
     def __str__(self) -> str:
         return self.name
+
+    @property
+    def is_purchasable(self):
+        """Check if product can be purchased (active and within date range)."""
+        from django.utils import timezone
+        today = timezone.localdate()
+        if not self.is_active:
+            return False
+        if self.available_from and self.available_from > today:
+            return False
+        if self.available_until and self.available_until < today:
+            return False
+        return True

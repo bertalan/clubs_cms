@@ -4,27 +4,31 @@
 {% block body_class %}page-events{% endblock %}
 
 {% block content %}
-{# Hero Section — dark banner like Velocity example #}
-<section class="page-events__hero">
-    <div class="container">
-        <h1 class="page-events__hero-title">{{ page.title }}</h1>
-        {% if page.intro %}
-        <p class="page-events__hero-subtitle">{{ page.intro|striptags }}</p>
-        {% endif %}
-    </div>
-</section>
+{% include "includes/breadcrumbs.html" %}
 
 <div class="page-events">
     <div class="container">
+        {# Header #}
+        <header class="page-events__header">
+            <h1 class="page-events__title">{{ page.title }}</h1>
+            {% if page.intro %}
+            <div class="page-events__intro">
+                {{ page.intro|richtext }}
+            </div>
+            {% endif %}
+        </header>
+
         {# Toggle upcoming / past #}
         <div class="page-events__toggle" role="tablist" aria-label="{% trans 'Event period' %}">
-            <a href="{% pageurl page %}?show=upcoming" role="tab" class="btn btn-secondary" {% if show == 'upcoming' or not show %}data-active aria-selected="true"{% endif %}>
+            <a href="{% pageurl page %}?show=upcoming{% if search_query %}&q={{ search_query }}{% endif %}" role="tab" class="btn btn-secondary" {% if show == 'upcoming' or not show %}data-active aria-selected="true"{% endif %}>
                 {% trans "Upcoming" %}
             </a>
-            <a href="{% pageurl page %}?show=past" role="tab" class="btn btn-secondary" {% if show == 'past' %}data-active aria-selected="true"{% endif %}>
+            <a href="{% pageurl page %}?show=past{% if search_query %}&q={{ search_query }}{% endif %}" role="tab" class="btn btn-secondary" {% if show == 'past' %}data-active aria-selected="true"{% endif %}>
                 {% trans "Past" %}
             </a>
         </div>
+
+
 
         {# Category filters #}
         {% if categories %}

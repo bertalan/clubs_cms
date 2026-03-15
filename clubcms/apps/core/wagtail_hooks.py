@@ -1,7 +1,44 @@
 """
 Wagtail hooks for core functionality.
 
-Register custom admin features, menu items, and other Wagtail hooks here.
+Register admin ViewSets for transactional models (Activity, Comment, Reaction).
+Inject global admin CSS/JS for field help tooltips.
 """
 
-# from wagtail import hooks
+from django.templatetags.static import static
+from django.utils.html import format_html
+
+from wagtail import hooks
+
+from apps.core.admin import activity_viewset, comment_viewset, reaction_viewset
+
+
+@hooks.register("register_admin_viewset")
+def register_comment_viewset():
+    return comment_viewset
+
+
+@hooks.register("register_admin_viewset")
+def register_activity_viewset():
+    return activity_viewset
+
+
+@hooks.register("register_admin_viewset")
+def register_reaction_viewset():
+    return reaction_viewset
+
+
+@hooks.register("insert_global_admin_css")
+def admin_field_help_css():
+    return format_html(
+        '<link rel="stylesheet" href="{}">',
+        static("css/admin_field_help.css"),
+    )
+
+
+@hooks.register("insert_global_admin_js")
+def admin_field_help_js():
+    return format_html(
+        '<script src="{}"></script>',
+        static("js/admin_field_help.js"),
+    )

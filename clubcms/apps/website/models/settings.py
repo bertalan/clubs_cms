@@ -57,6 +57,7 @@ class SiteSettings(BaseSiteSetting):
     )
     tagline = models.CharField(
         max_length=255, blank=True, verbose_name=_("Tagline"),
+        help_text=_("Breve slogan mostrato sotto il nome del sito."),
     )
     description = models.TextField(
         blank=True, verbose_name=_("Site description"),
@@ -69,6 +70,7 @@ class SiteSettings(BaseSiteSetting):
         choices=THEME_CHOICES,
         default="velocity",
         verbose_name=_("Theme"),
+        help_text=_("Tema grafico applicato al sito pubblico."),
     )
     color_scheme = models.ForeignKey(
         "website.ColorScheme",
@@ -77,6 +79,7 @@ class SiteSettings(BaseSiteSetting):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Colour scheme"),
+        help_text=_("Schema colore personalizzato da applicare al tema."),
     )
 
     # -- Branding tab -------------------------------------------------------
@@ -87,6 +90,7 @@ class SiteSettings(BaseSiteSetting):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Logo"),
+        help_text=_("Logo principale del sito, mostrato nella navbar."),
     )
     logo_dark = models.ForeignKey(
         "wagtailimages.Image",
@@ -104,23 +108,43 @@ class SiteSettings(BaseSiteSetting):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Favicon"),
+        help_text=_("Icona del sito mostrata nella scheda del browser."),
     )
 
     # -- Contact tab --------------------------------------------------------
-    phone = models.CharField(max_length=30, blank=True, verbose_name=_("Phone"))
-    email = models.EmailField(blank=True, verbose_name=_("Email"))
-    address = models.TextField(blank=True, verbose_name=_("Address"))
+    phone = models.CharField(max_length=30, blank=True, verbose_name=_("Phone"),
+        help_text=_("Numero di telefono del club."),
+    )
+    email = models.EmailField(blank=True, verbose_name=_("Email"),
+        help_text=_("Email principale del club."),
+    )
+    address = models.TextField(blank=True, verbose_name=_("Address"),
+        help_text=_("Indirizzo fisico della sede."),
+    )
     hours = models.CharField(
         max_length=255, blank=True, verbose_name=_("Opening hours"),
+        help_text=_("Orari di apertura (es. 'Lun-Ven 9-18')."),
     )
 
     # -- Social tab ---------------------------------------------------------
-    facebook_url = models.URLField(blank=True, verbose_name=_("Facebook URL"))
-    instagram_url = models.URLField(blank=True, verbose_name=_("Instagram URL"))
-    twitter_url = models.URLField(blank=True, verbose_name=_("Twitter / X URL"))
-    youtube_url = models.URLField(blank=True, verbose_name=_("YouTube URL"))
-    linkedin_url = models.URLField(blank=True, verbose_name=_("LinkedIn URL"))
-    tiktok_url = models.URLField(blank=True, verbose_name=_("TikTok URL"))
+    facebook_url = models.URLField(blank=True, verbose_name=_("Facebook URL"),
+        help_text=_("URL della pagina Facebook del club."),
+    )
+    instagram_url = models.URLField(blank=True, verbose_name=_("Instagram URL"),
+        help_text=_("URL del profilo Instagram del club."),
+    )
+    twitter_url = models.URLField(blank=True, verbose_name=_("Twitter / X URL"),
+        help_text=_("URL del profilo Twitter/X del club."),
+    )
+    youtube_url = models.URLField(blank=True, verbose_name=_("YouTube URL"),
+        help_text=_("URL del canale YouTube del club."),
+    )
+    linkedin_url = models.URLField(blank=True, verbose_name=_("LinkedIn URL"),
+        help_text=_("URL della pagina LinkedIn del club."),
+    )
+    tiktok_url = models.URLField(blank=True, verbose_name=_("TikTok URL"),
+        help_text=_("URL del profilo TikTok del club."),
+    )
 
     # -- Navigation tab -----------------------------------------------------
     navbar = models.ForeignKey(
@@ -130,6 +154,7 @@ class SiteSettings(BaseSiteSetting):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Navbar"),
+        help_text=_("Barra di navigazione attiva per questo sito."),
     )
     footer = models.ForeignKey(
         "website.Footer",
@@ -138,17 +163,21 @@ class SiteSettings(BaseSiteSetting):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Footer"),
+        help_text=_("Footer attivo per questo sito."),
     )
 
     # -- PWA tab ------------------------------------------------------------
     pwa_name = models.CharField(
         max_length=200, blank=True, verbose_name=_("PWA name"),
+        help_text=_("Nome completo dell'app (es. 'Moto Club Aquile Rosse')."),
     )
     pwa_short_name = models.CharField(
         max_length=50, blank=True, verbose_name=_("PWA short name"),
+        help_text=_("Nome breve per l'icona home screen (max 12 caratteri)."),
     )
     pwa_description = models.TextField(
         blank=True, verbose_name=_("PWA description"),
+        help_text=_("Descrizione dell'app per l'installazione PWA."),
     )
     pwa_icon_192 = models.ForeignKey(
         "wagtailimages.Image",
@@ -157,6 +186,7 @@ class SiteSettings(BaseSiteSetting):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("PWA icon 192x192"),
+        help_text=_("Icona PWA 192x192px (PNG, sfondo trasparente)."),
     )
     pwa_icon_512 = models.ForeignKey(
         "wagtailimages.Image",
@@ -165,12 +195,15 @@ class SiteSettings(BaseSiteSetting):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("PWA icon 512x512"),
+        help_text=_("Icona PWA 512x512px (PNG, sfondo trasparente)."),
     )
     pwa_theme_color = models.CharField(
         max_length=7, default="#0F172A", verbose_name=_("PWA theme colour"),
+        help_text=_("Colore tema della barra del browser (hex)."),
     )
     pwa_background_color = models.CharField(
         max_length=7, default="#FFFFFF", verbose_name=_("PWA background colour"),
+        help_text=_("Colore di sfondo della splash screen (hex)."),
     )
 
     # -- Forms tab ----------------------------------------------------------
@@ -179,12 +212,15 @@ class SiteSettings(BaseSiteSetting):
         choices=CAPTCHA_PROVIDER_CHOICES,
         default="honeypot",
         verbose_name=_("CAPTCHA provider"),
+        help_text=_("Sistema anti-spam per i form del sito."),
     )
     captcha_site_key = models.CharField(
         max_length=255, blank=True, verbose_name=_("CAPTCHA site key"),
+        help_text=_("Chiave pubblica del servizio CAPTCHA."),
     )
     captcha_secret_key = models.CharField(
         max_length=255, blank=True, verbose_name=_("CAPTCHA secret key"),
+        help_text=_("Chiave segreta del servizio CAPTCHA."),
     )
 
     # -- Map tab ------------------------------------------------------------
@@ -193,6 +229,7 @@ class SiteSettings(BaseSiteSetting):
         choices=MAP_ROUTING_CHOICES,
         default="openstreetmap",
         verbose_name=_("Map routing service"),
+        help_text=_("Servizio mappe per le pagine eventi."),
     )
     map_api_key = models.CharField(
         max_length=255, blank=True, verbose_name=_("Map API key"),
@@ -204,6 +241,7 @@ class SiteSettings(BaseSiteSetting):
     )
     map_default_zoom = models.IntegerField(
         default=10, verbose_name=_("Default map zoom"),
+        help_text=_("Livello di zoom iniziale della mappa (1-18)."),
     )
 
     # -- Computed helpers ---------------------------------------------------
@@ -448,68 +486,87 @@ class PaymentSettings(BaseSiteSetting):
     # -- Stripe test --------------------------------------------------------
     stripe_test_enabled = models.BooleanField(
         default=False, verbose_name=_("Stripe enabled (test)"),
+        help_text=_("Abilita Stripe in modalità test."),
     )
     stripe_test_public_key = models.CharField(
         max_length=255, blank=True, verbose_name=_("Stripe public key (test)"),
+        help_text=_("Chiave pubblica Stripe test (pk_test_...)."),
     )
     stripe_test_secret_key = models.CharField(
         max_length=255, blank=True, verbose_name=_("Stripe secret key (test)"),
+        help_text=_("Chiave segreta Stripe test (sk_test_...)."),
     )
     stripe_test_webhook_secret = models.CharField(
         max_length=255, blank=True, verbose_name=_("Stripe webhook secret (test)"),
+        help_text=_("Secret del webhook Stripe test (whsec_...)."),
     )
 
     # -- PayPal test --------------------------------------------------------
     paypal_test_enabled = models.BooleanField(
         default=False, verbose_name=_("PayPal enabled (test)"),
+        help_text=_("Abilita PayPal in modalità sandbox."),
     )
     paypal_test_client_id = models.CharField(
         max_length=255, blank=True, verbose_name=_("PayPal client ID (test)"),
+        help_text=_("Client ID PayPal sandbox."),
     )
     paypal_test_secret = models.CharField(
         max_length=255, blank=True, verbose_name=_("PayPal secret (test)"),
+        help_text=_("Secret PayPal sandbox."),
     )
 
     # -- Stripe live --------------------------------------------------------
     stripe_live_enabled = models.BooleanField(
         default=False, verbose_name=_("Stripe enabled (live)"),
+        help_text=_("Abilita Stripe in modalità produzione."),
     )
     stripe_live_public_key = models.CharField(
         max_length=255, blank=True, verbose_name=_("Stripe public key (live)"),
+        help_text=_("Chiave pubblica Stripe live (pk_live_...)."),
     )
     stripe_live_secret_key = models.CharField(
         max_length=255, blank=True, verbose_name=_("Stripe secret key (live)"),
+        help_text=_("Chiave segreta Stripe live (sk_live_...)."),
     )
     stripe_live_webhook_secret = models.CharField(
         max_length=255, blank=True, verbose_name=_("Stripe webhook secret (live)"),
+        help_text=_("Secret del webhook Stripe live (whsec_...)."),
     )
 
     # -- PayPal live --------------------------------------------------------
     paypal_live_enabled = models.BooleanField(
         default=False, verbose_name=_("PayPal enabled (live)"),
+        help_text=_("Abilita PayPal in modalità produzione."),
     )
     paypal_live_client_id = models.CharField(
         max_length=255, blank=True, verbose_name=_("PayPal client ID (live)"),
+        help_text=_("Client ID PayPal produzione."),
     )
     paypal_live_secret = models.CharField(
         max_length=255, blank=True, verbose_name=_("PayPal secret (live)"),
+        help_text=_("Secret PayPal produzione."),
     )
 
     # -- Bank transfer ------------------------------------------------------
     bank_transfer_enabled = models.BooleanField(
         default=False, verbose_name=_("Bank transfer enabled"),
+        help_text=_("Abilita il pagamento tramite bonifico bancario."),
     )
     bank_account_holder = models.CharField(
         max_length=255, blank=True, verbose_name=_("Account holder"),
+        help_text=_("Intestatario del conto corrente."),
     )
     bank_iban = models.CharField(
         max_length=34, blank=True, verbose_name=_("IBAN"),
+        help_text=_("Codice IBAN del conto corrente."),
     )
     bank_bic = models.CharField(
         max_length=11, blank=True, verbose_name=_("BIC / SWIFT"),
+        help_text=_("Codice BIC/SWIFT della banca."),
     )
     bank_name = models.CharField(
         max_length=255, blank=True, verbose_name=_("Bank name"),
+        help_text=_("Nome della banca (es. 'Banca Intesa')."),
     )
     bank_transfer_instructions = RichTextField(
         blank=True,

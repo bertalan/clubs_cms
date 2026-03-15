@@ -17,19 +17,25 @@
     body { font-family: system-ui, -apple-system, sans-serif; background: var(--cream); color: var(--text); line-height: 1.6; }
     a { color: var(--forest); }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
-    
+
     /* Nav */
     nav { background: var(--forest); padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
     nav .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
     .logo { color: white; text-decoration: none; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; }
     .logo span { color: var(--accent); }
-    nav ul { list-style: none; display: flex; gap: 2rem; flex-wrap: wrap; }
-    nav ul a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 500; transition: color 0.2s; }
-    nav ul a:hover, nav ul a.active { color: var(--accent); }
-    
+    .nav-center { list-style: none; display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; }
+    .nav-center a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .nav-center a:hover, .nav-center a.active { color: var(--accent); }
+    .nav-cta {
+      display: inline-block; padding: 0.5rem 1.25rem; background: var(--accent); color: white;
+      text-decoration: none; font-weight: 700; border-radius: 2px; font-size: 0.9rem;
+      transition: all 0.3s ease; letter-spacing: 0.02em;
+    }
+    .nav-cta:hover { background: #ff6b0a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(232,93,4,0.3); }
+
     /* Header with diagonal */
-    .header { 
-      background: linear-gradient(135deg, var(--forest) 0%, #3d6b1e 100%); 
+    .header {
+      background: linear-gradient(135deg, var(--forest) 0%, #3d6b1e 100%);
       color: white; padding: 4rem 0 6rem; text-align: center;
       position: relative; overflow: hidden;
     }
@@ -40,20 +46,20 @@
     }
     .header h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; }
     .header p { opacity: 0.9; }
-    
+
     /* Section */
     .section { padding: 4rem 0; }
-    
+
     /* Contact Grid */
     .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
     @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } }
-    
+
     /* Form Card */
-    .form-card { 
-      background: white; border-left: 4px solid var(--accent); 
+    .form-card {
+      background: white; border-left: 4px solid var(--accent);
       padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
-    .form-card h2 { 
+    .form-card h2 {
       color: var(--forest); margin-bottom: 1.5rem; font-weight: 800;
       position: relative; display: inline-block;
     }
@@ -61,61 +67,143 @@
       content: ''; display: block; width: 40px; height: 3px;
       background: var(--accent); margin-top: 0.5rem;
     }
+    .form-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
     .form-group { margin-bottom: 1.25rem; }
     .form-group label { display: block; margin-bottom: 0.4rem; font-weight: 600; color: var(--forest); }
-    .form-group input, .form-group textarea, .form-group select { 
-      width: 100%; padding: 0.75rem; border: 2px solid #ddd; 
+    .form-group label .required { color: var(--accent); }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 0.75rem; border: 2px solid #ddd;
       font-family: inherit; font-size: 1rem; transition: border-color 0.2s;
+      border-radius: 2px;
     }
-    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { 
-      outline: none; border-color: var(--accent); 
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      outline: none; border-color: var(--accent);
     }
-    .btn { 
-      display: inline-block; padding: 0.75rem 1.75rem; background: var(--accent); 
-      color: white; border: none; font-weight: 700; cursor: pointer; 
+    .checkbox-group {
+      display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 1.25rem;
+    }
+    .checkbox-group input[type="checkbox"] {
+      width: auto; margin-top: 0.3rem; accent-color: var(--accent);
+    }
+    .checkbox-group label {
+      font-size: 0.9rem; color: var(--text-light); font-weight: 400; cursor: pointer;
+    }
+    .checkbox-group label a { color: var(--forest); font-weight: 600; }
+    .btn {
+      display: inline-block; padding: 0.75rem 1.75rem; background: var(--accent);
+      color: white; border: none; font-weight: 700; cursor: pointer;
       font-size: 1rem; border-radius: 2px; transition: all 0.3s ease;
+      text-decoration: none;
     }
     .btn:hover { background: #ff6b0a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(232,93,4,0.3); }
-    
+
     /* Info Section */
-    .info-section h3 { 
+    .info-section h3 {
       color: var(--forest); margin-bottom: 1rem; font-weight: 700;
       display: inline-block;
     }
-    .info-box { 
-      background: white; border-left: 4px solid var(--accent); 
-      padding: 1.5rem; margin-bottom: 1rem; 
+    .info-box {
+      background: white; border-left: 4px solid var(--accent);
+      padding: 1.5rem; margin-bottom: 1rem;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s ease;
     }
     .info-box:hover { transform: translateX(4px); }
     .info-box h4 { color: var(--forest); margin-bottom: 0.5rem; font-weight: 700; }
     .info-box p { color: var(--text-light); font-size: 0.95rem; }
-    
+
     /* Volunteer CTA */
-    .volunteer-cta { 
+    .volunteer-cta {
       background: var(--accent); color: white; padding: 1.5rem; text-align: center;
       margin-top: 0.5rem;
     }
     .volunteer-cta h4 { margin-bottom: 0.5rem; font-weight: 700; }
     .volunteer-cta p { font-size: 0.95rem; opacity: 0.95; }
-    
+
+    /* Map Placeholder */
+    .map-placeholder {
+      width: 100%; height: 250px;
+      background: linear-gradient(135deg, var(--forest), #3d6b1e);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 700; font-size: 1.1rem;
+      margin-top: 1rem; border-left: 4px solid var(--accent);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .map-inner {
+      text-align: center; opacity: 0.9;
+    }
+    .map-inner .pin { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; line-height: 1; }
+
+    /* FAQ Section */
+    .faq-section { padding: 4rem 0; }
+    .faq-title {
+      text-align: center; color: var(--forest); margin-bottom: 2.5rem;
+      font-size: 2rem; font-weight: 800; position: relative;
+    }
+    .faq-title::after {
+      content: ''; display: block; width: 60px; height: 4px;
+      background: var(--accent); margin: 1rem auto 0;
+    }
+    .faq-list { max-width: 750px; margin: 0 auto; }
+    .faq-item {
+      background: white; border-left: 4px solid var(--accent);
+      margin-bottom: 0.75rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+    .faq-question {
+      width: 100%; padding: 1.25rem 1.5rem; background: none; border: none;
+      text-align: left; font-size: 1rem; font-weight: 700; color: var(--forest);
+      cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+      font-family: inherit; transition: background 0.2s;
+    }
+    .faq-question:hover { background: rgba(45,80,22,0.04); }
+    .faq-question .faq-icon {
+      font-size: 1.2rem; transition: transform 0.3s ease; flex-shrink: 0; margin-left: 1rem;
+      color: var(--accent);
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-answer {
+      max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+    .faq-item.open .faq-answer { max-height: 300px; }
+    .faq-answer-inner {
+      padding: 0 1.5rem 1.25rem; color: var(--text-light); font-size: 0.95rem; line-height: 1.7;
+    }
+
     /* Footer */
-    footer { background: #1a1a1a; color: #aaa; padding: 2rem 0; text-align: center; }
+    footer { background: #1a1a1a; color: #aaa; padding: 3rem 0 1.5rem; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+    footer h4 { color: white; margin-bottom: 1rem; font-weight: 700; }
     footer a { color: #aaa; text-decoration: none; transition: color 0.2s; }
     footer a:hover { color: var(--accent); }
+    footer ul { list-style: none; }
+    footer ul li { margin-bottom: 0.4rem; }
+    footer hr { border: none; border-top: 1px solid #333; margin-bottom: 1.5rem; }
+    .footer-copy { text-align: center; font-size: 0.85rem; color: #666; }
+    .social-links { display: flex; gap: 1rem; margin-top: 1rem; }
+    .social-links a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 50%; background: #333;
+      color: #aaa; text-decoration: none; font-size: 0.85rem; font-weight: 700;
+      transition: all 0.3s ease;
+    }
+    .social-links a:hover { background: var(--accent); color: white; }
   </style>
 </head>
 <body>
   <nav>
     <div class="container">
       <a href="index.html" class="logo">Green<span>Org</span></a>
-      <ul>
+      <ul class="nav-center">
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="events.html">Events</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="contact.html" class="active">Contact</a></li>
       </ul>
+      <a href="contact.html" class="nav-cta">Join Us</a>
     </div>
   </nav>
 
@@ -129,28 +217,43 @@
       <div class="contact-grid">
         <div class="form-card">
           <h2>Send a Message</h2>
-          <form>
-            <div class="form-group">
-              <label>Name</label>
-              <input type="text" placeholder="Your name">
+          <form action="#" method="post" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="first-name">First Name <span class="required">*</span></label>
+                <input type="text" id="first-name" name="first_name" placeholder="Your first name" required aria-label="First name">
+              </div>
+              <div class="form-group">
+                <label for="last-name">Last Name <span class="required">*</span></label>
+                <input type="text" id="last-name" name="last_name" placeholder="Your last name" required aria-label="Last name">
+              </div>
             </div>
             <div class="form-group">
-              <label>Email</label>
-              <input type="email" placeholder="your@email.example">
+              <label for="email">Email <span class="required">*</span></label>
+              <input type="email" id="email" name="email" placeholder="your@email.example" required aria-label="Email address">
             </div>
             <div class="form-group">
-              <label>Interest</label>
-              <select>
-                <option>General Inquiry</option>
-                <option>Volunteer</option>
-                <option>Membership</option>
-                <option>Partnership</option>
-                <option>Donation</option>
+              <label for="phone">Phone <span style="font-weight: 400; color: var(--text-light); font-size: 0.85rem;">(optional)</span></label>
+              <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" aria-label="Phone number">
+            </div>
+            <div class="form-group">
+              <label for="subject">Subject <span class="required">*</span></label>
+              <select id="subject" name="subject" required aria-label="Subject of inquiry">
+                <option value="" disabled selected>Select a subject</option>
+                <option value="general">General Inquiry</option>
+                <option value="membership">Membership</option>
+                <option value="events">Events</option>
+                <option value="partnership">Partnership</option>
+                <option value="other">Other</option>
               </select>
             </div>
             <div class="form-group">
-              <label>Message</label>
-              <textarea rows="4" placeholder="How can we help?"></textarea>
+              <label for="message">Message <span class="required">*</span></label>
+              <textarea id="message" name="message" rows="4" placeholder="How can we help you?" required aria-label="Your message"></textarea>
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="gdpr" name="gdpr" required>
+              <label for="gdpr">I agree to the <a href="#">Privacy Policy</a> and consent to GreenOrg processing my personal data. <span class="required">*</span></label>
             </div>
             <button type="submit" class="btn">Send Message</button>
           </form>
@@ -158,20 +261,96 @@
 
         <div class="info-section">
           <div class="info-box">
-            <h4>📍 Location</h4>
-            <p>789 Eco Lane<br>Green Valley, GV 12345</p>
+            <h4>Location</h4>
+            <p>789 Nature Way<br>Green Valley, GV 12345</p>
           </div>
           <div class="info-box">
-            <h4>✉️ Email</h4>
-            <p>hello@greenorg.example</p>
+            <h4>Email</h4>
+            <p><a href="mailto:info@greenorg.example">info@greenorg.example</a></p>
           </div>
           <div class="info-box">
-            <h4>🕐 Office Hours</h4>
+            <h4>Phone</h4>
+            <p><a href="tel:+15554567890">+1 (555) 456-7890</a></p>
+          </div>
+          <div class="info-box">
+            <h4>Office Hours</h4>
             <p>Tuesday - Saturday: 10:00 - 17:00<br>Sunday - Monday: Closed</p>
           </div>
           <div class="volunteer-cta">
-            <h4>🌱 Ready to Volunteer?</h4>
+            <h4>Ready to Volunteer?</h4>
             <p>No experience needed. Just bring your enthusiasm!</p>
+          </div>
+
+          <!-- Map Placeholder -->
+          <div class="map-placeholder">
+            <div class="map-inner">
+              <span class="pin">&#9906;</span>
+              789 Nature Way, Green Valley
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section">
+    <div class="container">
+      <h2 class="faq-title">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            How do I become a member of GreenOrg?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Becoming a member is easy. Simply fill out the contact form above or attend one of our community events. Membership is free and open to everyone who shares our passion for sustainable living. You will receive a welcome email with information about upcoming events and volunteer opportunities.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Do I need experience to volunteer?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Not at all! We welcome volunteers of all experience levels. Whether you are a seasoned gardener or have never planted a seed, our team leaders will guide you through every activity. We provide all necessary tools, equipment, and training on site.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            How can my business partner with GreenOrg?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              We offer several partnership opportunities including event sponsorship, corporate volunteer days, and sustainability consulting. Select "Partnership" in the subject dropdown above or email us directly at info@greenorg.example to discuss how we can work together.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Are your events family-friendly?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Yes, most of our events are designed to be family-friendly. We believe in engaging people of all ages in environmental stewardship. Each event listing will note any age restrictions or recommendations. Children under 12 should be accompanied by an adult.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            How is my personal data handled?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              We take your privacy seriously. Personal data collected through this form is used solely for responding to your inquiry and, if applicable, managing your membership. We never sell or share your data with third parties. You can request data deletion at any time by contacting us. Please review our full Privacy Policy for more details.
+            </div>
           </div>
         </div>
       </div>
@@ -180,9 +359,63 @@
 
   <footer>
     <div class="container">
-      <p>© 2026 GreenOrg • Terra Theme Demo</p>
-      <p style="margin-top: 0.5rem;"><a href="index.html">Home</a> · <a href="about.html">About</a> · <a href="events.html">Events</a></p>
+      <div class="footer-grid">
+        <div>
+          <h4>GreenOrg</h4>
+          <p style="font-size: 0.9rem; line-height: 1.8;">
+            789 Nature Way<br>
+            Green Valley<br>
+            <a href="mailto:info@greenorg.example">info@greenorg.example</a><br>
+            <a href="tel:+15554567890">+1 (555) 456-7890</a>
+          </p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook" title="Facebook">Fb</a>
+            <a href="#" aria-label="Instagram" title="Instagram">Ig</a>
+            <a href="#" aria-label="Twitter" title="Twitter">Tw</a>
+          </div>
+        </div>
+        <div>
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Sustainability Guide</a></li>
+            <li><a href="#">Partner Network</a></li>
+            <li><a href="#">Volunteer Handbook</a></li>
+            <li><a href="#">Annual Report</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <p class="footer-copy">&copy; 2026 GreenOrg &bull; Terra Theme Demo &bull; Built with minimal footprint</p>
     </div>
   </footer>
+
+  <script>
+    // FAQ accordion functionality
+    document.querySelectorAll('.faq-question').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var item = this.closest('.faq-item');
+        var isOpen = item.classList.contains('open');
+        // Close all items
+        document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+        document.querySelectorAll('.faq-question').forEach(function(q) { q.setAttribute('aria-expanded', 'false'); });
+        // Toggle current
+        if (!isOpen) {
+          item.classList.add('open');
+          this.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  </script>
 </body>
 </html>

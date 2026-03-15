@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags i18n l10n %}
 
 {% block body_class %}page-event-detail{% endblock %}
 
@@ -14,7 +14,7 @@
             {% image page.cover_image fill-1200x500 as cover_img %}
             <img src="{{ cover_img.url }}" alt="{{ page.title }}" class="page-event-detail__cover-image" itemprop="image" width="{{ cover_img.width }}" height="{{ cover_img.height }}">
             {% if page.is_past %}
-            <span class="page-event-detail__badge" data-variant="past">Past Event</span>
+            <span class="page-event-detail__badge" data-variant="past" aria-label="{% trans "Past Event" %}">{% trans "Past Event" %}</span>
             {% endif %}
         </div>
         {% endif %}
@@ -32,7 +32,7 @@
             {% endif %}
         </header>
 
-        <div class="page-event-detail__layout">
+        <div class="page-event-detail__layout" role="region" aria-label="{% trans "Event content and details" %}">
             {# Main content #}
             <div class="page-event-detail__main">
                 {# Body StreamField #}
@@ -46,25 +46,26 @@
             </div>
 
             {# Sidebar with event details #}
-            <aside class="page-event-detail__sidebar">
+            <aside class="page-event-detail__sidebar" aria-label="{% trans "Event Details" %}">
                 <div class="page-event-detail__info-card">
-                    <h2 class="page-event-detail__info-heading">Event Details</h2>
+                    <h2 class="page-event-detail__info-heading">{% trans "Event Details" %}</h2>
 
                     {# Date and time #}
                     <div class="page-event-detail__info-item">
-                        <span class="page-event-detail__info-label">Date</span>
-                        <div class="page-event-detail__info-value">
+                        <span class="page-event-detail__info-label" id="event-date-label">{% trans "Date" %}</span>
+                        <div class="page-event-detail__info-value" aria-labelledby="event-date-label">
                             <time datetime="{{ page.start_date|date:'c' }}" itemprop="startDate">
-                                {{ page.start_date|date:"l, F j, Y" }}
-                                <br>{{ page.start_date|date:"g:i A" }}
+                                {{ page.start_date|date:"l j F Y" }}
+                                <br>{{ page.start_date|date:"H:i" }}
                             </time>
                             {% if page.end_date %}
-                            <span class="page-event-detail__info-separator">to</span>
+                            <br>
+                            <span class="page-event-detail__info-separator">{% trans "to" %}</span>
                             <time datetime="{{ page.end_date|date:'c' }}" itemprop="endDate">
                                 {% if page.end_date|date:"Y-m-d" != page.start_date|date:"Y-m-d" %}
-                                    {{ page.end_date|date:"l, F j, Y" }}
+                                    {{ page.end_date|date:"l j F Y" }},
                                 {% endif %}
-                                {{ page.end_date|date:"g:i A" }}
+                                {{ page.end_date|date:"H:i" }}
                             </time>
                             {% endif %}
                         </div>
@@ -73,8 +74,8 @@
                     {# Location #}
                     {% if page.location_name %}
                     <div class="page-event-detail__info-item" itemprop="location" itemscope itemtype="https://schema.org/Place">
-                        <span class="page-event-detail__info-label">Location</span>
-                        <div class="page-event-detail__info-value">
+                        <span class="page-event-detail__info-label" id="event-location-label">{% trans "Location" %}</span>
+                        <div class="page-event-detail__info-value" aria-labelledby="event-location-label">
                             <span itemprop="name">{{ page.location_name }}</span>
                             {% if page.location_address %}
                             <br>
@@ -87,20 +88,20 @@
                     {# Pricing #}
                     {% if page.base_fee %}
                     <div class="page-event-detail__info-item">
-                        <span class="page-event-detail__info-label">Price</span>
-                        <div class="page-event-detail__info-value">
-                            <span class="page-event-detail__price">{{ page.current_price }} &euro;</span>
+                        <span class="page-event-detail__info-label" id="event-price-label">{% trans "Price" %}</span>
+                        <div class="page-event-detail__info-value" aria-labelledby="event-price-label">
+                            <span class="page-event-detail__price">{{ page.current_price|floatformat:2 }} &euro;</span>
                             {% if page.early_bird_discount and page.early_bird_deadline %}
                                 <br>
                                 <small class="page-event-detail__early-bird">
-                                    Early bird: -{{ page.early_bird_discount }}%
-                                    (until {{ page.early_bird_deadline|date:"M j" }})
+                                    {% trans "Early bird" %}: -{{ page.early_bird_discount }}%
+                                    ({% trans "until" %} {{ page.early_bird_deadline|date:"j M Y" }})
                                 </small>
                             {% endif %}
                             {% if page.member_discount_percent %}
                                 <br>
                                 <small class="page-event-detail__member-discount">
-                                    Members: {{ page.member_price }} &euro;
+                                    {% trans "Members" %}: {{ page.member_price|floatformat:2 }} &euro;
                                     (-{{ page.member_discount_percent }}%)
                                 </small>
                             {% endif %}
@@ -110,24 +111,24 @@
 
                     {# Registration status #}
                     <div class="page-event-detail__info-item">
-                        <span class="page-event-detail__info-label">Registration</span>
-                        <div class="page-event-detail__info-value">
+                        <span class="page-event-detail__info-label" id="event-reg-label">{% trans "Registration" %}</span>
+                        <div class="page-event-detail__info-value" aria-labelledby="event-reg-label">
                             {% if page.is_past %}
-                                <span class="page-event-detail__status" data-status="past">Event has ended</span>
+                                <span class="page-event-detail__status" data-status="past">{% trans "Event has ended" %}</span>
                             {% elif page.is_registration_open %}
-                                <span class="page-event-detail__status" data-status="open">Open</span>
+                                <span class="page-event-detail__status" data-status="open">{% trans "Open" %}</span>
                                 {% if page.spots_remaining is not None %}
                                     <br>
-                                    <small class="page-event-detail__spots">{{ page.spots_remaining }} spot{{ page.spots_remaining|pluralize }} remaining</small>
+                                    <small class="page-event-detail__spots">{{ page.spots_remaining }} {% trans "spots remaining" %}</small>
                                 {% endif %}
                                 {% if page.registration_deadline %}
                                     <br>
                                     <small class="page-event-detail__deadline">
-                                        Deadline: {{ page.registration_deadline|date:"M j, Y - g:i A" }}
+                                        {% trans "Deadline" %}: {{ page.registration_deadline|date:"j M Y, H:i" }}
                                     </small>
                                 {% endif %}
                             {% else %}
-                                <span class="page-event-detail__status" data-status="closed">Closed</span>
+                                <span class="page-event-detail__status" data-status="closed">{% trans "Closed" %}</span>
                             {% endif %}
                         </div>
                     </div>
@@ -135,9 +136,9 @@
                     {# Attendees count #}
                     {% if page.confirmed_count %}
                     <div class="page-event-detail__info-item">
-                        <span class="page-event-detail__info-label">Confirmed</span>
-                        <div class="page-event-detail__info-value">
-                            {{ page.confirmed_count }} attendee{{ page.confirmed_count|pluralize }}
+                        <span class="page-event-detail__info-label" id="event-confirmed-label">{% trans "Confirmed" %}</span>
+                        <div class="page-event-detail__info-value" aria-labelledby="event-confirmed-label">
+                            {{ page.confirmed_count }} {% trans "attendees" %}
                             {% if page.max_attendees %}
                                 / {{ page.max_attendees }}
                             {% endif %}
@@ -148,8 +149,8 @@
                     {# Register button #}
                     {% if page.is_registration_open and not page.is_past %}
                     <div class="page-event-detail__register">
-                        <a href="{% url 'events:register' event_pk=page.pk %}" class="btn btn-primary">
-                            Register Now
+                        <a href="{% url 'events:register' event_pk=page.pk %}" class="btn btn-primary" role="link" aria-label="{% trans "Register Now" %} — {{ page.title }}">
+                            {% trans "Register Now" %}
                         </a>
                     </div>
                     {% endif %}
@@ -158,8 +159,8 @@
                 {# Tags #}
                 {% with tags=page.tags.all %}
                 {% if tags %}
-                <div class="page-event-detail__tags" aria-label="Tags">
-                    <span class="page-event-detail__tags-label">Tags:</span>
+                <nav class="page-event-detail__tags" aria-label="{% trans "Tags" %}">
+                    <span class="page-event-detail__tags-label">{% trans "Tags" %}:</span>
                     <ul class="page-event-detail__tags-list">
                         {% for tag in tags %}
                         <li class="page-event-detail__tags-item">
@@ -167,11 +168,43 @@
                         </li>
                         {% endfor %}
                     </ul>
-                </div>
+                </nav>
                 {% endif %}
                 {% endwith %}
             </aside>
         </div>
+        {# OpenStreetMap #}
+        {% if page.latitude and page.longitude %}
+        <section class="page-event-detail__map-section">
+            <h2 class="page-event-detail__map-heading">{% trans "Location" %}</h2>
+            <div class="page-event-detail__map" id="event-map"></div>
+        </section>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+              integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+              crossorigin="" />
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+                integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+                crossorigin=""></script>
+        <script>
+        (function() {
+            var lat = {{ page.latitude|stringformat:"f" }};
+            var lng = {{ page.longitude|stringformat:"f" }};
+            var map = L.map('event-map').setView([lat, lng], 14);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+            var popup = '<strong>{{ page.location_name|escapejs }}</strong>';
+            {% if page.location_address %}
+            popup += '<br>{{ page.location_address|escapejs }}';
+            {% endif %}
+            popup += '<br><a href="https://maps.google.com/maps?daddr=' + lat + ',' + lng + '"'
+                   + ' target="_blank" rel="noopener" style="color:#1a73e8;font-weight:600;">'
+                   + '{% filter escapejs %}{% trans "Get directions" %}{% endfilter %} &#8594;</a>';
+            L.marker([lat, lng]).addTo(map).bindPopup(popup).openPopup();
+        })();
+        </script>
+        {% endif %}
     </div>
 </article>
 {% endblock %}

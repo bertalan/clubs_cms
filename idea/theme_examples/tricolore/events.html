@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Routes - Tricolore Theme Demo</title>
+  <title>Events - MotoItalia | Tricolore Theme</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -18,23 +18,34 @@
     body { font-family: 'Montserrat', system-ui, sans-serif; background: var(--bianco); color: var(--ink); line-height: 1.6; }
     .container { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
     a { color: var(--ink); text-decoration: none; }
-    
+
     /* === TRICOLORE RIBBON === */
     .tricolore-ribbon { height: 6px; display: flex; }
     .tricolore-ribbon span { flex: 1; }
     .tricolore-ribbon .verde { background: var(--verde); }
     .tricolore-ribbon .bianco { background: white; }
     .tricolore-ribbon .rosso { background: var(--rosso); }
-    
+
     /* === NAV === */
     nav { background: white; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
     nav .container { display: flex; justify-content: space-between; align-items: center; }
     .logo { font-weight: 900; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
-    .logo-badge { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(90deg, var(--verde) 33%, white 33%, white 66%, var(--rosso) 66%); border: 2px solid var(--ink); }
+    .logo-badge {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(90deg, var(--verde) 33%, white 33%, white 66%, var(--rosso) 66%);
+      border: 2px solid var(--ink);
+    }
+    .nav-links { display: flex; align-items: center; gap: 2.5rem; }
     nav ul { list-style: none; display: flex; gap: 2.5rem; }
     nav a { font-weight: 600; font-size: 0.9rem; color: var(--gray); transition: color 0.2s; }
     nav a:hover, nav a.active { color: var(--rosso); }
-    
+    .btn-join {
+      display: inline-block; padding: 0.6rem 1.5rem; background: var(--verde);
+      color: white; font-weight: 700; font-size: 0.85rem; border-radius: 8px;
+      transition: all 0.3s; text-transform: uppercase; letter-spacing: 0.03em;
+    }
+    .btn-join:hover { background: var(--rosso); color: white; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(206,43,55,0.3); }
+
     /* === HEADER === */
     .header {
       background: linear-gradient(135deg, var(--rosso) 0%, #e03040 100%);
@@ -46,66 +57,142 @@
     }
     .header h1 { font-size: 3rem; font-weight: 900; margin-bottom: 0.5rem; }
     .header p { opacity: 0.9; font-size: 1.1rem; }
-    
-    /* === ITINERARI GRID === */
-    .section { padding: 4rem 0; }
-    .itinerari-grid { display: flex; flex-direction: column; gap: 2rem; }
-    
-    .itinerario-card {
+
+    /* === FILTER TABS === */
+    .filter-section { padding: 2rem 0 0; }
+    .filter-tabs { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+    .filter-tab {
+      padding: 0.6rem 1.5rem; border-radius: 50px; font-weight: 700;
+      font-size: 0.85rem; cursor: pointer; transition: all 0.3s;
+      background: white; color: var(--gray); border: 2px solid #e0e0e0;
+      font-family: inherit;
+    }
+    .filter-tab:hover { border-color: var(--verde); color: var(--verde); }
+    .filter-tab.active {
+      background: var(--verde); color: white; border-color: var(--verde);
+    }
+
+    /* === EVENTS GRID === */
+    .section { padding: 3rem 0 5rem; }
+    .events-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+    @media (max-width: 900px) { .events-grid { grid-template-columns: 1fr; } }
+
+    .event-card {
       background: white; border-radius: 16px; overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      display: grid; grid-template-columns: 250px 1fr auto;
-      transition: all 0.3s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: all 0.3s;
+      display: flex; flex-direction: column;
     }
-    .itinerario-card:hover { transform: translateX(8px); box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
-    @media (max-width: 900px) { .itinerario-card { grid-template-columns: 1fr; } }
-    
-    .itinerario-image {
-      background: linear-gradient(135deg, var(--verde), #00a650);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 4rem; min-height: 200px;
+    .event-card:hover { transform: translateY(-8px); box-shadow: 0 12px 40px rgba(0,0,0,0.15); }
+
+    .event-image {
+      height: 220px; background-size: cover; background-position: center;
+      position: relative;
     }
-    .itinerario-card:nth-child(2) .itinerario-image { background: linear-gradient(135deg, var(--rosso), #e03040); }
-    .itinerario-card:nth-child(3) .itinerario-image { background: linear-gradient(135deg, var(--oro), #d4a82a); }
-    .itinerario-card:nth-child(4) .itinerario-image { background: linear-gradient(135deg, #0066cc, #0088ff); }
-    .itinerario-card:nth-child(5) .itinerario-image { background: linear-gradient(135deg, var(--ink), #333); }
-    
-    .itinerario-content { padding: 2rem; }
-    .itinerario-region {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      background: var(--bianco); padding: 0.3rem 0.8rem; border-radius: 50px;
-      font-size: 0.75rem; font-weight: 700; color: var(--verde);
-      text-transform: uppercase; margin-bottom: 1rem;
+    .event-date-badge {
+      position: absolute; top: 15px; left: 15px;
+      background: white; border-radius: 12px; padding: 0.6rem 0.8rem;
+      text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      min-width: 65px;
     }
-    .itinerario-region::before {
-      content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor;
+    .event-date-badge .day { display: block; font-size: 1.6rem; font-weight: 900; color: var(--rosso); line-height: 1; }
+    .event-date-badge .month { display: block; font-size: 0.7rem; font-weight: 700; color: var(--gray); text-transform: uppercase; margin-top: 2px; }
+    .event-category-ribbon {
+      position: absolute; top: 15px; right: 15px;
+      background: var(--verde); color: white; padding: 0.3rem 0.9rem;
+      border-radius: 50px; font-size: 0.7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.03em;
     }
-    .itinerario-card:nth-child(2) .itinerario-region { color: var(--rosso); }
-    .itinerario-card:nth-child(3) .itinerario-region { color: var(--oro); }
-    .itinerario-content h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; }
-    .itinerario-content p { color: var(--gray); margin-bottom: 1rem; }
-    .itinerario-stats { display: flex; gap: 2rem; }
-    .itinerario-stat { text-align: center; }
-    .itinerario-stat strong { display: block; font-size: 1.3rem; font-weight: 900; color: var(--verde); }
-    .itinerario-card:nth-child(2) .itinerario-stat strong { color: var(--rosso); }
-    .itinerario-stat span { font-size: 0.75rem; color: var(--gray); text-transform: uppercase; }
-    
-    .itinerario-action {
-      padding: 2rem; display: flex; align-items: center; justify-content: center;
-      border-left: 1px solid var(--bianco);
+    .event-card:nth-child(2) .event-category-ribbon { background: var(--rosso); }
+    .event-card:nth-child(3) .event-category-ribbon { background: var(--oro); }
+    .event-card:nth-child(4) .event-category-ribbon { background: var(--ink); }
+
+    .event-content { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+    .event-tag {
+      display: inline-block; background: var(--bianco); color: var(--verde);
+      padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem;
+      font-weight: 700; text-transform: uppercase; margin-bottom: 0.75rem;
+      align-self: flex-start;
     }
-    @media (max-width: 900px) { .itinerario-action { border-left: none; border-top: 1px solid var(--bianco); justify-content: flex-start; } }
-    .btn {
-      display: inline-block; padding: 0.8rem 1.5rem; background: var(--verde);
+    .event-card:nth-child(2) .event-tag { color: var(--rosso); }
+    .event-card:nth-child(3) .event-tag { color: var(--oro); }
+    .event-card:nth-child(4) .event-tag { color: var(--ink); }
+    .event-content h3 { font-weight: 800; font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .event-content p.desc { color: var(--gray); font-size: 0.9rem; margin-bottom: 1.25rem; flex: 1; }
+
+    .event-details { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem; font-size: 0.85rem; }
+    .event-detail { display: flex; align-items: center; gap: 0.5rem; color: var(--gray); }
+    .event-detail .icon {
+      width: 28px; height: 28px; border-radius: 6px; display: inline-flex;
+      align-items: center; justify-content: center; font-size: 0.75rem;
+      flex-shrink: 0; background: var(--bianco); color: var(--verde); font-weight: 800;
+    }
+    .event-price-tag {
+      font-weight: 800; color: var(--verde); font-size: 1rem;
+      padding: 0.5rem 0; border-top: 1px solid var(--bianco);
+      margin-bottom: 1rem;
+    }
+    .event-price-tag .free { color: var(--verde); }
+    .event-price-tag .paid { color: var(--rosso); }
+
+    .btn-event {
+      display: inline-block; padding: 0.75rem 1.5rem; background: var(--verde);
       color: white; font-weight: 700; border-radius: 8px; transition: all 0.3s;
+      text-align: center; font-size: 0.9rem; align-self: flex-start;
     }
-    .btn:hover { background: var(--rosso); transform: scale(1.05); }
-    
+    .btn-event:hover { background: var(--rosso); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(206,43,55,0.3); }
+
+    /* === ORGANIZE CTA === */
+    .organize-cta {
+      background: linear-gradient(135deg, var(--ink), #2a2a2a);
+      color: white; padding: 4rem 0; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .organize-cta::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+      background: linear-gradient(90deg, var(--verde), white, var(--rosso));
+    }
+    .organize-cockade {
+      width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 1.5rem;
+      background: conic-gradient(var(--verde) 0deg 120deg, white 120deg 240deg, var(--rosso) 240deg 360deg);
+      position: relative;
+    }
+    .organize-cockade::after {
+      content: ''; position: absolute; inset: 14px;
+      background: var(--ink); border-radius: 50%;
+    }
+    .organize-cta h2 { font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem; position: relative; }
+    .organize-cta p { opacity: 0.7; margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto; position: relative; }
+    .btn-oro {
+      display: inline-block; padding: 1rem 2.5rem; background: var(--oro);
+      color: white; font-weight: 800; border-radius: 8px; transition: all 0.3s;
+      font-size: 1rem; position: relative;
+    }
+    .btn-oro:hover { background: var(--rosso); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(206,43,55,0.3); }
+
     /* === FOOTER === */
-    footer { background: var(--ink); color: white; padding: 2rem 0; text-align: center; }
-    footer a { color: rgba(255,255,255,0.7); margin: 0 1rem; font-size: 0.9rem; }
+    footer { background: var(--ink); color: white; padding: 3rem 0 1.5rem; }
+    .footer-ribbon { height: 4px; display: flex; margin-bottom: 2.5rem; }
+    .footer-ribbon span { flex: 1; }
+    .footer-ribbon .verde { background: var(--verde); }
+    .footer-ribbon .bianco { background: white; }
+    .footer-ribbon .rosso { background: var(--rosso); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    footer h4 { font-weight: 700; margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .footer-brand { display: flex; align-items: center; gap: 0.75rem; font-weight: 900; font-size: 1.3rem; margin-bottom: 1rem; }
+    footer p { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+    footer a { color: rgba(255,255,255,0.7); font-size: 0.9rem; display: block; margin-bottom: 0.5rem; transition: color 0.2s; }
     footer a:hover { color: var(--oro); }
-    footer p { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 1rem; }
+    .footer-social { display: flex; gap: 1rem; margin-top: 1rem; }
+    .footer-social a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); color: white; font-size: 0.85rem;
+      font-weight: 700; transition: all 0.3s; margin-bottom: 0;
+    }
+    .footer-social a:hover { background: var(--oro); color: white; transform: translateY(-2px); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; text-align: center; }
+    .footer-bottom p { font-size: 0.85rem; color: rgba(255,255,255,0.5); }
     .footer-tricolore { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; }
     .footer-tricolore span { width: 30px; height: 4px; border-radius: 2px; }
   </style>
@@ -123,126 +210,224 @@
         <span class="logo-badge"></span>
         MotoItalia
       </a>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="events.html" class="active">Routes</a></li>
-        <li><a href="gallery.html">Gallery</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
+      <div class="nav-links">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="events.html" class="active">Events</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <a href="contact.html" class="btn-join">Join</a>
+      </div>
     </div>
   </nav>
 
   <section class="header">
-    <h1>Routes</h1>
-    <p>Discover the most beautiful roads in Italy</p>
+    <h1>Upcoming Events</h1>
+    <p>Rides, workshops, and gatherings for the MotoItalia community</p>
+  </section>
+
+  <section class="filter-section">
+    <div class="container">
+      <div class="filter-tabs">
+        <button class="filter-tab active">All</button>
+        <button class="filter-tab">Upcoming</button>
+        <button class="filter-tab">Past</button>
+        <button class="filter-tab">Group Rides</button>
+        <button class="filter-tab">Workshops</button>
+        <button class="filter-tab">Social</button>
+        <button class="filter-tab">Rallies</button>
+      </div>
+    </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <div class="itinerari-grid">
-        <article class="itinerario-card">
-          <div class="itinerario-image">🏔️</div>
-          <div class="itinerario-content">
-            <span class="itinerario-region">Alto Adige</span>
-            <h3>Passo dello Stelvio</h3>
-            <p>48 tornanti mozzafiato attraverso le Alpi. Il secondo passo più alto d'Europa, un'esperienza che ogni motociclista deve vivere almeno una volta.</p>
-            <div class="itinerario-stats">
-              <div class="itinerario-stat"><strong>180</strong><span>km</span></div>
-              <div class="itinerario-stat"><strong>2758</strong><span>m slm</span></div>
-              <div class="itinerario-stat"><strong>48</strong><span>tornanti</span></div>
+      <div class="events-grid">
+
+        <article class="event-card">
+          <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600');">
+            <div class="event-date-badge">
+              <span class="day">15</span>
+              <span class="month">Mar</span>
             </div>
+            <span class="event-category-ribbon">Group Ride</span>
           </div>
-          <div class="itinerario-action">
-            <a href="#" class="btn">Explore</a>
+          <div class="event-content">
+            <span class="event-tag">Group Ride</span>
+            <h3>Spring Alpine Rally</h3>
+            <p class="desc">Kick off the riding season with a spectacular group ride through the Dolomites. We will stop for lunch at a mountain refuge with panoramic views, then wind our way through legendary hairpin turns back to the valley.</p>
+            <div class="event-details">
+              <div class="event-detail">
+                <span class="icon">@</span>
+                Bolzano, South Tyrol
+              </div>
+              <div class="event-detail">
+                <span class="icon">T</span>
+                09:00 - 18:00
+              </div>
+            </div>
+            <div class="event-price-tag">
+              <span class="free">Free for members</span>
+            </div>
+            <a href="#" class="btn-event">Register Now</a>
           </div>
         </article>
 
-        <article class="itinerario-card">
-          <div class="itinerario-image">🌊</div>
-          <div class="itinerario-content">
-            <span class="itinerario-region">Campania</span>
-            <h3>Costiera Amalfitana</h3>
-            <p>La strada costiera più famosa al mondo. Tra limoni, panorami sul mare e borghi colorati che sembrano dipinti.</p>
-            <div class="itinerario-stats">
-              <div class="itinerario-stat"><strong>50</strong><span>km</span></div>
-              <div class="itinerario-stat"><strong>13</strong><span>borghi</span></div>
-              <div class="itinerario-stat"><strong>∞</strong><span>bellezza</span></div>
+        <article class="event-card">
+          <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=600');">
+            <div class="event-date-badge">
+              <span class="day">22</span>
+              <span class="month">Apr</span>
             </div>
+            <span class="event-category-ribbon">Workshop</span>
           </div>
-          <div class="itinerario-action">
-            <a href="#" class="btn">Explore</a>
+          <div class="event-content">
+            <span class="event-tag">Workshop</span>
+            <h3>Motorcycle Maintenance Day</h3>
+            <p class="desc">Join our expert mechanics for a hands-on workshop covering essential maintenance skills: oil changes, chain adjustment, brake inspection, and tire care. All tools and refreshments provided. Perfect for beginners and experienced riders alike.</p>
+            <div class="event-details">
+              <div class="event-detail">
+                <span class="icon">@</span>
+                MotoItalia HQ, Milano
+              </div>
+              <div class="event-detail">
+                <span class="icon">T</span>
+                10:00 - 16:00
+              </div>
+            </div>
+            <div class="event-price-tag">
+              <span class="paid">&euro;25</span> / Free for members
+            </div>
+            <a href="#" class="btn-event">Register Now</a>
           </div>
         </article>
 
-        <article class="itinerario-card">
-          <div class="itinerario-image">🏛️</div>
-          <div class="itinerario-content">
-            <span class="itinerario-region">Toscana</span>
-            <h3>Chianti Classic Tour</h3>
-            <p>Colline, vigneti e cipressi. Un viaggio attraverso il cuore della Toscana, tra borghi medievali e cantine storiche.</p>
-            <div class="itinerario-stats">
-              <div class="itinerario-stat"><strong>120</strong><span>km</span></div>
-              <div class="itinerario-stat"><strong>8</strong><span>borghi</span></div>
-              <div class="itinerario-stat"><strong>5</strong><span>cantine</span></div>
+        <article class="event-card">
+          <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1558980664-769d59546b3d?w=600');">
+            <div class="event-date-badge">
+              <span class="day">10</span>
+              <span class="month">May</span>
             </div>
+            <span class="event-category-ribbon">Social</span>
           </div>
-          <div class="itinerario-action">
-            <a href="#" class="btn">Explore</a>
+          <div class="event-content">
+            <span class="event-tag">Social</span>
+            <h3>Tuscan Wine &amp; Ride</h3>
+            <p class="desc">A leisurely ride through Chianti country with wine tasting stops at three historic estates. Experience the rolling Tuscan hills, stone farmhouses, and cypress-lined roads before a communal dinner under the stars.</p>
+            <div class="event-details">
+              <div class="event-detail">
+                <span class="icon">@</span>
+                Siena, Toscana
+              </div>
+              <div class="event-detail">
+                <span class="icon">T</span>
+                11:00 - 21:00
+              </div>
+            </div>
+            <div class="event-price-tag">
+              <span class="paid">&euro;40</span> (includes wine tasting &amp; dinner)
+            </div>
+            <a href="#" class="btn-event">Register Now</a>
           </div>
         </article>
 
-        <article class="itinerario-card">
-          <div class="itinerario-image">🌋</div>
-          <div class="itinerario-content">
-            <span class="itinerario-region">Sicilia</span>
-            <h3>Giro dell'Etna</h3>
-            <p>Alle pendici del vulcano più alto d'Europa. Paesaggi lunari, colate laviche e viste mozzafiato sul Mediterraneo.</p>
-            <div class="itinerario-stats">
-              <div class="itinerario-stat"><strong>140</strong><span>km</span></div>
-              <div class="itinerario-stat"><strong>3350</strong><span>m slm</span></div>
-              <div class="itinerario-stat"><strong>4</strong><span>crateri</span></div>
+        <article class="event-card">
+          <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=600');">
+            <div class="event-date-badge">
+              <span class="day">07</span>
+              <span class="month">Jun</span>
             </div>
+            <span class="event-category-ribbon">Rally</span>
           </div>
-          <div class="itinerario-action">
-            <a href="#" class="btn">Explore</a>
+          <div class="event-content">
+            <span class="event-tag">Rally</span>
+            <h3>National Summer Rally 2026</h3>
+            <p class="desc">Our flagship annual event returns! Three days of riding, camping, live music, and camaraderie. This year we explore the stunning Amalfi Coast and the wild beauty of Cilento National Park. All skill levels welcome.</p>
+            <div class="event-details">
+              <div class="event-detail">
+                <span class="icon">@</span>
+                Salerno, Campania
+              </div>
+              <div class="event-detail">
+                <span class="icon">T</span>
+                3-day event (Jun 7-9)
+              </div>
+            </div>
+            <div class="event-price-tag">
+              <span class="paid">&euro;95</span> / <span class="free">&euro;65 for members</span>
+            </div>
+            <a href="#" class="btn-event">Register Now</a>
           </div>
         </article>
 
-        <article class="itinerario-card">
-          <div class="itinerario-image">🏎️</div>
-          <div class="itinerario-content">
-            <span class="itinerario-region">Emilia-Romagna</span>
-            <h3>Motor Valley</h3>
-            <p>La terra dei motori. Da Maranello a Borgo Panigale, un pellegrinaggio tra i templi di Ferrari, Lamborghini e Ducati.</p>
-            <div class="itinerario-stats">
-              <div class="itinerario-stat"><strong>200</strong><span>km</span></div>
-              <div class="itinerario-stat"><strong>5</strong><span>musei</span></div>
-              <div class="itinerario-stat"><strong>3</strong><span>factory</span></div>
-            </div>
-          </div>
-          <div class="itinerario-action">
-            <a href="#" class="btn">Explore</a>
-          </div>
-        </article>
       </div>
+    </div>
+  </section>
+
+  <section class="organize-cta">
+    <div class="container">
+      <div class="organize-cockade"></div>
+      <h2>Want to Organize an Event?</h2>
+      <p>Have an idea for a ride, workshop, or social gathering? We are always looking for passionate members to lead new adventures. Get in touch and let us help make it happen.</p>
+      <a href="contact.html" class="btn-oro">Contact Us</a>
     </div>
   </section>
 
   <footer>
     <div class="container">
-      <div class="footer-tricolore">
-        <span style="background: var(--verde);"></span>
-        <span style="background: white;"></span>
-        <span style="background: var(--rosso);"></span>
+      <div class="footer-ribbon">
+        <span class="verde"></span>
+        <span class="bianco"></span>
+        <span class="rosso"></span>
       </div>
-      <div>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="contact.html">Contact</a>
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <span class="logo-badge" style="width:28px;height:28px;"></span>
+            MotoItalia
+          </div>
+          <p>The passion for two wheels and the Bel Paese, since 2010.</p>
+          <p style="margin-top: 1rem;">Via Roma 42, Milano, Italia</p>
+          <p>info@motoitalia.example</p>
+          <p>+39 02 1234567</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook">Fb</a>
+            <a href="#" aria-label="Instagram">Ig</a>
+            <a href="#" aria-label="YouTube">Yt</a>
+          </div>
+        </div>
+        <div>
+          <h4>Navigate</h4>
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="events.html">Events</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div>
+          <h4>Community</h4>
+          <a href="#">Forum</a>
+          <a href="events.html">Events</a>
+          <a href="#">Rallies</a>
+          <a href="#">Newsletter</a>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <a href="contact.html">Write Us</a>
+          <a href="mailto:info@motoitalia.example">info@motoitalia.example</a>
+          <a href="tel:+390212345678">+39 02 1234567</a>
+        </div>
       </div>
-      <p>© 2026 MotoItalia • Tricolore Theme Demo</p>
+      <div class="footer-bottom">
+        <div class="footer-tricolore">
+          <span style="background: var(--verde);"></span>
+          <span style="background: white;"></span>
+          <span style="background: var(--rosso);"></span>
+        </div>
+        <p>&copy; 2026 MotoItalia. All rights reserved. Made with passion in Italy.</p>
+      </div>
     </div>
   </footer>
 </body>

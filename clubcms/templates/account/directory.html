@@ -1,26 +1,41 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailimages_tags %}
 
 {% block title %}{% trans "Member Directory" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>{% trans "Member Directory" %}</h1>
+<section class="page-directory">
+    <div class="container">
+        {# Header #}
+        <header class="page-directory__header">
+            <h1 class="page-directory__title">{% trans "Member Directory" %}</h1>
+            <p class="page-directory__subtitle">{% trans "Connect with fellow club members" %}</p>
+        </header>
 
-    {% if members %}
-    <div class="member-directory">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>{% trans "Name" %}</th>
-                    <th>{% trans "City" %}</th>
-                    <th>{% trans "Member since" %}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for member in members %}
-                <tr>
-                    <td>
+        {% if members %}
+        {# Stats bar #}
+        <div class="page-directory__stats">
+            <span class="page-directory__stat">
+                <strong>{{ members|length }}</strong> {% trans "members visible" %}
+            </span>
+        </div>
+
+        {# Member grid #}
+        <div class="page-directory__grid">
+            {% for member in members %}
+            <article class="member-card">
+                <div class="member-card__avatar">
+                    {% if member.photo %}
+                        {% image member.photo fill-80x80 as photo %}
+                        <img src="{{ photo.url }}" alt="{{ member.visible_name }}" loading="lazy">
+                    {% else %}
+                        <span class="member-card__initials">
+                            {{ member.visible_name|slice:":2"|upper }}
+                        </span>
+                    {% endif %}
+                </div>
+                <div class="member-card__info">
+                    <h3 class="member-card__name">
                         {% if member.public_profile %}
                         <a href="{% url 'public_profile' username=member.username %}">
                             {{ member.visible_name }}
@@ -28,41 +43,62 @@
                         {% else %}
                             {{ member.visible_name }}
                         {% endif %}
-                    </td>
-                    <td>{{ member.city }}</td>
-                    <td>{{ member.membership_date }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                    </h3>
+                    {% if member.city %}
+                    <p class="member-card__location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        {{ member.city }}
+                    </p>
+                    {% endif %}
+                    {% if member.membership_date %}
+                    <p class="member-card__since">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        {% blocktrans with date=member.membership_date %}Member since {{ date }}{% endblocktrans %}
+                    </p>
+                    {% endif %}
+                </div>
+                {% if member.public_profile %}
+                <a href="{% url 'public_profile' username=member.username %}" class="member-card__link" aria-label="{% trans 'View profile' %}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+                {% endif %}
+            </article>
+            {% endfor %}
+        </div>
 
-    {% if is_paginated %}
-    <nav class="pagination" aria-label="{% trans 'Pagination' %}">
-        {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-secondary">
-            {% trans "Previous" %}
-        </a>
+        {# Pagination #}
+        {% if is_paginated %}
+        <nav class="page-directory__pagination" aria-label="{% trans 'Pagination' %}">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="page-directory__page-btn page-directory__page-btn--prev">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                {% trans "Previous" %}
+            </a>
+            {% endif %}
+
+            <span class="page-directory__page-info">
+                {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}
+                    Page {{ current }} of {{ total }}
+                {% endblocktrans %}
+            </span>
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="page-directory__page-btn page-directory__page-btn--next">
+                {% trans "Next" %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+            {% endif %}
+        </nav>
         {% endif %}
 
-        <span class="page-info">
-            {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}
-                Page {{ current }} of {{ total }}
-            {% endblocktrans %}
-        </span>
-
-        {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}" class="btn btn-secondary">
-            {% trans "Next" %}
-        </a>
+        {% else %}
+        {# Empty state #}
+        <div class="page-directory__empty">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <h2>{% trans "No members yet" %}</h2>
+            <p>{% trans "No members are currently visible in the directory." %}</p>
+        </div>
         {% endif %}
-    </nav>
-    {% endif %}
-
-    {% else %}
-    <div class="alert alert-info">
-        <p>{% trans "No members are currently visible in the directory." %}</p>
     </div>
-    {% endif %}
-</div>
+</section>
 {% endblock %}

@@ -212,6 +212,7 @@ a:hover {
 .site-nav__links {
   display: none;
   gap: 2.5rem;
+  color: var(--color-text-muted);
 }
 
 .site-nav__links a {
@@ -257,8 +258,7 @@ a:hover {
   padding: 3rem 0 1.5rem;
 }
 
-.site-footer h3,
-.site-footer h4 {
+.site-footer__heading {
   color: #fff;
   font-weight: 700;
   font-size: 0.9rem;
@@ -267,29 +267,31 @@ a:hover {
   margin-bottom: 1rem;
 }
 
-.site-footer a {
-  color: rgba(255, 255, 255, 0.7);
+.site-footer__about {
+  color: rgba(255, 255, 255, 0.65);
   font-size: 0.9rem;
-  display: block;
-  margin-bottom: 0.5rem;
-  text-decoration: none;
+  line-height: 1.6;
 }
 
-.site-footer a:hover {
+.site-footer__list a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color var(--tricolore-transition);
+}
+
+.site-footer__list a:hover {
   color: var(--tricolore-oro);
 }
 
-.site-footer__grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  margin-bottom: 2rem;
+.site-footer__label {
+  color: var(--tricolore-oro);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-@media (min-width: 768px) {
-  .site-footer__grid {
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-  }
+.site-footer__address {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .site-footer__brand {
@@ -310,7 +312,6 @@ a:hover {
 .site-footer__bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: 1.5rem;
-  text-align: center;
 }
 
 .site-footer__tricolore {
@@ -333,6 +334,15 @@ a:hover {
 .site-footer__copyright {
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.5);
+}
+
+.site-footer__social a {
+  color: rgba(255, 255, 255, 0.7);
+  transition: color var(--tricolore-transition);
+}
+
+.site-footer__social a:hover {
+  color: var(--tricolore-oro);
 }
 
 /* --------------------------------------------------------------------------
@@ -876,6 +886,27 @@ a:hover {
 .block-timeline__description {
   color: var(--color-text-muted);
   line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   13b. FAQ Accordion
+   -------------------------------------------------------------------------- */
+.block-faq__question:hover {
+  background: rgba(0, 146, 70, 0.05);
+  border-left: 3px solid var(--tricolore-verde);
+}
+
+.block-faq__item[open] > .block-faq__question {
+  color: var(--color-primary);
+  background: rgba(0, 146, 70, 0.06);
+  border-left: 3px solid transparent;
+  border-image: linear-gradient(to bottom, var(--tricolore-verde), var(--tricolore-rosso)) 1;
+}
+
+.block-faq__answer {
+  border-left: 3px solid transparent;
+  border-image: linear-gradient(to bottom, var(--tricolore-verde), var(--tricolore-rosso)) 1;
+  padding-left: 1rem;
 }
 
 /* --------------------------------------------------------------------------
@@ -1970,12 +2001,38 @@ a:hover {
   font-weight: 600;
 }
 .site-nav__dropdown-menu {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-top: 3px solid;
   border-image: linear-gradient(90deg, #009246, #fff, #CE2B37) 1;
   border-radius: 0 0 4px 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.site-nav__dropdown-menu a {
+  color: var(--color-text-primary, #1a1a1a);
 }
 .site-nav__dropdown-menu a:hover {
   background: rgba(0, 146, 70, 0.06);
+}
+.site-nav__dropdown-divider {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+/* Language menu */
+.site-nav__lang-menu {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.site-nav__lang-menu button {
+  color: var(--color-text-primary, #1a1a1a);
+}
+.site-nav__lang-menu button:hover,
+.site-nav__lang-menu button:focus-visible {
+  background: rgba(0, 146, 70, 0.06);
+}
+.site-nav__lang-menu button.active {
+  color: var(--color-secondary);
 }
 .auth-card {
   border-top: 3px solid;
@@ -1984,4 +2041,1269 @@ a:hover {
 .pricing-card--active {
   border-top: 3px solid;
   border-image: linear-gradient(90deg, #009246, #fff, #CE2B37) 1;
+}
+
+/* --------------------------------------------------------------------------
+   Help Modal — Tricolore overrides
+   -------------------------------------------------------------------------- */
+.field-help-modal__content {
+  border-radius: var(--tricolore-radius, 12px);
+  box-shadow: var(--tricolore-shadow-lg, 0 12px 40px rgba(0, 0, 0, 0.15));
+  border-top: 3px solid;
+  border-image: linear-gradient(90deg, #009246, #fff, #CE2B37) 1;
+}
+.field-help-btn {
+  border-radius: var(--tricolore-radius-sm, 4px);
+}
+.field-help-btn:hover,
+.field-help-btn:focus-visible {
+  background: var(--color-accent, #009246);
+  border-color: var(--color-accent, #009246);
+}
+.field-help-modal__close {
+  border-radius: var(--tricolore-radius-sm, 4px);
+}
+
+/* ==========================================================================
+   Member Directory - Tricolore Theme
+   ========================================================================== */
+
+.page-directory {
+  padding: clamp(3rem, 8vw, 5rem) 0;
+  background: var(--color-surface, #FAFAFA);
+  min-height: 60vh;
+}
+
+.page-directory__header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-directory__title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: var(--color-primary, #1A1A2E);
+}
+
+.page-directory__subtitle {
+  font-size: 1.0625rem;
+  color: var(--color-text-muted, #6B7280);
+  margin: 0;
+}
+
+.page-directory__stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 2rem;
+  margin-bottom: 2.5rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(90deg, rgba(0,146,70,0.05), rgba(255,255,255,0.05), rgba(206,43,55,0.05));
+  border-radius: var(--tricolore-radius, 0.5rem);
+  border: 1px solid var(--color-border, #E5E7EB);
+}
+
+.page-directory__stat {
+  font-size: 0.9375rem;
+  color: var(--color-text-muted, #6B7280);
+}
+
+.page-directory__stat strong {
+  color: var(--color-primary, #1A1A2E);
+  font-weight: 600;
+}
+
+.page-directory__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 1.5rem;
+}
+
+.member-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: #fff;
+  border: 1px solid var(--color-border, #E5E7EB);
+  border-radius: var(--tricolore-radius, 0.5rem);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.member-card:hover,
+.member-card:focus-within {
+  border-color: var(--color-primary, #1A1A2E);
+  box-shadow: 0 4px 16px rgba(26,26,46,0.1);
+}
+
+.member-card__avatar {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #009246 0%, #F4F5F0 50%, #CE2B37 100%);
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.member-card__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.member-card__initials {
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 50%;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-primary, #1A1A2E);
+}
+
+.member-card__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.member-card__name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.375rem 0;
+  color: var(--color-primary, #1A1A2E);
+}
+
+.member-card__name a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.member-card__name a:hover,
+.member-card__name a:focus {
+  color: var(--color-accent, #009246);
+}
+
+.member-card__name a:focus-visible {
+  outline: 2px solid var(--color-primary, #1A1A2E);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.member-card__location,
+.member-card__since {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted, #6B7280);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.member-card__location + .member-card__since {
+  margin-top: 0.25rem;
+}
+
+.member-card__location svg,
+.member-card__since svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.member-card__link {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-text-muted, #6B7280);
+  background: var(--color-surface-alt, #F3F4F6);
+  border-radius: 50%;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.member-card__link:hover,
+.member-card__link:focus {
+  background: var(--color-accent, #009246);
+  color: #fff;
+}
+
+.member-card__link:focus-visible {
+  outline: 2px solid var(--color-primary, #1A1A2E);
+  outline-offset: 2px;
+}
+
+.page-directory__pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border, #E5E7EB);
+}
+
+.page-directory__page-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-primary, #1A1A2E);
+  background: #fff;
+  border: 1px solid var(--color-border, #E5E7EB);
+  border-radius: var(--tricolore-radius, 0.5rem);
+  text-decoration: none;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.page-directory__page-btn:hover,
+.page-directory__page-btn:focus {
+  background: var(--color-surface-alt, #F3F4F6);
+  border-color: var(--color-primary, #1A1A2E);
+}
+
+.page-directory__page-btn:focus-visible {
+  outline: 2px solid var(--color-primary, #1A1A2E);
+  outline-offset: 2px;
+}
+
+.page-directory__page-info {
+  font-size: 0.875rem;
+  color: var(--color-text-muted, #6B7280);
+}
+
+.page-directory__empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #fff;
+  border: 1px solid var(--color-border, #E5E7EB);
+  border-radius: var(--tricolore-radius, 0.5rem);
+}
+
+.page-directory__empty svg {
+  color: var(--color-text-muted, #9CA3AF);
+  margin-bottom: 1.5rem;
+}
+
+.page-directory__empty h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: var(--color-primary, #1A1A2E);
+}
+
+.page-directory__empty p {
+  font-size: 0.9375rem;
+  color: var(--color-text-muted, #6B7280);
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .member-card__avatar { width: 48px; height: 48px; }
+  .member-card__link { width: 36px; height: 36px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .member-card, .member-card__link, .page-directory__page-btn { transition: none; }
+}
+
+/* ==========================================================================
+   MY REGISTRATIONS PAGE - Tricolore Theme
+   ========================================================================== */
+.page-registrations {
+  padding: 6rem 0;
+  background: var(--color-surface, #FFFFFF);
+  min-height: 60vh;
+}
+
+.page-registrations__header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.page-registrations__title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--color-primary, #1A1A1A);
+  margin: 0 0 0.5rem 0;
+}
+
+.page-registrations__subtitle {
+  font-size: 1rem;
+  color: var(--color-text-muted, #6B7280);
+  margin: 0;
+}
+
+.page-registrations__content {
+  background: #FFFFFF;
+  border: 1px solid var(--color-border, #E5E7EB);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.page-registrations__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.page-registrations__table thead {
+  background: linear-gradient(90deg, #009246 0%, #F4F5F0 50%, #CE2B37 100%);
+}
+
+.page-registrations__table th {
+  padding: 1rem 1.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-primary, #1A1A1A);
+  text-align: left;
+}
+
+.page-registrations__table td {
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--color-border, #E5E7EB);
+  color: var(--color-text-primary, #1A1A1A);
+  font-size: 0.9375rem;
+}
+
+.page-registrations__row:hover {
+  background: var(--color-surface-alt, #F9FAFB);
+}
+
+.page-registrations__event-link {
+  color: #009246;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.page-registrations__event-link:hover {
+  color: #CE2B37;
+}
+
+.page-registrations__cancelled {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.page-registrations .badge--confirmed,
+.page-registrations .badge--paid {
+  background: rgba(0, 146, 70, 0.15);
+  color: #009246;
+}
+
+.page-registrations .badge--pending {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.page-registrations .badge--cancelled {
+  background: rgba(206, 43, 55, 0.15);
+  color: #CE2B37;
+}
+
+.page-registrations .badge--waitlist {
+  background: #EDE9FE;
+  color: #5B21B6;
+}
+
+.page-registrations__pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: var(--color-surface-alt, #F9FAFB);
+  border-top: 1px solid var(--color-border, #E5E7EB);
+}
+
+.page-registrations__pagination .pagination__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  color: #FFFFFF;
+  text-decoration: none;
+  font-weight: 600;
+  background: #009246;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.page-registrations__pagination .pagination__link:hover {
+  background: #CE2B37;
+}
+
+.page-registrations__pagination .pagination__info {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.page-registrations__empty {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: #FFFFFF;
+  border: 1px solid var(--color-border, #E5E7EB);
+  border-radius: 8px;
+}
+
+.page-registrations__empty-icon {
+  color: #009246;
+  opacity: 0.5;
+  margin-bottom: 1.5rem;
+}
+
+.page-registrations__empty-text {
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+  margin: 0 0 1.5rem 0;
+}
+
+.page-registrations__footer {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .page-registrations { padding: 3rem 0; }
+  .page-registrations__table th,
+  .page-registrations__table td { padding: 0.75rem 0.5rem; font-size: 0.8125rem; }
+  .page-registrations__table th:nth-child(5),
+  .page-registrations__table td:nth-child(5) { display: none; }
+}
+
+/* ==========================================================================
+   PRIVACY SETTINGS PAGE - Tricolore Theme
+   ========================================================================== */
+.page-privacy {
+  padding: 6rem 0;
+  background: var(--color-surface, #FFFFFF);
+  min-height: 60vh;
+}
+
+.page-privacy__header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.page-privacy__title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--color-primary, #1A1A1A);
+  margin: 0 0 0.5rem 0;
+}
+
+.page-privacy__subtitle {
+  font-size: 1rem;
+  color: var(--color-text-muted, #6B7280);
+  margin: 0;
+}
+
+.page-privacy__alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: rgba(206, 43, 55, 0.1);
+  border: 1px solid rgba(206, 43, 55, 0.3);
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.page-privacy__alert .alert__icon {
+  color: #CE2B37;
+  flex-shrink: 0;
+}
+
+.page-privacy__alert p {
+  margin: 0;
+  color: #991B1B;
+}
+
+.page-privacy__form {
+  background: #FFFFFF;
+  border: 1px solid var(--color-border, #E5E7EB);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.page-privacy__fieldset {
+  border: none;
+  padding: 2rem;
+  margin: 0;
+}
+
+.page-privacy__legend {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-primary, #1A1A1A);
+  margin-bottom: 0.5rem;
+  padding: 0;
+}
+
+.page-privacy__description {
+  font-size: 0.9375rem;
+  color: var(--color-text-muted);
+  margin: 0 0 1.5rem 0;
+}
+
+.page-privacy__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.page-privacy__field {
+  padding: 1.25rem;
+  background: var(--color-surface-alt, #F9FAFB);
+  border: 1px solid var(--color-border, #E5E7EB);
+  border-radius: 8px;
+  transition: border-color 0.2s ease;
+}
+
+.page-privacy__field:hover {
+  border-color: #009246;
+}
+
+.page-privacy__field:focus-within {
+  border-color: #009246;
+  box-shadow: 0 0 0 3px rgba(0, 146, 70, 0.1);
+}
+
+.page-privacy__actions {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: var(--color-surface-alt, #F9FAFB);
+  border-top: 1px solid var(--color-border, #E5E7EB);
+}
+
+@media (max-width: 640px) {
+  .page-privacy { padding: 3rem 0; }
+  .page-privacy__fieldset { padding: 1.5rem; }
+  .page-privacy__actions { flex-direction: column; padding: 1rem 1.5rem; }
+}
+
+/* ==========================================================================
+   PUBLIC PROFILE PAGE - Tricolore Theme
+   ========================================================================== */
+.page-profile {
+  padding: 6rem 0;
+  background: var(--color-surface, #FFFFFF);
+  min-height: 60vh;
+}
+
+.page-profile__card {
+  max-width: 700px;
+  margin: 0 auto;
+  background: #FFFFFF;
+  border: 1px solid var(--color-border, #E5E7EB);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.page-profile__header {
+  display: flex;
+  gap: 1.5rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #009246 0%, #F4F5F0 50%, #CE2B37 100%);
+}
+
+.page-profile__avatar-container {
+  flex-shrink: 0;
+}
+
+.page-profile__avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #FFFFFF;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.page-profile__avatar--initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  color: var(--color-primary, #1A1A1A);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.page-profile__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.page-profile__name {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--color-primary, #1A1A1A);
+  margin: 0 0 0.75rem 0;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.page-profile__badge {
+  display: inline-flex;
+  background: #009246;
+  color: #FFFFFF;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
+
+.page-profile__member-since {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-text-primary, #1A1A1A);
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.page-profile__icon {
+  color: currentColor;
+  flex-shrink: 0;
+}
+
+.page-profile__content {
+  padding: 2rem;
+}
+
+.page-profile__section {
+  margin-bottom: 2rem;
+}
+
+.page-profile__section:last-child {
+  margin-bottom: 0;
+}
+
+.page-profile__section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #009246;
+  margin: 0 0 0.75rem 0;
+}
+
+.page-profile__location,
+.page-profile__bio {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--color-text-primary, #1A1A1A);
+  margin: 0;
+}
+
+.page-profile__footer {
+  display: flex;
+  padding: 1.5rem 2rem;
+  background: var(--color-surface-alt, #F9FAFB);
+  border-top: 1px solid var(--color-border, #E5E7EB);
+}
+
+.page-profile__footer .btn__icon {
+  margin-right: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .page-profile { padding: 3rem 0; }
+  .page-profile__header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  .page-profile__avatar { width: 80px; height: 80px; }
+  .page-profile__member-since { justify-content: center; }
+  .page-profile__content { padding: 1.5rem; }
+  .page-profile__section-title { justify-content: center; }
+  .page-profile__location, .page-profile__bio { text-align: center; }
+  .page-profile__footer { justify-content: center; }
+}
+
+/* Focus & Accessibility */
+.page-registrations__event-link:focus-visible,
+.page-privacy__field:focus-within,
+.page-profile__footer .btn:focus-visible {
+  outline: 3px solid #009246;
+  outline-offset: 2px;
+}
+
+@media (prefers-contrast: more) {
+  .page-registrations__table th,
+  .page-registrations__table td { border-width: 2px; }
+  .page-privacy__field { border-width: 2px; }
+  .page-profile__card { border-width: 2px; }
+  .page-profile__avatar { border-width: 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-registrations__event-link,
+  .page-registrations__pagination .pagination__link,
+  .page-privacy__field { transition: none; }
+}
+
+/* --------------------------------------------------------------------------
+   29g. Membership Card Page (tricolore override)
+   -------------------------------------------------------------------------- */
+.page-card {
+  padding: 5rem 0;
+  background: var(--tricolore-bg);
+}
+
+.page-card__title {
+  color: var(--tricolore-green);
+  font-weight: 700;
+}
+
+.page-card__subtitle {
+  color: var(--tricolore-text-muted);
+}
+
+/* Membership Card - Tricolore Premium Style */
+.membership-card {
+  background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 50%, #fafafa 100%);
+  border: 2px solid;
+  border-image: linear-gradient(180deg, var(--tricolore-green) 0%, #fff 50%, var(--tricolore-red) 100%) 1;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.membership-card::before {
+  background: linear-gradient(90deg, rgba(0, 140, 69, 0.05) 0%, transparent 33%, transparent 66%, rgba(205, 33, 42, 0.05) 100%);
+}
+
+.membership-card__logo {
+  color: var(--tricolore-green);
+}
+
+.membership-card__type {
+  background: linear-gradient(135deg, var(--tricolore-green) 0%, var(--tricolore-red) 100%);
+  color: #fff;
+}
+
+.page-card__no-card {
+  background: #fafafa;
+  border: 1px solid var(--tricolore-border);
+}
+
+.page-card__no-card-text {
+  color: var(--tricolore-text-muted);
+}
+
+.page-card__plans-title {
+  color: var(--tricolore-green);
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   29h. Account Profile Page (tricolore override)
+   -------------------------------------------------------------------------- */
+.page-account-profile {
+  padding: 5rem 0;
+  background: var(--tricolore-bg);
+}
+
+.page-account-profile__header {
+  margin-bottom: 2.5rem;
+}
+
+.page-account-profile__title {
+  color: var(--tricolore-green);
+  font-weight: 700;
+}
+
+.page-account-profile__form {
+  background: #fafafa;
+  border: 1px solid var(--tricolore-border);
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  position: relative;
+}
+
+.page-account-profile__form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--tricolore-green) 33.33%, #fff 33.33%, #fff 66.66%, var(--tricolore-red) 66.66%);
+}
+
+.page-account-profile__fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+}
+
+.page-account-profile__fieldset:last-of-type {
+  margin-bottom: 0;
+}
+
+.page-account-profile__legend {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--tricolore-green);
+  font-weight: 600;
+  font-size: 1.125rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--tricolore-border);
+  width: 100%;
+}
+
+.page-account-profile__legend-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--tricolore-red);
+}
+
+.page-account-profile__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.page-account-profile__field-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .page-account-profile__field-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.page-account-profile__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--tricolore-border);
+}
+
+.page-account-profile__submit {
+  background: var(--tricolore-green);
+  color: #fff;
+  border: none;
+  padding: 0.875rem 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.page-account-profile__submit:hover {
+  background: var(--tricolore-red);
+}
+
+.page-account-profile__submit:focus-visible {
+  outline: 2px solid var(--tricolore-green);
+  outline-offset: 2px;
+}
+
+.page-account-profile__privacy-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--tricolore-text-muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.3s ease;
+}
+
+.page-account-profile__privacy-link:hover {
+  color: var(--tricolore-green);
+}
+
+.page-account-profile__privacy-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-account-profile__submit,
+  .page-account-profile__privacy-link,
+  .membership-card { transition: none; }
+}
+
+/* --------------------------------------------------------------------------
+   29i. My Events Page (tricolore override)
+   -------------------------------------------------------------------------- */
+.page-my-events {
+  padding: 5rem 0;
+  background: var(--tricolore-bg);
+}
+
+.page-my-events__title {
+  color: var(--tricolore-green);
+  font-weight: 700;
+}
+
+.page-my-events__nav-link {
+  background: #fafafa;
+  border: 1px solid var(--tricolore-border);
+  color: #374151;
+  transition: all 0.3s ease;
+}
+
+.page-my-events__nav-link:hover {
+  background: #fff;
+  border-color: var(--tricolore-green);
+  color: var(--tricolore-green);
+}
+
+.page-my-events__nav-link--active {
+  background: var(--tricolore-green);
+  border-color: var(--tricolore-green);
+  color: #fff;
+}
+
+.page-my-events__map {
+  background: #fafafa;
+  border: 1px solid var(--tricolore-border);
+}
+
+.page-my-events__map-placeholder {
+  color: #6b7280;
+}
+
+.page-my-events__year-title {
+  color: var(--tricolore-green);
+  font-weight: 700;
+  border-color: var(--tricolore-border);
+}
+
+.page-my-events__card {
+  background: #fafafa;
+  border: 1px solid var(--tricolore-border);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.page-my-events__card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--tricolore-green) 0%, #fff 50%, var(--tricolore-red) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.page-my-events__card:hover {
+  border-color: var(--tricolore-green);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.page-my-events__card:hover::before {
+  opacity: 1;
+}
+
+.page-my-events__card-title {
+  color: var(--tricolore-green);
+}
+
+.page-my-events__card-link:hover {
+  color: var(--tricolore-red);
+}
+
+.page-my-events__card-meta {
+  color: #6b7280;
+}
+
+.page-my-events__btn--outline {
+  border-color: var(--tricolore-border);
+  color: #374151;
+}
+
+.page-my-events__btn--outline:hover {
+  background: #fff;
+  border-color: var(--tricolore-green);
+  color: var(--tricolore-green);
+}
+
+.page-my-events__btn--primary {
+  background: var(--tricolore-green);
+  border-color: var(--tricolore-green);
+  color: #fff;
+}
+
+.page-my-events__btn--primary:hover {
+  background: var(--tricolore-red);
+  border-color: var(--tricolore-red);
+}
+
+.page-my-events__pagination-link {
+  background: #fafafa;
+  border: 1px solid var(--tricolore-border);
+  color: var(--tricolore-green);
+}
+
+.page-my-events__pagination-link:hover {
+  background: var(--tricolore-green);
+  border-color: var(--tricolore-green);
+  color: #fff;
+}
+
+.page-my-events__pagination-info {
+  color: #6b7280;
+}
+
+.page-my-events__empty {
+  background: #fafafa;
+}
+
+/* === Federation Info Page === */
+
+.page-federation__stats {
+  gap: 2rem;
+}
+
+.page-federation__stat-number {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: var(--tricolore-verde);
+}
+
+.page-federation__stat-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.page-federation__section-title {
+  font-size: 1.9rem;
+  font-weight: 800;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.page-federation__section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--tricolore-verde), var(--tricolore-rosso));
+  border-radius: 2px;
+}
+
+.page-federation__cta .btn {
+  border-radius: var(--tricolore-radius);
+  box-shadow: var(--tricolore-shadow);
+  transition: all var(--tricolore-transition);
+}
+
+.page-federation__cta .btn:hover {
+  box-shadow: var(--tricolore-shadow-lg);
+  transform: translateY(-2px);
+}
+
+.federation-club-card {
+  border: none;
+  border-radius: var(--tricolore-radius);
+  box-shadow: var(--tricolore-shadow);
+  transition: all var(--tricolore-transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.federation-club-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--tricolore-verde), #fff, var(--tricolore-rosso));
+  opacity: 0;
+  transition: opacity var(--tricolore-transition);
+}
+
+.federation-club-card:hover {
+  box-shadow: var(--tricolore-shadow-lg);
+  transform: translateY(-3px);
+}
+
+.federation-club-card:hover::before {
+  opacity: 1;
+}
+
+.federation-club-card__logo {
+  border-radius: var(--tricolore-radius-sm);
+  overflow: hidden;
+}
+
+.federation-club-card__logo--placeholder {
+  background: linear-gradient(135deg, rgba(0, 140, 69, 0.05), rgba(206, 43, 55, 0.05));
+  border-radius: var(--tricolore-radius-sm);
+  color: var(--color-text-muted);
+}
+
+.federation-club-card__content {
+  padding: 1.5rem;
+}
+
+.federation-club-card__name {
+  font-size: 1.2rem;
+  font-weight: 800;
+  transition: color var(--tricolore-transition);
+}
+
+.federation-club-card__code {
+  background: rgba(0, 140, 69, 0.1);
+  color: var(--tricolore-verde);
+  border-radius: var(--tricolore-radius-sm);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+}
+
+/* Federation — Dark mode */
+.dark-mode .federation-club-card {
+  background: #1e1e2a;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .federation-club-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .federation-club-card__logo--placeholder {
+  background: linear-gradient(135deg, rgba(0, 140, 69, 0.1), rgba(206, 43, 55, 0.1));
+}
+
+.dark-mode .federation-club-card__code {
+  background: rgba(0, 140, 69, 0.2);
+  color: #6ee7a0;
+}
+
+.dark-mode .page-federation__stat-number {
+  color: #6ee7a0;
+}
+
+.dark-mode .page-federation__section-title::after {
+  background: linear-gradient(90deg, #6ee7a0, var(--tricolore-rosso));
+}
+
+/* ── Mutual Aid — Tricolore aesthetic ─────────────────────── */
+.aid-card {
+  border-radius: var(--tricolore-radius, 12px);
+  box-shadow: var(--tricolore-shadow);
+  transition: all var(--tricolore-transition);
+}
+.aid-card--link:hover {
+  box-shadow: var(--tricolore-shadow-lg);
+  border-color: var(--color-primary, #009246);
+}
+.aid-card--link:focus-visible {
+  outline-color: var(--color-primary, #009246);
+}
+.aid-card__badge {
+  border-radius: var(--tricolore-radius-sm, 4px);
+  background: rgba(0,146,70,0.1);
+  color: var(--color-primary, #009246);
+}
+.aid-card__distance {
+  border-radius: var(--tricolore-radius-sm, 4px);
+}
+.aid-card__source-badge {
+  border-radius: var(--tricolore-radius-sm, 4px);
+}
+.aid-search__results-summary {
+  border-radius: var(--tricolore-radius-sm, 4px);
+}
+.aid-map {
+  border-radius: var(--tricolore-radius, 12px);
+  box-shadow: var(--tricolore-shadow);
+}
+.aid-emergency {
+  border-radius: var(--tricolore-radius, 12px);
+  border-color: var(--color-secondary, #CE2B37);
+}
+.aid-emergency__title {
+  color: var(--color-secondary, #CE2B37);
+}
+.helper-detail__emergency {
+  border-radius: var(--tricolore-radius, 12px);
+  border-color: var(--color-secondary, #CE2B37);
+}
+.helper-detail__club-contacts {
+  border-radius: var(--tricolore-radius, 12px);
+}
+.helper-detail__quick-actions {
+  border-radius: var(--tricolore-radius, 12px);
+}
+.helper-detail__info-section {
+  border-radius: var(--tricolore-radius, 12px);
+}
+.helper-detail__guidance {
+  border-radius: var(--tricolore-radius, 12px);
+}
+.helper-detail__call-btn {
+  border-radius: var(--tricolore-radius-sm, 4px);
+  transition: all var(--tricolore-transition);
+}
+.helper-detail__call-btn--emergency {
+  background: var(--color-secondary, #CE2B37);
+  border-color: var(--color-secondary, #CE2B37);
+}
+.helper-detail__call-btn--emergency:hover {
+  background: #a82230;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-my-events__nav-link,
+  .page-my-events__card,
+  .page-my-events__card::before,
+  .page-my-events__btn,
+  .page-my-events__pagination-link { transition: none; }
+
+  .federation-club-card,
+  .federation-club-card::before,
+  .page-federation__cta .btn { transition: none; transform: none; }
+
+  .aid-card,
+  .helper-detail__call-btn { transition: none; transform: none; }
 }

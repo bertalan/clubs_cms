@@ -1,0 +1,24 @@
+{% load wagtailcore_tags wagtailimages_tags i18n website_tags %}
+
+<section {% block_attrs self.settings "block-testimonials" %} data-layout="{{ self.layout }}">
+    <div class="container">
+        {% if self.title %}
+        <h2 class="block-testimonials__title">{{ self.title }}</h2>
+        {% endif %}
+        <div class="block-testimonials__list">
+            {% for item in self.testimonials %}
+            <div class="block-testimonials__item">
+                {% if item.value.avatar %}
+                    {% image item.value.avatar fill-80x80 as avatar_img %}
+                    <img class="block-testimonials__avatar" src="{{ avatar_img.url }}" alt="{{ item.value.name }}" loading="lazy">
+                {% endif %}
+                <blockquote class="block-testimonials__quote">{{ item.value.quote }}</blockquote>
+                <cite class="block-testimonials__cite">
+                    <strong>{{ item.value.name }}</strong>
+                    {% if item.value.role %}<span>{{ item.value.role }}</span>{% endif %}
+                </cite>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

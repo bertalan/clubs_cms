@@ -17,19 +17,25 @@
     body { font-family: system-ui, -apple-system, sans-serif; background: var(--cream); color: var(--text); line-height: 1.6; }
     a { color: var(--forest); }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
-    
+
     /* Nav */
     nav { background: var(--forest); padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
     nav .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
     .logo { color: white; text-decoration: none; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; }
     .logo span { color: var(--accent); }
-    nav ul { list-style: none; display: flex; gap: 2rem; flex-wrap: wrap; }
-    nav ul a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 500; transition: color 0.2s; }
-    nav ul a:hover, nav ul a.active { color: var(--accent); }
-    
+    .nav-center { list-style: none; display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; }
+    .nav-center a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .nav-center a:hover, .nav-center a.active { color: var(--accent); }
+    .nav-cta {
+      display: inline-block; padding: 0.5rem 1.25rem; background: var(--accent); color: white;
+      text-decoration: none; font-weight: 700; border-radius: 2px; font-size: 0.9rem;
+      transition: all 0.3s ease; letter-spacing: 0.02em;
+    }
+    .nav-cta:hover { background: #ff6b0a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(232,93,4,0.3); }
+
     /* Header with diagonal */
-    .header { 
-      background: linear-gradient(135deg, var(--forest) 0%, #3d6b1e 100%); 
+    .header {
+      background: linear-gradient(135deg, var(--forest) 0%, #3d6b1e 100%);
       color: white; padding: 4rem 0 6rem; text-align: center;
       position: relative; overflow: hidden;
     }
@@ -40,10 +46,10 @@
     }
     .header h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; }
     .header p { opacity: 0.9; }
-    
+
     /* Section */
     .section { padding: 4rem 0; }
-    .section h2 { 
+    .section h2 {
       color: var(--forest); margin-bottom: 1.5rem; font-size: 1.8rem; font-weight: 800;
       position: relative; display: inline-block;
     }
@@ -51,54 +57,92 @@
       content: ''; display: block; width: 40px; height: 3px;
       background: var(--accent); margin-top: 0.5rem;
     }
-    
+
     /* Content Grid */
     .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
     @media (max-width: 768px) { .content-grid { grid-template-columns: 1fr; } }
-    
+
     /* Values Cards with racing stripe */
     .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
-    .value-card { 
-      background: white; border-left: 4px solid var(--accent); padding: 1.5rem; 
+    .value-card {
+      background: white; border-left: 4px solid var(--accent); padding: 1.5rem;
       text-align: center; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
     .value-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
     .value-icon { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
     .value-card h3 { color: var(--forest); margin-bottom: 0.5rem; font-weight: 700; }
     .value-card p { font-size: 0.9rem; color: var(--text-light); }
-    
+
     /* Sidebar */
-    .sidebar { 
-      background: white; border-left: 4px solid var(--accent); padding: 1.5rem; 
+    .sidebar {
+      background: white; border-left: 4px solid var(--accent); padding: 1.5rem;
       height: fit-content; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
     .sidebar h3 { color: var(--forest); margin-bottom: 1.5rem; font-weight: 700; }
     .team-member { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #eee; }
     .team-member:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-    .team-member .avatar { 
-      width: 60px; height: 60px; background: linear-gradient(135deg, var(--forest), #3d6b1e); 
-      border-radius: 50%; margin: 0 auto 0.75rem; 
+    .team-member .avatar {
+      width: 60px; height: 60px; background: linear-gradient(135deg, var(--forest), #3d6b1e);
+      border-radius: 50%; margin: 0 auto 0.75rem;
     }
     .team-member strong { color: var(--forest); }
     .team-member p { font-size: 0.85rem; color: var(--text-light); }
-    
+
+    /* Join CTA */
+    .join-cta {
+      background: linear-gradient(135deg, var(--forest), #3d6b1e);
+      color: white; padding: 5rem 0; text-align: center; position: relative;
+    }
+    .join-cta::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 60px; background: var(--cream);
+      clip-path: polygon(0 0, 100% 0, 100% 100%);
+    }
+    .join-cta h2 { font-size: 2rem; font-weight: 900; margin-bottom: 0.75rem; }
+    .join-cta h2::after { display: none; }
+    .join-cta p { opacity: 0.9; margin-bottom: 1.5rem; max-width: 550px; margin-left: auto; margin-right: auto; font-size: 1.05rem; }
+    .join-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block; padding: 0.75rem 1.75rem; text-decoration: none;
+      font-weight: 700; border-radius: 2px; transition: all 0.3s ease;
+    }
+    .btn-accent { background: var(--accent); color: white; }
+    .btn-accent:hover { background: #ff6b0a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(232,93,4,0.3); }
+    .btn-outline { background: transparent; color: white; border: 2px solid white; }
+    .btn-outline:hover { background: white; color: var(--forest); }
+
     /* Footer */
-    footer { background: #1a1a1a; color: #aaa; padding: 2rem 0; text-align: center; }
+    footer { background: #1a1a1a; color: #aaa; padding: 3rem 0 1.5rem; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+    footer h4 { color: white; margin-bottom: 1rem; font-weight: 700; }
     footer a { color: #aaa; text-decoration: none; transition: color 0.2s; }
     footer a:hover { color: var(--accent); }
+    footer ul { list-style: none; }
+    footer ul li { margin-bottom: 0.4rem; }
+    footer hr { border: none; border-top: 1px solid #333; margin-bottom: 1.5rem; }
+    .footer-copy { text-align: center; font-size: 0.85rem; color: #666; }
+    .social-links { display: flex; gap: 1rem; margin-top: 1rem; }
+    .social-links a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 50%; background: #333;
+      color: #aaa; text-decoration: none; font-size: 0.85rem; font-weight: 700;
+      transition: all 0.3s ease;
+    }
+    .social-links a:hover { background: var(--accent); color: white; }
   </style>
 </head>
 <body>
   <nav>
     <div class="container">
       <a href="index.html" class="logo">Green<span>Org</span></a>
-      <ul>
+      <ul class="nav-center">
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html" class="active">About</a></li>
         <li><a href="events.html">Events</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
+      <a href="contact.html" class="nav-cta">Join Us</a>
     </div>
   </nav>
 
@@ -119,22 +163,22 @@
           <h2>Our Values</h2>
           <div class="values-grid">
             <div class="value-card">
-              <span class="value-icon">🌱</span>
+              <span class="value-icon">&#9752;</span>
               <h3>Sustainability</h3>
               <p>Every decision considers environmental impact</p>
             </div>
             <div class="value-card">
-              <span class="value-icon">🤝</span>
+              <span class="value-icon">&#9829;</span>
               <h3>Community</h3>
               <p>Working together for collective benefit</p>
             </div>
             <div class="value-card">
-              <span class="value-icon">📚</span>
+              <span class="value-icon">&#9733;</span>
               <h3>Education</h3>
               <p>Empowering through knowledge</p>
             </div>
             <div class="value-card">
-              <span class="value-icon">♻️</span>
+              <span class="value-icon">&#9654;</span>
               <h3>Action</h3>
               <p>Turning ideas into tangible results</p>
             </div>
@@ -146,7 +190,7 @@
           <div class="team-member">
             <div class="avatar"></div>
             <strong>David Park</strong>
-            <p>Founder & Director</p>
+            <p>Founder &amp; Director</p>
           </div>
           <div class="team-member">
             <div class="avatar"></div>
@@ -163,10 +207,58 @@
     </div>
   </section>
 
+  <!-- Join Our Community CTA -->
+  <section class="join-cta">
+    <div class="container">
+      <h2>Join Our Community</h2>
+      <p>Whether you are passionate about gardening, conservation, or simply want to meet like-minded people, there is a place for you at GreenOrg. Together, we can build a more sustainable future.</p>
+      <div class="join-btns">
+        <a href="contact.html" class="btn btn-accent">Become a Member</a>
+        <a href="events.html" class="btn btn-outline">View Events</a>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <div class="container">
-      <p>© 2026 GreenOrg • Terra Theme Demo</p>
-      <p style="margin-top: 0.5rem;"><a href="index.html">Home</a> · <a href="events.html">Events</a> · <a href="contact.html">Contact</a></p>
+      <div class="footer-grid">
+        <div>
+          <h4>GreenOrg</h4>
+          <p style="font-size: 0.9rem; line-height: 1.8;">
+            789 Nature Way<br>
+            Green Valley<br>
+            <a href="mailto:info@greenorg.example">info@greenorg.example</a><br>
+            <a href="tel:+15554567890">+1 (555) 456-7890</a>
+          </p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook" title="Facebook">Fb</a>
+            <a href="#" aria-label="Instagram" title="Instagram">Ig</a>
+            <a href="#" aria-label="Twitter" title="Twitter">Tw</a>
+          </div>
+        </div>
+        <div>
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Sustainability Guide</a></li>
+            <li><a href="#">Partner Network</a></li>
+            <li><a href="#">Volunteer Handbook</a></li>
+            <li><a href="#">Annual Report</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <p class="footer-copy">&copy; 2026 GreenOrg &bull; Terra Theme Demo &bull; Built with minimal footprint</p>
     </div>
   </footer>
 </body>

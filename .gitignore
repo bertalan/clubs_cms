@@ -1,9 +1,44 @@
-.DS_Store
-clubcms.tgz
-media-items/
-*.pyc
+# Python
+*.py[cod]
+*$py.class
 __pycache__/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Django / project
 *.sqlite3
 clubcms/media/*
 !clubcms/media/.gitkeep
 clubcms/staticfiles/
+clubcms/messages.mo
+
+# Archives & temp
+clubcms.tgz
+clubcms/scripts.zip
+media-items/
+
+# Tests
+.pytest_cache/
+
+# AI / IDE / editor
+.claude/
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+
+# Local task notes (not for VCS)
+tasks/
+clubcms/backups/

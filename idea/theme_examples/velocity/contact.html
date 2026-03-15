@@ -5,34 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact - Velocity Theme Demo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Open+Sans&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            neon: '#39FF14',
+            dark: { 950: '#0a0a0f', 900: '#111118', 800: '#1a1a24', 700: '#252530' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
-    :root { --primary: #0F172A; --secondary: #F59E0B; --accent: #8B5CF6; }
-    body { font-family: 'Open Sans', sans-serif; }
-    h1, h2, h3, h4 { font-family: 'Inter', sans-serif; }
+    body { font-family: 'Inter', sans-serif; background: #0a0a0f; }
+    h1, h2, h3, h4 { font-family: 'Rajdhani', 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.05em; }
+    .neon-glow { box-shadow: 0 0 20px rgba(57, 255, 20, 0.3); }
+    .neon-text-glow { text-shadow: 0 0 20px rgba(57, 255, 20, 0.5); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .faq-answer.open { max-height: 300px; }
+    .faq-toggle.open svg { transform: rotate(180deg); }
   </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-dark-950 text-gray-300">
+
   <!-- Navbar -->
-  <nav class="fixed w-full bg-slate-900/95 backdrop-blur z-50">
+  <nav class="fixed w-full bg-dark-950/95 backdrop-blur-md z-50 border-b border-neon/10">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-      <a href="index.html" class="text-2xl font-black text-white">Club<span class="text-amber-500">Hub</span></a>
-      <div class="hidden md:flex gap-8 text-white">
-        <a href="index.html" class="hover:text-amber-500 transition">Home</a>
-        <a href="about.html" class="hover:text-amber-500 transition">About</a>
-        <a href="events.html" class="hover:text-amber-500 transition">Events</a>
-        <a href="gallery.html" class="hover:text-amber-500 transition">Gallery</a>
-        <a href="contact.html" class="text-amber-500">Contact</a>
+      <a href="index.html" class="text-2xl font-black text-white uppercase tracking-wider" style="font-family:'Rajdhani',sans-serif;">
+        Club<span class="text-neon">Hub</span>
+      </a>
+      <div class="hidden md:flex gap-8 text-sm uppercase tracking-wider font-semibold">
+        <a href="index.html" class="text-gray-400 hover:text-neon transition">Home</a>
+        <a href="about.html" class="text-gray-400 hover:text-neon transition">About</a>
+        <a href="events.html" class="text-gray-400 hover:text-neon transition">Events</a>
+        <a href="gallery.html" class="text-gray-400 hover:text-neon transition">Gallery</a>
+        <a href="contact.html" class="text-neon">Contact</a>
       </div>
-      <a href="contact.html" class="bg-amber-500 text-slate-900 px-5 py-2 rounded-full font-bold hover:scale-105 transition">Join Us</a>
+      <a href="contact.html" class="bg-neon text-dark-950 px-5 py-2 rounded font-bold text-sm uppercase tracking-wider hover:shadow-[0_0_20px_rgba(57,255,20,0.4)] transition">Join Us</a>
     </div>
   </nav>
 
   <!-- Hero -->
-  <section class="pt-32 pb-16 bg-slate-900">
+  <section class="pt-32 pb-16 bg-dark-900 border-b border-neon/10">
     <div class="max-w-4xl mx-auto px-6 text-center text-white">
-      <h1 class="text-5xl font-black mb-6">Get in Touch</h1>
-      <p class="text-xl text-white">We'd love to hear from you</p>
+      <span class="inline-block bg-neon/10 text-neon border border-neon/30 px-4 py-1 rounded text-sm font-bold uppercase tracking-widest mb-6">Reach Out</span>
+      <h1 class="text-5xl font-black mb-6 neon-text-glow">Get in Touch</h1>
+      <p class="text-xl text-gray-300">We'd love to hear from you</p>
     </div>
   </section>
 
@@ -40,77 +60,216 @@
   <section class="py-20">
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid lg:grid-cols-2 gap-12">
-        <!-- Form -->
-        <div class="bg-white p-8 rounded-2xl shadow-lg">
-          <h2 class="text-2xl font-bold text-slate-900 mb-6">Send us a message</h2>
+
+        <!-- Contact Form -->
+        <div class="bg-dark-800 border border-dark-700 p-8 rounded-lg">
+          <h2 class="text-2xl font-bold text-white mb-6">Send Us a Message</h2>
           <form class="space-y-6">
+            <!-- First Name / Last Name -->
             <div class="grid md:grid-cols-2 gap-6">
               <div>
-                <label class="block text-sm font-bold text-slate-700 mb-2">First Name</label>
-                <input type="text" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none transition">
+                <label for="first-name" class="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">First Name <span class="text-neon">*</span></label>
+                <input type="text" id="first-name" name="first_name" required
+                  placeholder="Enter your first name"
+                  aria-label="First Name"
+                  class="w-full px-4 py-3 rounded bg-dark-900 border border-dark-700 text-white placeholder-gray-500 focus:border-neon focus:outline-none focus:ring-1 focus:ring-neon/50 transition">
               </div>
               <div>
-                <label class="block text-sm font-bold text-slate-700 mb-2">Last Name</label>
-                <input type="text" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none transition">
+                <label for="last-name" class="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">Last Name <span class="text-neon">*</span></label>
+                <input type="text" id="last-name" name="last_name" required
+                  placeholder="Enter your last name"
+                  aria-label="Last Name"
+                  class="w-full px-4 py-3 rounded bg-dark-900 border border-dark-700 text-white placeholder-gray-500 focus:border-neon focus:outline-none focus:ring-1 focus:ring-neon/50 transition">
               </div>
             </div>
+            <!-- Email -->
             <div>
-              <label class="block text-sm font-bold text-slate-700 mb-2">Email</label>
-              <input type="email" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none transition">
+              <label for="email" class="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">Email <span class="text-neon">*</span></label>
+              <input type="email" id="email" name="email" required
+                placeholder="Enter your email address"
+                aria-label="Email"
+                class="w-full px-4 py-3 rounded bg-dark-900 border border-dark-700 text-white placeholder-gray-500 focus:border-neon focus:outline-none focus:ring-1 focus:ring-neon/50 transition">
             </div>
+            <!-- Subject -->
             <div>
-              <label class="block text-sm font-bold text-slate-700 mb-2">Subject</label>
-              <select class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none transition">
-                <option>General Inquiry</option>
-                <option>Membership</option>
-                <option>Events</option>
-                <option>Partnership</option>
+              <label for="subject" class="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">Subject <span class="text-neon">*</span></label>
+              <select id="subject" name="subject" required
+                aria-label="Subject"
+                class="w-full px-4 py-3 rounded bg-dark-900 border border-dark-700 text-white focus:border-neon focus:outline-none focus:ring-1 focus:ring-neon/50 transition">
+                <option value="" disabled selected>Select a subject</option>
+                <option value="general">General Inquiry</option>
+                <option value="membership">Membership</option>
+                <option value="events">Events</option>
+                <option value="partnership">Partnership</option>
+                <option value="other">Other</option>
               </select>
             </div>
+            <!-- Phone (optional) -->
             <div>
-              <label class="block text-sm font-bold text-slate-700 mb-2">Message</label>
-              <textarea rows="5" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none transition resize-none"></textarea>
+              <label for="phone" class="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">Phone</label>
+              <input type="tel" id="phone" name="phone"
+                placeholder="Enter your phone number (optional)"
+                aria-label="Phone"
+                class="w-full px-4 py-3 rounded bg-dark-900 border border-dark-700 text-white placeholder-gray-500 focus:border-neon focus:outline-none focus:ring-1 focus:ring-neon/50 transition">
             </div>
-            <button type="submit" class="w-full bg-amber-500 text-slate-900 py-4 rounded-full font-bold hover:scale-105 transition">Send Message</button>
+            <!-- Message -->
+            <div>
+              <label for="message" class="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">Message <span class="text-neon">*</span></label>
+              <textarea id="message" name="message" rows="5" required
+                placeholder="Write your message here..."
+                aria-label="Message"
+                class="w-full px-4 py-3 rounded bg-dark-900 border border-dark-700 text-white placeholder-gray-500 focus:border-neon focus:outline-none focus:ring-1 focus:ring-neon/50 transition resize-none"></textarea>
+            </div>
+            <!-- GDPR / Privacy Checkbox -->
+            <div class="flex items-start gap-3">
+              <input type="checkbox" id="privacy" name="privacy" required
+                class="mt-1 w-4 h-4 rounded border-dark-700 bg-dark-900 text-neon focus:ring-neon/50 accent-[#39FF14]">
+              <label for="privacy" class="text-sm text-gray-400">
+                I have read and accept the <a href="#" class="text-neon hover:underline">privacy policy</a>. <span class="text-neon">*</span>
+              </label>
+            </div>
+            <!-- Submit -->
+            <button type="submit" class="w-full bg-neon text-dark-950 py-4 rounded font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_25px_rgba(57,255,20,0.4)] transition">
+              Send Message
+            </button>
           </form>
         </div>
-        
-        <!-- Info -->
+
+        <!-- Contact Info & Map -->
         <div class="space-y-8">
+          <!-- Contact Information -->
           <div>
-            <h2 class="text-2xl font-bold text-slate-900 mb-6">Contact Information</h2>
+            <h2 class="text-2xl font-bold text-white mb-6">Contact Information</h2>
             <div class="space-y-4">
               <div class="flex gap-4 items-start">
-                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-500 font-bold">📍</div>
+                <div class="w-12 h-12 bg-neon/10 border border-neon/30 rounded flex items-center justify-center text-neon font-bold flex-shrink-0">&#128205;</div>
                 <div>
-                  <h3 class="font-bold text-slate-900">Address</h3>
-                  <p class="text-slate-600">123 Community Street<br>City, Country 12345</p>
+                  <h3 class="font-bold text-white">Address</h3>
+                  <p class="text-gray-400">123 Community Street<br>City, Country 12345</p>
                 </div>
               </div>
               <div class="flex gap-4 items-start">
-                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-500 font-bold">✉️</div>
+                <div class="w-12 h-12 bg-neon/10 border border-neon/30 rounded flex items-center justify-center text-neon font-bold flex-shrink-0">&#9993;</div>
                 <div>
-                  <h3 class="font-bold text-slate-900">Email</h3>
-                  <p class="text-slate-600">hello@clubhub.example</p>
+                  <h3 class="font-bold text-white">Email</h3>
+                  <p class="text-gray-400">hello@clubhub.example</p>
                 </div>
               </div>
               <div class="flex gap-4 items-start">
-                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-amber-500 font-bold">📞</div>
+                <div class="w-12 h-12 bg-neon/10 border border-neon/30 rounded flex items-center justify-center text-neon font-bold flex-shrink-0">&#128222;</div>
                 <div>
-                  <h3 class="font-bold text-slate-900">Phone</h3>
-                  <p class="text-slate-600">+1 234 567 890</p>
+                  <h3 class="font-bold text-white">Phone</h3>
+                  <p class="text-gray-400">+1 234 567 890</p>
                 </div>
               </div>
             </div>
           </div>
-          
-          <div class="bg-slate-900 p-8 rounded-2xl text-white">
-            <h3 class="text-xl font-bold mb-4">Office Hours</h3>
-            <ul class="space-y-2 text-slate-300">
-              <li class="flex justify-between"><span>Monday - Friday</span><span>9:00 - 18:00</span></li>
-              <li class="flex justify-between"><span>Saturday</span><span>10:00 - 14:00</span></li>
-              <li class="flex justify-between"><span>Sunday</span><span>Closed</span></li>
+
+          <!-- Office Hours -->
+          <div class="bg-dark-800 border border-dark-700 p-8 rounded-lg">
+            <h3 class="text-xl font-bold text-white mb-4">Office Hours</h3>
+            <ul class="space-y-2 text-gray-400">
+              <li class="flex justify-between"><span>Monday &ndash; Friday</span><span class="text-neon">9:00 &ndash; 18:00</span></li>
+              <li class="flex justify-between"><span>Saturday</span><span class="text-neon">10:00 &ndash; 14:00</span></li>
+              <li class="flex justify-between"><span>Sunday</span><span class="text-gray-500">Closed</span></li>
             </ul>
+          </div>
+
+          <!-- Map Placeholder -->
+          <div class="bg-dark-800 border border-dark-700 rounded-lg overflow-hidden">
+            <div class="h-64 flex items-center justify-center bg-dark-900">
+              <div class="text-center">
+                <div class="text-4xl mb-3">&#128506;</div>
+                <p class="text-gray-500 uppercase tracking-wider text-sm font-bold">Map Placeholder</p>
+                <p class="text-gray-600 text-xs mt-1">123 Community Street, City, Country 12345</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-20 bg-dark-900 border-y border-neon/10">
+    <div class="max-w-4xl mx-auto px-6">
+      <h2 class="text-4xl font-black text-white text-center mb-4">Frequently Asked Questions</h2>
+      <p class="text-gray-400 text-center mb-12 uppercase tracking-wider text-sm">Quick answers to common questions</p>
+
+      <div class="space-y-4">
+        <!-- FAQ 1 -->
+        <div class="bg-dark-800 border border-dark-700 rounded-lg overflow-hidden">
+          <button class="faq-toggle w-full flex justify-between items-center p-6 text-left transition hover:bg-dark-700/50" onclick="toggleFaq(this)">
+            <span class="font-bold text-white">How do I become a member?</span>
+            <svg class="w-5 h-5 text-neon transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <div class="px-6 pb-6 text-gray-400">
+              Joining ClubHub is easy! Simply fill out the contact form above or visit our registration page. Annual membership costs &euro;50 and includes full access to all events, workshops, and member-only resources. You can also visit us during office hours.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="bg-dark-800 border border-dark-700 rounded-lg overflow-hidden">
+          <button class="faq-toggle w-full flex justify-between items-center p-6 text-left transition hover:bg-dark-700/50" onclick="toggleFaq(this)">
+            <span class="font-bold text-white">What events do you organize?</span>
+            <svg class="w-5 h-5 text-neon transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <div class="px-6 pb-6 text-gray-400">
+              We organize a wide variety of events including an annual conference, seasonal workshops, monthly meetups, retreats, hackathons, and social gatherings. Check our <a href="events.html" class="text-neon hover:underline">Events page</a> for the full calendar and upcoming activities.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="bg-dark-800 border border-dark-700 rounded-lg overflow-hidden">
+          <button class="faq-toggle w-full flex justify-between items-center p-6 text-left transition hover:bg-dark-700/50" onclick="toggleFaq(this)">
+            <span class="font-bold text-white">Can I attend events as a non-member?</span>
+            <svg class="w-5 h-5 text-neon transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <div class="px-6 pb-6 text-gray-400">
+              Absolutely! Some of our events are open to non-members, especially monthly meetups and social gatherings. However, members get priority registration, discounted prices, and access to exclusive member-only events and workshops.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="bg-dark-800 border border-dark-700 rounded-lg overflow-hidden">
+          <button class="faq-toggle w-full flex justify-between items-center p-6 text-left transition hover:bg-dark-700/50" onclick="toggleFaq(this)">
+            <span class="font-bold text-white">How can I volunteer or contribute?</span>
+            <svg class="w-5 h-5 text-neon transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <div class="px-6 pb-6 text-gray-400">
+              We are always looking for passionate volunteers! You can help with event organization, mentoring, content creation, or community management. Reach out via the contact form and select "General Inquiry" to learn about current volunteer opportunities.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 5 -->
+        <div class="bg-dark-800 border border-dark-700 rounded-lg overflow-hidden">
+          <button class="faq-toggle w-full flex justify-between items-center p-6 text-left transition hover:bg-dark-700/50" onclick="toggleFaq(this)">
+            <span class="font-bold text-white">What is your cancellation and refund policy?</span>
+            <svg class="w-5 h-5 text-neon transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <div class="px-6 pb-6 text-gray-400">
+              Event registrations can be cancelled up to 72 hours before the event for a full refund. Cancellations within 72 hours receive a 50% refund or a credit toward a future event. Membership fees are non-refundable but transferable to another person within the same calendar year.
+            </div>
           </div>
         </div>
       </div>
@@ -118,31 +277,66 @@
   </section>
 
   <!-- Footer -->
-  <footer class="bg-slate-900 text-white/70 py-12">
-    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
-      <div>
-        <h3 class="text-xl font-bold text-white mb-4">ClubHub</h3>
-        <p>123 Community Street</p>
-        <p>hello@clubhub.example</p>
-      </div>
-      <div>
-        <h3 class="text-xl font-bold text-white mb-4">Links</h3>
-        <ul class="space-y-2">
-          <li><a href="about.html" class="hover:text-amber-500">About Us</a></li>
-          <li><a href="events.html" class="hover:text-amber-500">Events</a></li>
-          <li><a href="contact.html" class="hover:text-amber-500">Contact</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3 class="text-xl font-bold text-white mb-4">Follow Us</h3>
-        <div class="flex gap-4">
-          <span class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">FB</span>
-          <span class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">IG</span>
-          <span class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">YT</span>
+  <footer class="bg-dark-950 border-t border-neon/10 text-gray-400 py-16">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div>
+          <a href="index.html" class="text-2xl font-bold text-white uppercase tracking-wider" style="font-family:'Rajdhani',sans-serif;">
+            Club<span class="text-neon">Hub</span>
+          </a>
+          <p class="mt-4 text-sm">Your community, your passion.<br>Dark sporty energy since 2010.</p>
+        </div>
+        <div>
+          <h4 class="text-white font-bold uppercase tracking-wider mb-4" style="font-family:'Rajdhani',sans-serif;">Contact</h4>
+          <ul class="space-y-2 text-sm">
+            <li>123 Community Street</li>
+            <li>City, Country 12345</li>
+            <li>hello@clubhub.example</li>
+            <li>+1 234 567 890</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-bold uppercase tracking-wider mb-4" style="font-family:'Rajdhani',sans-serif;">Navigation</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="index.html" class="hover:text-neon transition">Home</a></li>
+            <li><a href="about.html" class="hover:text-neon transition">About</a></li>
+            <li><a href="events.html" class="hover:text-neon transition">Events</a></li>
+            <li><a href="gallery.html" class="hover:text-neon transition">Gallery</a></li>
+            <li><a href="contact.html" class="hover:text-neon transition">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-bold uppercase tracking-wider mb-4" style="font-family:'Rajdhani',sans-serif;">Follow Us</h4>
+          <div class="flex gap-3">
+            <a href="#" class="w-10 h-10 bg-dark-800 hover:bg-neon hover:text-dark-950 rounded flex items-center justify-center transition text-sm font-bold">FB</a>
+            <a href="#" class="w-10 h-10 bg-dark-800 hover:bg-neon hover:text-dark-950 rounded flex items-center justify-center transition text-sm font-bold">IG</a>
+            <a href="#" class="w-10 h-10 bg-dark-800 hover:bg-neon hover:text-dark-950 rounded flex items-center justify-center transition text-sm font-bold">YT</a>
+          </div>
         </div>
       </div>
+      <div class="border-t border-dark-700 mt-12 pt-8 text-center text-sm text-gray-500">
+        &copy; 2026 ClubHub &bull; Velocity Theme Demo
+      </div>
     </div>
-    <div class="border-t border-white/10 mt-8 pt-8 text-center text-sm">© 2026 ClubHub • Velocity Theme Demo</div>
   </footer>
+
+  <!-- FAQ Accordion Script -->
+  <script>
+    function toggleFaq(button) {
+      const answer = button.nextElementSibling;
+      const isOpen = answer.classList.contains('open');
+
+      // Close all
+      document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+      document.querySelectorAll('.faq-toggle').forEach(t => t.classList.remove('open'));
+
+      // Open clicked if it was closed
+      if (!isOpen) {
+        answer.classList.add('open');
+        button.classList.add('open');
+      }
+    }
+  </script>
+
 </body>
 </html>

@@ -5,6 +5,7 @@ All views require login. Interest and comment actions require
 active membership.
 """
 
+import json
 import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -12,6 +13,7 @@ from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 from django.views.generic import DetailView, ListView, View
 
 from apps.federation.models import (
@@ -26,6 +28,56 @@ logger = logging.getLogger(__name__)
 def _is_active_member(user):
     """Check if user is an active club member."""
     return getattr(user, "is_active_member", False)
+
+
+def _build_event_json_ld(event):
+    """Build a schema.org/Event dict for JSON-LD structured data."""
+    data = {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": event.event_name,
+        "startDate": event.start_date.isoformat(),
+        "eventStatus": f"https://schema.org/{event.event_status}",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "organizer": {
+            "@type": "Organization",
+            "name": event.source_club.name,
+        },
+    }
+
+    if event.end_date:
+        data["endDate"] = event.end_date.isoformat()
+
+    if event.source_club.base_url:
+        data["organizer"]["url"] = event.source_club.base_url
+
+    if event.detail_url:
+        data["url"] = event.detail_url
+
+    if event.location_name or event.location_address:
+        location = {"@type": "Place"}
+        if event.location_name:
+            location["name"] = event.location_name
+        if event.location_address:
+            location["address"] = event.location_address
+        if event.location_lat and event.location_lon:
+            location["geo"] = {
+                "@type": "GeoCoordinates",
+                "latitude": event.location_lat,
+                "longitude": event.location_lon,
+            }
+        data["location"] = location
+
+    if event.description:
+        from django.utils.html import strip_tags
+        from django.template.defaultfilters import truncatewords
+
+        data["description"] = truncatewords(strip_tags(event.description), 50)
+
+    if event.image_url:
+        data["image"] = event.image_url
+
+    return data
 
 
 class ExternalEventsListView(LoginRequiredMixin, ListView):
@@ -127,6 +179,11 @@ class ExternalEventDetailView(LoginRequiredMixin, DetailView):
         }
 
         context["is_active_member"] = _is_active_member(user)
+
+        # JSON-LD Event structured data
+        context["json_ld"] = mark_safe(
+            json.dumps(_build_event_json_ld(event), ensure_ascii=False)
+        )
 
         return context
 

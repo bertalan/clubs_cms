@@ -1,0 +1,36 @@
+{% load wagtailimages_tags %}
+
+<section class="block-partners-grid">
+    <div class="container">
+        {% if self.title or self.subtitle %}
+        <div class="block-partners-grid__header">
+            {% if self.title %}
+            <h2 class="block-partners-grid__title">{{ self.title }}</h2>
+            {% endif %}
+            {% if self.subtitle %}
+            <p class="block-partners-grid__subtitle">{{ self.subtitle }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+        <div class="block-partners-grid__grid" data-columns="{{ self.columns }}">
+            {% for partner in self.partners %}
+            <div class="block-partners-grid__card">
+                {% if partner.value.logo %}
+                    {% image partner.value.logo fill-160x160 as partner_img %}
+                    <img class="block-partners-grid__logo" src="{{ partner_img.url }}" alt="{{ partner.value.name }}" loading="lazy" width="{{ partner_img.width }}" height="{{ partner_img.height }}">
+                {% endif %}
+                <h3 class="block-partners-grid__name">
+                    {% if partner.value.url %}
+                        <a href="{{ partner.value.url }}" target="_blank" rel="noopener noreferrer">{{ partner.value.name }}</a>
+                    {% else %}
+                        {{ partner.value.name }}
+                    {% endif %}
+                </h3>
+                {% if partner.value.description %}
+                <p class="block-partners-grid__description">{{ partner.value.description }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

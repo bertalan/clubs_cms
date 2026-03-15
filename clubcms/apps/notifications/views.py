@@ -165,7 +165,7 @@ class PushUnsubscribeView(LoginRequiredMixin, View):
                 {"error": _("Endpoint is required")}, status=400
             )
 
-        deleted_count, _ = PushSubscription.objects.filter(
+        deleted_count, _detail = PushSubscription.objects.filter(
             user=request.user,
             endpoint=endpoint,
         ).delete()

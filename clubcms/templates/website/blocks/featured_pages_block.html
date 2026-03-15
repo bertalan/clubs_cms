@@ -1,0 +1,24 @@
+{% load wagtailcore_tags wagtailimages_tags i18n website_tags %}
+
+<section {% block_attrs self.settings "block-featured-pages" %} data-columns="{{ self.columns }}">
+    <div class="container">
+        {% if self.title %}
+        <h2 class="block-featured-pages__title">{{ self.title }}</h2>
+        {% endif %}
+        <div class="block-featured-pages__grid">
+            {% for item in self.pages %}
+            {% with page=item.value.page %}
+            <a class="block-featured-pages__card" href="{% pageurl page %}">
+                {% if item.value.override_image %}
+                    {% image item.value.override_image fill-400x250 as card_img %}
+                    <img class="block-featured-pages__image" src="{{ card_img.url }}" alt="" loading="lazy">
+                {% endif %}
+                <h3 class="block-featured-pages__card-title">
+                    {% if item.value.override_title %}{{ item.value.override_title }}{% else %}{{ page.title }}{% endif %}
+                </h3>
+            </a>
+            {% endwith %}
+            {% endfor %}
+        </div>
+    </div>
+</section>

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailimages_tags %}
+{% load i18n wagtailimages_tags %}
 
 {% block body_class %}page-my-uploads{% endblock %}
 
@@ -7,12 +7,12 @@
 <div class="page-my-uploads">
     <div class="page-my-uploads__container">
         <header class="page-my-uploads__header">
-            <h1 class="page-my-uploads__title">My Uploads</h1>
+            <h1 class="page-my-uploads__title">{% trans "My Uploads" %}</h1>
             <p class="page-my-uploads__description">
-                View the status of your photo uploads.
+                {% trans "View the status of your photo uploads." %}
             </p>
             <a href="{% url 'website:upload_photo' %}" class="page-my-uploads__upload-link">
-                Upload More Photos
+                {% trans "Upload More Photos" %}
             </a>
         </header>
 
@@ -37,23 +37,23 @@
 
                     {% if upload.event %}
                     <p class="upload-card__event">
-                        Event: {{ upload.event.title }}
+                        {% blocktrans with event_title=upload.event.title %}Event: {{ event_title }}{% endblocktrans %}
                     </p>
                     {% endif %}
 
                     <p class="upload-card__status">
                         {% if upload.is_approved %}
-                            <span class="upload-card__badge upload-card__badge--approved">Approved</span>
+                            <span class="upload-card__badge upload-card__badge--approved">{% trans "Approved" %}</span>
                         {% elif upload.is_rejected %}
-                            <span class="upload-card__badge upload-card__badge--rejected">Rejected</span>
+                            <span class="upload-card__badge upload-card__badge--rejected">{% trans "Rejected" %}</span>
                         {% else %}
-                            <span class="upload-card__badge upload-card__badge--pending">Pending Review</span>
+                            <span class="upload-card__badge upload-card__badge--pending">{% trans "Pending Review" %}</span>
                         {% endif %}
                     </p>
 
                     {% if upload.rejection_reason %}
                     <p class="upload-card__reason">
-                        Reason: {{ upload.rejection_reason }}
+                        {% blocktrans with reason=upload.rejection_reason %}Reason: {{ reason }}{% endblocktrans %}
                     </p>
                     {% endif %}
                 </div>
@@ -63,16 +63,16 @@
 
         {# Pagination #}
         {% if is_paginated %}
-        <nav class="page-my-uploads__pagination" aria-label="Pagination">
+        <nav class="page-my-uploads__pagination" aria-label="{% trans 'Pagination' %}">
             <ul class="pagination">
                 {% if page_obj.has_previous %}
-                <li><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                <li><a href="?page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a></li>
                 {% endif %}
                 <li class="pagination__current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}
                 </li>
                 {% if page_obj.has_next %}
-                <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                <li><a href="?page={{ page_obj.next_page_number }}">{% trans "Next" %}</a></li>
                 {% endif %}
             </ul>
         </nav>
@@ -80,8 +80,8 @@
 
         {% else %}
         <div class="page-my-uploads__empty">
-            <p>You haven't uploaded any photos yet.</p>
-            <a href="{% url 'website:upload_photo' %}">Upload your first photo</a>
+            <p>{% trans "You haven't uploaded any photos yet." %}</p>
+            <a href="{% url 'website:upload_photo' %}">{% trans "Upload your first photo" %}</a>
         </div>
         {% endif %}
     </div>

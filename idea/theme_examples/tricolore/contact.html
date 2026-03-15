@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact - Tricolore Theme Demo</title>
+  <title>Contact - MotoItalia | Tricolore Theme</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -18,23 +18,34 @@
     body { font-family: 'Montserrat', system-ui, sans-serif; background: var(--bianco); color: var(--ink); line-height: 1.6; }
     .container { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
     a { color: var(--ink); text-decoration: none; }
-    
+
     /* === TRICOLORE RIBBON === */
     .tricolore-ribbon { height: 6px; display: flex; }
     .tricolore-ribbon span { flex: 1; }
     .tricolore-ribbon .verde { background: var(--verde); }
     .tricolore-ribbon .bianco { background: white; }
     .tricolore-ribbon .rosso { background: var(--rosso); }
-    
+
     /* === NAV === */
     nav { background: white; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
     nav .container { display: flex; justify-content: space-between; align-items: center; }
     .logo { font-weight: 900; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
-    .logo-badge { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(90deg, var(--verde) 33%, white 33%, white 66%, var(--rosso) 66%); border: 2px solid var(--ink); }
+    .logo-badge {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(90deg, var(--verde) 33%, white 33%, white 66%, var(--rosso) 66%);
+      border: 2px solid var(--ink);
+    }
+    .nav-links { display: flex; align-items: center; gap: 2.5rem; }
     nav ul { list-style: none; display: flex; gap: 2.5rem; }
     nav a { font-weight: 600; font-size: 0.9rem; color: var(--gray); transition: color 0.2s; }
     nav a:hover, nav a.active { color: var(--rosso); }
-    
+    .btn-join {
+      display: inline-block; padding: 0.6rem 1.5rem; background: var(--verde);
+      color: white; font-weight: 700; font-size: 0.85rem; border-radius: 8px;
+      transition: all 0.3s; text-transform: uppercase; letter-spacing: 0.03em;
+    }
+    .btn-join:hover { background: var(--rosso); color: white; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(206,43,55,0.3); }
+
     /* === HEADER === */
     .header {
       background: linear-gradient(135deg, var(--oro) 0%, #d4a82a 100%);
@@ -46,12 +57,12 @@
     }
     .header h1 { font-size: 3rem; font-weight: 900; margin-bottom: 0.5rem; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
     .header p { opacity: 0.9; font-size: 1.1rem; }
-    
+
     /* === CONTACT GRID === */
     .section { padding: 4rem 0; }
     .contact-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 3rem; }
     @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
-    
+
     /* === FORM === */
     .form-card {
       background: white; border-radius: 20px; padding: 2.5rem;
@@ -64,10 +75,6 @@
     }
     .form-card h2 {
       font-weight: 900; font-size: 1.5rem; margin-bottom: 1.5rem;
-      display: flex; align-items: center; gap: 0.75rem;
-    }
-    .form-card h2::before {
-      content: '✉️'; font-size: 1.3rem;
     }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
@@ -77,6 +84,7 @@
       font-size: 0.85rem; color: var(--gray); text-transform: uppercase;
       letter-spacing: 0.05em;
     }
+    .form-group label .required { color: var(--rosso); margin-left: 0.15rem; }
     .form-group input, .form-group textarea, .form-group select {
       width: 100%; padding: 1rem; border: 2px solid #e0e0e0;
       border-radius: 10px; font-family: inherit; font-size: 1rem;
@@ -86,18 +94,36 @@
       outline: none; border-color: var(--verde);
       box-shadow: 0 0 0 4px rgba(0,146,70,0.1);
     }
+    .form-group input::placeholder, .form-group textarea::placeholder {
+      color: #bbb; font-size: 0.95rem;
+    }
+
+    /* === CHECKBOX GROUP === */
+    .checkbox-group {
+      margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 0.75rem;
+    }
+    .checkbox-group input[type="checkbox"] {
+      width: 20px; height: 20px; margin-top: 2px; accent-color: var(--verde);
+      cursor: pointer; flex-shrink: 0;
+    }
+    .checkbox-group label {
+      font-size: 0.85rem; color: var(--gray); cursor: pointer;
+      font-weight: 400; text-transform: none; letter-spacing: 0;
+    }
+    .checkbox-group label a { color: var(--verde); text-decoration: underline; }
+
     .btn-submit {
       display: inline-block; padding: 1rem 2.5rem;
       background: linear-gradient(135deg, var(--verde), #00a650);
       color: white; font-weight: 800; font-size: 1rem;
       border: none; border-radius: 10px; cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.3s; font-family: inherit;
     }
     .btn-submit:hover {
       background: linear-gradient(135deg, var(--rosso), #e03040);
       transform: translateY(-2px); box-shadow: 0 8px 20px rgba(206,43,55,0.3);
     }
-    
+
     /* === INFO CARDS === */
     .info-stack { display: flex; flex-direction: column; gap: 1.5rem; }
     .info-card {
@@ -110,14 +136,34 @@
     .info-icon {
       width: 50px; height: 50px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem; flex-shrink: 0;
+      font-size: 0.85rem; flex-shrink: 0; font-weight: 800;
+      color: white;
     }
-    .info-card:nth-child(1) .info-icon { background: rgba(0,146,70,0.1); }
-    .info-card:nth-child(2) .info-icon { background: rgba(206,43,55,0.1); }
-    .info-card:nth-child(3) .info-icon { background: rgba(201,162,39,0.1); }
+    .info-card:nth-child(1) .info-icon { background: var(--verde); }
+    .info-card:nth-child(2) .info-icon { background: var(--rosso); }
+    .info-card:nth-child(3) .info-icon { background: var(--oro); }
     .info-content h4 { font-weight: 800; font-size: 1rem; margin-bottom: 0.3rem; }
     .info-content p { color: var(--gray); font-size: 0.95rem; margin: 0; }
-    
+
+    /* === MAP PLACEHOLDER === */
+    .map-placeholder {
+      background: white; border-radius: 16px; overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06); height: 200px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      background: linear-gradient(135deg, #e8e8e8, #f2f2f2);
+    }
+    .map-placeholder::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--verde), white, var(--rosso));
+    }
+    .map-inner {
+      text-align: center; color: var(--gray);
+    }
+    .map-inner .pin { font-size: 2rem; margin-bottom: 0.5rem; display: block; font-weight: 800; color: var(--rosso); }
+    .map-inner p { font-size: 0.85rem; font-weight: 600; }
+    .map-inner p span { display: block; font-weight: 400; opacity: 0.7; margin-top: 0.25rem; }
+
     /* === CTA CARD === */
     .cta-card {
       background: linear-gradient(135deg, var(--ink), #2a2a2a);
@@ -135,18 +181,70 @@
       position: relative;
     }
     .cta-cockade::after {
-      content: '🏍️'; position: absolute; inset: 12px;
-      background: white; border-radius: 50%; display: flex;
-      align-items: center; justify-content: center; font-size: 1.5rem;
+      content: ''; position: absolute; inset: 12px;
+      background: var(--ink); border-radius: 50%;
     }
     .cta-card h4 { font-weight: 900; font-size: 1.2rem; margin-bottom: 0.5rem; position: relative; }
     .cta-card p { opacity: 0.7; font-size: 0.9rem; position: relative; }
-    
+
+    /* === FAQ SECTION === */
+    .faq-section { padding: 4rem 0; background: white; }
+    .faq-section .section-header { text-align: center; margin-bottom: 3rem; }
+    .faq-section .section-header h2 { font-size: 2.2rem; font-weight: 900; margin-bottom: 0.5rem; }
+    .faq-section .section-header p { color: var(--gray); }
+    .faq-list { max-width: 800px; margin: 0 auto; }
+    .faq-item {
+      background: var(--bianco); border-radius: 12px; margin-bottom: 1rem;
+      overflow: hidden; border: 2px solid transparent; transition: all 0.3s;
+    }
+    .faq-item:hover { border-color: rgba(0,146,70,0.2); }
+    .faq-question {
+      width: 100%; padding: 1.25rem 1.5rem; background: none; border: none;
+      font-family: inherit; font-size: 1rem; font-weight: 700;
+      text-align: left; cursor: pointer; display: flex;
+      justify-content: space-between; align-items: center; gap: 1rem;
+      color: var(--ink); transition: color 0.2s;
+    }
+    .faq-question:hover { color: var(--verde); }
+    .faq-arrow {
+      width: 28px; height: 28px; border-radius: 50%; background: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; flex-shrink: 0; transition: all 0.3s;
+      color: var(--verde); font-weight: 900;
+    }
+    .faq-item.active .faq-arrow { transform: rotate(180deg); background: var(--verde); color: white; }
+    .faq-answer {
+      max-height: 0; overflow: hidden; transition: max-height 0.3s ease;
+    }
+    .faq-answer-inner {
+      padding: 0 1.5rem 1.25rem; color: var(--gray); font-size: 0.95rem;
+    }
+    .faq-item.active .faq-answer { max-height: 300px; }
+
     /* === FOOTER === */
-    footer { background: var(--ink); color: white; padding: 2rem 0; text-align: center; }
-    footer a { color: rgba(255,255,255,0.7); margin: 0 1rem; font-size: 0.9rem; }
+    footer { background: var(--ink); color: white; padding: 3rem 0 1.5rem; }
+    .footer-ribbon { height: 4px; display: flex; margin-bottom: 2.5rem; }
+    .footer-ribbon span { flex: 1; }
+    .footer-ribbon .verde { background: var(--verde); }
+    .footer-ribbon .bianco { background: white; }
+    .footer-ribbon .rosso { background: var(--rosso); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    footer h4 { font-weight: 700; margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .footer-brand { display: flex; align-items: center; gap: 0.75rem; font-weight: 900; font-size: 1.3rem; margin-bottom: 1rem; }
+    footer p { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+    footer a { color: rgba(255,255,255,0.7); font-size: 0.9rem; display: block; margin-bottom: 0.5rem; transition: color 0.2s; }
     footer a:hover { color: var(--oro); }
-    footer p { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 1rem; }
+    .footer-social { display: flex; gap: 1rem; margin-top: 1rem; }
+    .footer-social a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.1); color: white; font-size: 0.85rem;
+      font-weight: 700; transition: all 0.3s; margin-bottom: 0;
+    }
+    .footer-social a:hover { background: var(--oro); color: white; transform: translateY(-2px); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; text-align: center; }
+    .footer-bottom p { font-size: 0.85rem; color: rgba(255,255,255,0.5); }
     .footer-tricolore { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; }
     .footer-tricolore span { width: 30px; height: 4px; border-radius: 2px; }
   </style>
@@ -164,19 +262,22 @@
         <span class="logo-badge"></span>
         MotoItalia
       </a>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="events.html">Routes</a></li>
-        <li><a href="gallery.html">Gallery</a></li>
-        <li><a href="contact.html" class="active">Contact</a></li>
-      </ul>
+      <div class="nav-links">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html" class="active">Contact</a></li>
+        </ul>
+        <a href="contact.html" class="btn-join">Join</a>
+      </div>
     </div>
   </nav>
 
   <section class="header">
     <h1>Contact</h1>
-    <p>We're here for you, write to us!</p>
+    <p>We are here for you, write to us!</p>
   </section>
 
   <section class="section">
@@ -184,62 +285,78 @@
       <div class="contact-grid">
         <div class="form-card">
           <h2>Send Us a Message</h2>
-          <form>
+          <form onsubmit="event.preventDefault();">
             <div class="form-row">
               <div class="form-group">
-                <label>First Name</label>
-                <input type="text" placeholder="Your first name">
+                <label for="first-name">First Name <span class="required">*</span></label>
+                <input type="text" id="first-name" name="first_name" placeholder="Your first name" required aria-label="First name">
               </div>
               <div class="form-group">
-                <label>Last Name</label>
-                <input type="text" placeholder="Your last name">
+                <label for="last-name">Last Name <span class="required">*</span></label>
+                <input type="text" id="last-name" name="last_name" placeholder="Your last name" required aria-label="Last name">
               </div>
             </div>
             <div class="form-group">
-              <label>Email</label>
-              <input type="email" placeholder="your@email.com">
+              <label for="email">Email <span class="required">*</span></label>
+              <input type="email" id="email" name="email" placeholder="your@email.com" required aria-label="Email address">
             </div>
             <div class="form-group">
-              <label>Subject</label>
-              <select>
-                <option>General Information</option>
-                <option>Become a Member</option>
-                <option>Suggest a Route</option>
-                <option>Collaborations</option>
-                <option>Other</option>
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" placeholder="+39 333 1234567" aria-label="Phone number">
+            </div>
+            <div class="form-group">
+              <label for="subject">Subject <span class="required">*</span></label>
+              <select id="subject" name="subject" required aria-label="Message subject">
+                <option value="">Select a subject...</option>
+                <option value="general">General Information</option>
+                <option value="membership">Become a Member</option>
+                <option value="events">Events &amp; Rides</option>
+                <option value="collaboration">Collaborations</option>
+                <option value="other">Other</option>
               </select>
             </div>
             <div class="form-group">
-              <label>Message</label>
-              <textarea rows="5" placeholder="Tell us about yourself..."></textarea>
+              <label for="message">Message <span class="required">*</span></label>
+              <textarea id="message" name="message" rows="5" placeholder="Tell us how we can help you..." required aria-label="Your message"></textarea>
             </div>
-            <button type="submit" class="btn-submit">Send Message →</button>
+            <div class="checkbox-group">
+              <input type="checkbox" id="gdpr" name="gdpr" required>
+              <label for="gdpr">I agree to the <a href="#">Privacy Policy</a> and consent to the processing of my personal data in accordance with GDPR regulations. <span class="required" style="color: var(--rosso);">*</span></label>
+            </div>
+            <button type="submit" class="btn-submit">Send Message</button>
           </form>
         </div>
 
         <div class="info-stack">
           <div class="info-card">
-            <div class="info-icon">📍</div>
+            <div class="info-icon">HQ</div>
             <div class="info-content">
               <h4>Headquarters</h4>
-              <p>Via Roma 123<br>20121 Milan (MI)</p>
+              <p>Via Roma 42<br>20121 Milano, Italia</p>
             </div>
           </div>
           <div class="info-card">
-            <div class="info-icon">✉️</div>
+            <div class="info-icon">@</div>
             <div class="info-content">
               <h4>Email</h4>
               <p>info@motoitalia.example<br>members@motoitalia.example</p>
             </div>
           </div>
           <div class="info-card">
-            <div class="info-icon">📱</div>
+            <div class="info-icon">Tel</div>
             <div class="info-content">
               <h4>Phone</h4>
-              <p>+39 02 1234 5678<br>Mon-Fri 9:00-18:00</p>
+              <p>+39 02 1234567<br>Mon-Fri 9:00-18:00</p>
             </div>
           </div>
-          
+
+          <div class="map-placeholder">
+            <div class="map-inner">
+              <span class="pin">+</span>
+              <p>Via Roma 42, Milano<span>Click to open in Google Maps</span></p>
+            </div>
+          </div>
+
           <div class="cta-card">
             <div class="cta-cockade"></div>
             <h4>Join the Family!</h4>
@@ -250,21 +367,145 @@
     </div>
   </section>
 
+  <section class="faq-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Frequently Asked Questions</h2>
+        <p>Quick answers to common questions</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            How do I become a member of MotoItalia?
+            <span class="faq-arrow">v</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Joining MotoItalia is simple! Fill out the contact form above selecting "Become a Member" as the subject, or visit us at our headquarters in Milano. Annual membership is EUR 50 and includes access to all group rides, workshops, and member discounts with our partners.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Do I need a specific type of motorcycle to join?
+            <span class="faq-arrow">v</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Not at all! MotoItalia welcomes riders of all brands and types of motorcycles. Whether you ride a sportbike, cruiser, adventure bike, or scooter, you are welcome. The only requirement is a valid motorcycle license and a passion for riding.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Are events open to non-members?
+            <span class="faq-arrow">v</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Many of our events are open to everyone, though members enjoy priority registration and discounted rates. Social events and our annual rally welcome all riders. Check individual event pages for specific member vs. non-member pricing.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            What skill level is needed for group rides?
+            <span class="faq-arrow">v</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              We organize rides for all skill levels. Each event listing indicates the difficulty (beginner, intermediate, advanced). Our group rides always have experienced road captains and sweep riders to ensure everyone feels safe and comfortable at their own pace.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            How can I sponsor or partner with MotoItalia?
+            <span class="faq-arrow">v</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              We welcome partnerships with motorcycle-related brands and local businesses. Please contact us using the form above with "Collaborations" as the subject, and our partnerships team will get back to you within 48 hours with sponsorship packages and opportunities.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <div class="container">
-      <div class="footer-tricolore">
-        <span style="background: var(--verde);"></span>
-        <span style="background: white;"></span>
-        <span style="background: var(--rosso);"></span>
+      <div class="footer-ribbon">
+        <span class="verde"></span>
+        <span class="bianco"></span>
+        <span class="rosso"></span>
       </div>
-      <div>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="events.html">Routes</a>
-        <a href="gallery.html">Gallery</a>
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <span class="logo-badge" style="width:28px;height:28px;"></span>
+            MotoItalia
+          </div>
+          <p>The passion for two wheels and the Bel Paese, since 2010.</p>
+          <p style="margin-top: 1rem;">Via Roma 42, Milano, Italia</p>
+          <p>info@motoitalia.example</p>
+          <p>+39 02 1234567</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook">Fb</a>
+            <a href="#" aria-label="Instagram">Ig</a>
+            <a href="#" aria-label="YouTube">Yt</a>
+          </div>
+        </div>
+        <div>
+          <h4>Navigate</h4>
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="events.html">Events</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div>
+          <h4>Community</h4>
+          <a href="#">Forum</a>
+          <a href="events.html">Events</a>
+          <a href="#">Rallies</a>
+          <a href="#">Newsletter</a>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <a href="contact.html">Write Us</a>
+          <a href="mailto:info@motoitalia.example">info@motoitalia.example</a>
+          <a href="tel:+390212345678">+39 02 1234567</a>
+        </div>
       </div>
-      <p>© 2026 MotoItalia • Tricolore Theme Demo</p>
+      <div class="footer-bottom">
+        <div class="footer-tricolore">
+          <span style="background: var(--verde);"></span>
+          <span style="background: white;"></span>
+          <span style="background: var(--rosso);"></span>
+        </div>
+        <p>&copy; 2026 MotoItalia. All rights reserved. Made with passion in Italy.</p>
+      </div>
     </div>
   </footer>
+
+  <script>
+    (function() {
+      var faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(function(item) {
+        var btn = item.querySelector('.faq-question');
+        btn.addEventListener('click', function() {
+          var isActive = item.classList.contains('active');
+          // Close all items
+          faqItems.forEach(function(fi) { fi.classList.remove('active'); fi.querySelector('.faq-question').setAttribute('aria-expanded', 'false'); });
+          // Toggle clicked
+          if (!isActive) {
+            item.classList.add('active');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

@@ -21,6 +21,8 @@ from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
 
+from .common import BlockSettings
+
 
 # ---------------------------------------------------------------------------
 # GalleryImageBlock / GalleryBlock
@@ -87,6 +89,7 @@ class GalleryBlock(StructBlock):
         default="auto",
         help_text=_("Thumbnail aspect ratio."),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/gallery_block.html"
@@ -118,6 +121,7 @@ class VideoEmbedBlock(StructBlock):
         required=False,
         help_text=_("Autoplay the video (muted)."),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/video_embed_block.html"
@@ -152,6 +156,7 @@ class ImageBlock(StructBlock):
         default="full",
         help_text=_("Image alignment within the content area."),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/image_block.html"
@@ -198,6 +203,7 @@ class DocumentListBlock(StructBlock):
         min_num=1,
         label=_("Documents"),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/document_list_block.html"
@@ -241,6 +247,7 @@ class MapBlock(StructBlock):
         required=False,
         help_text=_("Optional marker label."),
     )
+    settings = BlockSettings(required=False)
 
     class Meta:
         template = "website/blocks/map_block.html"

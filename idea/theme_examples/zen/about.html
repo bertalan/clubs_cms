@@ -5,28 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About - Zen Theme Demo</title>
   <style>
-    :root { 
-      --ink: #0a0a0a; 
-      --paper: #ffffff; 
+    :root {
+      --ink: #0a0a0a;
+      --paper: #ffffff;
       --gray: #f5f5f5;
       --pop: #FF3366;
       --pop-yellow: #FFD700;
       --pop-blue: #00BFFF;
+      --pop-green: #00E676;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--gray); color: var(--ink); line-height: 1.6; }
     .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
     a { color: var(--ink); }
-    
+
     /* === NAV === */
     nav { background: var(--ink); color: var(--paper); padding: 1rem 0; border-bottom: 4px solid var(--pop); }
     nav .container { display: flex; justify-content: space-between; align-items: center; }
-    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav .nav-links { list-style: none; display: flex; gap: 2rem; align-items: center; }
     nav a { color: var(--paper); text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.85rem; }
     nav a:hover, nav a.active { color: var(--pop); }
     .logo { font-weight: 900; font-size: 1.3rem; text-decoration: none; color: var(--paper); }
     .logo span { color: var(--pop); }
-    
+    .btn-nav-cta {
+      display: inline-block; padding: 0.5rem 1.2rem; background: var(--pop); color: var(--paper);
+      text-decoration: none; font-weight: 800; text-transform: uppercase; font-size: 0.8rem;
+      border: 2px solid var(--pop); transition: all 0.2s; margin-left: 1rem;
+    }
+    .btn-nav-cta:hover { background: var(--paper); color: var(--pop); }
+
     /* === HEADER PANEL === */
     .header { padding: 3rem 0; }
     .header-panel {
@@ -35,14 +42,14 @@
     }
     .header-panel h1 { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; }
     .header-panel p { opacity: 0.7; margin-top: 0.5rem; }
-    
+
     /* === CONTENT === */
     .section { padding: 3rem 0; }
     .content-panel {
       background: var(--paper); border: 3px solid var(--ink);
       box-shadow: 6px 6px 0 var(--ink); padding: 2.5rem;
     }
-    .content-panel h2 { 
+    .content-panel h2 {
       font-weight: 900; font-size: 1.5rem; text-transform: uppercase;
       margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;
     }
@@ -50,7 +57,7 @@
       content: ''; width: 8px; height: 100%; min-height: 24px; background: var(--pop);
     }
     .content-panel p { color: #333; margin-bottom: 1rem; font-size: 1.05rem; }
-    
+
     /* === VALUES GRID === */
     .values-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 2rem; }
     @media (max-width: 600px) { .values-grid { grid-template-columns: 1fr; } }
@@ -65,10 +72,10 @@
     .value-panel .icon { font-size: 2rem; margin-bottom: 0.5rem; }
     .value-panel h3 { font-weight: 800; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 0.3rem; }
     .value-panel p { font-size: 0.85rem; color: #333; margin: 0; }
-    
+
     /* === TEAM STRIP === */
-    .team-strip { 
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; 
+    .team-strip {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
       margin-top: 2rem;
     }
     @media (max-width: 600px) { .team-strip { grid-template-columns: 1fr; } }
@@ -88,24 +95,63 @@
     .team-panel:nth-child(3) .team-avatar { background: var(--pop-yellow); color: var(--ink); }
     .team-panel strong { display: block; font-weight: 800; text-transform: uppercase; font-size: 0.9rem; }
     .team-panel span { font-size: 0.8rem; color: #555; }
-    
+
+    /* === JOIN CTA === */
+    .join-cta { padding: 0 0 3rem; }
+    .join-panel {
+      background: var(--pop); border: 4px solid var(--ink);
+      box-shadow: 8px 8px 0 var(--ink); padding: 3rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .join-panel::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background-image: radial-gradient(var(--paper) 1px, transparent 1px);
+      background-size: 6px 6px; opacity: 0.06; pointer-events: none;
+    }
+    .join-panel h2 { font-size: 2rem; font-weight: 900; text-transform: uppercase; color: var(--paper); margin-bottom: 0.5rem; }
+    .join-panel p { color: rgba(255,255,255,0.9); margin-bottom: 1.5rem; font-size: 1.1rem; }
+    .btn-join {
+      display: inline-block; padding: 1rem 2.5rem; background: var(--paper); color: var(--ink);
+      text-decoration: none; font-weight: 800; text-transform: uppercase;
+      border: 3px solid var(--ink); font-size: 1rem; transition: all 0.2s;
+    }
+    .btn-join:hover { background: var(--pop-yellow); transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--ink); }
+
     /* === FOOTER === */
-    footer { background: var(--ink); color: var(--paper); padding: 2.5rem 0; text-align: center; }
-    footer a { color: var(--paper); text-decoration: none; margin: 0 1rem; font-size: 0.9rem; }
-    footer a:hover { color: var(--pop); }
-    footer .copy { margin-top: 1rem; font-size: 0.8rem; opacity: 0.6; }
+    footer { background: var(--ink); color: var(--paper); padding: 3rem 0 2rem; }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    @media (max-width: 700px) { .footer-grid { grid-template-columns: 1fr; } }
+    .footer-brand .logo { font-size: 1.5rem; display: inline-block; margin-bottom: 0.75rem; }
+    .footer-brand p { font-size: 0.85rem; opacity: 0.7; margin-bottom: 0.25rem; }
+    .footer-brand a { color: var(--pop); text-decoration: none; }
+    .footer-brand a:hover { text-decoration: underline; }
+    .footer-nav h4, .footer-social h4 { font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; color: var(--pop); }
+    .footer-nav ul { list-style: none; }
+    .footer-nav ul li { margin-bottom: 0.5rem; }
+    .footer-nav a { color: var(--paper); text-decoration: none; font-size: 0.9rem; opacity: 0.8; }
+    .footer-nav a:hover { color: var(--pop); opacity: 1; }
+    .footer-social .social-links { display: flex; gap: 1rem; }
+    .footer-social .social-links a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border: 2px solid var(--paper);
+      color: var(--paper); text-decoration: none; font-weight: 700;
+      font-size: 0.75rem; transition: all 0.2s;
+    }
+    .footer-social .social-links a:hover { background: var(--pop); border-color: var(--pop); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 1.5rem; text-align: center; font-size: 0.8rem; opacity: 0.6; }
   </style>
 </head>
 <body>
   <nav>
     <div class="container">
       <a href="index.html" class="logo">MIND<span>FUL</span></a>
-      <ul>
+      <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html" class="active">About</a></li>
         <li><a href="events.html">Events</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="contact.html">Contact</a></li>
+        <li><a href="contact.html" class="btn-nav-cta">Join</a></li>
       </ul>
     </div>
   </nav>
@@ -128,22 +174,22 @@
 
         <div class="values-grid">
           <div class="value-panel">
-            <div class="icon">◉</div>
+            <div class="icon">&#9673;</div>
             <h3>Presence</h3>
             <p>Being fully here, now.</p>
           </div>
           <div class="value-panel">
-            <div class="icon">◇</div>
+            <div class="icon">&#9671;</div>
             <h3>Simplicity</h3>
             <p>Removing the unnecessary.</p>
           </div>
           <div class="value-panel">
-            <div class="icon">∞</div>
+            <div class="icon">&#8734;</div>
             <h3>Connection</h3>
             <p>Meaningful relationships.</p>
           </div>
           <div class="value-panel">
-            <div class="icon">△</div>
+            <div class="icon">&#9651;</div>
             <h3>Growth</h3>
             <p>Continuous, gentle progress.</p>
           </div>
@@ -177,15 +223,49 @@
     </div>
   </section>
 
+  <!-- Join Our Community CTA -->
+  <section class="join-cta">
+    <div class="container">
+      <div class="join-panel">
+        <h2>Join Our Community</h2>
+        <p>Whether you are a seasoned practitioner or just beginning your journey, there is a place for you at Mindful. Come ride with us.</p>
+        <a href="contact.html" class="btn-join">Become a Member</a>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <div class="container">
-      <div>
-        <a href="index.html">Home</a>
-        <a href="events.html">Events</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="contact.html">Contact</a>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">MIND<span>FUL</span></a>
+          <p>123 Serenity Lane</p>
+          <p>Calm City, CC 10001</p>
+          <p style="margin-top: 0.5rem;"><a href="mailto:info@mindful.example">info@mindful.example</a></p>
+          <p><a href="tel:+15551234567">+1 (555) 123-4567</a></p>
+        </div>
+        <div class="footer-nav">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-social">
+          <h4>Follow Us</h4>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook">FB</a>
+            <a href="#" aria-label="Instagram">IG</a>
+            <a href="#" aria-label="Twitter">TW</a>
+          </div>
+        </div>
       </div>
-      <p class="copy">© 2026 Mindful • Zen Comic Theme</p>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Mindful. All rights reserved.</p>
+      </div>
     </div>
   </footer>
 </body>
