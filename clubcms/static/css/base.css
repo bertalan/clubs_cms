@@ -589,6 +589,25 @@ h4, .h4 {
   gap: 0.5rem;
   margin-top: 1rem;
 }
+.site-footer__feeds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+.site-footer__feeds a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  text-decoration: none;
+  color: inherit;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.site-footer__feeds a:hover {
+  opacity: 1;
+}
 .site-footer__about {
   margin-bottom: 0.5rem;
 }

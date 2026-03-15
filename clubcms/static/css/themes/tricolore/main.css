@@ -345,6 +345,15 @@ a:hover {
   color: var(--tricolore-oro);
 }
 
+.site-footer__feeds a {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  transition: color var(--tricolore-transition);
+}
+.site-footer__feeds a:hover {
+  color: var(--tricolore-oro);
+}
+
 /* --------------------------------------------------------------------------
    8. Hero Blocks
    -------------------------------------------------------------------------- */

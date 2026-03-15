@@ -290,6 +290,15 @@ a:hover {
   color: var(--color-primary);
 }
 
+.site-footer__feeds a {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  transition: color var(--zen-transition);
+}
+.site-footer__feeds a:hover {
+  color: var(--color-primary);
+}
+
 .dark-mode .site-footer {
   border-color: rgba(255, 255, 255, 0.1);
 }

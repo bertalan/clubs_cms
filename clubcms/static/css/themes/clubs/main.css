@@ -311,6 +311,15 @@ a:hover {
   color: #fff;
 }
 
+.site-footer__feeds a {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  transition: color var(--clubs-transition);
+}
+.site-footer__feeds a:hover {
+  color: #fff;
+}
+
 /* --------------------------------------------------------------------------
    7. Hero Blocks
    -------------------------------------------------------------------------- */
