@@ -13,7 +13,8 @@ set -euo pipefail
 # ── Configurazione ──────────────────────────────────────────────────────────
 REMOTE_HOST="guzzi-days.net"
 REMOTE_PORT="100"
-REMOTE_PATH="/www/wwwroot/clubs.betabi.it/clubcms"
+REMOTE_REPO="/www/wwwroot/clubs.betabi.it/clubcms"
+REMOTE_PATH="/www/wwwroot/clubs.betabi.it/clubcms/clubcms"
 REPO_URL="https://github.com/bertalan/clubs_cms.git"
 COMPOSE_FILE="deploy/clubs.betabi.it/docker-compose.yml"
 COMPOSE="docker compose -f $COMPOSE_FILE"
@@ -39,7 +40,7 @@ mkdir -p /www/wwwroot/clubs.betabi.it/{staticfiles,media,backups}
 # Clona il repository
 if [ ! -d "/www/wwwroot/clubs.betabi.it/clubcms" ]; then
     git clone https://github.com/bertalan/clubs_cms.git /www/wwwroot/clubs.betabi.it/clubcms
-    echo "  Repo clonato in /www/wwwroot/clubs.betabi.it/clubcms"
+    echo "  Repo clonato."
 else
     echo "  Repo già presente, skip clone."
 fi
