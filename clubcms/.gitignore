@@ -42,3 +42,7 @@ messages.mo
 
 # Tests
 .pytest_cache/
+
+# Script di deploy sensibili (non in repo)
+deploy/**/server_first_deploy.sh
+deploy/**/*_first_deploy.sh
