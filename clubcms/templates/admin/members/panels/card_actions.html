@@ -1,0 +1,255 @@
+{% load i18n %}
+
+<style>
+    /* Ensure card action buttons are visible and properly styled */
+    .card-actions-panel form {
+        display: inline-block;
+        margin-right: 0.5rem;
+        margin-top: 0.5rem;
+    }
+    .card-actions-panel button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .card-actions-panel .button {
+        padding: 0.5rem 1rem;
+        min-height: auto;
+    }
+</style>
+
+<div class="w-panel card-actions-panel">
+    <div class="w-panel__header">
+        <h2 class="w-panel__heading w-panel__heading--label">{% trans "Membership Summary" %}</h2>
+    </div>
+    <div class="w-panel__content" style="padding: 1rem;">
+        {% if instance %}
+            {% if has_card %}
+                {# Card exists - show info #}
+                <div style="margin-bottom: 1rem; padding: 1rem; background: var(--w-color-surface-container); border-radius: 8px;">
+                    <dl style="margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1rem;">
+                        <dt style="font-weight: 600;">{% trans "Card Number" %}:</dt>
+                        <dd style="margin: 0; font-family: monospace;">{{ card_number }}</dd>
+                        
+                        <dt style="font-weight: 600;">{% trans "Member Since" %}:</dt>
+                        <dd style="margin: 0;">{{ membership_date|default:"-" }}</dd>
+                        
+                        <dt style="font-weight: 600;">{% trans "Expires" %}:</dt>
+                        <dd style="margin: 0;">
+                            {{ membership_expiry|default:"-" }}
+                            {% if days_to_expiry is not None %}
+                                {% if days_to_expiry < 0 %}
+                                    <span style="color: var(--w-color-critical-100); font-weight: 600; margin-left: 0.5rem;">
+                                        ({% trans "EXPIRED" %})
+                                    </span>
+                                {% elif days_to_expiry < 30 %}
+                                    <span style="color: var(--w-color-warning-100); font-weight: 600; margin-left: 0.5rem;">
+                                        ({{ days_to_expiry }} {% trans "days left" %})
+                                    </span>
+                                {% else %}
+                                    <span style="color: var(--w-color-positive-100); margin-left: 0.5rem;">
+                                        ({{ days_to_expiry }} {% trans "days left" %})
+                                    </span>
+                                {% endif %}
+                            {% endif %}
+                        </dd>
+                        
+                        <dt style="font-weight: 600;">{% trans "Card Status" %}:</dt>
+                        <dd style="margin: 0;">
+                            {% if card_status == "active" %}
+                                {% if is_active %}
+                                    <span style="display: inline-block; padding: 0.25rem 0.5rem; background: var(--w-color-positive-50); color: var(--w-color-positive-100); border-radius: 4px; font-size: 0.875rem; font-weight: 600;">
+                                        {% trans "Active" %}
+                                    </span>
+                                {% else %}
+                                    <span style="display: inline-block; padding: 0.25rem 0.5rem; background: var(--w-color-critical-50); color: var(--w-color-critical-100); border-radius: 4px; font-size: 0.875rem; font-weight: 600;">
+                                        {% trans "Expired" %}
+                                    </span>
+                                {% endif %}
+                            {% elif card_status == "suspended" %}
+                                <span style="display: inline-block; padding: 0.25rem 0.5rem; background: var(--w-color-warning-50); color: var(--w-color-warning-100); border-radius: 4px; font-size: 0.875rem; font-weight: 600;">
+                                    {% trans "Suspended" %}
+                                </span>
+                            {% elif card_status == "terminated" %}
+                                <span style="display: inline-block; padding: 0.25rem 0.5rem; background: var(--w-color-critical-50); color: var(--w-color-critical-100); border-radius: 4px; font-size: 0.875rem; font-weight: 600;">
+                                    {% trans "Terminated" %}
+                                </span>
+                            {% endif %}
+                        </dd>
+                    </dl>
+                    
+                    {% if card_status_reason %}
+                    <div style="margin-top: 0.75rem; padding: 0.75rem; background: var(--w-color-surface-container-low); border-left: 3px solid var(--w-color-warning-100); border-radius: 0 4px 4px 0;">
+                        <strong style="font-size: 0.75rem; text-transform: uppercase; color: var(--w-color-text-label);">{% trans "Reason" %}:</strong>
+                        <p style="margin: 0.25rem 0 0 0;">{{ card_status_reason }}</p>
+                        {% if card_status_changed %}
+                        <span style="font-size: 0.75rem; color: var(--w-color-text-label);">
+                            {{ card_status_changed|date:"d/m/Y H:i" }}
+                        </span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                {# Purchased products #}
+                {% if user_products %}
+                <div style="margin-bottom: 1rem;">
+                    <h3 style="font-size: 0.875rem; font-weight: 600; margin: 0 0 0.5rem 0; color: var(--w-color-text-label);">
+                        {% trans "Purchased Products" %}
+                    </h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        {% for product in user_products %}
+                        <div style="padding: 0.75rem 1rem; background: var(--w-color-surface-container-low); border: 1px solid var(--w-color-border-furniture); border-radius: 6px; display: flex; align-items: center; gap: 0.75rem;">
+                            <div>
+                                <span style="font-weight: 600;">{{ product.name }}</span>
+                                <div style="font-size: 0.75rem; color: var(--w-color-text-label);">
+                                    €{{ product.price }} · {{ product.validity_days }} {% trans "days" %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                <div style="margin-bottom: 1rem; padding: 0.75rem 1rem; background: var(--w-color-warning-50); border-radius: 6px;">
+                    <span style="color: var(--w-color-warning-100);">
+                        <svg class="icon icon-warning" aria-hidden="true" style="width: 1rem; height: 1rem; vertical-align: middle; margin-right: 0.25rem;"><use href="#icon-warning"></use></svg>
+                        {% trans "No products assigned to this membership." %}
+                    </span>
+                </div>
+                {% endif %}
+
+                {# Action buttons #}
+                <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; padding-top: 1rem; border-top: 2px solid var(--w-color-border-furniture);">
+                    <div style="font-size: 0.875rem; color: var(--w-color-text-label); width: 100%; margin-bottom: 0.5rem; font-weight: 600;">
+                        {% trans "Card Actions:" %}
+                    </div>
+                    {% if card_status == "active" %}
+                        {# Renew button #}
+                        <form method="post" action="{{ renew_url }}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="button button-secondary" title="{% trans 'Extend expiry date by 1 year' %}" style="padding: 0.5rem 1rem;">
+                                <svg class="icon icon-time" aria-hidden="true" style="width: 1rem; height: 1rem;"><use href="#icon-time"></use></svg>
+                                {% trans "Renew (+1Y)" %}
+                            </button>
+                        </form>
+
+                        {# Suspend button - opens modal #}
+                        <button type="button" class="button button-secondary" onclick="document.getElementById('suspend-modal').showModal();" title="{% trans 'Temporarily suspend this card (can be reactivated)' %}" style="padding: 0.5rem 1rem;">
+                            <svg class="icon icon-no-view" aria-hidden="true" style="width: 1rem; height: 1rem;"><use href="#icon-no-view"></use></svg>
+                            {% trans "Suspend" %}
+                        </button>
+
+                        {# Terminate button - opens modal #}
+                        <button type="button" class="button button-secondary button--critical" onclick="document.getElementById('terminate-modal').showModal();" title="{% trans 'Permanently terminate this card (cannot be undone)' %}" style="padding: 0.5rem 1rem;">
+                            <svg class="icon icon-bin" aria-hidden="true" style="width: 1rem; height: 1rem;"><use href="#icon-bin"></use></svg>
+                            {% trans "Terminate" %}
+                        </button>
+
+                    {% elif card_status == "suspended" %}
+                        <div style="width: 100%; padding: 0.75rem; background: var(--w-color-warning-50); border-left: 3px solid var(--w-color-warning-100); border-radius: 0 4px 4px 0;">
+                            <strong style="color: var(--w-color-warning-100);">{% trans "This card is suspended" %}</strong>
+                            {% if card_status_reason %}<br><small>{{ card_status_reason }}</small>{% endif %}
+                        </div>
+
+                        {# Reactivate button #}
+                        <form method="post" action="{{ reactivate_url }}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="button" title="{% trans 'Reactivate this suspended card' %}" style="padding: 0.5rem 1rem;">
+                                <svg class="icon icon-success" aria-hidden="true" style="width: 1rem; height: 1rem;"><use href="#icon-success"></use></svg>
+                                {% trans "Reactivate" %}
+                            </button>
+                        </form>
+
+                        {# Terminate button #}
+                        <button type="button" class="button button-secondary button--critical" onclick="document.getElementById('terminate-modal').showModal();" style="padding: 0.5rem 1rem;">
+                            <svg class="icon icon-bin" aria-hidden="true" style="width: 1rem; height: 1rem;"><use href="#icon-bin"></use></svg>
+                            {% trans "Terminate" %}
+                        </button>
+
+                    {% elif card_status == "terminated" %}
+                        <div style="width: 100%; padding: 0.75rem; background: var(--w-color-critical-50); border-left: 3px solid var(--w-color-critical-100); border-radius: 0 4px 4px 0;">
+                            <strong style="color: var(--w-color-critical-100);">{% trans "This card is permanently terminated." %}</strong>
+                            <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem;">{% trans "To restore membership, issue a new card." %}</p>
+                            {% if card_status_reason %}<small>{{ card_status_reason }}</small>{% endif %}
+                        </div>
+
+                        {# Issue new card button #}
+                        <form method="post" action="{{ issue_url }}" style="display: inline; margin-top: 0.5rem;">
+                            {% csrf_token %}
+                            <input type="hidden" name="force_new" value="1">
+                            <button type="submit" class="button" title="{% trans 'Issue a new card number' %}" style="padding: 0.5rem 1rem;">
+                                <svg class="icon icon-plus" aria-hidden="true" style="width: 1rem; height: 1rem;"><use href="#icon-plus"></use></svg>
+                                {% trans "Issue New Card" %}
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+                
+                {# Suspend Modal #}
+                <dialog id="suspend-modal" style="border: none; border-radius: 8px; padding: 0; box-shadow: 0 4px 24px rgba(0,0,0,0.15); max-width: 400px;">
+                    <form method="post" action="{{ suspend_url }}">
+                        {% csrf_token %}
+                        <div style="padding: 1.5rem;">
+                            <h3 style="margin: 0 0 1rem 0; font-size: 1.125rem;">{% trans "Suspend Card" %}</h3>
+                            <p style="margin: 0 0 1rem 0; color: var(--w-color-text-label);">
+                                {% trans "The member will not be able to use their card until reactivated." %}
+                            </p>
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">{% trans "Reason (optional)" %}</label>
+                            <textarea name="reason" rows="3" style="width: 100%; padding: 0.5rem; border: 1px solid var(--w-color-border-field); border-radius: 4px; resize: vertical;" placeholder="{% trans 'E.g., unpaid dues, violation of rules...' %}"></textarea>
+                        </div>
+                        <div style="padding: 1rem 1.5rem; background: var(--w-color-surface-container); display: flex; justify-content: flex-end; gap: 0.5rem;">
+                            <button type="button" class="button button-secondary" onclick="this.closest('dialog').close();">{% trans "Cancel" %}</button>
+                            <button type="submit" class="button button--warning">{% trans "Suspend Card" %}</button>
+                        </div>
+                    </form>
+                </dialog>
+                
+                {# Terminate Modal #}
+                <dialog id="terminate-modal" style="border: none; border-radius: 8px; padding: 0; box-shadow: 0 4px 24px rgba(0,0,0,0.15); max-width: 400px;">
+                    <form method="post" action="{{ terminate_url }}">
+                        {% csrf_token %}
+                        <div style="padding: 1.5rem;">
+                            <h3 style="margin: 0 0 1rem 0; font-size: 1.125rem; color: var(--w-color-critical-100);">{% trans "Terminate Card" %}</h3>
+                            <p style="margin: 0 0 1rem 0; color: var(--w-color-text-label);">
+                                <strong>{% trans "This action is permanent." %}</strong><br>
+                                {% trans "The card cannot be reactivated. A new card must be issued if the member wants to rejoin." %}
+                            </p>
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">{% trans "Reason (optional)" %}</label>
+                            <textarea name="reason" rows="3" style="width: 100%; padding: 0.5rem; border: 1px solid var(--w-color-border-field); border-radius: 4px; resize: vertical;" placeholder="{% trans 'E.g., resignation, expulsion, deceased...' %}"></textarea>
+                        </div>
+                        <div style="padding: 1rem 1.5rem; background: var(--w-color-surface-container); display: flex; justify-content: flex-end; gap: 0.5rem;">
+                            <button type="button" class="button button-secondary" onclick="this.closest('dialog').close();">{% trans "Cancel" %}</button>
+                            <button type="submit" class="button button--critical">{% trans "Terminate Card" %}</button>
+                        </div>
+                    </form>
+                </dialog>
+            {% else %}
+                {# No card - show issue button #}
+                <div style="margin-bottom: 1rem; padding: 1rem; background: var(--w-color-warning-50); border-left: 4px solid var(--w-color-warning-100); border-radius: 0 4px 4px 0;">
+                    <p style="margin: 0; color: var(--w-color-text-label); display: flex; align-items: center; gap: 0.5rem;">
+                        <svg class="icon icon-warning" aria-hidden="true" style="width: 1.25rem; height: 1.25rem; flex-shrink: 0;"><use href="#icon-warning"></use></svg>
+                        <span>{% trans "This user does not have a membership card yet." %}</span>
+                    </p>
+                </div>
+
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--w-color-border-furniture);">
+                    <p style="font-size: 0.875rem; color: var(--w-color-text-label); margin: 0 0 0.75rem 0;">
+                        {% trans "To enable this member, issue a new membership card:" %}
+                    </p>
+                    <form method="post" action="{{ issue_url }}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="button" style="padding: 0.75rem 1.5rem; font-weight: 600;">
+                            <svg class="icon icon-plus" aria-hidden="true" style="width: 1rem; height: 1rem;"><use href="#icon-plus"></use></svg>
+                            {% trans "Issue Card" %}
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+        {% else %}
+            <p style="color: var(--w-color-text-label); font-style: italic;">
+                {% trans "Save the user first to enable card actions." %}
+            </p>
+        {% endif %}
+    </div>
+</div>
