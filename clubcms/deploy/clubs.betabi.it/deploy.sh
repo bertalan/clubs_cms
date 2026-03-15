@@ -3,8 +3,8 @@
 # Eseguire dalla macchina locale: bash deploy/clubs.betabi.it/deploy.sh
 #
 # Prerequisiti locali:
-#   - Accesso SSH al server: ssh -p YOUR_SSH_PORT root@YOUR_SERVER_HOST
-#   - La chiave SSH deve essere autorizzata sul server
+#   - Accesso SSH: ssh -p YOUR_SSH_PORT YOUR_SERVER_HOST  (utente root configurato in ~/.ssh/config)
+#   - Chiave SSH: ~/.ssh/id_rsa
 #
 # Prima installazione sul server, eseguire:
 #   bash deploy/clubs.betabi.it/deploy.sh --setup
@@ -13,17 +13,17 @@ set -euo pipefail
 # ── Configurazione ──────────────────────────────────────────────────────────
 REMOTE_HOST="YOUR_SERVER_HOST"
 REMOTE_PORT="YOUR_SSH_PORT"
-REMOTE_USER="${DEPLOY_USER:-root}"
 REMOTE_PATH="/www/wwwroot/clubs.betabi.it/clubcms"
 REPO_URL="https://github.com/bertalan/clubs_cms.git"
 COMPOSE_FILE="deploy/clubs.betabi.it/docker-compose.yml"
 COMPOSE="docker compose -f $COMPOSE_FILE"
 BACKUP_DIR="/www/wwwroot/clubs.betabi.it/backups"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-SSH_CMD="ssh -p $REMOTE_PORT $REMOTE_USER@$REMOTE_HOST"
+# Utente root già nel ~/.ssh/config per YOUR_SERVER_HOST
+SSH_CMD="ssh -p $REMOTE_PORT -i ~/.ssh/id_rsa $REMOTE_HOST"
 
 echo "=== ClubCMS Deploy → clubs.betabi.it — $TIMESTAMP ==="
-echo "    Server: $REMOTE_USER@$REMOTE_HOST:$REMOTE_PORT"
+echo "    Server: $REMOTE_HOST (porta $REMOTE_PORT)"
 
 # ── Prima installazione ──────────────────────────────────────────────────────
 if [[ "${1:-}" == "--setup" ]]; then
@@ -83,10 +83,15 @@ set -euo pipefail
 
 cd $REMOTE_PATH
 
-echo "[1/7] Backup database (pg_dump via aaPanel PostgreSQL)..."
+echo "[1/7] Backup database (pg_dump — PostgreSQL locale aaPanel)..."
 mkdir -p $BACKUP_DIR
-PGPASSWORD=\$(grep POSTGRES_PASSWORD .env | cut -d= -f2) \
-    pg_dump -U YOUR_DB_NAME -h 127.0.0.1 YOUR_DB_NAME 2>/dev/null \
+# Estrae user, password e dbname da DATABASE_URL nel .env
+# pg_dump gira sul bare metal → host sempre 127.0.0.1 (non host.docker.internal)
+_DB_URL=\$(grep '^DATABASE_URL=' .env | cut -d= -f2-)
+_DB_USER=\$(echo "\$_DB_URL" | sed 's|postgres://||' | cut -d: -f1)
+_DB_PASS=\$(echo "\$_DB_URL" | sed 's|postgres://[^:]*:||' | cut -d@ -f1)
+_DB_NAME=\$(echo "\$_DB_URL" | awk -F/ '{print \$NF}')
+PGPASSWORD="\$_DB_PASS" pg_dump -U "\$_DB_USER" -h 127.0.0.1 -p 5432 "\$_DB_NAME" 2>/dev/null \
     | gzip > $BACKUP_DIR/db_${TIMESTAMP}.sql.gz \
     && echo "  Backup: $BACKUP_DIR/db_${TIMESTAMP}.sql.gz" \
     || echo "  AVVISO: backup fallito, continuo deploy..."
