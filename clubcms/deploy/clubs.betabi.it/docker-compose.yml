@@ -7,6 +7,8 @@
 #   - Static/media: bind mount su paths accessibili da nginx aaPanel
 #   - host.docker.internal punta al PostgreSQL del host
 #   - Porta gunicorn: 127.0.0.1:8001 (nginx aaPanel fa proxy a localhost:8001)
+#   - .env nella cartella del dominio: /www/wwwroot/clubs.betabi.it/.env (chmod 600)
+#     fuori dalla cartella clubcms/ (repo git), non accessibile via web
 #
 # Avvio: cd /www/wwwroot/clubs.betabi.it/clubcms
 #         docker compose -f deploy/clubs.betabi.it/docker-compose.yml up -d
@@ -23,7 +25,7 @@ services:
       - /www/wwwroot/clubs.betabi.it/staticfiles:/app/staticfiles
       - /www/wwwroot/clubs.betabi.it/media:/app/media
     env_file:
-      - .env
+      - /www/wwwroot/clubs.betabi.it/.env
     environment:
       - DJANGO_SETTINGS_MODULE=clubcms.settings.prod
     extra_hosts:
@@ -44,7 +46,7 @@ services:
     volumes:
       - /www/wwwroot/clubs.betabi.it/media:/app/media
     env_file:
-      - .env
+      - /www/wwwroot/clubs.betabi.it/.env
     environment:
       - DJANGO_SETTINGS_MODULE=clubcms.settings.prod
     extra_hosts:
