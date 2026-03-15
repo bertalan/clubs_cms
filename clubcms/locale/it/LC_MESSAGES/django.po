@@ -7604,46 +7604,41 @@ msgid "Home"
 msgstr "Home"
 
 #: templates/includes/footer.html:39
-#, fuzzy
 #| msgid "Toggle navigation"
 msgid "Footer navigation"
-msgstr "Attiva/disattiva navigazione"
+msgstr "Navigazione footer"
 
 #: templates/includes/footer.html:40
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: templates/includes/footer.html:58 templates/includes/footer.html:59
 msgid "Services"
-msgstr ""
+msgstr "Servizi"
 
 #: templates/includes/footer.html:61
 msgid "Roadside Assistance"
-msgstr ""
+msgstr "Soccorso Stradale"
 
 #: templates/includes/footer.html:69
-#, fuzzy
 #| msgid "Become a member"
 msgid "Become a Member"
-msgstr "Diventa socio"
+msgstr "Diventa Socio"
 
 #: templates/includes/footer.html:71
-#, fuzzy
 #| msgid "contributions"
 msgid "Contributions"
-msgstr "Introduzione"
+msgstr "Contributi"
 
 #: templates/includes/footer.html:85
-#, fuzzy
 #| msgid "Phone"
 msgid "Phone:"
-msgstr "Telefono"
+msgstr "Telefono:"
 
 #: templates/includes/footer.html:94
-#, fuzzy
 #| msgid "Email"
 msgid "Email:"
-msgstr "Email"
+msgstr "Email:"
 
 #: templates/includes/footer.html:117
 msgid "All rights reserved."

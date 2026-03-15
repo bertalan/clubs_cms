@@ -1,4 +1,4 @@
-{% load i18n wagtailcore_tags wagtailimages_tags wagtailsettings_tags %}
+{% load i18n wagtailcore_tags wagtailimages_tags wagtailsettings_tags seo_tags %}
 
 {% with footer=settings.website.SiteSettings.footer %}
 {% with site=settings.website.SiteSettings %}
@@ -77,12 +77,11 @@
                 <h3 class="site-footer__heading">{% trans "Services" %}</h3>
                 <ul class="site-footer__list">
                     <li><a href="{% url 'mutual_aid:map' %}">{% trans "Roadside Assistance" %}</a></li>
-                    {% load wagtailcore_tags %}
-                    {% slugurl 'federazione' as federation_url %}
+                    {% localized_slugurl 'federazione' as federation_url %}
                     {% if federation_url %}
                     <li><a href="{{ federation_url }}">{% trans "Federation" %}</a></li>
                     {% endif %}
-                    {% slugurl 'diventa-socio' as membership_url %}
+                    {% localized_slugurl 'diventa-socio' as membership_url %}
                     {% if membership_url %}
                     <li><a href="{{ membership_url }}">{% trans "Become a Member" %}</a></li>
                     {% endif %}

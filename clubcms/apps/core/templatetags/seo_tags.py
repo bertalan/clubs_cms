@@ -364,3 +364,27 @@ def get_active_locales():
             for locale in locales
         ]
     return list(settings.LANGUAGES)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 10. localized_slugurl — locale-aware version of Wagtail's slugurl
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+@register.simple_tag
+def localized_slugurl(slug):
+    """
+    Find a page by slug and return its localized URL.
+
+    Unlike Wagtail's built-in ``{% slugurl %}``, this applies ``.localized``
+    so the resulting URL matches the active language.
+
+    Usage:
+        {% localized_slugurl 'federazione' as fed_url %}
+    """
+    from wagtail.models import Page
+
+    page = Page.objects.filter(slug=slug).live().first()
+    if page:
+        return page.localized.url
+    return ""

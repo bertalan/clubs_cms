@@ -65,37 +65,46 @@ def block_attrs(settings, base_class=""):
 def upcoming_events(count=3):
     """Return up to `count` upcoming (future) events, ordered by start_date."""
     from apps.website.models import EventDetailPage
+    from wagtail.models import Locale
 
-    return list(
-        EventDetailPage.objects.live()
-        .filter(start_date__gte=timezone.now())
-        .order_by("start_date")[:count]
-    )
+    try:
+        locale = Locale.get_active()
+    except (LookupError, Locale.DoesNotExist):
+        locale = None
+
+    qs = EventDetailPage.objects.live().filter(start_date__gte=timezone.now())
+    if locale:
+        qs = qs.filter(locale=locale)
+    return list(qs.order_by("start_date")[:count])
 
 
 @register.simple_tag
 def homepage_partners(count=6):
     """Return up to `count` active partners marked for homepage display."""
     from apps.website.models import PartnerPage
+    from wagtail.models import Locale
 
-    qs = (
-        PartnerPage.objects.live()
-        .filter(show_on_homepage=True)
-        .order_by("display_order", "title")[:count]
-    )
+    try:
+        locale = Locale.get_active()
+    except (LookupError, Locale.DoesNotExist):
+        locale = None
+
+    base_qs = PartnerPage.objects.live()
+    if locale:
+        base_qs = base_qs.filter(locale=locale)
+
+    qs = base_qs.filter(show_on_homepage=True).order_by("display_order", "title")[:count]
     results = list(qs)
     # Fallback: if none are flagged for homepage, show featured partners
     if not results:
         results = list(
-            PartnerPage.objects.live()
-            .filter(is_featured=True)
+            base_qs.filter(is_featured=True)
             .order_by("display_order", "title")[:count]
         )
     # Final fallback: show any active partners
     if not results:
         results = list(
-            PartnerPage.objects.live()
-            .order_by("display_order", "title")[:count]
+            base_qs.order_by("display_order", "title")[:count]
         )
     return results
 
@@ -107,7 +116,7 @@ def partner_index_url():
 
     page = PartnerIndexPage.objects.live().first()
     if page:
-        return page.url
+        return page.localized.url
     return "#"
 
 
@@ -118,5 +127,5 @@ def events_index_url():
 
     page = EventsPage.objects.live().first()
     if page:
-        return page.url
+        return page.localized.url
     return "#"
