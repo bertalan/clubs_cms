@@ -10,8 +10,38 @@ Feeds:
 from datetime import datetime, time, timezone as dt_tz
 
 from django.contrib.syndication.views import Feed
+from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.feedgenerator import Atom1Feed
+from django.utils.translation import gettext_lazy as _
+
+
+def _site_name():
+    """Return the club name from SiteSettings or fall back to WAGTAIL_SITE_NAME."""
+    try:
+        from wagtail.models import Site as WagtailSite
+
+        from apps.website.models import SiteSettings
+
+        ws = WagtailSite.objects.filter(is_default_site=True).first()
+        if ws:
+            ss = SiteSettings.for_site(ws)
+            if ss and ss.site_name:
+                return ss.site_name
+    except Exception:
+        pass
+    from django.conf import settings as django_settings
+
+    return getattr(django_settings, "WAGTAIL_SITE_NAME", "Club CMS")
+
+
+class BrowsableFeed(Feed):
+    """Feed base class that serves application/xml so browsers render inline."""
+
+    def __call__(self, request, *args, **kwargs):
+        response = super().__call__(request, *args, **kwargs)
+        response["Content-Type"] = "application/xml; charset=utf-8"
+        return response
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -19,11 +49,14 @@ from django.utils.feedgenerator import Atom1Feed
 # ─────────────────────────────────────────────────────────────────────────────
 
 
-class LatestNewsFeed(Feed):
+class LatestNewsFeed(BrowsableFeed):
     """RSS 2.0 feed of the latest 20 news articles."""
 
-    title = "Club CMS - News"
-    description = "Latest news and articles"
+    def title(self):
+        return f"{_site_name()} - {_('News')}"
+
+    def description(self):
+        return str(_("Latest news and articles"))
 
     def link(self):
         try:
@@ -89,7 +122,9 @@ class LatestNewsAtomFeed(LatestNewsFeed):
     """Atom 1.0 version of the news feed."""
 
     feed_type = Atom1Feed
-    subtitle = LatestNewsFeed.description
+
+    def subtitle(self):
+        return str(_("Latest news and articles"))
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -97,11 +132,14 @@ class LatestNewsAtomFeed(LatestNewsFeed):
 # ─────────────────────────────────────────────────────────────────────────────
 
 
-class UpcomingEventsFeed(Feed):
+class UpcomingEventsFeed(BrowsableFeed):
     """RSS 2.0 feed of the next 20 upcoming events."""
 
-    title = "Club CMS - Upcoming Events"
-    description = "Upcoming events and activities"
+    def title(self):
+        return f"{_site_name()} - {_('Upcoming Events')}"
+
+    def description(self):
+        return str(_("Upcoming events and activities"))
 
     def link(self):
         try:
