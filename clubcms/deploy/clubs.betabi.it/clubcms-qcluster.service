@@ -1,0 +1,16 @@
+[Unit]
+Description=ClubCMS Django-Q2 Worker (clubs.betabi.it)
+After=network.target postgresql.service clubcms.service
+
+[Service]
+Type=simple
+User=www
+Group=www
+WorkingDirectory=/www/wwwroot/clubs.betabi.it/clubcms/clubcms
+EnvironmentFile=/www/wwwroot/clubs.betabi.it/.env
+ExecStart=/www/wwwroot/clubs.betabi.it/venv/bin/python manage.py qcluster
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

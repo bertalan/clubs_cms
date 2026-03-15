@@ -1,0 +1,22 @@
+[Unit]
+Description=ClubCMS Gunicorn (clubs.betabi.it)
+After=network.target postgresql.service
+
+[Service]
+Type=notify
+User=www
+Group=www
+WorkingDirectory=/www/wwwroot/clubs.betabi.it/clubcms/clubcms
+EnvironmentFile=/www/wwwroot/clubs.betabi.it/.env
+ExecStart=/www/wwwroot/clubs.betabi.it/venv/bin/gunicorn clubcms.wsgi:application \
+    --bind 127.0.0.1:8001 \
+    --workers 3 \
+    --timeout 120 \
+    --access-logfile - \
+    --error-logfile -
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
