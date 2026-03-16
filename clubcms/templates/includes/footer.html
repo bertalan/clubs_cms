@@ -22,8 +22,23 @@
                     <div class="site-footer__social" aria-label="{% trans 'Social media' %}">
                         {% for link in social_links %}
                             <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer"
-                               aria-label="{{ link.get_platform_display }}">
-                                {{ link.get_platform_display }}
+                               aria-label="{{ link.get_platform_display }}"
+                               title="{{ link.get_platform_display }}">
+                                {% if link.platform == 'facebook' %}
+                                    <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
+                                {% elif link.platform == 'instagram' %}
+                                    <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+                                {% elif link.platform == 'twitter' %}
+                                    <i class="fa-brands fa-x-twitter" aria-hidden="true"></i>
+                                {% elif link.platform == 'youtube' %}
+                                    <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+                                {% elif link.platform == 'linkedin' %}
+                                    <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>
+                                {% elif link.platform == 'tiktok' %}
+                                    <i class="fa-brands fa-tiktok" aria-hidden="true"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-link" aria-hidden="true"></i>
+                                {% endif %}
                             </a>
                         {% endfor %}
                     </div>
@@ -34,17 +49,11 @@
                 {# Feed links #}
                 <div class="site-footer__feeds" aria-label="{% trans 'RSS Feeds' %}">
                     <a href="{% url 'feed-news-rss' %}" aria-label="{% trans 'News' %} RSS">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <circle cx="6.18" cy="17.82" r="2.18"/>
-                            <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
-                        </svg>
+                        <i class="fa-solid fa-rss" aria-hidden="true"></i>
                         <span>{% trans "News" %}</span>
                     </a>
                     <a href="{% url 'feed-events-rss' %}" aria-label="{% trans 'Events' %} RSS">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <circle cx="6.18" cy="17.82" r="2.18"/>
-                            <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
-                        </svg>
+                        <i class="fa-solid fa-rss" aria-hidden="true"></i>
                         <span>{% trans "Events" %}</span>
                     </a>
                 </div>
@@ -99,7 +108,7 @@
                     {% with phone=footer.phone|default:site.phone %}
                     {% if phone %}
                         <p>
-                            <span class="site-footer__label">{% trans "Phone:" %}</span>
+                            <i class="fa-solid fa-phone site-footer__icon" aria-hidden="true"></i>
                             <a href="tel:{{ phone }}">{{ phone }}</a>
                         </p>
                     {% endif %}
@@ -108,7 +117,7 @@
                     {% with email=footer.email|default:site.email %}
                     {% if email %}
                         <p>
-                            <span class="site-footer__label">{% trans "Email:" %}</span>
+                            <i class="fa-solid fa-envelope site-footer__icon" aria-hidden="true"></i>
                             <a href="mailto:{{ email }}">{{ email }}</a>
                         </p>
                     {% endif %}
@@ -116,7 +125,10 @@
 
                     {% with address=footer.address|default:site.address %}
                     {% if address %}
-                        <p>{{ address|linebreaksbr }}</p>
+                        <p>
+                            <i class="fa-solid fa-location-dot site-footer__icon" aria-hidden="true"></i>
+                            {{ address|linebreaksbr }}
+                        </p>
                     {% endif %}
                     {% endwith %}
                 </address>
@@ -137,9 +149,7 @@
 
             <div class="theme-switcher">
                 <label class="theme-switcher__label" for="theme-switcher-select">
-                    <svg class="theme-switcher__icon" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-                    </svg>
+                    <i class="fa-solid fa-palette theme-switcher__icon" aria-hidden="true"></i>
                     <span>{% trans "Theme" %}</span>
                 </label>
                 <span class="theme-switcher__select-wrapper">

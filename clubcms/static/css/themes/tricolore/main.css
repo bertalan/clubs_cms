@@ -337,12 +337,18 @@ a:hover {
 }
 
 .site-footer__social a {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.7);
-  transition: color var(--tricolore-transition);
+  font-size: 1.1rem;
+  transition: all var(--tricolore-transition);
 }
 
 .site-footer__social a:hover {
   color: var(--tricolore-oro);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .site-footer__feeds a {

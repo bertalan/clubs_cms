@@ -238,13 +238,18 @@ a:hover {
 }
 
 .site-footer__social a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.7);
-  font-size: 0.85rem;
-  transition: color var(--terra-transition);
+  font-size: 1rem;
+  transition: all var(--terra-transition);
 }
 
 .site-footer__social a:hover {
   color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .site-footer__feeds a {

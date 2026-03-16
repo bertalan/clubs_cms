@@ -302,13 +302,20 @@ a:hover {
 }
 
 .site-footer__social a {
+  width: 40px;
+  height: 40px;
+  border-radius: 0;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.2);
   color: rgba(255, 255, 255, 0.6);
-  font-size: 0.85rem;
-  transition: color var(--clubs-transition);
+  font-size: 1.1rem;
+  transition: all var(--clubs-transition);
 }
 
 .site-footer__social a:hover {
   color: #fff;
+  border-color: var(--color-secondary);
+  background: var(--color-secondary);
 }
 
 .site-footer__feeds a {

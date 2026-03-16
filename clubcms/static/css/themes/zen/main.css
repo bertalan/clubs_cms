@@ -281,13 +281,28 @@ a:hover {
 }
 
 .site-footer__social a {
+  width: 34px;
+  height: 34px;
+  border: var(--zen-border);
+  border-radius: 0;
   color: var(--color-text-muted);
-  font-size: 0.8rem;
-  transition: color var(--zen-transition);
+  font-size: 0.9rem;
+  transition: all var(--zen-transition);
 }
 
 .site-footer__social a:hover {
   color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.dark-mode .site-footer__social a {
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.dark-mode .site-footer__social a:hover {
+  color: #fff;
+  border-color: #fff;
 }
 
 .site-footer__feeds a {

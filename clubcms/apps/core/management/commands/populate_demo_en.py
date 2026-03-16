@@ -64,7 +64,7 @@ class Command(ITCommand):
     # ------------------------------------------------------------------
 
     def _create_en_translations(self, home_page):
-        """Create Italian copies of EN pages as starting point for translation."""
+        """Create Italian copies of EN pages, then fill them with Italian content."""
         it_locale, _ = Locale.objects.get_or_create(language_code="it")
         self.stdout.write("Creating Italian page translations...")
 
@@ -85,6 +85,34 @@ class Command(ITCommand):
             f"  Created {count} Italian pages"
             + (f" ({skipped} skipped / already exist)" if skipped else "")
         )
+
+        # Publish all IT pages and update content with Italian text
+        from apps.core.management.commands.update_it_content import (
+            Command as UpdateITCommand,
+        )
+
+        self.stdout.write("Publishing Italian pages...")
+        from django.utils import timezone as tz
+
+        now = tz.now()
+        it_pages = Page.objects.filter(locale=it_locale, depth__gte=2)
+        published = 0
+        for p in it_pages:
+            if not p.live:
+                p.live = True
+                p.has_unpublished_changes = False
+                if not p.first_published_at:
+                    p.first_published_at = now
+                p.last_published_at = now
+                p.save()
+                published += 1
+        self.stdout.write(f"  Published {published} Italian pages")
+
+        self.stdout.write("Updating Italian page content...")
+        updater = UpdateITCommand()
+        updater.stdout = self.stdout
+        updater.style = self.style
+        updater.handle()
 
     # ------------------------------------------------------------------
     # Override: Categories (English names)

@@ -10,28 +10,19 @@ own tests (or use ``pytestmark = pytest.mark.django_db`` at module level).
 """
 
 from datetime import date, timedelta
-from decimal import Decimal
 
 import pytest
-from django.contrib.auth import get_user_model
 
-from apps.website.models.snippets import Navbar, NavbarItem, Product
-
-User = get_user_model()  # members.ClubUser
-
-
-# ---------------------------------------------------------------------------
-# Helpers (internal)
-# ---------------------------------------------------------------------------
-
-_user_counter = 0
-
-
-def _next_username(prefix: str = "user") -> str:
-    """Return a unique username for each call within a test session."""
-    global _user_counter
-    _user_counter += 1
-    return f"{prefix}_{_user_counter}"
+from apps.factories import (
+    ClubUserFactory,
+    ColorSchemeFactory,
+    FooterFactory,
+    FooterMenuItemFactory,
+    FooterSocialLinkFactory,
+    NavbarFactory,
+    NavbarItemFactory,
+    ProductFactory,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -42,54 +33,24 @@ def _next_username(prefix: str = "user") -> str:
 @pytest.fixture()
 def user_factory(db):
     """
-    Factory fixture that returns a callable for creating ``ClubUser`` instances.
+    Factory fixture that returns the ``ClubUserFactory`` callable.
 
     Usage::
 
         def test_something(user_factory):
             user = user_factory(username="rider1", email="rider1@example.com")
             assert user.pk is not None
-
-    Any keyword argument accepted by ``ClubUser`` can be passed; sensible
-    defaults are provided for the most common fields.
     """
-
-    def _create(**kwargs):
-        defaults = {
-            "username": _next_username(),
-            "email": "",
-            "first_name": "Test",
-            "last_name": "User",
-            "is_active": True,
-        }
-        defaults.update(kwargs)
-
-        # Pop password so we can use set_password for proper hashing.
-        password = defaults.pop("password", "testpass123")
-
-        # Handle ``email`` default based on username when not explicitly given.
-        if not defaults["email"]:
-            defaults["email"] = f"{defaults['username']}@example.com"
-
-        user = User(**defaults)
-        user.set_password(password)
-        user.save()
-        return user
-
-    return _create
+    return ClubUserFactory
 
 
 @pytest.fixture()
-def active_member(db, user_factory, product_factory):
+def active_member(db):
     """
     A ``ClubUser`` whose membership is valid (expiry 365 days in the future)
     and who owns a full-privilege ``Product``.
-
-    The user is returned with its related product already attached, so
-    ``active_member.is_active_member`` is ``True`` and all ``grants_*``
-    properties evaluate to ``True``.
     """
-    product = product_factory(
+    product = ProductFactory(
         name="Full Membership",
         slug="full-membership",
         grants_vote=True,
@@ -98,7 +59,7 @@ def active_member(db, user_factory, product_factory):
         grants_discount=True,
         discount_percent=15,
     )
-    user = user_factory(
+    user = ClubUserFactory(
         username="active_member",
         first_name="Active",
         last_name="Member",
@@ -111,14 +72,13 @@ def active_member(db, user_factory, product_factory):
 
 
 @pytest.fixture()
-def inactive_user(db, user_factory):
+def inactive_user(db):
     """
-    A ``ClubUser`` with **no** membership data at all -- ``membership_expiry``
-    is ``None`` and no products are assigned.
+    A ``ClubUser`` with **no** membership data at all.
 
     ``inactive_user.is_active_member`` is ``False``.
     """
-    return user_factory(
+    return ClubUserFactory(
         username="inactive_user",
         first_name="Inactive",
         last_name="User",
@@ -129,11 +89,11 @@ def inactive_user(db, user_factory):
 
 
 @pytest.fixture()
-def staff_user(db, user_factory):
+def staff_user(db):
     """
     A ``ClubUser`` with ``is_staff=True`` for admin/Wagtail access tests.
     """
-    return user_factory(
+    return ClubUserFactory(
         username="staff_user",
         first_name="Staff",
         last_name="Admin",
@@ -149,8 +109,7 @@ def staff_user(db, user_factory):
 @pytest.fixture()
 def product_factory(db):
     """
-    Factory fixture that returns a callable for creating ``Product`` snippet
-    instances.
+    Factory fixture that returns the ``ProductFactory`` callable.
 
     Usage::
 
@@ -158,30 +117,7 @@ def product_factory(db):
             prod = product_factory(name="Gold", price=Decimal("99.00"))
             assert prod.is_active is True
     """
-
-    _counter = 0
-
-    def _create(**kwargs):
-        nonlocal _counter
-        _counter += 1
-
-        defaults = {
-            "name": f"Product {_counter}",
-            "slug": f"product-{_counter}",
-            "description": "",
-            "price": Decimal("50.00"),
-            "is_active": True,
-            "order": 0,
-            "grants_vote": False,
-            "grants_upload": False,
-            "grants_events": False,
-            "grants_discount": False,
-            "discount_percent": 0,
-        }
-        defaults.update(kwargs)
-        return Product.objects.create(**defaults)
-
-    return _create
+    return ProductFactory
 
 
 # ---------------------------------------------------------------------------
@@ -192,38 +128,16 @@ def product_factory(db):
 @pytest.fixture()
 def navbar_with_items(db):
     """
-    A ``Navbar`` with three ``NavbarItem`` children already attached:
-
-    1. "Home"   -- internal link (``link_url`` as placeholder)
-    2. "About"  -- internal link
-    3. "Join Us" -- external CTA, opens in a new tab
+    A ``Navbar`` with three ``NavbarItem`` children already attached.
 
     Returns the ``Navbar`` instance.  Access items via
     ``navbar.items.all()``.
     """
-    navbar = Navbar.objects.create(
-        name="Main Navigation",
-        logo=None,
-        show_search=True,
-    )
+    navbar = NavbarFactory(name="Main Navigation", show_search=True)
 
-    NavbarItem.objects.create(
-        navbar=navbar,
-        label="Home",
-        link_url="/",
-        open_new_tab=False,
-        is_cta=False,
-        sort_order=0,
-    )
-    NavbarItem.objects.create(
-        navbar=navbar,
-        label="About",
-        link_url="/about/",
-        open_new_tab=False,
-        is_cta=False,
-        sort_order=1,
-    )
-    NavbarItem.objects.create(
+    NavbarItemFactory(navbar=navbar, label="Home", link_url="/", sort_order=0)
+    NavbarItemFactory(navbar=navbar, label="About", link_url="/about/", sort_order=1)
+    NavbarItemFactory(
         navbar=navbar,
         label="Join Us",
         link_url="https://example.com/join",
