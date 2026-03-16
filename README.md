@@ -185,3 +185,8 @@ It can also be applied to other organizations that require local research and ef
 ---
 
 **Need help?** Start with [`idea/00-INDEX.md`](idea/00-INDEX.md) for the complete documentation index.
+
+---
+
+# Hosting, support, professional services, custom development
+Contact [`https://betabi.it`](https://betabi.it)
