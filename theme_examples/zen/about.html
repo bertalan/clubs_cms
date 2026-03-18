@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - Zen Theme Demo</title>
+  <style>
+    :root { 
+      --ink: #0a0a0a; 
+      --paper: #ffffff; 
+      --gray: #f5f5f5;
+      --pop: #FF3366;
+      --pop-yellow: #FFD700;
+      --pop-blue: #00BFFF;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--gray); color: var(--ink); line-height: 1.6; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    a { color: var(--ink); }
+    
+    /* === NAV === */
+    nav { background: var(--ink); color: var(--paper); padding: 1rem 0; border-bottom: 4px solid var(--pop); }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav a { color: var(--paper); text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.85rem; }
+    nav a:hover, nav a.active { color: var(--pop); }
+    .logo { font-weight: 900; font-size: 1.3rem; text-decoration: none; color: var(--paper); }
+    .logo span { color: var(--pop); }
+    
+    /* === HEADER PANEL === */
+    .header { padding: 3rem 0; }
+    .header-panel {
+      background: var(--ink); color: var(--paper); border: 4px solid var(--ink);
+      box-shadow: 8px 8px 0 var(--pop); padding: 3rem; text-align: center;
+    }
+    .header-panel h1 { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; }
+    .header-panel p { opacity: 0.7; margin-top: 0.5rem; }
+    
+    /* === CONTENT === */
+    .section { padding: 3rem 0; }
+    .content-panel {
+      background: var(--paper); border: 3px solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink); padding: 2.5rem;
+    }
+    .content-panel h2 { 
+      font-weight: 900; font-size: 1.5rem; text-transform: uppercase;
+      margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;
+    }
+    .content-panel h2::before {
+      content: ''; width: 8px; height: 100%; min-height: 24px; background: var(--pop);
+    }
+    .content-panel p { color: #333; margin-bottom: 1rem; font-size: 1.05rem; }
+    
+    /* === VALUES GRID === */
+    .values-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 2rem; }
+    @media (max-width: 600px) { .values-grid { grid-template-columns: 1fr; } }
+    .value-panel {
+      background: var(--paper); border: 3px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink); padding: 1.5rem; text-align: center;
+      transition: all 0.2s;
+    }
+    .value-panel:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+    .value-panel:nth-child(1) { background: var(--pop-yellow); }
+    .value-panel:nth-child(3) { background: var(--pop-blue); }
+    .value-panel .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .value-panel h3 { font-weight: 800; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 0.3rem; }
+    .value-panel p { font-size: 0.85rem; color: #333; margin: 0; }
+    
+    /* === TEAM STRIP === */
+    .team-strip { 
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; 
+      margin-top: 2rem;
+    }
+    @media (max-width: 600px) { .team-strip { grid-template-columns: 1fr; } }
+    .team-panel {
+      background: var(--paper); border: 3px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink); padding: 1.5rem; text-align: center;
+      position: relative; transition: all 0.2s;
+    }
+    .team-panel:hover { transform: rotate(-1deg); }
+    .team-avatar {
+      width: 70px; height: 70px; background: var(--ink); border-radius: 50%;
+      margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; color: var(--paper); font-weight: 700;
+    }
+    .team-panel:nth-child(1) .team-avatar { background: var(--pop); }
+    .team-panel:nth-child(2) .team-avatar { background: var(--pop-blue); }
+    .team-panel:nth-child(3) .team-avatar { background: var(--pop-yellow); color: var(--ink); }
+    .team-panel strong { display: block; font-weight: 800; text-transform: uppercase; font-size: 0.9rem; }
+    .team-panel span { font-size: 0.8rem; color: #555; }
+    
+    /* === FOOTER === */
+    footer { background: var(--ink); color: var(--paper); padding: 2.5rem 0; text-align: center; }
+    footer a { color: var(--paper); text-decoration: none; margin: 0 1rem; font-size: 0.9rem; }
+    footer a:hover { color: var(--pop); }
+    footer .copy { margin-top: 1rem; font-size: 0.8rem; opacity: 0.6; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <a href="index.html" class="logo">MIND<span>FUL</span></a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html" class="active">About</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="header">
+    <div class="container">
+      <div class="header-panel">
+        <h1>About Us</h1>
+        <p>Our story, values, and guides</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="content-panel">
+        <h2>Our Philosophy</h2>
+        <p>Founded in 2018, Mindful began as a small gathering of individuals seeking a slower, more intentional approach to life. We believe that in a world of constant noise, there is profound value in stillness, in listening, and in being present.</p>
+        <p>We are not about adding more to your life. We are about helping you discover what truly matters and letting go of the rest.</p>
+
+        <div class="values-grid">
+          <div class="value-panel">
+            <div class="icon">◉</div>
+            <h3>Presence</h3>
+            <p>Being fully here, now.</p>
+          </div>
+          <div class="value-panel">
+            <div class="icon">◇</div>
+            <h3>Simplicity</h3>
+            <p>Removing the unnecessary.</p>
+          </div>
+          <div class="value-panel">
+            <div class="icon">∞</div>
+            <h3>Connection</h3>
+            <p>Meaningful relationships.</p>
+          </div>
+          <div class="value-panel">
+            <div class="icon">△</div>
+            <h3>Growth</h3>
+            <p>Continuous, gentle progress.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="content-panel">
+        <h2>Our Guides</h2>
+        <div class="team-strip">
+          <div class="team-panel">
+            <div class="team-avatar">MP</div>
+            <strong>Maya Patel</strong>
+            <span>Founder</span>
+          </div>
+          <div class="team-panel">
+            <div class="team-avatar">TE</div>
+            <strong>Thomas Eriksen</strong>
+            <span>Meditation Guide</span>
+          </div>
+          <div class="team-panel">
+            <div class="team-avatar">YT</div>
+            <strong>Yuki Tanaka</strong>
+            <span>Workshop Facilitator</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div>
+        <a href="index.html">Home</a>
+        <a href="events.html">Events</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <p class="copy">© 2026 Mindful • Zen Comic Theme</p>
+    </div>
+  </footer>
+</body>
+</html>

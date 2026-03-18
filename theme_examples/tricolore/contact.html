@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - Tricolore Theme Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --verde: #009246;
+      --bianco: #F4F5F0;
+      --rosso: #CE2B37;
+      --oro: #C9A227;
+      --ink: #1a1a1a;
+      --gray: #666;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Montserrat', system-ui, sans-serif; background: var(--bianco); color: var(--ink); line-height: 1.6; }
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
+    a { color: var(--ink); text-decoration: none; }
+    
+    /* === TRICOLORE RIBBON === */
+    .tricolore-ribbon { height: 6px; display: flex; }
+    .tricolore-ribbon span { flex: 1; }
+    .tricolore-ribbon .verde { background: var(--verde); }
+    .tricolore-ribbon .bianco { background: white; }
+    .tricolore-ribbon .rosso { background: var(--rosso); }
+    
+    /* === NAV === */
+    nav { background: white; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-weight: 900; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    .logo-badge { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(90deg, var(--verde) 33%, white 33%, white 66%, var(--rosso) 66%); border: 2px solid var(--ink); }
+    nav ul { list-style: none; display: flex; gap: 2.5rem; }
+    nav a { font-weight: 600; font-size: 0.9rem; color: var(--gray); transition: color 0.2s; }
+    nav a:hover, nav a.active { color: var(--rosso); }
+    
+    /* === HEADER === */
+    .header {
+      background: linear-gradient(135deg, var(--oro) 0%, #d4a82a 100%);
+      color: white; padding: 5rem 0; text-align: center; position: relative;
+    }
+    .header::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 6px;
+      background: linear-gradient(90deg, var(--verde), white, var(--rosso));
+    }
+    .header h1 { font-size: 3rem; font-weight: 900; margin-bottom: 0.5rem; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+    .header p { opacity: 0.9; font-size: 1.1rem; }
+    
+    /* === CONTACT GRID === */
+    .section { padding: 4rem 0; }
+    .contact-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 3rem; }
+    @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
+    
+    /* === FORM === */
+    .form-card {
+      background: white; border-radius: 20px; padding: 2.5rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+      position: relative; overflow: hidden;
+    }
+    .form-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+      background: linear-gradient(90deg, var(--verde), white, var(--rosso));
+    }
+    .form-card h2 {
+      font-weight: 900; font-size: 1.5rem; margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .form-card h2::before {
+      content: '✉️'; font-size: 1.3rem;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label {
+      display: block; margin-bottom: 0.5rem; font-weight: 700;
+      font-size: 0.85rem; color: var(--gray); text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 1rem; border: 2px solid #e0e0e0;
+      border-radius: 10px; font-family: inherit; font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      outline: none; border-color: var(--verde);
+      box-shadow: 0 0 0 4px rgba(0,146,70,0.1);
+    }
+    .btn-submit {
+      display: inline-block; padding: 1rem 2.5rem;
+      background: linear-gradient(135deg, var(--verde), #00a650);
+      color: white; font-weight: 800; font-size: 1rem;
+      border: none; border-radius: 10px; cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-submit:hover {
+      background: linear-gradient(135deg, var(--rosso), #e03040);
+      transform: translateY(-2px); box-shadow: 0 8px 20px rgba(206,43,55,0.3);
+    }
+    
+    /* === INFO CARDS === */
+    .info-stack { display: flex; flex-direction: column; gap: 1.5rem; }
+    .info-card {
+      background: white; border-radius: 16px; padding: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      display: flex; align-items: flex-start; gap: 1rem;
+      transition: all 0.3s;
+    }
+    .info-card:hover { transform: translateX(8px); }
+    .info-icon {
+      width: 50px; height: 50px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; flex-shrink: 0;
+    }
+    .info-card:nth-child(1) .info-icon { background: rgba(0,146,70,0.1); }
+    .info-card:nth-child(2) .info-icon { background: rgba(206,43,55,0.1); }
+    .info-card:nth-child(3) .info-icon { background: rgba(201,162,39,0.1); }
+    .info-content h4 { font-weight: 800; font-size: 1rem; margin-bottom: 0.3rem; }
+    .info-content p { color: var(--gray); font-size: 0.95rem; margin: 0; }
+    
+    /* === CTA CARD === */
+    .cta-card {
+      background: linear-gradient(135deg, var(--ink), #2a2a2a);
+      color: white; border-radius: 16px; padding: 2rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .cta-card::before {
+      content: ''; position: absolute; inset: 8px;
+      border: 2px dashed rgba(255,255,255,0.2); border-radius: 12px;
+    }
+    .cta-cockade {
+      width: 70px; height: 70px; border-radius: 50%; margin: 0 auto 1rem;
+      background: conic-gradient(var(--verde) 0deg 120deg, white 120deg 240deg, var(--rosso) 240deg 360deg);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .cta-cockade::after {
+      content: '🏍️'; position: absolute; inset: 12px;
+      background: white; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; font-size: 1.5rem;
+    }
+    .cta-card h4 { font-weight: 900; font-size: 1.2rem; margin-bottom: 0.5rem; position: relative; }
+    .cta-card p { opacity: 0.7; font-size: 0.9rem; position: relative; }
+    
+    /* === FOOTER === */
+    footer { background: var(--ink); color: white; padding: 2rem 0; text-align: center; }
+    footer a { color: rgba(255,255,255,0.7); margin: 0 1rem; font-size: 0.9rem; }
+    footer a:hover { color: var(--oro); }
+    footer p { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 1rem; }
+    .footer-tricolore { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; }
+    .footer-tricolore span { width: 30px; height: 4px; border-radius: 2px; }
+  </style>
+</head>
+<body>
+  <div class="tricolore-ribbon">
+    <span class="verde"></span>
+    <span class="bianco"></span>
+    <span class="rosso"></span>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="logo-badge"></span>
+        MotoItalia
+      </a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="events.html">Routes</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="header">
+    <h1>Contact</h1>
+    <p>We're here for you, write to us!</p>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="form-card">
+          <h2>Send Us a Message</h2>
+          <form>
+            <div class="form-row">
+              <div class="form-group">
+                <label>First Name</label>
+                <input type="text" placeholder="Your first name">
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" placeholder="Your last name">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+              <label>Subject</label>
+              <select>
+                <option>General Information</option>
+                <option>Become a Member</option>
+                <option>Suggest a Route</option>
+                <option>Collaborations</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Message</label>
+              <textarea rows="5" placeholder="Tell us about yourself..."></textarea>
+            </div>
+            <button type="submit" class="btn-submit">Send Message →</button>
+          </form>
+        </div>
+
+        <div class="info-stack">
+          <div class="info-card">
+            <div class="info-icon">📍</div>
+            <div class="info-content">
+              <h4>Headquarters</h4>
+              <p>Via Roma 123<br>20121 Milan (MI)</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">✉️</div>
+            <div class="info-content">
+              <h4>Email</h4>
+              <p>info@motoitalia.example<br>members@motoitalia.example</p>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">📱</div>
+            <div class="info-content">
+              <h4>Phone</h4>
+              <p>+39 02 1234 5678<br>Mon-Fri 9:00-18:00</p>
+            </div>
+          </div>
+          
+          <div class="cta-card">
+            <div class="cta-cockade"></div>
+            <h4>Join the Family!</h4>
+            <p>500+ members across Italy are waiting for you</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-tricolore">
+        <span style="background: var(--verde);"></span>
+        <span style="background: white;"></span>
+        <span style="background: var(--rosso);"></span>
+      </div>
+      <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="events.html">Routes</a>
+        <a href="gallery.html">Gallery</a>
+      </div>
+      <p>© 2026 MotoItalia • Tricolore Theme Demo</p>
+    </div>
+  </footer>
+</body>
+</html>

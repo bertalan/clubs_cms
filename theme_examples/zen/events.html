@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events - Zen Theme Demo</title>
+  <style>
+    :root { 
+      --ink: #0a0a0a; 
+      --paper: #ffffff; 
+      --gray: #f5f5f5;
+      --pop: #FF3366;
+      --pop-yellow: #FFD700;
+      --pop-blue: #00BFFF;
+      --pop-green: #00E676;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--gray); color: var(--ink); line-height: 1.6; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    a { color: var(--ink); }
+    
+    /* === NAV === */
+    nav { background: var(--ink); color: var(--paper); padding: 1rem 0; border-bottom: 4px solid var(--pop); }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav a { color: var(--paper); text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.85rem; }
+    nav a:hover, nav a.active { color: var(--pop); }
+    .logo { font-weight: 900; font-size: 1.3rem; text-decoration: none; color: var(--paper); }
+    .logo span { color: var(--pop); }
+    
+    /* === HEADER === */
+    .header { padding: 3rem 0; }
+    .header-panel {
+      background: var(--ink); color: var(--paper); border: 4px solid var(--ink);
+      box-shadow: 8px 8px 0 var(--pop-yellow); padding: 3rem; text-align: center;
+    }
+    .header-panel h1 { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; }
+    
+    /* === EVENTS COMIC STRIP === */
+    .section { padding: 2rem 0 3rem; }
+    .event-strip { display: flex; flex-direction: column; gap: 1.5rem; }
+    
+    .event-panel {
+      background: var(--paper); border: 3px solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      display: grid; grid-template-columns: 100px 1fr auto;
+      overflow: hidden; transition: all 0.2s;
+    }
+    .event-panel:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--ink); }
+    @media (max-width: 650px) { 
+      .event-panel { grid-template-columns: 1fr; }
+      .event-date { border-right: none !important; border-bottom: 3px solid var(--ink); }
+    }
+    
+    /* Date badge - colored */
+    .event-date {
+      background: var(--pop-yellow); border-right: 3px solid var(--ink);
+      padding: 1.5rem; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+    }
+    .event-panel:nth-child(2) .event-date { background: var(--pop); color: var(--paper); }
+    .event-panel:nth-child(3) .event-date { background: var(--pop-blue); }
+    .event-panel:nth-child(4) .event-date { background: var(--pop-green); }
+    .event-panel:nth-child(5) .event-date { background: var(--ink); color: var(--paper); }
+    .event-date .day { font-size: 2rem; font-weight: 900; line-height: 1; }
+    .event-date .month { font-size: 0.7rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.1em; }
+    
+    /* Content */
+    .event-content { padding: 1.5rem; }
+    .event-tag {
+      display: inline-block; background: var(--ink); color: var(--paper);
+      padding: 0.2rem 0.6rem; font-size: 0.65rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;
+    }
+    .event-content h3 { font-weight: 800; font-size: 1.2rem; margin-bottom: 0.5rem; }
+    .event-content p { color: #444; font-size: 0.95rem; margin-bottom: 0.5rem; }
+    .event-meta { font-size: 0.8rem; color: #666; }
+    
+    /* Action button */
+    .event-action {
+      padding: 1.5rem; display: flex; align-items: center; justify-content: center;
+      border-left: 3px solid var(--ink);
+    }
+    @media (max-width: 650px) { 
+      .event-action { border-left: none; border-top: 3px solid var(--ink); justify-content: flex-start; padding: 1rem 1.5rem; }
+    }
+    .btn-action {
+      display: inline-block; padding: 0.6rem 1.5rem; background: var(--ink); color: var(--paper);
+      text-decoration: none; font-weight: 800; text-transform: uppercase; font-size: 0.8rem;
+      border: 2px solid var(--ink); transition: all 0.2s;
+    }
+    .btn-action:hover { background: var(--pop); border-color: var(--pop); }
+    
+    /* === FOOTER === */
+    footer { background: var(--ink); color: var(--paper); padding: 2.5rem 0; text-align: center; }
+    footer a { color: var(--paper); text-decoration: none; margin: 0 1rem; font-size: 0.9rem; }
+    footer a:hover { color: var(--pop); }
+    footer .copy { margin-top: 1rem; font-size: 0.8rem; opacity: 0.6; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <a href="index.html" class="logo">MIND<span>FUL</span></a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="events.html" class="active">Events</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="header">
+    <div class="container">
+      <div class="header-panel">
+        <h1>Events</h1>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="event-strip">
+        <article class="event-panel">
+          <div class="event-date">
+            <span class="day">15</span>
+            <span class="month">March</span>
+          </div>
+          <div class="event-content">
+            <span class="event-tag">Workshop</span>
+            <h3>Mindfulness Workshop</h3>
+            <p>An introduction to daily mindfulness practices. Learn simple techniques to bring more presence into your everyday life.</p>
+            <span class="event-meta">10:00 – 12:00 • Community Room</span>
+          </div>
+          <div class="event-action">
+            <a href="#" class="btn-action">Join</a>
+          </div>
+        </article>
+
+        <article class="event-panel">
+          <div class="event-date">
+            <span class="day">28</span>
+            <span class="month">March</span>
+          </div>
+          <div class="event-content">
+            <span class="event-tag">Retreat</span>
+            <h3>Silent Retreat</h3>
+            <p>A full day of quiet reflection, meditation, and renewal. Meals provided. Suitable for beginners.</p>
+            <span class="event-meta">8:00 – 18:00 • Retreat Center</span>
+          </div>
+          <div class="event-action">
+            <a href="#" class="btn-action">Reserve</a>
+          </div>
+        </article>
+
+        <article class="event-panel">
+          <div class="event-date">
+            <span class="day">12</span>
+            <span class="month">April</span>
+          </div>
+          <div class="event-content">
+            <span class="event-tag">Circle</span>
+            <h3>Discussion Circle</h3>
+            <p>Monthly gathering for meaningful dialogue on topics of intentional living. This month: "The Art of Slowing Down."</p>
+            <span class="event-meta">19:00 – 21:00 • Library Hall</span>
+          </div>
+          <div class="event-action">
+            <a href="#" class="btn-action">RSVP</a>
+          </div>
+        </article>
+
+        <article class="event-panel">
+          <div class="event-date">
+            <span class="day">26</span>
+            <span class="month">April</span>
+          </div>
+          <div class="event-content">
+            <span class="event-tag">Outdoor</span>
+            <h3>Walking Meditation</h3>
+            <p>A gentle practice of mindful walking through nature. Meet at the park entrance. Bring comfortable shoes.</p>
+            <span class="event-meta">7:00 – 8:30 • Riverside Park</span>
+          </div>
+          <div class="event-action">
+            <a href="#" class="btn-action">Sign Up</a>
+          </div>
+        </article>
+
+        <article class="event-panel">
+          <div class="event-date">
+            <span class="day">10</span>
+            <span class="month">May</span>
+          </div>
+          <div class="event-content">
+            <span class="event-tag">Reading</span>
+            <h3>Reading & Reflection</h3>
+            <p>Guided reading and discussion of selected texts on simplicity and mindful living.</p>
+            <span class="event-meta">15:00 – 17:00 • Community Room</span>
+          </div>
+          <div class="event-action">
+            <a href="#" class="btn-action">Join</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <p class="copy">© 2026 Mindful • Zen Comic Theme</p>
+    </div>
+  </footer>
+</body>
+</html>

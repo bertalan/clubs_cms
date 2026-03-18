@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery - Clubs Theme Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { --red: #C41E3A; --red-hover: #E02547; }
+    body { font-family: system-ui, -apple-system, sans-serif; }
+    .text-red { color: var(--red); }
+    .bg-red { background-color: var(--red); }
+    .nav-link { position: relative; }
+    .nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--red); transition: width 0.3s; }
+    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+  </style>
+</head>
+<body class="bg-[#0A0A0A] text-white">
+  <!-- Navbar -->
+  <nav class="fixed w-full bg-[#0A0A0A]/95 backdrop-blur-md z-50 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="index.html" class="text-2xl font-black tracking-tight">EAGLE<span class="text-red">RIDERS</span></a>
+      <div class="hidden md:flex gap-8 text-sm font-semibold uppercase tracking-wider">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">Heritage</a>
+        <a href="events.html" class="nav-link">Events</a>
+        <a href="gallery.html" class="nav-link active">Gallery</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <a href="contact.html" class="bg-red px-6 py-2 text-sm font-bold uppercase tracking-wider hover:scale-105 transition">Join Us</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="relative h-[40vh] flex items-center justify-center pt-20">
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=1920')] bg-cover bg-center"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/70 to-[#0A0A0A]"></div>
+    <div class="relative z-10 text-center px-6">
+      <p class="text-red font-bold uppercase tracking-[0.3em] mb-4">Our</p>
+      <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tight">Memories</h1>
+    </div>
+  </section>
+
+  <!-- Filter -->
+  <section class="bg-[#1A1A1A] border-y border-white/10">
+    <div class="max-w-7xl mx-auto px-6 flex gap-8 overflow-x-auto">
+      <button class="py-4 text-sm font-bold uppercase tracking-wider border-b-2 border-red text-white">All</button>
+      <button class="py-4 text-sm font-bold uppercase tracking-wider border-b-2 border-transparent text-gray-400 hover:text-white">Rallies</button>
+      <button class="py-4 text-sm font-bold uppercase tracking-wider border-b-2 border-transparent text-gray-400 hover:text-white">Tours</button>
+      <button class="py-4 text-sm font-bold uppercase tracking-wider border-b-2 border-transparent text-gray-400 hover:text-white">Club Life</button>
+    </div>
+  </section>
+
+  <!-- Gallery Grid -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        
+        <div class="group relative overflow-hidden aspect-square col-span-2 row-span-2">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-6">
+            <div>
+              <p class="text-red text-sm font-bold uppercase">Rally 2025</p>
+              <p class="text-lg font-bold">500 Eagles in Flight</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group relative overflow-hidden aspect-square">
+          <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=400" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-[#0A0A0A]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+            <p class="font-bold uppercase">Alps Tour</p>
+          </div>
+        </div>
+        
+        <div class="group relative overflow-hidden aspect-square">
+          <img src="https://images.unsplash.com/photo-1558980664-769d59546b3d?w=400" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-[#0A0A0A]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+            <p class="font-bold uppercase">Stelvio</p>
+          </div>
+        </div>
+        
+        <div class="group relative overflow-hidden aspect-square">
+          <img src="https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=400" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-[#0A0A0A]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+            <p class="font-bold uppercase">Open Day</p>
+          </div>
+        </div>
+        
+        <div class="group relative overflow-hidden aspect-square">
+          <img src="https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=400" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-[#0A0A0A]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+            <p class="font-bold uppercase">Museum</p>
+          </div>
+        </div>
+        
+        <div class="group relative overflow-hidden aspect-square col-span-2">
+          <img src="https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=800" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-6">
+            <div>
+              <p class="text-red text-sm font-bold uppercase">Tour 2024</p>
+              <p class="text-lg font-bold">Dolomites in 7 Days</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group relative overflow-hidden aspect-square">
+          <img src="https://images.unsplash.com/photo-1525160354320-d8e92641c563?w=400" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-[#0A0A0A]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+            <p class="font-bold uppercase">Club Dinner</p>
+          </div>
+        </div>
+        
+        <div class="group relative overflow-hidden aspect-square">
+          <img src="https://images.unsplash.com/photo-1558618047-f4b511aae2de?w=400" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-[#0A0A0A]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+            <p class="font-bold uppercase">Workshop</p>
+          </div>
+        </div>
+        
+        <div class="group relative overflow-hidden aspect-square">
+          <img src="https://images.unsplash.com/photo-1591378603223-e15b45a81640?w=400" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-[#0A0A0A]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+            <p class="font-bold uppercase">Breakfast</p>
+          </div>
+        </div>
+        
+        <div class="group relative overflow-hidden aspect-square">
+          <img src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=400" alt="Gallery" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-[#0A0A0A]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+            <p class="font-bold uppercase">Awards</p>
+          </div>
+        </div>
+
+      </div>
+      
+      <div class="text-center mt-12">
+        <a href="#" class="inline-block border-2 border-white px-8 py-4 font-bold uppercase tracking-wider hover:bg-white hover:text-[#0A0A0A] transition">Load More Photos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#0A0A0A] border-t border-white/10 py-16">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <p class="text-2xl font-black">EAGLE<span class="text-red">RIDERS</span></p>
+        <div class="flex gap-8 mt-6 md:mt-0 text-sm text-gray-400">
+          <a href="index.html" class="hover:text-white transition">Home</a>
+          <a href="about.html" class="hover:text-white transition">Heritage</a>
+          <a href="events.html" class="hover:text-white transition">Events</a>
+          <a href="contact.html" class="hover:text-white transition">Contact</a>
+        </div>
+      </div>
+      <div class="mt-8 pt-8 border-t border-white/10 text-center text-gray-500 text-sm">
+        © 2026 EagleRiders • Clubs Theme Demo
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

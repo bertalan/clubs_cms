@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - Terra Theme Demo</title>
+  <style>
+    :root {
+      --forest: #2D5016;
+      --earth: #6B3410;
+      --accent: #E85D04;
+      --cream: #F5F5DC;
+      --text: #1a1a1a;
+      --text-light: #555;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--cream); color: var(--text); line-height: 1.6; }
+    a { color: var(--forest); }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+    
+    /* Nav */
+    nav { background: var(--forest); padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
+    nav .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .logo { color: white; text-decoration: none; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; }
+    .logo span { color: var(--accent); }
+    nav ul { list-style: none; display: flex; gap: 2rem; flex-wrap: wrap; }
+    nav ul a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    nav ul a:hover, nav ul a.active { color: var(--accent); }
+    
+    /* Header with diagonal */
+    .header { 
+      background: linear-gradient(135deg, var(--forest) 0%, #3d6b1e 100%); 
+      color: white; padding: 4rem 0 6rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .header::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 60px; background: var(--cream);
+      clip-path: polygon(0 100%, 100% 100%, 100% 0);
+    }
+    .header h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; }
+    .header p { opacity: 0.9; }
+    
+    /* Section */
+    .section { padding: 4rem 0; }
+    
+    /* Contact Grid */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } }
+    
+    /* Form Card */
+    .form-card { 
+      background: white; border-left: 4px solid var(--accent); 
+      padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .form-card h2 { 
+      color: var(--forest); margin-bottom: 1.5rem; font-weight: 800;
+      position: relative; display: inline-block;
+    }
+    .form-card h2::after {
+      content: ''; display: block; width: 40px; height: 3px;
+      background: var(--accent); margin-top: 0.5rem;
+    }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; margin-bottom: 0.4rem; font-weight: 600; color: var(--forest); }
+    .form-group input, .form-group textarea, .form-group select { 
+      width: 100%; padding: 0.75rem; border: 2px solid #ddd; 
+      font-family: inherit; font-size: 1rem; transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { 
+      outline: none; border-color: var(--accent); 
+    }
+    .btn { 
+      display: inline-block; padding: 0.75rem 1.75rem; background: var(--accent); 
+      color: white; border: none; font-weight: 700; cursor: pointer; 
+      font-size: 1rem; border-radius: 2px; transition: all 0.3s ease;
+    }
+    .btn:hover { background: #ff6b0a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(232,93,4,0.3); }
+    
+    /* Info Section */
+    .info-section h3 { 
+      color: var(--forest); margin-bottom: 1rem; font-weight: 700;
+      display: inline-block;
+    }
+    .info-box { 
+      background: white; border-left: 4px solid var(--accent); 
+      padding: 1.5rem; margin-bottom: 1rem; 
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s ease;
+    }
+    .info-box:hover { transform: translateX(4px); }
+    .info-box h4 { color: var(--forest); margin-bottom: 0.5rem; font-weight: 700; }
+    .info-box p { color: var(--text-light); font-size: 0.95rem; }
+    
+    /* Volunteer CTA */
+    .volunteer-cta { 
+      background: var(--accent); color: white; padding: 1.5rem; text-align: center;
+      margin-top: 0.5rem;
+    }
+    .volunteer-cta h4 { margin-bottom: 0.5rem; font-weight: 700; }
+    .volunteer-cta p { font-size: 0.95rem; opacity: 0.95; }
+    
+    /* Footer */
+    footer { background: #1a1a1a; color: #aaa; padding: 2rem 0; text-align: center; }
+    footer a { color: #aaa; text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <a href="index.html" class="logo">Green<span>Org</span></a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="header">
+    <h1>Get Involved</h1>
+    <p>Join our growing community</p>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="form-card">
+          <h2>Send a Message</h2>
+          <form>
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" placeholder="Your name">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" placeholder="your@email.example">
+            </div>
+            <div class="form-group">
+              <label>Interest</label>
+              <select>
+                <option>General Inquiry</option>
+                <option>Volunteer</option>
+                <option>Membership</option>
+                <option>Partnership</option>
+                <option>Donation</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Message</label>
+              <textarea rows="4" placeholder="How can we help?"></textarea>
+            </div>
+            <button type="submit" class="btn">Send Message</button>
+          </form>
+        </div>
+
+        <div class="info-section">
+          <div class="info-box">
+            <h4>📍 Location</h4>
+            <p>789 Eco Lane<br>Green Valley, GV 12345</p>
+          </div>
+          <div class="info-box">
+            <h4>✉️ Email</h4>
+            <p>hello@greenorg.example</p>
+          </div>
+          <div class="info-box">
+            <h4>🕐 Office Hours</h4>
+            <p>Tuesday - Saturday: 10:00 - 17:00<br>Sunday - Monday: Closed</p>
+          </div>
+          <div class="volunteer-cta">
+            <h4>🌱 Ready to Volunteer?</h4>
+            <p>No experience needed. Just bring your enthusiasm!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 GreenOrg • Terra Theme Demo</p>
+      <p style="margin-top: 0.5rem;"><a href="index.html">Home</a> · <a href="about.html">About</a> · <a href="events.html">Events</a></p>
+    </div>
+  </footer>
+</body>
+</html>

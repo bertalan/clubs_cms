@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery - Tricolore Theme Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --verde: #009246;
+      --bianco: #F4F5F0;
+      --rosso: #CE2B37;
+      --oro: #C9A227;
+      --ink: #1a1a1a;
+      --gray: #666;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Montserrat', system-ui, sans-serif; background: var(--bianco); color: var(--ink); line-height: 1.6; }
+    .container { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
+    a { color: var(--ink); text-decoration: none; }
+    
+    /* === TRICOLORE RIBBON === */
+    .tricolore-ribbon { height: 6px; display: flex; }
+    .tricolore-ribbon span { flex: 1; }
+    .tricolore-ribbon .verde { background: var(--verde); }
+    .tricolore-ribbon .bianco { background: white; }
+    .tricolore-ribbon .rosso { background: var(--rosso); }
+    
+    /* === NAV === */
+    nav { background: white; padding: 1rem 0; box-shadow: 0 2px 20px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-weight: 900; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    .logo-badge { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(90deg, var(--verde) 33%, white 33%, white 66%, var(--rosso) 66%); border: 2px solid var(--ink); }
+    nav ul { list-style: none; display: flex; gap: 2.5rem; }
+    nav a { font-weight: 600; font-size: 0.9rem; color: var(--gray); transition: color 0.2s; }
+    nav a:hover, nav a.active { color: var(--rosso); }
+    
+    /* === HEADER === */
+    .header {
+      background: linear-gradient(135deg, var(--verde) 0%, #00a650 100%);
+      color: white; padding: 5rem 0; text-align: center; position: relative;
+    }
+    .header::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 6px;
+      background: linear-gradient(90deg, var(--verde), white, var(--rosso));
+    }
+    .header h1 { font-size: 3rem; font-weight: 900; margin-bottom: 0.5rem; }
+    .header p { opacity: 0.9; font-size: 1.1rem; }
+    
+    /* === MASONRY GALLERY === */
+    .section { padding: 4rem 0; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: 200px;
+      gap: 1.5rem;
+    }
+    @media (max-width: 900px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .gallery-grid { grid-template-columns: 1fr; } }
+    
+    .gallery-item {
+      border-radius: 16px; overflow: hidden; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem; cursor: pointer; transition: all 0.3s;
+    }
+    .gallery-item:hover { transform: scale(1.02); z-index: 10; }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    
+    /* Tricolore accent borders */
+    .gallery-item::before {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 5px;
+      background: linear-gradient(90deg, var(--verde), white, var(--rosso));
+      z-index: 10;
+    }
+    
+    /* Colors */
+    .g-verde { background: linear-gradient(135deg, var(--verde), #00a650); }
+    .g-rosso { background: linear-gradient(135deg, var(--rosso), #e03040); }
+    .g-oro { background: linear-gradient(135deg, var(--oro), #d4a82a); }
+    .g-blue { background: linear-gradient(135deg, #0066cc, #0088ff); }
+    .g-ink { background: linear-gradient(135deg, var(--ink), #333); }
+    .g-bianco { background: linear-gradient(135deg, #e8e8e8, #f5f5f5); color: var(--ink); }
+    
+    /* Sizes */
+    .g-tall { grid-row: span 2; }
+    .g-wide { grid-column: span 2; }
+    @media (max-width: 600px) { .g-tall, .g-wide { grid-row: span 1; grid-column: span 1; } }
+    
+    /* Overlay */
+    .gallery-overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,0.7);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.3s; color: white; padding: 1.5rem; text-align: center;
+    }
+    .gallery-overlay h4 { font-weight: 800; font-size: 1.1rem; margin-bottom: 0.3rem; }
+    .gallery-overlay p { font-size: 0.85rem; opacity: 0.8; }
+    
+    /* Cockade decoration */
+    .gallery-cockade {
+      position: absolute; top: 15px; right: 15px;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: conic-gradient(var(--verde) 0deg 120deg, white 120deg 240deg, var(--rosso) 240deg 360deg);
+      z-index: 10; border: 2px solid white;
+    }
+    
+    /* === FOOTER === */
+    footer { background: var(--ink); color: white; padding: 2rem 0; text-align: center; }
+    footer a { color: rgba(255,255,255,0.7); margin: 0 1rem; font-size: 0.9rem; }
+    footer a:hover { color: var(--oro); }
+    footer p { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 1rem; }
+    .footer-tricolore { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; }
+    .footer-tricolore span { width: 30px; height: 4px; border-radius: 2px; }
+  </style>
+</head>
+<body>
+  <div class="tricolore-ribbon">
+    <span class="verde"></span>
+    <span class="bianco"></span>
+    <span class="rosso"></span>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="logo-badge"></span>
+        MotoItalia
+      </a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="events.html">Routes</a></li>
+        <li><a href="gallery.html" class="active">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="header">
+    <h1>Gallery</h1>
+    <p>Unforgettable moments on Italian roads</p>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="gallery-grid">
+        <div class="gallery-item g-verde g-tall">
+          <span class="gallery-cockade"></span>
+          🏔️
+          <div class="gallery-overlay">
+            <h4>Passo dello Stelvio</h4>
+            <p>Alto Adige • 48 tornanti</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item g-rosso g-wide">
+          🌊
+          <div class="gallery-overlay">
+            <h4>Costiera Amalfitana</h4>
+            <p>Campania • Mare e limoni</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item g-oro">
+          🏛️
+          <div class="gallery-overlay">
+            <h4>Toscana</h4>
+            <p>Colline e cipressi</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item g-blue">
+          🌋
+          <div class="gallery-overlay">
+            <h4>Etna</h4>
+            <p>Sicilia • Vulcano attivo</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item g-ink g-tall">
+          <span class="gallery-cockade"></span>
+          🏎️
+          <div class="gallery-overlay">
+            <h4>Motor Valley</h4>
+            <p>Emilia-Romagna</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item g-bianco">
+          🏰
+          <div class="gallery-overlay">
+            <h4>Dolomiti</h4>
+            <p>Trentino • Patrimonio UNESCO</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item g-verde">
+          🍷
+          <div class="gallery-overlay">
+            <h4>Langhe</h4>
+            <p>Piemonte • Vigneti</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item g-rosso g-wide">
+          <span class="gallery-cockade"></span>
+          🏍️
+          <div class="gallery-overlay">
+            <h4>Raduno Nazionale</h4>
+            <p>500+ motociclisti</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item g-oro">
+          ⛵
+          <div class="gallery-overlay">
+            <h4>Cinque Terre</h4>
+            <p>Liguria • Costa</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-tricolore">
+        <span style="background: var(--verde);"></span>
+        <span style="background: white;"></span>
+        <span style="background: var(--rosso);"></span>
+      </div>
+      <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="events.html">Routes</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <p>© 2026 MotoItalia • Tricolore Theme Demo</p>
+    </div>
+  </footer>
+</body>
+</html>

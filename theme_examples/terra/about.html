@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - Terra Theme Demo</title>
+  <style>
+    :root {
+      --forest: #2D5016;
+      --earth: #6B3410;
+      --accent: #E85D04;
+      --cream: #F5F5DC;
+      --text: #1a1a1a;
+      --text-light: #555;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--cream); color: var(--text); line-height: 1.6; }
+    a { color: var(--forest); }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+    
+    /* Nav */
+    nav { background: var(--forest); padding: 1rem 0; position: sticky; top: 0; z-index: 100; }
+    nav .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .logo { color: white; text-decoration: none; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; }
+    .logo span { color: var(--accent); }
+    nav ul { list-style: none; display: flex; gap: 2rem; flex-wrap: wrap; }
+    nav ul a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    nav ul a:hover, nav ul a.active { color: var(--accent); }
+    
+    /* Header with diagonal */
+    .header { 
+      background: linear-gradient(135deg, var(--forest) 0%, #3d6b1e 100%); 
+      color: white; padding: 4rem 0 6rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .header::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 60px; background: var(--cream);
+      clip-path: polygon(0 100%, 100% 100%, 100% 0);
+    }
+    .header h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; }
+    .header p { opacity: 0.9; }
+    
+    /* Section */
+    .section { padding: 4rem 0; }
+    .section h2 { 
+      color: var(--forest); margin-bottom: 1.5rem; font-size: 1.8rem; font-weight: 800;
+      position: relative; display: inline-block;
+    }
+    .section h2::after {
+      content: ''; display: block; width: 40px; height: 3px;
+      background: var(--accent); margin-top: 0.5rem;
+    }
+    
+    /* Content Grid */
+    .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+    @media (max-width: 768px) { .content-grid { grid-template-columns: 1fr; } }
+    
+    /* Values Cards with racing stripe */
+    .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+    .value-card { 
+      background: white; border-left: 4px solid var(--accent); padding: 1.5rem; 
+      text-align: center; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .value-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .value-icon { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+    .value-card h3 { color: var(--forest); margin-bottom: 0.5rem; font-weight: 700; }
+    .value-card p { font-size: 0.9rem; color: var(--text-light); }
+    
+    /* Sidebar */
+    .sidebar { 
+      background: white; border-left: 4px solid var(--accent); padding: 1.5rem; 
+      height: fit-content; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .sidebar h3 { color: var(--forest); margin-bottom: 1.5rem; font-weight: 700; }
+    .team-member { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #eee; }
+    .team-member:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .team-member .avatar { 
+      width: 60px; height: 60px; background: linear-gradient(135deg, var(--forest), #3d6b1e); 
+      border-radius: 50%; margin: 0 auto 0.75rem; 
+    }
+    .team-member strong { color: var(--forest); }
+    .team-member p { font-size: 0.85rem; color: var(--text-light); }
+    
+    /* Footer */
+    footer { background: #1a1a1a; color: #aaa; padding: 2rem 0; text-align: center; }
+    footer a { color: #aaa; text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <a href="index.html" class="logo">Green<span>Org</span></a>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html" class="active">About</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="header">
+    <h1>About GreenOrg</h1>
+    <p>Cultivating sustainability since 2014</p>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="content-grid">
+        <div>
+          <h2>Our Story</h2>
+          <p style="margin-bottom: 1rem;">Founded in 2014, GreenOrg began as a small group of neighbors who shared a vision of a more sustainable community. What started as weekend garden meetups has grown into a thriving network of environmental advocates.</p>
+          <p style="margin-bottom: 1rem;">Today, we work with local governments, schools, and businesses to promote sustainable practices. Our community garden produces over 2,000 pounds of organic vegetables annually, all distributed to local food banks.</p>
+          <p style="margin-bottom: 2rem;">We believe that small actions, multiplied by many, create lasting change. Every tree planted, every workshop held, every volunteer hour contributed brings us closer to a greener future.</p>
+
+          <h2>Our Values</h2>
+          <div class="values-grid">
+            <div class="value-card">
+              <span class="value-icon">🌱</span>
+              <h3>Sustainability</h3>
+              <p>Every decision considers environmental impact</p>
+            </div>
+            <div class="value-card">
+              <span class="value-icon">🤝</span>
+              <h3>Community</h3>
+              <p>Working together for collective benefit</p>
+            </div>
+            <div class="value-card">
+              <span class="value-icon">📚</span>
+              <h3>Education</h3>
+              <p>Empowering through knowledge</p>
+            </div>
+            <div class="value-card">
+              <span class="value-icon">♻️</span>
+              <h3>Action</h3>
+              <p>Turning ideas into tangible results</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar">
+          <h3>Leadership</h3>
+          <div class="team-member">
+            <div class="avatar"></div>
+            <strong>David Park</strong>
+            <p>Founder & Director</p>
+          </div>
+          <div class="team-member">
+            <div class="avatar"></div>
+            <strong>Lisa Chen</strong>
+            <p>Programs Lead</p>
+          </div>
+          <div class="team-member">
+            <div class="avatar"></div>
+            <strong>Marcus Webb</strong>
+            <p>Community Coordinator</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 GreenOrg • Terra Theme Demo</p>
+      <p style="margin-top: 0.5rem;"><a href="index.html">Home</a> · <a href="events.html">Events</a> · <a href="contact.html">Contact</a></p>
+    </div>
+  </footer>
+</body>
+</html>
