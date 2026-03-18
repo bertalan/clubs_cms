@@ -1,0 +1,91 @@
+services:
+  web:
+    build: .
+    command: >-
+      gunicorn clubcms.wsgi:application
+      --bind 0.0.0.0:8000
+      --workers 3
+      --timeout 120
+      --access-logfile -
+      --error-logfile -
+    env_file:
+      - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=clubcms.settings.prod
+    volumes:
+      - static_data:/app/staticfiles
+      - media_data:/app/media
+    expose:
+      - "8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health/', timeout=5)\"",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  qcluster:
+    build: .
+    command: python manage.py qcluster
+    env_file:
+      - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=clubcms.settings.prod
+    volumes:
+      - media_data:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+      web:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-clubcms}
+      - POSTGRES_USER=${POSTGRES_USER:-clubcms}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-change-me}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-clubcms} -d ${POSTGRES_DB:-clubcms}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    image: nginx:1.27-alpine
+    depends_on:
+      web:
+        condition: service_healthy
+    environment:
+      - DOMAIN=${DOMAIN:-localhost}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - static_data:/app/staticfiles:ro
+      - media_data:/app/media:ro
+      - letsencrypt_data:/etc/letsencrypt
+      - certbot_webroot:/var/www/certbot
+      - ./deploy/nginx.conf:/etc/nginx/templates/default.conf.template:ro
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  static_data:
+  media_data:
+  letsencrypt_data:
+  certbot_webroot:
