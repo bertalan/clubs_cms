@@ -1824,9 +1824,20 @@ a:hover {
 .event-card,
 .news-card {
   border: none;
+  border-left: 4px solid var(--tricolore-verde);
   border-radius: var(--tricolore-radius);
   box-shadow: var(--tricolore-shadow);
   transition: all var(--tricolore-transition);
+}
+
+.news-card:nth-child(3n+2),
+.event-card:nth-child(3n+2) {
+  border-left-color: var(--tricolore-rosso);
+}
+
+.news-card:nth-child(3n+3),
+.event-card:nth-child(3n+3) {
+  border-left-color: var(--tricolore-oro);
 }
 
 .event-card:hover,
