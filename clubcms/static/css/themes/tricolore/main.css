@@ -1852,6 +1852,46 @@ a:hover {
   border-radius: var(--tricolore-radius-sm);
 }
 
+/* CTA buttons — fix contrast (base uses verde-on-rosso = 1.29:1 FAIL) */
+.event-card__cta {
+  background: var(--tricolore-rosso);
+  color: #fff;
+  border: 2px solid var(--tricolore-rosso);
+  border-radius: var(--tricolore-radius-sm);
+}
+
+.event-card__cta:hover {
+  background: #a82230;
+  border-color: #a82230;
+  color: #fff;
+}
+
+.event-card__cta--secondary {
+  background: transparent;
+  color: var(--tricolore-rosso);
+  border: 2px solid var(--tricolore-rosso);
+}
+
+.event-card__cta--secondary:hover {
+  background: var(--tricolore-rosso);
+  color: #fff;
+}
+
+/* Toggle Prossimo/Passato */
+.page-events__toggle .btn {
+  border-radius: var(--tricolore-radius-sm);
+}
+
+.page-events__toggle .btn[data-active] {
+  background: var(--tricolore-rosso);
+  color: #fff;
+  border-bottom-color: var(--tricolore-rosso);
+}
+
+.page-events__toggle .btn:hover {
+  color: var(--tricolore-rosso);
+}
+
 .event-card__title,
 .news-card__title {
   font-weight: 800;
