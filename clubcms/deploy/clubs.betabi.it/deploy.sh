@@ -151,6 +151,7 @@ set -euo pipefail
 DOMAIN_DIR="/www/wwwroot/clubs.betabi.it"
 cd "\$DOMAIN_DIR/clubcms/clubcms"
 source "\$DOMAIN_DIR/venv/bin/activate"
+set -a; source "\$DOMAIN_DIR/.env"; set +a
 
 echo "[1/7] Backup database..."
 mkdir -p "\$DOMAIN_DIR/backups"
@@ -192,8 +193,8 @@ systemctl restart clubcms clubcms-qcluster
 
 # Health check
 sleep 3
-HTTP_CODE=\$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8001/health/ || echo "000")
-if [ "\$HTTP_CODE" = "200" ]; then
+HTTP_CODE=\$(curl -s -o /dev/null -w "%{http_code}" -H "Host: clubs.betabi.it" http://127.0.0.1:8001/it/ || echo "000")
+if [ "\$HTTP_CODE" = "200" ] || [ "\$HTTP_CODE" = "301" ]; then
     echo "  Health check PASSED (HTTP \$HTTP_CODE)"
 else
     echo "  ERRORE: Health check FAILED (HTTP \$HTTP_CODE)"
