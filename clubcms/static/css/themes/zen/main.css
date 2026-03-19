@@ -371,7 +371,7 @@ a:hover {
 .block-hero-slider__overlay,
 .block-hero-banner__overlay,
 .block-hero-video__overlay {
-  display: none; /* zen: no heavy overlays */
+  background: none; /* zen: no heavy overlays, but keep content visible */
 }
 
 .block-hero-slider__content,
