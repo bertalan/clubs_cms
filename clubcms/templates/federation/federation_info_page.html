@@ -68,12 +68,12 @@
                     </div>
                     {% else %}
                     <div class="federation-club-card__logo federation-club-card__logo--placeholder" aria-hidden="true">
-                        <span>{{ club.name|truncatechars:2 }}</span>
+                        <span>{{ club.name|first }}</span>
                     </div>
                     {% endif %}
                     <div class="federation-club-card__content">
                         <h3 class="federation-club-card__name">{{ club.name }}</h3>
-                        <span class="federation-club-card__code">{{ club.short_code }}</span>
+                        <span class="federation-club-card__code">{% if club.city %}{{ club.city }}{% else %}{{ club.short_code }}{% endif %}</span>
                         {% if club.description %}
                         <p class="federation-club-card__description">{{ club.description }}</p>
                         {% endif %}

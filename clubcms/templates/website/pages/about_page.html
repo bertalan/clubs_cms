@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags i18n %}
 
 {% block body_class %}page-about{% endblock %}
 
@@ -21,37 +21,44 @@
         </div>
         {% endif %}
 
-        {# Intro #}
-        {% if page.intro %}
-        <div class="page-about__intro">
-            {{ page.intro|richtext }}
-        </div>
-        {% endif %}
+        <div class="page-about__layout">
+            <div class="page-about__main">
 
-        {# Body StreamField #}
-        {% if page.body %}
-        <div class="page-about__body">
-            {% for block in page.body %}
-                {% include_block block %}
-            {% endfor %}
-        </div>
-        {% endif %}
+                {# Intro #}
+                {% if page.intro %}
+                <section class="page-about__intro page-about__prose" aria-label="{% trans 'Introduction' %}">
+                    {{ page.intro|richtext }}
+                </section>
+                {% endif %}
 
-        {# Child pages (BoardPage links) #}
-        {% with children=page.get_children.live %}
-        {% if children %}
-        <nav class="page-about__subpages" aria-label="Related pages">
-            <h2 class="page-about__subpages-heading">Sections</h2>
-            <ul class="page-about__subpages-list">
-                {% for child in children %}
-                <li class="page-about__subpages-item">
-                    <a href="{% pageurl child %}" class="page-about__subpages-link">{{ child.title }}</a>
-                </li>
-                {% endfor %}
-            </ul>
-        </nav>
-        {% endif %}
-        {% endwith %}
+                {# Body StreamField #}
+                {% if page.body %}
+                <section class="page-about__body page-about__prose" aria-label="{% trans 'Page content' %}">
+                    {% for block in page.body %}
+                        {% include_block block %}
+                    {% endfor %}
+                </section>
+                {% endif %}
+            </div>
+
+            {# Child pages (BoardPage links) #}
+            {% with children=page.get_children.live %}
+            {% if children %}
+            <aside class="page-about__sidebar">
+                <nav class="page-about__subpages" aria-labelledby="page-about-subpages-heading">
+                    <h2 id="page-about-subpages-heading" class="page-about__subpages-heading">{% trans "Sections" %}</h2>
+                    <ul class="page-about__subpages-list">
+                        {% for child in children %}
+                        <li class="page-about__subpages-item">
+                            <a href="{% pageurl child %}" class="page-about__subpages-link">{{ child.title }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </aside>
+            {% endif %}
+            {% endwith %}
+        </div>
     </div>
 </article>
 {% endblock %}

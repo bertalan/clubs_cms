@@ -21,7 +21,9 @@ from pathlib import Path
 import requests as http_requests
 from django.core.files.images import ImageFile
 from django.core.management.base import BaseCommand
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import override
 
 from wagtail.images.models import Image
 from wagtail.models import Locale, Page, Site
@@ -100,6 +102,7 @@ IMAGE_SPECS = [
     ("news_officina.jpg", 800, 600, "motorcycle,workshop", "News Officina Bergamo"),
     ("news_manutenzione.jpg", 800, 600, "motorcycle,engine,repair", "News Preparazione Stagione"),
     ("news_assemblea.jpg", 800, 600, "meeting,people", "News Assemblea Soci"),
+    ("partner_bgmoto.jpg", 1200, 500, "motorcycle,magazine", "Bergamo Moto Magazine Cover"),
     ("member_marco.jpg", 400, 400, "biker,man,portrait", "Member Marco Bianchi"),
     ("member_giulia.jpg", 400, 400, "biker,woman,portrait", "Member Giulia Ferrara"),
     ("member_alessandro.jpg", 400, 400, "motorcyclist,man", "Member Alessandro Rossi"),
@@ -1466,6 +1469,9 @@ class Command(BaseCommand):
             ),
         }])
 
+        with override("it"):
+            federation_events_url = reverse("federation_frontend:list")
+
         page = FederationInfoPage(
             title="Federazione",
             slug="federazione",
@@ -1480,7 +1486,7 @@ class Command(BaseCommand):
             faq=faq,
             body=body,
             cta_text="Scopri gli eventi partner",
-            cta_url="/eventi/partner/",
+            cta_url=federation_events_url,
         )
         parent.add_child(instance=page)
         page.save_revision().publish()
@@ -1602,6 +1608,12 @@ class Command(BaseCommand):
             show_search=True,
         )
 
+        with override("it"):
+            member_card_url = reverse("account:card")
+            aid_map_url = reverse("mutual_aid:map")
+            contributions_url = reverse("account:my_contributions")
+            notifications_url = reverse("account:notifications")
+
         # NOTE: no "Home" item — the logo/brand already links to home
         top_items = [
             ("Chi Siamo", about),
@@ -1637,7 +1649,7 @@ class Command(BaseCommand):
                 ("Diventa Socio", MembershipPlansPage.objects.first(), ""),
                 ("Consiglio Direttivo", BoardPage.objects.first(), ""),
                 ("Trasparenza", TransparencyPage.objects.first(), ""),
-                ("Tessera Socio", None, "/account/card/"),
+                ("Tessera Socio", None, member_card_url),
                 ("Partner", PartnerIndexPage.objects.first(), ""),
             ]
             for i, (label, page, url) in enumerate(sub_items):
@@ -1657,10 +1669,10 @@ class Command(BaseCommand):
             servizi = nav_items["Servizi"]
             federation_page = FederationInfoPage.objects.first()
             service_items = [
-                ("Soccorso Stradale", None, "/mutual-aid/"),
+                ("Soccorso Stradale", None, aid_map_url),
                 ("Federazione Eventi", federation_page, ""),
-                ("Contributi", None, "/account/contributions/"),
-                ("Notifiche", None, "/account/notifications/"),
+                ("Contributi", None, contributions_url),
+                ("Notifiche", None, notifications_url),
                 ("Area Stampa", PressPage.objects.first(), ""),
             ]
             for i, (label, page, url) in enumerate(service_items):
@@ -1837,6 +1849,13 @@ class Command(BaseCommand):
                 event.cover_image = images[img_key]
                 event.save_revision().publish()
                 self.stdout.write(f"  EventDetailPage '{slug}' cover_image set")
+
+        # Partner cover images
+        partner = PartnerPage.objects.filter(slug="bergamo-moto-magazine").first()
+        if partner and "partner_bgmoto" in images:
+            partner.cover_image = images["partner_bgmoto"]
+            partner.save_revision().publish()
+            self.stdout.write("  PartnerPage 'bergamo-moto-magazine' cover_image set")
 
         # News cover images
         news_map = {
@@ -2428,6 +2447,9 @@ class Command(BaseCommand):
         event_ct = ContentType.objects.get_for_model(EventDetailPage)
         events = list(EventDetailPage.objects.live()[:3])
 
+        with override("it"):
+            profile_url = reverse("account:profile")
+
         activities = [
             {"user": marco, "action": "login",
              "target_title": "", "target_url": ""},
@@ -2438,7 +2460,7 @@ class Command(BaseCommand):
             {"user": giulia, "action": "login",
              "target_title": "", "target_url": ""},
             {"user": giulia, "action": "profile_update",
-             "target_title": "Aggiornamento profilo", "target_url": "/account/profile/"},
+             "target_title": "Aggiornamento profilo", "target_url": profile_url},
             {"user": alessandro, "action": "comment",
              "target_title": "Avviamento Motori 2026", "target_url": ""},
             {"user": chiara, "action": "login",
@@ -2520,7 +2542,9 @@ class Command(BaseCommand):
             FederatedClub.objects.create(
                 name="Moto Club Le Aquile - Mandello del Lario",
                 short_code="MANDELLO",
+                city="Mandello del Lario",
                 base_url="https://api.motoclubmandello.it",
+                logo_url="/static/img/federation/mandello.svg",
                 description=(
                     "Club storico sulle rive del Lago di Como, punto di "
                     "riferimento per gli appassionati di moto nella zona "
@@ -2537,7 +2561,9 @@ class Command(BaseCommand):
             FederatedClub.objects.create(
                 name="Moto Club Terre di Pisa",
                 short_code="PISA",
+                city="Pisa",
                 base_url="https://api.mcterre-pisa.it",
+                logo_url="/static/img/federation/pisa.svg",
                 description=(
                     "Club attivo nella provincia di Pisa con focus su "
                     "turismo in moto e cultura del territorio. Tour "
@@ -2554,7 +2580,9 @@ class Command(BaseCommand):
             FederatedClub.objects.create(
                 name="Moto Club Lago di Garda",
                 short_code="MOTOGARDA",
+                city="Desenzano del Garda",
                 base_url="https://api.motoclub-garda.it",
+                logo_url="/static/img/federation/garda.svg",
                 description=(
                     "Club motociclistico del Lago di Garda. "
                     "Raduni, charity ride e weekend touring sulle "
@@ -2721,6 +2749,17 @@ class Command(BaseCommand):
         marco, giulia, alessandro, chiara, roberto = members[:5]
         now = timezone.now()
 
+        with override("it"):
+            member_card_url = reverse("account:card")
+            aid_url = reverse("account:aid")
+            contributions_url = reverse("account:my_contributions")
+            orobie_event = EventDetailPage.objects.live().filter(slug="tour-orobie-2026").first()
+            franciacorta_event = EventDetailPage.objects.live().filter(slug="track-day-franciacorta-2026").first()
+            kickoff_news = NewsPage.objects.live().filter(slug="avviamento-motori-2026").first()
+            orobie_event_url = orobie_event.localized.url if orobie_event else ""
+            franciacorta_event_url = franciacorta_event.localized.url if franciacorta_event else ""
+            kickoff_news_url = kickoff_news.localized.url if kickoff_news else ""
+
         notifications = [
             {
                 "notification_type": "event_reminder",
@@ -2729,7 +2768,7 @@ class Command(BaseCommand):
                 "title": "Promemoria: Tour delle Orobie tra 3 giorni",
                 "body": "Il Tour delle Orobie è previsto per sabato. "
                         "Ritrovo alle 8:30 presso la sede del club.",
-                "url": "/eventi/tour-orobie-2026/",
+                "url": orobie_event_url,
                 "status": "sent",
                 "sent_at": now - timedelta(hours=2),
             },
@@ -2740,7 +2779,7 @@ class Command(BaseCommand):
                 "title": "Promemoria: Tour delle Orobie tra 3 giorni",
                 "body": "Il Tour delle Orobie è previsto per sabato. "
                         "Ritrovo alle 8:30 presso la sede del club.",
-                "url": "/eventi/tour-orobie-2026/",
+                "url": orobie_event_url,
                 "status": "sent",
                 "sent_at": now - timedelta(hours=2),
             },
@@ -2751,7 +2790,7 @@ class Command(BaseCommand):
                 "title": "Giulia ha risposto al tuo commento",
                 "body": "Giulia F. ha risposto al tuo commento su "
                         "'Avviamento Motori 2026'.",
-                "url": "/news/avviamento-motori-2026/",
+                "url": kickoff_news_url,
                 "status": "sent",
                 "sent_at": now - timedelta(hours=12),
             },
@@ -2762,7 +2801,7 @@ class Command(BaseCommand):
                 "title": "La tua richiesta di tessera è stata approvata!",
                 "body": "La tua richiesta per la Tessera Socio Ordinario è stata "
                         "approvata. La tessera digitale è disponibile nel tuo profilo.",
-                "url": "/account/card/",
+                "url": member_card_url,
                 "status": "sent",
                 "sent_at": now - timedelta(days=5),
             },
@@ -2773,7 +2812,7 @@ class Command(BaseCommand):
                 "title": "Nuova richiesta di soccorso nella tua zona",
                 "body": "Roberto C. ha bisogno di trasporto moto da Mandello del Lario. "
                         "Distanza: ~25km dalla tua posizione.",
-                "url": "/account/aid/",
+                "url": aid_url,
                 "status": "sent",
                 "sent_at": now - timedelta(hours=36),
             },
@@ -2784,7 +2823,7 @@ class Command(BaseCommand):
                 "title": "Nuovo evento: Track Day Franciacorta",
                 "body": "È stato pubblicato un nuovo evento: Track Day all'Autodromo "
                         "di Franciacorta. Iscrizioni aperte!",
-                "url": "/eventi/track-day-franciacorta-2026/",
+                "url": franciacorta_event_url,
                 "status": "pending",
             },
             {
@@ -2794,7 +2833,7 @@ class Command(BaseCommand):
                 "title": "La tua proposta è stata approvata",
                 "body": "La tua proposta 'Tour Sardegna 5 giorni' è stata approvata "
                         "e pubblicata nella bacheca del club.",
-                "url": "/account/contributions/",
+                "url": contributions_url,
                 "status": "sent",
                 "sent_at": now - timedelta(days=1),
             },

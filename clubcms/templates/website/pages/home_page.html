@@ -5,13 +5,16 @@
 
 {% block content %}
 {# Hero section — uses .block-hero-banner classes so theme CSS applies #}
-<section class="block-hero-banner" aria-label="Hero">
+<section class="block-hero-banner page-home__hero" aria-label="{% trans 'Hero' %}">
+    <div class="page-home__hero-media">
     {% if page.hero_image %}
         {% image page.hero_image fill-1920x800 as hero_img %}
         <img src="{{ hero_img.url }}" alt="" loading="eager" width="{{ hero_img.width }}" height="{{ hero_img.height }}">
     {% endif %}
+    </div>
     <div class="block-hero-banner__overlay">
-        <div class="block-hero-banner__content">
+        <div class="container page-home__hero-inner">
+        <div class="block-hero-banner__content page-home__hero-panel">
             {% if page.hero_badge %}
                 <span class="block-hero-banner__badge">{{ page.hero_badge }}</span>
             {% endif %}
@@ -48,6 +51,7 @@
                 {% endif %}
             </div>
         </div>
+        </div>
     </div>
     <div class="block-hero-banner__scroll-indicator" aria-hidden="true">
         <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -59,35 +63,37 @@
 {# Upcoming Events — clubs-style minimal cards #}
 {% upcoming_events 3 as events_list %}
 {% if events_list %}
-<section class="home-events" aria-label="{% trans 'Upcoming events' %}">
-    <div class="container">
-        <div class="home-events__header">
-            <div>
+<section class="home-events page-home__section page-home__section--events" aria-label="{% trans 'Upcoming events' %}">
+    <div class="container page-home__section-inner">
+        <div class="home-events__header page-home__section-head">
+            <div class="page-home__section-copy">
                 {% trans "Upcoming Events" as default_events_title %}
-                <p class="home-events__label">{{ page.events_section_title|default:default_events_title }}</p>
-                <h2 class="home-events__title">{% trans "News & Events" %}</h2>
+                <p class="home-events__label page-home__section-kicker">{{ page.events_section_title|default:default_events_title }}</p>
+                <h2 class="home-events__title page-home__section-title">{% trans "News & Events" %}</h2>
             </div>
             {% events_index_url as ev_url %}
-            <a href="{{ ev_url }}" class="home-events__viewall">{% trans "All Events" %} &rarr;</a>
+            <a href="{{ ev_url }}" class="home-events__viewall page-home__viewall">{% trans "All Events" %} &rarr;</a>
         </div>
-        <div class="home-events__grid">
+        <div class="home-events__grid page-home__cards">
             {% for event in events_list %}
-            <article class="home-events__card">
+            <article class="home-events__card page-home__card">
                 {% if event.cover_image %}
-                <div class="home-events__card-image">
+                <div class="home-events__card-image page-home__card-media">
                     {% image event.cover_image fill-600x400 as evt_img %}
                     <img src="{{ evt_img.url }}" alt="{{ event.title }}" loading="lazy" width="{{ evt_img.width }}" height="{{ evt_img.height }}">
                 </div>
                 {% endif %}
+                <div class="page-home__card-body">
                 {% if event.start_date %}
-                <p class="home-events__card-date">{{ event.start_date|date:"M j, Y" }}</p>
+                <p class="home-events__card-date page-home__card-meta">{{ event.start_date|date:"M j, Y" }}</p>
                 {% endif %}
-                <h3 class="home-events__card-title">
+                <h3 class="home-events__card-title page-home__card-title">
                     <a href="{% pageurl event %}">{{ event.title }}</a>
                 </h3>
                 {% if event.intro %}
-                <p class="home-events__card-text">{{ event.intro|truncatewords:25 }}</p>
+                <p class="home-events__card-text page-home__card-text">{{ event.intro|truncatewords:25 }}</p>
                 {% endif %}
+                </div>
             </article>
             {% endfor %}
         </div>
@@ -99,18 +105,22 @@
 {% homepage_partners 6 as partners_list %}
 {% if partners_list %}
 {% partner_index_url as partners_url %}
-<section class="home-partners" aria-label="{% trans 'Partners & Sponsors' %}">
-    <div class="container">
-        <p class="home-partners__label">{% trans "Our Network" %}</p>
-        <h2 class="home-partners__title">{% trans "Partners & Sponsors" %}</h2>
-        <div class="home-partners__grid">
+<section class="home-partners page-home__section page-home__section--partners" aria-label="{% trans 'Partners & Sponsors' %}">
+    <div class="container page-home__section-inner">
+        <div class="page-home__section-head page-home__section-head--centered">
+            <div class="page-home__section-copy">
+                <p class="home-partners__label page-home__section-kicker">{% trans "Our Network" %}</p>
+                <h2 class="home-partners__title page-home__section-title">{% trans "Partners & Sponsors" %}</h2>
+            </div>
+        </div>
+        <div class="home-partners__grid page-home__cards">
             {% for partner in partners_list %}
-            <a href="{% pageurl partner %}" class="home-partners__card">
+            <a href="{% pageurl partner %}" class="home-partners__card page-home__card">
                 {% if partner.logo %}
                     {% image partner.logo fill-160x100 as p_logo %}
                     <img src="{{ p_logo.url }}" alt="{{ partner.title }}" class="home-partners__logo" loading="lazy" width="{{ p_logo.width }}" height="{{ p_logo.height }}">
                 {% else %}
-                    <div class="home-partners__placeholder">
+                    <div class="home-partners__placeholder page-home__card-body">
                         <p class="home-partners__placeholder-name">{{ partner.title|truncatewords:1 }}</p>
                         {% if partner.category %}
                         <p class="home-partners__placeholder-cat">{{ partner.category.name }}</p>

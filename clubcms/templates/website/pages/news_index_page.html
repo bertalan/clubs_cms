@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags i18n %}
 
 {% block body_class %}page-news-index{% endblock %}
 
@@ -20,10 +20,10 @@
 
         {# Category filters #}
         {% if categories %}
-        <div class="page-news-index__filters" role="navigation" aria-label="News filters">
+        <div class="page-news-index__filters" role="navigation" aria-label="{% trans 'News filters' %}">
             <ul class="page-news-index__filter-list">
                 <li class="page-news-index__filter-item">
-                    <a href="{% pageurl page %}" class="page-news-index__filter-link" {% if not current_category %}data-active{% endif %}>All</a>
+                    <a href="{% pageurl page %}" class="page-news-index__filter-link" {% if not current_category %}data-active{% endif %}>{% trans "All" %}</a>
                 </li>
                 {% for cat in categories %}
                 <li class="page-news-index__filter-item">
@@ -64,7 +64,7 @@
                         <span class="news-card__author" itemprop="author">{{ post.author.get_full_name|default:post.author.username }}</span>
                         {% endif %}
                         {% if post.reading_time %}
-                        <span class="news-card__reading-time">{{ post.reading_time }} min read</span>
+                        <span class="news-card__reading-time">{% blocktrans with mins=post.reading_time %}{{ mins }} min read{% endblocktrans %}</span>
                         {% endif %}
                     </div>
                     {% if post.intro %}
@@ -80,7 +80,7 @@
 
         {% else %}
         <div class="page-news-index__empty">
-            <p>No news articles found.</p>
+            <p>{% trans "No news articles found." %}</p>
         </div>
         {% endif %}
 

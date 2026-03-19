@@ -8,20 +8,8 @@
 
 <article class="page-partner" itemscope itemtype="https://schema.org/Organization">
     <div class="container">
-        {# Cover / Logo #}
-        {% if page.logo %}
-        <div class="page-partner__cover">
-            {% image page.logo max-400x300 as partner_logo %}
-            <img src="{{ partner_logo.url }}"
-                 alt="{{ page.title }}"
-                 class="page-partner__cover-image"
-                 itemprop="logo"
-                 width="{{ partner_logo.width }}"
-                 height="{{ partner_logo.height }}">
-        </div>
-        {% endif %}
 
-        {# Header #}
+        {# Header with logo #}
         <header class="page-partner__header">
             {% if page.category %}
             <span class="page-partner__category">{{ page.category.name }}</span>
@@ -41,6 +29,20 @@
         <div class="page-partner__layout" role="region" aria-label="{% trans 'Partner content and details' %}">
             {# Main content area #}
             <div class="page-partner__main">
+                {# Cover image inside main column #}
+                {% if page.cover_image %}
+                <figure class="page-partner__hero">
+                    {% image page.cover_image fill-800x450 as cover %}
+                    <img src="{{ cover.url }}"
+                         alt="{{ page.title }}"
+                         class="page-partner__hero-image"
+                         itemprop="image"
+                         width="{{ cover.width }}"
+                         height="{{ cover.height }}"
+                         loading="eager">
+                </figure>
+                {% endif %}
+
                 {% if page.body %}
                 <div class="page-partner__body">
                     {% for block in page.body %}
@@ -52,9 +54,20 @@
 
             {# Sidebar #}
             <aside class="page-partner__sidebar" aria-label="{% trans 'Partner Details' %}">
-                {# Contact information #}
-                {% if page.website or page.email or page.phone or page.address %}
+                {# Logo + Contact card #}
                 <div class="page-partner__info-card">
+                    {% if page.logo %}
+                    <div class="page-partner__sidebar-logo">
+                        {% image page.logo max-280x180 as sidebar_logo %}
+                        <img src="{{ sidebar_logo.url }}"
+                             alt="{{ page.title }}"
+                             itemprop="logo"
+                             width="{{ sidebar_logo.width }}"
+                             height="{{ sidebar_logo.height }}">
+                    </div>
+                    {% endif %}
+
+                    {% if page.website or page.email or page.phone or page.address %}
                     <h2 class="page-partner__info-heading">{% trans "Contact" %}</h2>
 
                     {% if page.website %}
@@ -99,8 +112,8 @@
                         </div>
                     </div>
                     {% endif %}
+                    {% endif %}
                 </div>
-                {% endif %}
 
                 {# Social links #}
                 {% if page.facebook_url or page.instagram_url or page.linkedin_url or page.youtube_url or page.twitter_url %}

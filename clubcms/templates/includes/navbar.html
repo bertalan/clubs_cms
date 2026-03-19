@@ -1,4 +1,4 @@
-{% load i18n wagtailcore_tags wagtailimages_tags wagtailsettings_tags seo_tags %}
+{% load i18n wagtailcore_tags wagtailimages_tags wagtailsettings_tags seo_tags website_tags %}
 
 {% with navbar=settings.website.SiteSettings.navbar %}
 <nav class="site-nav" role="navigation" aria-label="{% trans 'Main navigation' %}">
@@ -35,7 +35,7 @@
                                     type="button"
                                     aria-expanded="false"
                                     aria-haspopup="true">
-                                {% if item.link_page %}{{ item.link_page.localized.title }}{% else %}{{ item.label }}{% endif %}
+                                {% if item.link_page %}{{ item.link_page.localized.title }}{% else %}{{ item.label|translate_label }}{% endif %}
                                 <span class="site-nav__dropdown-arrow" aria-hidden="true">&#9662;</span>
                             </button>
                             <ul class="site-nav__dropdown-menu" role="menu">
@@ -49,10 +49,10 @@
                                             {{ child.link_page.localized.title }}
                                         </a>
                                     {% elif child.link_url %}
-                                        <a href="{{ child.link_url }}"
+                                        <a href="{{ child.link_url|localize_internal_url }}"
                                            role="menuitem"
                                            {% if child.open_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}>
-                                            {{ child.label }}
+                                            {{ child.label|translate_label }}
                                         </a>
                                     {% endif %}
                                 </li>
@@ -69,10 +69,10 @@
                                 {{ item.link_page.localized.title }}
                             </a>
                         {% elif item.link_url %}
-                            <a href="{{ item.link_url }}"
+                            <a href="{{ item.link_url|localize_internal_url }}"
                                class="{% if item.is_cta %}site-nav__cta{% endif %}"
                                {% if item.open_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}>
-                                {{ item.label }}
+                                {{ item.label|translate_label }}
                             </a>
                         {% endif %}
                     {% endif %}

@@ -1,60 +1,70 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n website_tags %}
 
 {% block title %}{% trans "Notification history" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 800px; margin: 2rem auto; padding: 1rem;">
-    <h1>{% trans "Notification history" %}</h1>
+<section class="page-notification-history" aria-labelledby="notif-heading">
+    <div class="container container--narrow">
+        <header class="page-notification-history__header">
+            <h1 id="notif-heading" class="page-notification-history__title">
+                <svg class="page-notification-history__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+                {% trans "Notification history" %}
+            </h1>
+        </header>
 
-    {% if notifications %}
-        <ul class="notification-list" style="list-style: none; padding: 0;">
+        {% if notifications %}
+        <ul class="page-notification-history__list" role="list">
             {% for notification in notifications %}
-            <li class="notification-item" data-pk="{{ notification.pk }}"
-                style="border-bottom: 1px solid #eee; padding: 1rem 0;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div>
-                        <strong>{{ notification.title }}</strong>
-                        <span class="badge" style="font-size: 0.75rem; background: #e2e8f0; padding: 0.15rem 0.5rem; border-radius: 4px; margin-left: 0.5rem;">
-                            {{ notification.get_channel_display }}
-                        </span>
-                        <p style="margin: 0.25rem 0; color: #555;">{{ notification.body|truncatewords:30 }}</p>
+            <li class="page-notification-history__item" data-pk="{{ notification.pk }}">
+                <article class="page-notification-history__panel">
+                    <div class="page-notification-history__channel-badge">
+                        {% if notification.channel == "email" %}
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        {% elif notification.channel == "push" %}
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                        {% else %}
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        {% endif %}
+                        <span class="sr-only">{{ notification.get_channel_display }}</span>
+                    </div>
+                    <div class="page-notification-history__content">
+                        <h2 class="page-notification-history__item-title">{{ notification.title }}</h2>
+                        <p class="page-notification-history__body">{{ notification.body|truncatewords:30 }}</p>
                         {% if notification.url %}
-                            <a href="{{ notification.url }}" style="font-size: 0.875rem;">{% trans "View" %} &rarr;</a>
+                        <a href="{{ notification.url|localize_internal_url }}" class="page-notification-history__link">
+                            {% trans "View" %} &rarr;
+                        </a>
                         {% endif %}
                     </div>
-                    <time style="font-size: 0.8rem; color: #888; white-space: nowrap; margin-left: 1rem;"
-                          datetime="{{ notification.sent_at|date:'c' }}">
+                    <time class="page-notification-history__time" datetime="{{ notification.sent_at|date:'c' }}">
                         {{ notification.sent_at|timesince }} {% trans "ago" %}
                     </time>
-                </div>
+                </article>
             </li>
             {% endfor %}
         </ul>
 
-        {# Pagination #}
         {% if is_paginated %}
-        <nav aria-label="{% trans 'Pagination' %}" style="margin-top: 2rem; text-align: center;">
-            {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}">&laquo; {% trans "Previous" %}</a>
-            {% endif %}
-
-            <span style="margin: 0 1rem;">
-                {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}
-                Page {{ current }} of {{ total }}
-                {% endblocktrans %}
-            </span>
-
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">{% trans "Next" %} &raquo;</a>
-            {% endif %}
-        </nav>
+        {% include "includes/pagination.html" %}
         {% endif %}
 
-    {% else %}
-        <p style="color: #888; margin-top: 2rem;">
-            {% trans "No notifications yet." %}
-        </p>
-    {% endif %}
-</div>
+        {% else %}
+        <div class="page-notification-history__empty">
+            <svg class="page-notification-history__empty-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+            </svg>
+            <p class="page-notification-history__empty-text">{% trans "No notifications yet." %}</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
 {% endblock %}

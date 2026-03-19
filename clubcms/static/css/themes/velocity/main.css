@@ -407,6 +407,192 @@ a:hover {
   flex-wrap: wrap;
 }
 
+.page-home__hero .block-hero-banner__overlay {
+  align-items: center;
+}
+
+.page-home__hero-panel {
+  max-width: 46rem;
+  margin-right: auto;
+  padding: 2rem 2.25rem;
+  text-align: left;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.78), rgba(15, 23, 42, 0.46));
+  border: 1px solid rgba(245, 158, 11, 0.24);
+  border-radius: 24px;
+  box-shadow: var(--velocity-shadow-lg), var(--velocity-glow);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.page-home__hero .block-hero-banner__subtitle {
+  max-width: 34rem;
+  margin-inline: 0;
+}
+
+.page-home__hero .block-hero-banner__actions {
+  justify-content: flex-start;
+}
+
+/* --------------------------------------------------------------------------
+   7b. Home — Velocity-specific sections
+   -------------------------------------------------------------------------- */
+.page-home__section--events {
+  background:
+    radial-gradient(circle at top right, rgba(139, 92, 246, 0.08), transparent 28%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.03), transparent 60%);
+}
+
+.page-home__section--events .page-home__section-kicker,
+.page-home__section--partners .page-home__section-kicker {
+  color: var(--color-secondary);
+  font-family: 'Rajdhani', 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+.page-home__section--events .page-home__section-title,
+.page-home__section--partners .page-home__section-title {
+  font-family: 'Rajdhani', 'Inter', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.home-events__viewall {
+  color: var(--color-primary);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: var(--velocity-radius-pill);
+  padding: 0.7rem 1.2rem;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.home-events__viewall:hover {
+  color: #fff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.home-events__grid {
+  gap: 2rem;
+}
+
+.home-events__card {
+  gap: 1.1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 24px;
+  box-shadow: var(--velocity-shadow);
+  transition: transform var(--velocity-transition), box-shadow var(--velocity-transition), border-color var(--velocity-transition);
+}
+
+.home-events__card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--velocity-shadow-lg);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.home-events__card-image {
+  border-radius: 18px;
+}
+
+.home-events__card-image img {
+  transition: transform 0.45s ease;
+}
+
+.home-events__card:hover .home-events__card-image img {
+  transform: scale(1.04);
+}
+
+.home-events__card-date {
+  color: var(--color-secondary);
+  font-family: 'Rajdhani', 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.home-events__card-title {
+  font-family: 'Rajdhani', 'Inter', sans-serif;
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.home-events__card-text {
+  color: var(--color-text-muted);
+}
+
+.page-home__section--partners {
+  background: transparent;
+}
+
+.page-home__section--partners .page-home__section-head {
+  justify-content: center;
+  text-align: center;
+}
+
+.home-partners__grid {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1.25rem;
+}
+
+.home-partners__card {
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 22px;
+  box-shadow: var(--velocity-shadow);
+  transition: transform var(--velocity-transition), box-shadow var(--velocity-transition), border-color var(--velocity-transition);
+}
+
+.home-partners__card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(139, 92, 246, 0.28);
+  box-shadow: var(--velocity-shadow-lg);
+}
+
+.home-partners__placeholder-name {
+  font-family: 'Rajdhani', 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.home-partners__placeholder-cat {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+/* Partner-card visual — velocity */
+.partner-card__visual {
+  background:
+    radial-gradient(circle at 2px 2px, rgba(139,92,246,0.06) 1px, transparent 1px);
+  background-size: 12px 12px;
+  background-color: var(--color-primary);
+  border-radius: var(--velocity-radius) var(--velocity-radius) 0 0;
+}
+
+.partner-card:nth-child(4n+2) .partner-card__visual { background-color: #1e293b; }
+.partner-card:nth-child(4n+3) .partner-card__visual { background-color: #312e81; }
+.partner-card:nth-child(4n+4) .partner-card__visual { background-color: #1e3a5f; }
+
+.partner-card__logo-img {
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+}
+
+.partner-card:hover .partner-card__logo-img {
+  transform: scale(1.08) rotate(-1deg);
+}
+
+.page-home .home-body {
+  padding: clamp(4rem, 8vw, 6rem) 0;
+}
+
 .block-hero-slider__arrows {
   position: absolute;
   inset: 0;
@@ -1922,6 +2108,140 @@ a:hover {
 /* Body blocks area */
 .page-contact__body {
   margin-top: 0.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   About / Events / News / Gallery — Velocity
+   -------------------------------------------------------------------------- */
+.page-shell__header {
+  justify-items: center;
+  text-align: center;
+}
+
+.page-shell__title {
+  font-family: 'Rajdhani', 'Inter', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.page-shell__intro {
+  max-width: 42rem;
+  margin-inline: auto;
+  color: var(--color-text-muted);
+  line-height: 1.75;
+}
+
+.page-about__header,
+.page-events__header,
+.page-news-index__header,
+.page-gallery__header {
+  justify-items: center;
+  text-align: center;
+}
+
+.page-about__title,
+.page-events__title,
+.page-news-index__title,
+.page-gallery__title {
+  font-family: 'Rajdhani', 'Inter', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.page-about__intro,
+.page-events__intro,
+.page-news-index__intro,
+.page-gallery__intro {
+  max-width: 42rem;
+  margin-inline: auto;
+  color: var(--color-text-muted);
+  line-height: 1.75;
+}
+
+.page-about__main {
+  padding: clamp(1.5rem, 3vw, 2rem);
+  background: rgba(255, 255, 255, 0.84);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 24px;
+  box-shadow: var(--velocity-shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.page-about__sidebar {
+  align-self: start;
+}
+
+.page-about__subpages {
+  position: sticky;
+  top: 6.5rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 20px;
+  box-shadow: var(--velocity-shadow);
+}
+
+.page-about__subpages-heading {
+  font-family: 'Rajdhani', 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 1rem;
+}
+
+.page-about__subpages-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.page-about__subpages-link {
+  display: block;
+  padding: 0.95rem 1rem;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 16px;
+  color: var(--color-text-primary);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform var(--velocity-transition), box-shadow var(--velocity-transition), border-color var(--velocity-transition);
+}
+
+.page-about__subpages-link:hover {
+  transform: translateY(-3px);
+  border-color: rgba(245, 158, 11, 0.32);
+  box-shadow: var(--velocity-shadow);
+}
+
+.page-about__subpages-link:focus-visible,
+.page-news-detail__nav-link:focus-visible,
+.page-events__filter-link:focus-visible,
+.page-news-index__filter-link:focus-visible,
+.page-partners__filter-link:focus-visible,
+.page-partner__social-link:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 3px;
+}
+
+.page-event-detail .page-shell__header,
+.page-news-detail .page-shell__header,
+.page-partner .page-shell__header {
+  justify-items: start;
+  text-align: left;
+}
+
+.page-event-detail .page-shell__intro,
+.page-news-detail .page-shell__intro,
+.page-partner .page-shell__intro {
+  margin-inline: 0;
+}
+
+@media (max-width: 1023px) {
+  .page-about__subpages {
+    position: static;
+  }
 }
 
 /* Responsive adjustments */

@@ -480,6 +480,161 @@ a:hover {
   flex-wrap: wrap;
 }
 
+.page-home__hero .block-hero-banner__overlay {
+  align-items: center;
+}
+
+.page-home__hero-panel {
+  max-width: 42rem;
+  margin-right: auto;
+  text-align: left;
+}
+
+/* --------------------------------------------------------------------------
+   7b. Home — Tricolore-specific sections
+   -------------------------------------------------------------------------- */
+.page-home__section--events,
+.page-home__section--partners {
+  background: var(--color-surface);
+}
+
+.page-home__section--events .page-home__section-head,
+.page-home__section--partners .page-home__section-head {
+  justify-content: center;
+  text-align: center;
+}
+
+.page-home__section--events .page-home__section-copy,
+.page-home__section--partners .page-home__section-copy {
+  justify-items: center;
+}
+
+.page-home__section--events .page-home__section-kicker,
+.page-home__section--partners .page-home__section-kicker {
+  color: var(--tricolore-rosso);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.page-home__section--events .page-home__section-title,
+.page-home__section--partners .page-home__section-title {
+  color: var(--color-text-primary);
+  font-size: 2.1rem;
+}
+
+.home-events__viewall {
+  color: var(--tricolore-rosso);
+  font-weight: 700;
+}
+
+.home-events__grid {
+  gap: 2rem;
+}
+
+.home-events__card {
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--color-surface-alt);
+  border-radius: 16px;
+  box-shadow: var(--tricolore-shadow);
+  transition: transform var(--tricolore-transition), box-shadow var(--tricolore-transition);
+}
+
+.home-events__card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--tricolore-shadow-lg);
+}
+
+.home-events__card-image {
+  border-radius: 12px;
+}
+
+.home-events__card-date {
+  color: var(--tricolore-verde);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.home-events__card-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.home-events__card-text {
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+}
+
+.home-partners__grid {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1.5rem;
+}
+
+.home-partners__card {
+  padding: 1.5rem 1rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: var(--tricolore-shadow);
+  position: relative;
+  transition: transform var(--tricolore-transition), box-shadow var(--tricolore-transition);
+}
+
+.home-partners__card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--tricolore-verde), #fff, var(--tricolore-rosso));
+  border-radius: 16px 16px 0 0;
+}
+
+.home-partners__card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--tricolore-shadow-lg);
+}
+
+.home-partners__placeholder-name {
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.home-partners__placeholder-cat {
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Partner-card visual — tricolore */
+.partner-card__visual {
+  background-color: var(--color-primary);
+  border-bottom: 3px solid;
+  border-image: linear-gradient(90deg, var(--tricolore-verde), #fff, var(--tricolore-rosso)) 1;
+}
+
+.partner-card:nth-child(4n+2) .partner-card__visual { background-color: #a0222d; }
+.partner-card:nth-child(4n+3) .partner-card__visual { background-color: #1a3a5f; }
+.partner-card:nth-child(4n+4) .partner-card__visual { background-color: #006d34; }
+
+.partner-card__logo-img {
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+}
+
+.partner-card:hover .partner-card__logo-img {
+  transform: scale(1.08) rotate(-1deg);
+}
+
+.page-home .home-body {
+  padding: 5rem 0 6rem;
+}
+
 .block-hero-slider__arrows {
   position: absolute;
   inset: 0;
@@ -1988,6 +2143,139 @@ a:hover {
 
 .page-contact__body {
   margin-top: 0.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   About / Events / News / Gallery — Tricolore
+   -------------------------------------------------------------------------- */
+.page-shell__header {
+  justify-items: center;
+  text-align: center;
+}
+
+.page-shell__title {
+  font-weight: 900;
+  color: var(--color-text-primary);
+}
+
+.page-shell__intro {
+  max-width: 42rem;
+  margin-inline: auto;
+  color: var(--color-text-muted);
+  line-height: 1.75;
+}
+
+.page-about__header,
+.page-events__header,
+.page-news-index__header,
+.page-gallery__header {
+  justify-items: center;
+  text-align: center;
+}
+
+.page-about__title,
+.page-events__title,
+.page-news-index__title,
+.page-gallery__title {
+  font-weight: 900;
+  color: var(--color-text-primary);
+}
+
+.page-about__intro,
+.page-events__intro,
+.page-news-index__intro,
+.page-gallery__intro {
+  max-width: 42rem;
+  margin-inline: auto;
+  color: var(--color-text-muted);
+  line-height: 1.75;
+}
+
+.page-about__main {
+  padding: 2rem;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: var(--tricolore-shadow);
+}
+
+.page-about__sidebar {
+  align-self: start;
+}
+
+.page-about__subpages {
+  position: sticky;
+  top: 5.5rem;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: var(--tricolore-shadow);
+}
+
+.page-about__subpages::before {
+  content: '';
+  display: block;
+  height: 4px;
+  margin: -1.5rem -1.5rem 1rem;
+  border-radius: 18px 18px 0 0;
+  background: linear-gradient(90deg, var(--tricolore-verde), #fff, var(--tricolore-rosso));
+}
+
+.page-about__subpages-heading {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+}
+
+.page-about__subpages-list {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.page-about__subpages-link {
+  display: block;
+  padding: 0.9rem 1rem;
+  background: var(--color-surface);
+  border-radius: 12px;
+  color: var(--color-text-primary);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform var(--tricolore-transition), box-shadow var(--tricolore-transition);
+}
+
+.page-about__subpages-link:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--tricolore-shadow);
+}
+
+.page-about__subpages-link:focus-visible,
+.page-news-detail__nav-link:focus-visible,
+.page-events__filter-link:focus-visible,
+.page-news-index__filter-link:focus-visible,
+.page-partners__filter-link:focus-visible,
+.page-partner__social-link:focus-visible {
+  outline: 2px solid var(--tricolore-rosso);
+  outline-offset: 3px;
+}
+
+.page-event-detail .page-shell__header,
+.page-news-detail .page-shell__header,
+.page-partner .page-shell__header {
+  justify-items: start;
+  text-align: left;
+}
+
+.page-event-detail .page-shell__intro,
+.page-news-detail .page-shell__intro,
+.page-partner .page-shell__intro {
+  margin-inline: 0;
+}
+
+@media (max-width: 1023px) {
+  .page-about__subpages {
+    position: static;
+  }
 }
 
 @media (max-width: 767px) {

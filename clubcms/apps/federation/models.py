@@ -6,6 +6,7 @@ ExternalEventComment, FederationInfoPage.
 import uuid
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -27,12 +28,22 @@ class FederatedClub(models.Model):
     short_code = models.CharField(
         max_length=20, unique=True, help_text=_("URL-safe identifier")
     )
+    city = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name=_("City"),
+        help_text=_("City where the partner club is based."),
+    )
     base_url = models.URLField(help_text=_("Partner site base URL"))
     description = models.TextField(
         blank=True,
         help_text=_("Short description of the partner club (visible on federation page)."),
     )
-    logo_url = models.URLField(blank=True, help_text=_("Optional logo URL"))
+    logo_url = models.CharField(
+        max_length=500,
+        blank=True,
+        help_text=_("Logo URL (external) or static path (e.g. /static/img/federation/logo.svg)."),
+    )
     api_key = models.CharField(
         max_length=64, help_text=_("Their public API key (given to us)")
     )
@@ -73,6 +84,17 @@ class FederatedClub(models.Model):
         verbose_name = _("Federated Club")
         verbose_name_plural = _("Federated Clubs")
         ordering = ["name"]
+
+    def clean(self):
+        super().clean()
+        if self.logo_url and not (
+            self.logo_url.startswith("/static/")
+            or self.logo_url.startswith("http://")
+            or self.logo_url.startswith("https://")
+        ):
+            raise ValidationError(
+                {"logo_url": _("Logo must be a URL (http/https) or a /static/ path.")}
+            )
 
     def __str__(self):
         return self.name

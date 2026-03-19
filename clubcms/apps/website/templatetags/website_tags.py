@@ -2,11 +2,63 @@
 Custom template tags for the website app.
 """
 
+from urllib.parse import urlsplit, urlunsplit
+
 from django import template
+from django.urls import NoReverseMatch, reverse
 from django.utils import timezone
 from django.utils.safestring import mark_safe
+from django.utils.translation import get_language, gettext, override
 
 register = template.Library()
+
+
+_INTERNAL_ROUTE_MAP = {
+    "account/profile/": "account:profile",
+    "account/card/": "account:card",
+    "account/notifications/": "account:notifications",
+    "account/aid/": "account:aid",
+    "account/contributions/": "account:my_contributions",
+    "account/contributi/": "account:my_contributions",
+    "mutual-aid/": "mutual_aid:map",
+    "events/partner/": "federation_frontend:list",
+    "eventi/partner/": "federation_frontend:list",
+}
+
+
+def _normalize_internal_path(path: str) -> str:
+    normalized = path.lstrip("/")
+    parts = normalized.split("/", 1)
+    if parts and parts[0] in {"it", "en", "de", "fr", "es"}:
+        normalized = parts[1] if len(parts) > 1 else ""
+    if normalized and not normalized.endswith("/"):
+        normalized += "/"
+    return normalized
+
+
+def _localized_internal_url(url: str) -> str:
+    if not url:
+        return url
+
+    parts = urlsplit(url)
+    if parts.scheme or parts.netloc or not parts.path.startswith("/"):
+        return url
+
+    # Reject path-traversal and double-slash tricks
+    if ".." in parts.path or "//" in parts.path:
+        return url
+
+    route_name = _INTERNAL_ROUTE_MAP.get(_normalize_internal_path(parts.path))
+    if not route_name:
+        return url
+
+    try:
+        with override(get_language() or "en"):
+            localized = reverse(route_name)
+    except NoReverseMatch:
+        return url
+
+    return urlunsplit(("", "", localized, parts.query, parts.fragment))
 
 
 @register.simple_tag
@@ -59,6 +111,18 @@ def block_attrs(settings, base_class=""):
         parts.append(f'class="{" ".join(classes)}"')
 
     return mark_safe(" ".join(parts))
+
+
+@register.filter
+def translate_label(value):
+    if not value:
+        return value
+    return gettext(value)
+
+
+@register.filter
+def localize_internal_url(value):
+    return _localized_internal_url(value)
 
 
 @register.simple_tag

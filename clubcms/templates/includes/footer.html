@@ -1,4 +1,4 @@
-{% load i18n wagtailcore_tags wagtailimages_tags wagtailsettings_tags seo_tags %}
+{% load i18n wagtailcore_tags wagtailimages_tags wagtailsettings_tags seo_tags website_tags %}
 
 {% with footer=settings.website.SiteSettings.footer %}
 {% with site=settings.website.SiteSettings %}
@@ -71,7 +71,7 @@
                             {% if item.link_page %}
                                 <a href="{% pageurl item.link_page.localized %}">{{ item.link_page.localized.title }}</a>
                             {% elif item.link_url %}
-                                <a href="{{ item.link_url }}" target="_blank" rel="noopener noreferrer">{{ item.label }}</a>
+                                <a href="{{ item.link_url|localize_internal_url }}" target="_blank" rel="noopener noreferrer">{{ item.label|translate_label }}</a>
                             {% endif %}
                         </li>
                         {% endfor %}

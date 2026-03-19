@@ -16,6 +16,13 @@ This skill defines how the agent should plan, implement, and validate changes in
 - Main app modules: apps/core, apps/website, apps/members, apps/events, apps/federation, apps/notifications, apps/mutual_aid.
 - Settings modules: clubcms.settings.dev and clubcms.settings.prod.
 
+## Execution Namespaces
+
+- `live`: bare-metal Meta server is reached via host alias in `~/.ssh/config`.
+- Default development target: Docker only (`docker compose` in this repository) whenever the user does not specify a target.
+- Never assume local virtualenv or system-wide Python/pip execution unless explicitly requested by the user.
+- For any command with potential production impact, request explicit confirmation before execution.
+
 ## Mandatory Workflow
 
 1. Read context before editing:

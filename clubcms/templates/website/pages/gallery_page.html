@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags i18n %}
 
 {% block body_class %}page-gallery{% endblock %}
 
@@ -21,8 +21,8 @@
         {% if album %}
             {# Album detail view #}
             <div class="page-gallery__album-detail">
-                <nav class="page-gallery__back" aria-label="Back to albums">
-                    <a href="{% pageurl page %}" class="page-gallery__back-link">&laquo; Back to albums</a>
+                <nav class="page-gallery__back" aria-label="{% trans 'Back to albums' %}">
+                    <a href="{% pageurl page %}" class="page-gallery__back-link">&laquo; {% trans "Back to albums" %}</a>
                 </nav>
 
                 <h2 class="page-gallery__album-title">{{ album.name }}</h2>
@@ -46,7 +46,7 @@
                 {# Pagination for photos #}
                 {% include "includes/pagination.html" with paginator=paginator page_obj=photos %}
                 {% else %}
-                <p class="page-gallery__empty">No photos in this album.</p>
+                <p class="page-gallery__empty">{% trans "No photos in this album." %}</p>
                 {% endif %}
             </div>
 
@@ -76,7 +76,7 @@
                 {% endfor %}
             </div>
             {% else %}
-            <p class="page-gallery__empty">No albums yet.</p>
+            <p class="page-gallery__empty">{% trans "No albums yet." %}</p>
             {% endif %}
         {% endif %}
 
@@ -109,11 +109,11 @@
                 overlay.className = 'lightbox';
                 overlay.setAttribute('role', 'dialog');
                 overlay.setAttribute('aria-modal', 'true');
-                overlay.setAttribute('aria-label', caption || 'Image preview');
+                overlay.setAttribute('aria-label', caption || '{% filter escapejs %}{% trans "Image preview" %}{% endfilter %}');
                 overlay.innerHTML =
                     '<div class="lightbox__backdrop"></div>' +
                     '<div class="lightbox__content">' +
-                        '<button class="lightbox__close" aria-label="Close">&times;</button>' +
+                        '<button class="lightbox__close" aria-label="{% filter escapejs %}{% trans "Close" %}{% endfilter %}">&times;</button>' +
                         '<img src="' + src + '" alt="' + caption + '" class="lightbox__image">' +
                         (caption ? '<p class="lightbox__caption">' + caption + '</p>' : '') +
                     '</div>';

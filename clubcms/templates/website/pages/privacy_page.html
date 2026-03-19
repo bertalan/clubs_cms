@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags i18n %}
 
 {% block body_class %}page-privacy{% endblock %}
 
@@ -13,7 +13,7 @@
             <h1 class="page-privacy__title">{{ page.title }}</h1>
             {% if page.last_updated %}
             <p class="page-privacy__updated">
-                Last updated: <time datetime="{{ page.last_updated|date:'c' }}">{{ page.last_updated|date:"F j, Y" }}</time>
+                {% trans "Last updated:" %} <time datetime="{{ page.last_updated|date:'c' }}">{{ page.last_updated|date:"F j, Y" }}</time>
             </p>
             {% endif %}
         </header>

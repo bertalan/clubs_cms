@@ -23,6 +23,7 @@ class FederatedClubViewSet(SnippetViewSet):
     list_display = [
         "name",
         "short_code",
+        "city",
         "base_url",
         "is_active",
         "is_approved",
@@ -30,7 +31,7 @@ class FederatedClubViewSet(SnippetViewSet):
         "last_sync",
     ]
     list_filter = ["is_active", "is_approved", "share_our_events"]
-    search_fields = ["name", "short_code"]
+    search_fields = ["name", "short_code", "city"]
 
 
 class ExternalEventViewSet(SnippetViewSet):

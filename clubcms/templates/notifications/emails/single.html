@@ -1,4 +1,5 @@
 {% extends "notifications/emails/base.html" %}
+{% load website_tags %}
 
 {% block email_title %}{{ notification.title }} | {{ site_name }}{% endblock %}
 
@@ -13,7 +14,7 @@
 
 {% if notification.url %}
 <p style="text-align: center;">
-    <a href="{{ base_url }}{{ notification.url }}" class="btn">
+    <a href="{{ base_url }}{{ notification.url|localize_internal_url }}" class="btn">
         View details
     </a>
 </p>

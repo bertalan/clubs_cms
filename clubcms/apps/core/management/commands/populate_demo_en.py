@@ -14,7 +14,9 @@ import json
 from datetime import date, timedelta
 from decimal import Decimal
 
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import override
 
 from wagtail.models import Locale, Page, Site
 
@@ -1203,6 +1205,9 @@ class Command(ITCommand):
             ),
         }])
 
+        with override("en"):
+            federation_events_url = reverse("federation_frontend:list")
+
         page = FederationInfoPage(
             title="Federation",
             slug="federazione",
@@ -1217,7 +1222,7 @@ class Command(ITCommand):
             faq=faq,
             body=body,
             cta_text="Explore partner events",
-            cta_url="/events/partner/",
+            cta_url=federation_events_url,
         )
         parent.add_child(instance=page)
         page.save_revision().publish()
@@ -1339,6 +1344,12 @@ class Command(ITCommand):
             show_search=True,
         )
 
+        with override("en"):
+            member_card_url = reverse("account:card")
+            aid_map_url = reverse("mutual_aid:map")
+            contributions_url = reverse("account:my_contributions")
+            notifications_url = reverse("account:notifications")
+
         # NOTE: no "Home" item — the logo/brand already links to home
         top_items = [
             ("About Us", about),
@@ -1374,7 +1385,7 @@ class Command(ITCommand):
                 ("Become a Member", MembershipPlansPage.objects.first(), ""),
                 ("Board of Directors", BoardPage.objects.first(), ""),
                 ("Transparency", TransparencyPage.objects.first(), ""),
-                ("Member Card", None, "/account/card/"),
+                ("Member Card", None, member_card_url),
                 ("Partners", PartnerIndexPage.objects.first(), ""),
             ]
             for i, (label, page, url) in enumerate(sub_items):
@@ -1394,10 +1405,10 @@ class Command(ITCommand):
             services = nav_items["Services"]
             federation_page = FederationInfoPage.objects.first()
             service_items = [
-                ("Roadside Assistance", None, "/mutual-aid/"),
+                ("Roadside Assistance", None, aid_map_url),
                 ("Federation Events", federation_page, ""),
-                ("Contributions", None, "/account/contributions/"),
-                ("Notifications", None, "/account/notifications/"),
+                ("Contributions", None, contributions_url),
+                ("Notifications", None, notifications_url),
                 ("Press Room", PressPage.objects.first(), ""),
             ]
             for i, (label, page, url) in enumerate(service_items):
@@ -1765,6 +1776,22 @@ class Command(ITCommand):
         marco, giulia, alessandro, chiara, roberto = members[:5]
         now = timezone.now()
 
+        with override("en"):
+            member_card_url = reverse("account:card")
+            aid_url = reverse("account:aid")
+            contributions_url = reverse("account:my_contributions")
+
+        with override("en"):
+            member_card_url = reverse("account:card")
+            aid_url = reverse("account:aid")
+            contributions_url = reverse("account:my_contributions")
+            orobie_event = EventDetailPage.objects.live().filter(slug="orobie-tour-2026").first()
+            franciacorta_event = EventDetailPage.objects.live().filter(slug="franciacorta-track-day-2026").first()
+            kickoff_news = NewsPage.objects.live().filter(slug="2026-season-kickoff").first()
+            orobie_event_url = orobie_event.localized.url if orobie_event else ""
+            franciacorta_event_url = franciacorta_event.localized.url if franciacorta_event else ""
+            kickoff_news_url = kickoff_news.localized.url if kickoff_news else ""
+
         notifications = [
             {
                 "notification_type": "event_reminder",
@@ -1773,7 +1800,7 @@ class Command(ITCommand):
                 "title": "Reminder: Orobie Tour in 3 days",
                 "body": "The Orobie Tour is scheduled for Saturday. "
                         "Meeting point at 8:30 at the clubhouse.",
-                "url": "/events/orobie-tour-2026/",
+                "url": orobie_event_url,
                 "status": "sent",
                 "sent_at": now - timedelta(hours=2),
             },
@@ -1784,7 +1811,7 @@ class Command(ITCommand):
                 "title": "Reminder: Orobie Tour in 3 days",
                 "body": "The Orobie Tour is scheduled for Saturday. "
                         "Meeting point at 8:30 at the clubhouse.",
-                "url": "/events/orobie-tour-2026/",
+                "url": orobie_event_url,
                 "status": "sent",
                 "sent_at": now - timedelta(hours=2),
             },
@@ -1795,7 +1822,7 @@ class Command(ITCommand):
                 "title": "Giulia replied to your comment",
                 "body": "Giulia F. replied to your comment on "
                         "'2026 Season Kick-off'.",
-                "url": "/news/2026-season-kickoff/",
+                "url": kickoff_news_url,
                 "status": "sent",
                 "sent_at": now - timedelta(hours=12),
             },
@@ -1806,7 +1833,7 @@ class Command(ITCommand):
                 "title": "Your membership request has been approved!",
                 "body": "Your request for the Standard Membership Card has been "
                         "approved. Your digital card is available in your profile.",
-                "url": "/account/card/",
+                "url": member_card_url,
                 "status": "sent",
                 "sent_at": now - timedelta(days=5),
             },
@@ -1817,7 +1844,7 @@ class Command(ITCommand):
                 "title": "New roadside assistance request near you",
                 "body": "Roberto C. needs a motorcycle transport from Mandello del "
                         "Lario. Distance: ~25 km from your location.",
-                "url": "/account/aid/",
+                "url": aid_url,
                 "status": "sent",
                 "sent_at": now - timedelta(hours=36),
             },
@@ -1828,7 +1855,7 @@ class Command(ITCommand):
                 "title": "New event: Franciacorta Track Day",
                 "body": "A new event has been published: Track Day at Franciacorta "
                         "Circuit. Registrations are open!",
-                "url": "/events/franciacorta-track-day-2026/",
+                "url": franciacorta_event_url,
                 "status": "pending",
             },
             {
@@ -1838,7 +1865,7 @@ class Command(ITCommand):
                 "title": "Your proposal has been approved",
                 "body": "Your proposal '5-day Sardinia Tour' has been approved "
                         "and published on the club noticeboard.",
-                "url": "/account/contributions/",
+                "url": contributions_url,
                 "status": "sent",
                 "sent_at": now - timedelta(days=1),
             },

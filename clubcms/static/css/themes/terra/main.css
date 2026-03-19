@@ -375,6 +375,163 @@ a:hover {
   flex-wrap: wrap;
 }
 
+.page-home__hero .block-hero-banner__overlay {
+  align-items: center;
+}
+
+.page-home__hero-panel {
+  max-width: 44rem;
+  margin-inline: auto;
+  text-align: center;
+  padding: 2rem 2rem 2.5rem;
+  background: linear-gradient(135deg, rgba(245, 245, 220, 0.08), rgba(245, 245, 220, 0.02));
+  border-left: 4px solid var(--color-accent);
+}
+
+/* --------------------------------------------------------------------------
+   7b. Home — Terra-specific sections
+   -------------------------------------------------------------------------- */
+.page-home__section--events,
+.page-home__section--partners {
+  background: var(--color-surface);
+}
+
+.page-home__section--events .page-home__section-head,
+.page-home__section--partners .page-home__section-head {
+  justify-content: center;
+  text-align: center;
+}
+
+.page-home__section--events .page-home__section-copy,
+.page-home__section--partners .page-home__section-copy {
+  justify-items: center;
+}
+
+.page-home__section--events .page-home__section-kicker,
+.page-home__section--partners .page-home__section-kicker {
+  color: var(--color-accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.page-home__section--events .page-home__section-title,
+.page-home__section--partners .page-home__section-title {
+  color: var(--color-primary);
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.page-home__section--events .page-home__section-title::after,
+.page-home__section--partners .page-home__section-title::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 64px;
+  height: 4px;
+  background: var(--color-accent);
+  transform: translateX(-50%);
+}
+
+.home-events__viewall {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.home-events__grid {
+  gap: 1.5rem;
+}
+
+.home-events__card {
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--color-surface-alt);
+  border-left: 4px solid var(--color-accent);
+  box-shadow: var(--terra-shadow);
+  transition: transform var(--terra-transition), box-shadow var(--terra-transition);
+}
+
+.home-events__card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--terra-shadow-lg);
+}
+
+.home-events__card-date {
+  display: inline-block;
+  width: fit-content;
+  background: var(--color-accent);
+  color: #fff;
+  padding: 0.28rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.home-events__card-title {
+  color: var(--color-primary);
+  font-size: 1.35rem;
+}
+
+.home-events__card-text {
+  color: var(--color-text-muted);
+}
+
+.home-partners__grid {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1.5rem;
+}
+
+.home-partners__card {
+  padding: 1.5rem 1rem;
+  background: #fff;
+  border-top: 4px solid var(--color-accent);
+  box-shadow: var(--terra-shadow);
+  transition: transform var(--terra-transition), box-shadow var(--terra-transition);
+}
+
+.home-partners__card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--terra-shadow-lg);
+}
+
+.home-partners__placeholder-name {
+  color: var(--color-primary);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.home-partners__placeholder-cat {
+  color: var(--color-text-muted);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Partner-card visual — terra */
+.partner-card__visual {
+  background-color: var(--color-primary);
+  border-bottom: 4px solid var(--color-accent);
+}
+
+.partner-card:nth-child(4n+2) .partner-card__visual { background-color: #3a4a2d; }
+.partner-card:nth-child(4n+3) .partner-card__visual { background-color: #4a3a2d; }
+.partner-card:nth-child(4n+4) .partner-card__visual { background-color: #2d4a3a; }
+
+.partner-card__logo-img {
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25));
+}
+
+.partner-card:hover .partner-card__logo-img {
+  transform: scale(1.06);
+}
+
+.page-home .home-body {
+  padding: 5rem 0 6rem;
+}
+
 .block-hero-slider__arrows {
   position: absolute;
   inset: 0;
@@ -1757,6 +1914,131 @@ a:hover {
 
 .page-contact__body {
   margin-top: 0.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   About / Events / News / Gallery — Terra
+   -------------------------------------------------------------------------- */
+.page-shell__header {
+  justify-items: center;
+  text-align: center;
+}
+
+.page-shell__title {
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.page-shell__intro {
+  max-width: 42rem;
+  margin-inline: auto;
+  color: var(--color-text-muted);
+  line-height: 1.75;
+}
+
+.page-about__header,
+.page-events__header,
+.page-news-index__header,
+.page-gallery__header {
+  justify-items: center;
+  text-align: center;
+}
+
+.page-about__title,
+.page-events__title,
+.page-news-index__title,
+.page-gallery__title {
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.page-about__intro,
+.page-events__intro,
+.page-news-index__intro,
+.page-gallery__intro {
+  max-width: 42rem;
+  margin-inline: auto;
+  color: var(--color-text-muted);
+  line-height: 1.75;
+}
+
+.page-about__main {
+  padding: 2rem;
+  background: var(--color-surface-alt);
+  border-left: 4px solid var(--color-accent);
+  box-shadow: var(--terra-shadow);
+}
+
+.page-about__sidebar {
+  align-self: start;
+}
+
+.page-about__subpages {
+  position: sticky;
+  top: 5.5rem;
+  padding: 1.5rem;
+  background: #fff;
+  border-top: 4px solid var(--color-accent);
+  box-shadow: var(--terra-shadow);
+}
+
+.page-about__subpages-heading {
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+  color: var(--color-primary);
+}
+
+.page-about__subpages-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.page-about__subpages-link {
+  display: block;
+  padding: 0.9rem 1rem;
+  border-left: 3px solid transparent;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: border-color var(--terra-transition), color var(--terra-transition), transform var(--terra-transition);
+}
+
+.page-about__subpages-link:hover {
+  border-left-color: var(--color-accent);
+  color: var(--color-accent);
+  transform: translateX(4px);
+}
+
+.page-about__subpages-link:focus-visible,
+.page-news-detail__nav-link:focus-visible,
+.page-events__filter-link:focus-visible,
+.page-news-index__filter-link:focus-visible,
+.page-partners__filter-link:focus-visible,
+.page-partner__social-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.page-event-detail .page-shell__header,
+.page-news-detail .page-shell__header,
+.page-partner .page-shell__header {
+  justify-items: start;
+  text-align: left;
+}
+
+.page-event-detail .page-shell__intro,
+.page-news-detail .page-shell__intro,
+.page-partner .page-shell__intro {
+  margin-inline: 0;
+}
+
+@media (max-width: 1023px) {
+  .page-about__subpages {
+    position: static;
+  }
 }
 
 @media (max-width: 767px) {

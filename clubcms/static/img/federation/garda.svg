@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" fill="#0a2540"/>
+  <!-- Lake waves -->
+  <path d="M0 115 Q25 105 50 115 T100 115 T150 115 T200 115 V145 H0 Z" fill="#1a6b8a" opacity="0.6"/>
+  <path d="M0 122 Q25 112 50 122 T100 122 T150 122 T200 122 V145 H0 Z" fill="#1a6b8a" opacity="0.4"/>
+  <path d="M0 130 Q25 120 50 130 T100 130 T150 130 T200 130 V145 H0 Z" fill="#1a6b8a" opacity="0.25"/>
+  <!-- Mountains -->
+  <polygon points="20,115 60,65 100,115" fill="#1a3a5c"/>
+  <polygon points="70,115 120,50 170,115" fill="#1a4a6c"/>
+  <polygon points="130,115 165,75 200,115" fill="#1a3a5c"/>
+  <!-- Mountain snow caps -->
+  <polygon points="60,65 52,80 68,80" fill="#c0d8e8"/>
+  <polygon points="120,50 110,68 130,68" fill="#c0d8e8"/>
+  <polygon points="165,75 158,87 172,87" fill="#c0d8e8"/>
+  <!-- Sun/moon -->
+  <circle cx="160" cy="45" r="15" fill="#e8b828" opacity="0.9"/>
+  <!-- Motorcycle silhouette -->
+  <g transform="translate(75, 88)">
+    <ellipse cx="25" cy="12" rx="22" ry="6" fill="#e8b828" opacity="0.8"/>
+    <circle cx="8" cy="18" r="7" fill="none" stroke="#e8b828" stroke-width="2"/>
+    <circle cx="42" cy="18" r="7" fill="none" stroke="#e8b828" stroke-width="2"/>
+  </g>
+  <!-- Text -->
+  <text x="100" y="168" text-anchor="middle" fill="#e8b828" font-family="sans-serif" font-size="11" font-weight="700" letter-spacing="0.1em">LAGO DI GARDA</text>
+  <text x="100" y="184" text-anchor="middle" fill="#5a8aaa" font-family="sans-serif" font-size="8" letter-spacing="0.15em">MOTO CLUB</text>
+</svg>

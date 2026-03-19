@@ -388,6 +388,174 @@ a:hover {
   flex-wrap: wrap;
 }
 
+.page-home__hero .block-hero-banner__overlay {
+  align-items: center;
+}
+
+.page-home__hero-panel {
+  max-width: 44rem;
+  margin-inline: auto;
+  padding: 2rem 2.25rem;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(30, 58, 95, 0.62), rgba(30, 58, 95, 0.42));
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  box-shadow: var(--heritage-shadow-lg);
+}
+
+.page-home__hero .block-hero-banner__subtitle {
+  max-width: 34rem;
+}
+
+/* --------------------------------------------------------------------------
+   7b. Home — Heritage-specific sections
+   -------------------------------------------------------------------------- */
+.page-home__section--events,
+.page-home__section--partners {
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.06), transparent 20%);
+}
+
+.page-home__section--events .page-home__section-head,
+.page-home__section--partners .page-home__section-head {
+  justify-content: center;
+  text-align: center;
+}
+
+.page-home__section--events .page-home__section-copy,
+.page-home__section--partners .page-home__section-copy {
+  justify-items: center;
+}
+
+.page-home__section--events .page-home__section-kicker,
+.page-home__section--partners .page-home__section-kicker {
+  color: var(--color-secondary);
+  font-size: 0.85rem;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+}
+
+.page-home__section--events .page-home__section-title,
+.page-home__section--partners .page-home__section-title {
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.page-home__section--events .page-home__section-title::after,
+.page-home__section--partners .page-home__section-title::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 72px;
+  height: 2px;
+  background: var(--color-secondary);
+  transform: translateX(-50%);
+}
+
+.home-events__viewall {
+  color: var(--color-primary);
+  border: 1px solid var(--color-secondary);
+  padding: 0.6rem 1.2rem;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.home-events__viewall:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.home-events__grid {
+  gap: 2rem;
+}
+
+.home-events__card {
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--color-surface-alt);
+  border: var(--heritage-gold-border);
+  box-shadow: var(--heritage-shadow);
+}
+
+.home-events__card-image {
+  margin-bottom: 0;
+}
+
+.home-events__card-date {
+  color: var(--color-secondary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-events__card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.45rem;
+}
+
+.home-events__card-text {
+  color: var(--color-text-muted);
+}
+
+.page-home__section--partners .page-home__section-head {
+  margin-bottom: 0.5rem;
+}
+
+.home-partners__grid {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1.5rem;
+}
+
+.home-partners__card {
+  padding: 1.5rem 1.25rem;
+  background: var(--color-surface-alt);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  box-shadow: var(--heritage-shadow);
+  transition: transform var(--heritage-transition), box-shadow var(--heritage-transition), border-color var(--heritage-transition);
+}
+
+.home-partners__card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-secondary);
+  box-shadow: var(--heritage-shadow-lg);
+}
+
+.home-partners__placeholder-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--color-primary);
+}
+
+.home-partners__placeholder-cat {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+}
+
+/* Partner-card visual — heritage */
+.partner-card__visual {
+  background:
+    radial-gradient(circle at 2px 2px, rgba(212,175,55,0.08) 1px, transparent 1px);
+  background-size: 14px 14px;
+  background-color: var(--color-primary);
+}
+
+.partner-card:nth-child(4n+2) .partner-card__visual { background-color: #2c1810; }
+.partner-card:nth-child(4n+3) .partner-card__visual { background-color: #4a1a2a; }
+.partner-card:nth-child(4n+4) .partner-card__visual { background-color: #2a3a2a; }
+
+.partner-card__logo-img {
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+}
+
+.partner-card:hover .partner-card__logo-img {
+  transform: scale(1.05);
+}
+
+.page-home .home-body {
+  padding: 5rem 0 6rem;
+}
+
 .block-hero-slider__arrows {
   position: absolute;
   inset: 0;
@@ -1797,6 +1965,131 @@ a:hover {
 
 .page-contact__body {
   margin-top: 0.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   About / Events / News / Gallery — Heritage
+   -------------------------------------------------------------------------- */
+.page-shell__header {
+  justify-items: center;
+  text-align: center;
+}
+
+.page-shell__title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.page-shell__intro {
+  max-width: 42rem;
+  margin-inline: auto;
+  color: var(--color-text-muted);
+  line-height: 1.75;
+}
+
+.page-about__header,
+.page-events__header,
+.page-news-index__header,
+.page-gallery__header {
+  justify-items: center;
+  text-align: center;
+}
+
+.page-about__title,
+.page-events__title,
+.page-news-index__title,
+.page-gallery__title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.page-about__intro,
+.page-events__intro,
+.page-news-index__intro,
+.page-gallery__intro {
+  max-width: 42rem;
+  margin-inline: auto;
+  color: var(--color-text-muted);
+  line-height: 1.75;
+}
+
+.page-about__main {
+  padding: 2rem;
+  background: var(--color-surface-alt);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  box-shadow: var(--heritage-shadow);
+}
+
+.page-about__sidebar {
+  align-self: start;
+}
+
+.page-about__subpages {
+  position: sticky;
+  top: 5.5rem;
+  padding: 1.5rem;
+  background: var(--color-surface-alt);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  box-shadow: var(--heritage-shadow);
+}
+
+.page-about__subpages-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  margin-bottom: 1rem;
+  color: var(--color-primary);
+}
+
+.page-about__subpages-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.page-about__subpages-link {
+  display: block;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background var(--heritage-transition), color var(--heritage-transition), border-color var(--heritage-transition);
+}
+
+.page-about__subpages-link:hover {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+.page-about__subpages-link:focus-visible,
+.page-news-detail__nav-link:focus-visible,
+.page-events__filter-link:focus-visible,
+.page-news-index__filter-link:focus-visible,
+.page-partners__filter-link:focus-visible,
+.page-partner__social-link:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 3px;
+}
+
+.page-event-detail .page-shell__header,
+.page-news-detail .page-shell__header,
+.page-partner .page-shell__header {
+  justify-items: start;
+  text-align: left;
+}
+
+.page-event-detail .page-shell__intro,
+.page-news-detail .page-shell__intro,
+.page-partner .page-shell__intro {
+  margin-inline: 0;
+}
+
+@media (max-width: 1023px) {
+  .page-about__subpages {
+    position: static;
+  }
 }
 
 @media (max-width: 767px) {

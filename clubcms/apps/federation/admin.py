@@ -10,9 +10,9 @@ from apps.federation.models import (
 
 @admin.register(FederatedClub)
 class FederatedClubAdmin(admin.ModelAdmin):
-    list_display = ["name", "short_code", "is_active", "is_approved", "last_sync"]
+    list_display = ["name", "short_code", "city", "is_active", "is_approved", "last_sync"]
     list_filter = ["is_active", "is_approved"]
-    search_fields = ["name", "short_code"]
+    search_fields = ["name", "short_code", "city"]
     readonly_fields = ["id", "created_at"]
 
 

@@ -127,6 +127,15 @@ class PartnerPage(Page):
         verbose_name=_("Logo"),
         help_text=_("Logo del partner, mostrato nei listing e nella pagina."),
     )
+    cover_image = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name=_("Cover image"),
+        help_text=_("Immagine di copertina mostrata tra il titolo e il contenuto."),
+    )
     category = models.ForeignKey(
         "website.PartnerCategory",
         null=True,
@@ -276,6 +285,7 @@ class PartnerPage(Page):
     # --- Panels ---
     content_panels = Page.content_panels + [
         FieldPanel("logo"),
+        FieldPanel("cover_image"),
         FieldPanel("category"),
         FieldPanel("intro"),
         FieldPanel("body"),

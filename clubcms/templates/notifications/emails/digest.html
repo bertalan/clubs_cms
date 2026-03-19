@@ -1,5 +1,5 @@
 {% extends "notifications/emails/base.html" %}
-{% load i18n %}
+{% load i18n website_tags %}
 
 {% block email_title %}{% trans "Notification digest" %} | {{ site_name }}{% endblock %}
 
@@ -25,7 +25,7 @@
         {{ notification.body|truncatewords:40 }}
     </p>
     {% if notification.url %}
-    <a href="{{ base_url }}{{ notification.url }}"
+    <a href="{{ base_url }}{{ notification.url|localize_internal_url }}"
        style="font-size: 13px; color: #2563eb; text-decoration: none;">
         {% trans "View details" %} &rarr;
     </a>
