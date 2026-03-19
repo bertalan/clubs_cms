@@ -24,8 +24,10 @@
 
   /* Theme-specific tokens */
   --tricolore-verde: #009246;
+  --tricolore-verde-dark: #007B3D;
   --tricolore-rosso: #CE2B37;
   --tricolore-oro: #C9A227;
+  --tricolore-oro-dark: #8B7517;
   --tricolore-radius: 12px;
   --tricolore-radius-sm: 4px;
   --tricolore-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -120,14 +122,14 @@ a:hover {
 
 .btn-primary {
   background: #fff;
-  color: var(--color-primary);
+  color: var(--tricolore-verde-dark);
   border-color: #fff;
 }
 
 .btn-primary:hover {
-  background: var(--tricolore-oro);
+  background: var(--tricolore-oro-dark);
   color: #fff;
-  border-color: var(--tricolore-oro);
+  border-color: var(--tricolore-oro-dark);
 }
 
 .btn-secondary {
@@ -149,18 +151,18 @@ a:hover {
 
 .btn-outline-light:hover {
   background: #fff;
-  color: var(--color-primary);
+  color: var(--tricolore-verde-dark);
   border-color: #fff;
 }
 
 .btn-verde {
-  background: var(--tricolore-verde);
+  background: var(--tricolore-verde-dark);
   color: #fff;
-  border-color: var(--tricolore-verde);
+  border-color: var(--tricolore-verde-dark);
 }
 
 .btn-verde:hover {
-  background: #00A650;
+  background: var(--tricolore-verde-dark);
 }
 
 .btn-rosso {
