@@ -97,10 +97,13 @@ class Command(BaseCommand):
             {
                 "type": "rich_text",
                 "value": "<h2>Benvenuti nel Moto Club Aquile Rosse</h2>"
-                         "<p>Siamo un club motociclistico fondato nel 1987 a Bergamo, "
-                         "con oltre 250 soci attivi in tutta la Lombardia. "
-                         "Organizziamo raduni, tour, track day e eventi benefici "
-                         "per condividere la nostra passione per le due ruote.</p>",
+                         "<p>Dal 1987 trasformiamo la passione per le due ruote in "
+                         "viaggi memorabili, amicizie vere e iniziative che tengono "
+                         "insieme strada, territorio e spirito di club.</p>"
+                         "<p>Con oltre 250 soci attivi in tutta la Lombardia, "
+                         "organizziamo raduni, tour panoramici, track day ed eventi "
+                         "benefici per vivere la moto con intensita', stile e senso "
+                         "di appartenenza.</p>",
             },
             {
                 "type": "stats",
@@ -117,8 +120,9 @@ class Command(BaseCommand):
                 "type": "cta",
                 "value": {
                     "title": "Unisciti a Noi",
-                    "text": "Diventa socio del Moto Club Aquile Rosse e "
-                            "partecipa alle nostre avventure su strada.",
+                    "text": "Entra nel club, accedi alle attivita' riservate e "
+                        "condividi tour, eventi e nuove strade con una comunita' "
+                        "che vive la moto tutto l'anno.",
                     "button_text": "Scopri le Tessere",
                     "button_url": "/diventa-socio/",
                     "style": "primary",

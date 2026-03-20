@@ -107,26 +107,34 @@
 {% partner_index_url as partners_url %}
 <section class="home-partners page-home__section page-home__section--partners" aria-label="{% trans 'Partners & Sponsors' %}">
     <div class="container page-home__section-inner">
-        <div class="page-home__section-head page-home__section-head--centered">
+        <div class="page-home__section-head page-home__section-head--partners">
             <div class="page-home__section-copy">
                 <p class="home-partners__label page-home__section-kicker">{% trans "Our Network" %}</p>
                 <h2 class="home-partners__title page-home__section-title">{% trans "Partners & Sponsors" %}</h2>
             </div>
+            {% if partners_url and partners_url != "#" %}
+            <a href="{{ partners_url }}" class="home-partners__viewall page-home__viewall">
+                {% trans "All Partners" %} <span aria-hidden="true">→</span>
+            </a>
+            {% endif %}
         </div>
-        <div class="home-partners__grid page-home__cards">
+        <div class="home-partners__grid">
             {% for partner in partners_list %}
-            <a href="{% pageurl partner %}" class="home-partners__card page-home__card">
-                {% if partner.logo %}
-                    {% image partner.logo fill-160x100 as p_logo %}
-                    <img src="{{ p_logo.url }}" alt="{{ partner.title }}" class="home-partners__logo" loading="lazy" width="{{ p_logo.width }}" height="{{ p_logo.height }}">
-                {% else %}
-                    <div class="home-partners__placeholder page-home__card-body">
-                        <p class="home-partners__placeholder-name">{{ partner.title|truncatewords:1 }}</p>
-                        {% if partner.category %}
-                        <p class="home-partners__placeholder-cat">{{ partner.category.name }}</p>
-                        {% endif %}
-                    </div>
-                {% endif %}
+            <a href="{% pageurl partner %}" class="home-partners__card">
+                <div class="home-partners__card-visual">
+                    {% if partner.logo %}
+                        {% image partner.logo fill-200x120 as p_logo %}
+                        <img src="{{ p_logo.url }}" alt="" class="home-partners__logo" loading="lazy" width="{{ p_logo.width }}" height="{{ p_logo.height }}">
+                    {% else %}
+                        <span class="home-partners__card-initial">{{ partner.title|truncatewords:1|truncatechars:1 }}</span>
+                    {% endif %}
+                </div>
+                <div class="home-partners__card-info">
+                    <p class="home-partners__card-name">{{ partner.title }}</p>
+                    {% if partner.category %}
+                    <p class="home-partners__card-category">{{ partner.category.name }}</p>
+                    {% endif %}
+                </div>
             </a>
             {% endfor %}
         </div>
@@ -135,10 +143,70 @@
 {% endif %}
 
 {# Body StreamField #}
-{% if page.body %}
+{% if page.home_intro_section.enabled or page.remaining_body_blocks %}
 <section class="home-body">
     <div class="container">
-        {% for block in page.body %}
+        {% with intro=page.home_intro_section %}
+        {% if intro.enabled %}
+        <div class="home-body__intro page-home__spotlight">
+            <div class="page-home__spotlight-container">
+                <div class="page-home__spotlight-shell">
+                    <div class="page-home__spotlight-copy">
+                        <div class="page-home__spotlight-copy-inner rich-text">
+                            <div class="page-home__spotlight-copy-text">
+                                {{ intro.rich_text.value|richtext }}
+                            </div>
+                            {% if settings.website.SiteSettings.logo %}
+                            <div class="page-home__spotlight-logo">
+                                {% image settings.website.SiteSettings.logo max-400x400 as spotlight_logo %}
+                                <img src="{{ spotlight_logo.url }}" alt="{{ settings.website.SiteSettings.site_name }}" loading="lazy" width="{{ spotlight_logo.width }}" height="{{ spotlight_logo.height }}">
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="page-home__spotlight-bottom">
+                        {% if intro.stats and intro.stats_items %}
+                        <section class="page-home__spotlight-stats"{% if intro.stats_title %} aria-label="{{ intro.stats_title }}"{% endif %}>
+                            {% if intro.stats_title %}
+                            <h2 class="page-home__spotlight-stats-title">{{ intro.stats_title }}</h2>
+                            {% endif %}
+                            <div class="page-home__spotlight-stats-grid">
+                                {% for stat in intro.stats_items %}
+                                <div class="page-home__spotlight-stat">
+                                    <span class="page-home__spotlight-stat-value">{{ stat.value }}</span>
+                                    <span class="page-home__spotlight-stat-label">{{ stat.label }}</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </section>
+                        {% endif %}
+
+                        {% if intro.cta %}
+                        <section class="page-home__spotlight-cta" data-style="{{ intro.cta.value.background_style|default:'primary' }}">
+                            <div class="page-home__spotlight-cta-inner">
+                                <h2 class="page-home__spotlight-cta-title">{{ intro.cta.value.title }}</h2>
+                                {% if intro.cta.value.text %}
+                                <div class="page-home__spotlight-cta-text rich-text">{{ intro.cta.value.text|richtext }}</div>
+                                {% endif %}
+                                {% if intro.cta.value.button_text %}
+                                    {% if intro.cta.value.button_link %}
+                                    <a href="{% pageurl intro.cta.value.button_link %}" class="btn btn-primary page-home__spotlight-cta-button">{{ intro.cta.value.button_text }}</a>
+                                    {% elif intro.cta.value.button_url %}
+                                    <a href="{{ intro.cta.value.button_url }}" class="btn btn-primary page-home__spotlight-cta-button" target="_blank" rel="noopener noreferrer">{{ intro.cta.value.button_text }}</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </section>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% for block in page.remaining_body_blocks %}
             {% include_block block %}
         {% endfor %}
     </div>

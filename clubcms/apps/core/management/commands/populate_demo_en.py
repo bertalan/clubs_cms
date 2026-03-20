@@ -396,10 +396,12 @@ class Command(ITCommand):
                 {
                     "type": "rich_text",
                     "value": "<h2>Welcome to Moto Club Aquile Rosse</h2>"
-                             "<p>We are a motorcycle club founded in 1987 in Bergamo, "
-                             "with over 250 active members across Lombardy. "
-                             "We organise rallies, tours, track days and charity events "
-                             "to share our passion for two wheels.</p>",
+                             "<p>Since 1987, we have turned a passion for two wheels "
+                             "into memorable rides, lasting friendships and initiatives "
+                             "that connect the road with a true club spirit.</p>"
+                             "<p>With more than 250 active members across Lombardy, we "
+                             "organise rallies, scenic tours, track days and charity "
+                             "events for riders who want every season to feel alive.</p>",
                 },
                 {
                     "type": "stats",
@@ -416,8 +418,9 @@ class Command(ITCommand):
                     "type": "cta",
                     "value": {
                         "title": "Join Us",
-                        "text": "Become a member of Moto Club Aquile Rosse and "
-                                "join our adventures on the road.",
+                        "text": "Join the club, unlock members-only activities and "
+                                "share tours, events and new roads with a community "
+                                "that rides all year long.",
                         "button_text": "Explore Memberships",
                         "button_url": "/membership/",
                         "style": "primary",

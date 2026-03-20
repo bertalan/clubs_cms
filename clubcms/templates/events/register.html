@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n l10n %}
 
 {% block title %}{% trans "Register" %} — {{ event.title }} | {{ block.super }}{% endblock %}
 
@@ -232,8 +232,8 @@
     }
 
     /* ── Dynamic price update ── */
-    var perPerson = parseFloat('{{ pricing.final_price|stringformat:"f" }}') || 0;
-    var passengerPrice = parseFloat('{{ pricing.passenger_price|stringformat:"f" }}') || 0;
+    var perPerson = parseFloat('{{ pricing.final_price|unlocalize }}') || 0;
+    var passengerPrice = parseFloat('{{ pricing.passenger_price|unlocalize }}') || 0;
     var guestsInput = document.getElementById('id_guests');
     var reviewTotal = document.getElementById('review-total');
     var reviewGuestsLabel = document.getElementById('review-guests-label');

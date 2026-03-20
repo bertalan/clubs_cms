@@ -210,6 +210,73 @@ class HomePage(Page):
     def __str__(self) -> str:
         return self.title
 
+    def _split_intro_body_blocks(self):
+        opening_block_types = {"rich_text", "stats", "cta"}
+        promoted_blocks = {}
+        promoted_indices = []
+        promoted_raw_values = {}
+
+        for index, block in enumerate(self.body):
+            if block.block_type not in opening_block_types:
+                break
+            if block.block_type in promoted_blocks:
+                break
+
+            promoted_blocks[block.block_type] = block
+            promoted_indices.append(index)
+            promoted_raw_values[block.block_type] = self.body.raw_data[index].get("value", {})
+
+            if len(promoted_blocks) == len(opening_block_types):
+                break
+
+        enabled = "rich_text" in promoted_blocks and (
+            "stats" in promoted_blocks or "cta" in promoted_blocks
+        )
+        if not enabled:
+            promoted_indices = []
+            promoted_blocks = {}
+
+        remaining_blocks = [
+            block for index, block in enumerate(self.body) if index not in promoted_indices
+        ]
+
+        stats_items = []
+        raw_stats_value = promoted_raw_values.get("stats") or {}
+        for item in raw_stats_value.get("stats", []):
+            if isinstance(item, dict):
+                stats_items.append(
+                    {
+                        "value": item.get("value", ""),
+                        "label": item.get("label", ""),
+                    }
+                )
+        for item in raw_stats_value.get("items", []):
+            if isinstance(item, dict):
+                stats_items.append(
+                    {
+                        "value": item.get("number", ""),
+                        "label": item.get("label", ""),
+                    }
+                )
+
+        return {
+            "enabled": enabled,
+            "rich_text": promoted_blocks.get("rich_text"),
+            "stats": promoted_blocks.get("stats"),
+            "cta": promoted_blocks.get("cta"),
+            "stats_title": raw_stats_value.get("title", ""),
+            "stats_items": [item for item in stats_items if item["value"] or item["label"]],
+            "remaining": remaining_blocks,
+        }
+
+    @cached_property
+    def home_intro_section(self):
+        return self._split_intro_body_blocks()
+
+    @cached_property
+    def remaining_body_blocks(self):
+        return self.home_intro_section["remaining"]
+
 
 # ═══════════════════════════════════════════════════════════════════════════
 # 2. AboutPage
