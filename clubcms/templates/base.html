@@ -46,6 +46,16 @@
     {% if settings.website.SiteSettings.pwa_name %}
     <link rel="manifest" href="{% url 'pwa-manifest' %}">
     <meta name="theme-color" content="{{ settings.website.SiteSettings.pwa_theme_color|default:'#0F172A' }}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="{{ settings.website.SiteSettings.pwa_short_name|default:settings.website.SiteSettings.pwa_name }}">
+    {% if settings.website.SiteSettings.pwa_icon_180 %}
+        {% image settings.website.SiteSettings.pwa_icon_180 fill-180x180 as apple_icon %}
+        <link rel="apple-touch-icon" href="{{ apple_icon.url }}">
+    {% elif settings.website.SiteSettings.pwa_icon_192 %}
+        {% image settings.website.SiteSettings.pwa_icon_192 fill-180x180 as apple_icon_fallback %}
+        <link rel="apple-touch-icon" href="{{ apple_icon_fallback.url }}">
+    {% endif %}
     {% endif %}
 
     {# SEO: JSON-LD, Open Graph, Twitter Cards, hreflang, canonical, feeds #}
@@ -75,13 +85,22 @@
         {% block content %}{% endblock %}
     </main>
 
+    {# PWA install banner (hidden until beforeinstallprompt fires) #}
+    {% if settings.website.SiteSettings.pwa_name %}
+    <div id="pwa-install-banner" class="pwa-install-banner" hidden role="alert">
+        <span class="pwa-install-text">{% trans "Install this app on your device" %}</span>
+        <button class="btn btn--primary btn--sm pwa-install-btn" type="button">{% trans "Install" %}</button>
+        <button class="pwa-install-dismiss" type="button" aria-label="{% trans 'Dismiss' %}">&times;</button>
+    </div>
+    {% endif %}
+
     {# Footer #}
     {% include "includes/footer.html" %}
 
     {# Theme Switcher #}
     <script src="{% static 'js/theme-switcher.js' %}"></script>
 
-    {# PWA service worker registration #}
+    {# PWA service worker registration + install prompt #}
     {% if settings.website.SiteSettings.pwa_name %}
     <script>
         if ('serviceWorker' in navigator) {
@@ -90,6 +109,34 @@
                     console.warn('ServiceWorker registration failed:', err);
                 });
         }
+        /* A2HS install prompt */
+        (function() {
+            var deferredPrompt = null;
+            var banner = document.getElementById('pwa-install-banner');
+            window.addEventListener('beforeinstallprompt', function(e) {
+                e.preventDefault();
+                deferredPrompt = e;
+                if (banner) banner.hidden = false;
+            });
+            if (banner) {
+                var btn = banner.querySelector('.pwa-install-btn');
+                var dismiss = banner.querySelector('.pwa-install-dismiss');
+                if (btn) btn.addEventListener('click', function() {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        deferredPrompt.userChoice.then(function() { deferredPrompt = null; });
+                    }
+                    banner.hidden = true;
+                });
+                if (dismiss) dismiss.addEventListener('click', function() {
+                    banner.hidden = true;
+                });
+            }
+            window.addEventListener('appinstalled', function() {
+                if (banner) banner.hidden = true;
+                deferredPrompt = null;
+            });
+        })();
     </script>
     {% endif %}
 

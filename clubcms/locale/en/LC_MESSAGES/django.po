@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ClubCMS 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-19 01:43+0100\n"
+"POT-Creation-Date: 2026-03-20 16:25+0100\n"
 "PO-Revision-Date: 2024-01-01 00:00+0000\n"
 "Last-Translator: ClubCMS Team\n"
 "Language-Team: English\n"
@@ -69,8 +69,8 @@ msgid "Title"
 msgstr "Title"
 
 #: apps/core/forms.py:26 apps/core/models.py:190 apps/core/models.py:306
-#: apps/website/models/pages.py:864 apps/website/models/pages.py:1259
-#: apps/website/models/partners.py:348
+#: apps/website/models/pages.py:864 apps/website/models/pages.py:1273
+#: apps/website/models/partners.py:358
 msgid "Content"
 msgstr "Content"
 
@@ -377,15 +377,15 @@ msgstr "Introduction"
 msgid "contributions"
 msgstr "Introduction"
 
-#: apps/core/templatetags/seo_tags.py:245
+#: apps/core/templatetags/seo_tags.py:256
 msgid "News (RSS)"
 msgstr ""
 
-#: apps/core/templatetags/seo_tags.py:246
+#: apps/core/templatetags/seo_tags.py:257
 msgid "News (Atom)"
 msgstr ""
 
-#: apps/core/templatetags/seo_tags.py:247
+#: apps/core/templatetags/seo_tags.py:258
 #, fuzzy
 #| msgid "Events"
 msgid "Events (RSS)"
@@ -397,7 +397,7 @@ msgstr "Events"
 msgid "search/"
 msgstr "Search"
 
-#: apps/core/views.py:480
+#: apps/core/views.py:581
 msgid "Your contribution has been submitted and is awaiting moderation."
 msgstr "Your contribution has been submitted and is awaiting moderation."
 
@@ -582,12 +582,12 @@ msgid "Your family name. Example: Rossi"
 msgstr "Your family name. Example: Rossi"
 
 #: apps/events/forms.py:241 apps/events/models.py:151 apps/members/forms.py:97
-#: apps/notifications/models.py:48 apps/website/models/partners.py:160
+#: apps/notifications/models.py:48 apps/website/models/partners.py:169
 #: apps/website/models/settings.py:118 apps/website/models/snippets.py:261
 #: templates/mutual_aid/helper_card.html:148
 #: templates/website/pages/contact_page.html:56
 #: templates/website/pages/contact_page.html:163
-#: templates/website/pages/partner_page.html:73
+#: templates/website/pages/partner_page.html:86
 msgid "Email"
 msgstr "Email"
 
@@ -1063,292 +1063,297 @@ msgstr "Payment service temporarily unavailable. Please try again."
 msgid "Federation"
 msgstr "Federation"
 
-#: apps/federation/models.py:26
+#: apps/federation/models.py:27
 msgid "Display name of the partner club"
 msgstr "Display name of the partner club"
 
-#: apps/federation/models.py:28
+#: apps/federation/models.py:29
 msgid "URL-safe identifier"
 msgstr "URL-safe identifier"
 
-#: apps/federation/models.py:33 apps/members/forms.py:267
+#: apps/federation/models.py:34 apps/members/forms.py:267
 #: apps/mutual_aid/models.py:539 apps/website/forms.py:18
-#: apps/website/models/partners.py:177 apps/website/models/verification.py:14
+#: apps/website/models/partners.py:186 apps/website/models/verification.py:14
 #: templates/mutual_aid/helper_card.html:115
 msgid "City"
 msgstr "City"
 
-#: apps/federation/models.py:34
+#: apps/federation/models.py:35
 #, fuzzy
 #| msgid "Display name of the partner club"
 msgid "City where the partner club is based."
 msgstr "Display name of the partner club"
 
-#: apps/federation/models.py:36
+#: apps/federation/models.py:37
 msgid "Partner site base URL"
 msgstr "Partner site base URL"
 
-#: apps/federation/models.py:39
+#: apps/federation/models.py:40
 #, fuzzy
 #| msgid "A short description about yourself. Visible on your profile page."
 msgid "Short description of the partner club (visible on federation page)."
 msgstr "A short description about yourself. Visible on your profile page."
 
-#: apps/federation/models.py:41
-msgid "Optional logo URL"
-msgstr "Optional logo URL"
+#: apps/federation/models.py:45
+msgid ""
+"Logo URL (external) or static path (e.g. /static/img/federation/logo.svg)."
+msgstr ""
 
-#: apps/federation/models.py:43
+#: apps/federation/models.py:48
 msgid "Their public API key (given to us)"
 msgstr "Their public API key (given to us)"
 
-#: apps/federation/models.py:46
+#: apps/federation/models.py:51
 msgid "Our key we gave them (auto-generated)"
 msgstr "Our key we gave them (auto-generated)"
 
-#: apps/federation/models.py:49
+#: apps/federation/models.py:54
 msgid "Attiva la connessione con questo club partner."
 msgstr "Enable the connection with this partner club."
 
-#: apps/federation/models.py:52
+#: apps/federation/models.py:57
 msgid "Il club partner è stato verificato e approvato."
 msgstr "The partner club has been verified and approved."
 
-#: apps/federation/models.py:55
+#: apps/federation/models.py:60
 msgid "Share our events with this partner"
 msgstr "Share our events with this partner"
 
-#: apps/federation/models.py:58
+#: apps/federation/models.py:63
 msgid "Auto-approve imported events"
 msgstr "Auto-approve imported events"
 
-#: apps/federation/models.py:61
+#: apps/federation/models.py:66
 msgid "Data e ora dell'ultima sincronizzazione eventi."
 msgstr "Date and time of the last event sync."
 
-#: apps/federation/models.py:64
+#: apps/federation/models.py:69
 msgid "Ultimo messaggio di errore durante la sincronizzazione."
 msgstr "Last error message during synchronisation."
 
-#: apps/federation/models.py:67
+#: apps/federation/models.py:72
 msgid "Data di creazione del record."
 msgstr "Record creation date."
 
-#: apps/federation/models.py:75
+#: apps/federation/models.py:80
 msgid "Amministratore che ha aggiunto il club partner."
 msgstr "Administrator who added the partner club."
 
-#: apps/federation/models.py:79
+#: apps/federation/models.py:84
 msgid "Federated Club"
 msgstr "Federated Club"
 
-#: apps/federation/models.py:80
+#: apps/federation/models.py:85
 msgid "Federated Clubs"
 msgstr "Federated Clubs"
 
-#: apps/federation/models.py:103
+#: apps/federation/models.py:96
+msgid "Logo must be a URL (http/https) or a /static/ path."
+msgstr ""
+
+#: apps/federation/models.py:119
 msgid "Club partner che ha pubblicato l'evento."
 msgstr "Partner club that published the event."
 
-#: apps/federation/models.py:106
+#: apps/federation/models.py:122
 msgid "ID univoco dell'evento nel sistema del partner."
 msgstr "Unique event ID in the partner's system."
 
-#: apps/federation/models.py:109
+#: apps/federation/models.py:125
 msgid "Nome dell'evento come fornito dal partner."
 msgstr "Event name as provided by the partner."
 
-#: apps/federation/models.py:112 apps/website/models/pages.py:641
+#: apps/federation/models.py:128 apps/website/models/pages.py:641
 msgid "Data e ora di inizio dell'evento."
 msgstr "Event start date and time."
 
-#: apps/federation/models.py:115
+#: apps/federation/models.py:131
 msgid "Data e ora di fine dell'evento."
 msgstr "Event end date and time."
 
-#: apps/federation/models.py:118
+#: apps/federation/models.py:134
 msgid "Nome del luogo dell'evento."
 msgstr "Event venue name."
 
-#: apps/federation/models.py:121
+#: apps/federation/models.py:137
 msgid "Indirizzo completo del luogo."
 msgstr "Full venue address."
 
-#: apps/federation/models.py:124
+#: apps/federation/models.py:140
 msgid "Latitudine della posizione."
 msgstr "Position latitude."
 
-#: apps/federation/models.py:127
+#: apps/federation/models.py:143
 msgid "Longitudine della posizione."
 msgstr "Position longitude."
 
-#: apps/federation/models.py:129
+#: apps/federation/models.py:145
 msgid "Sanitized HTML"
 msgstr "Sanitized HTML"
 
-#: apps/federation/models.py:132
+#: apps/federation/models.py:148
 msgid "Stato corrente dell'evento."
 msgstr "Current event status."
 
-#: apps/federation/models.py:135
+#: apps/federation/models.py:151
 msgid "URL dell'immagine di copertina."
 msgstr "Cover image URL."
 
-#: apps/federation/models.py:138
+#: apps/federation/models.py:154
 msgid "URL della pagina dell'evento sul sito partner."
 msgstr "Event page URL on the partner site."
 
-#: apps/federation/models.py:141
+#: apps/federation/models.py:157
 msgid "L'evento è visibile ai soci."
 msgstr "The event is visible to members."
 
-#: apps/federation/models.py:144
+#: apps/federation/models.py:160
 msgid "Nascondi l'evento dall'elenco pubblico."
 msgstr "Hide the event from the public listing."
 
-#: apps/federation/models.py:147
+#: apps/federation/models.py:163
 msgid "Data del primo import dell'evento."
 msgstr "Date of the first event import."
 
-#: apps/federation/models.py:150
+#: apps/federation/models.py:166
 msgid "Data dell'ultimo aggiornamento."
 msgstr "Date of the last update."
 
-#: apps/federation/models.py:154
+#: apps/federation/models.py:170
 msgid "External Event"
 msgstr "External Event"
 
-#: apps/federation/models.py:155
+#: apps/federation/models.py:171
 msgid "External Events"
 msgstr "External Events"
 
-#: apps/federation/models.py:183
+#: apps/federation/models.py:199
 msgid "Socio che ha espresso interesse."
 msgstr "Member who expressed interest."
 
-#: apps/federation/models.py:187
+#: apps/federation/models.py:203
 msgid "Evento esterno di interesse."
 msgstr "Event or milestone title."
 
-#: apps/federation/models.py:190
+#: apps/federation/models.py:206
 msgid "Livello di interesse per l'evento."
 msgstr "Level of interest in the event."
 
-#: apps/federation/models.py:193
+#: apps/federation/models.py:209
 msgid "Data di espressione dell'interesse."
 msgstr "Date the interest was expressed."
 
-#: apps/federation/models.py:196 apps/federation/models.py:235
+#: apps/federation/models.py:212 apps/federation/models.py:251
 msgid "Data dell'ultima modifica."
 msgstr "Date of the last modification."
 
-#: apps/federation/models.py:200
+#: apps/federation/models.py:216
 msgid "External Event Interest"
 msgstr "External Event Interest"
 
-#: apps/federation/models.py:201
+#: apps/federation/models.py:217
 msgid "External Event Interests"
 msgstr "External Event Interests"
 
-#: apps/federation/models.py:222
+#: apps/federation/models.py:238
 msgid "Socio autore del commento."
 msgstr "Member who authored the comment."
 
-#: apps/federation/models.py:226
+#: apps/federation/models.py:242
 msgid "Evento esterno commentato."
 msgstr "External event commented on."
 
-#: apps/federation/models.py:229
+#: apps/federation/models.py:245
 msgid "Testo del commento (non condiviso col partner)."
 msgstr "Comment text (not shared with the partner)."
 
-#: apps/federation/models.py:232
+#: apps/federation/models.py:248
 msgid "Data di creazione del commento."
 msgstr "Comment creation date."
 
-#: apps/federation/models.py:238
+#: apps/federation/models.py:254
 msgid "Il commento è stato cancellato (soft delete)."
 msgstr "The comment has been deleted (soft delete)."
 
-#: apps/federation/models.py:242
+#: apps/federation/models.py:258
 msgid "External Event Comment"
 msgstr "External Event Comment"
 
-#: apps/federation/models.py:243
+#: apps/federation/models.py:259
 msgid "External Event Comments"
 msgstr "External Event Comments"
 
-#: apps/federation/models.py:268 apps/mutual_aid/models.py:52
+#: apps/federation/models.py:284 apps/mutual_aid/models.py:52
 #: apps/website/models/pages.py:225 apps/website/models/pages.py:280
 #: apps/website/models/pages.py:324 apps/website/models/pages.py:519
-#: apps/website/models/pages.py:1012 apps/website/models/pages.py:1130
-#: apps/website/models/pages.py:1331 apps/website/models/pages.py:1375
-#: apps/website/models/pages.py:1459 apps/website/models/partners.py:41
-#: apps/website/models/partners.py:141
+#: apps/website/models/pages.py:1026 apps/website/models/pages.py:1144
+#: apps/website/models/pages.py:1345 apps/website/models/pages.py:1389
+#: apps/website/models/pages.py:1473 apps/website/models/partners.py:41
+#: apps/website/models/partners.py:150
 #: templates/website/pages/about_page.html:29
 msgid "Introduction"
 msgstr "Introduction"
 
-#: apps/federation/models.py:269
+#: apps/federation/models.py:285
 #, fuzzy
 #| msgid "Introductory text displayed above the helpers map."
 msgid "Introductory text displayed below the page title."
 msgstr "Introductory text displayed above the helpers map."
 
-#: apps/federation/models.py:275
+#: apps/federation/models.py:291
 msgid "How it works"
 msgstr ""
 
-#: apps/federation/models.py:276
+#: apps/federation/models.py:292
 msgid "Steps explaining the federation process."
 msgstr ""
 
-#: apps/federation/models.py:282 apps/website/blocks/content.py:753
+#: apps/federation/models.py:298 apps/website/blocks/content.py:753
 #: apps/website/models/snippets.py:383
 msgid "FAQ"
 msgstr "FAQ"
 
-#: apps/federation/models.py:288
+#: apps/federation/models.py:304
 #, fuzzy
 #| msgid "Additional guests"
 msgid "Additional content"
 msgstr "Additional guests"
 
-#: apps/federation/models.py:293
+#: apps/federation/models.py:309
 #, fuzzy
 #| msgid "Membership CTA button text"
 msgid "CTA button text"
 msgstr "Membership alerts"
 
-#: apps/federation/models.py:294
+#: apps/federation/models.py:310
 #, fuzzy
 #| msgid "Call-to-action buttons"
 msgid "Label for the call-to-action button."
 msgstr "Call-to-action buttons"
 
-#: apps/federation/models.py:300
+#: apps/federation/models.py:316
 #, fuzzy
 #| msgid "CTA page link"
 msgid "CTA link"
 msgstr "CTA page link"
 
-#: apps/federation/models.py:301
+#: apps/federation/models.py:317
 msgid "URL the CTA button links to."
 msgstr ""
 
-#: apps/federation/models.py:309
+#: apps/federation/models.py:325
 #, fuzzy
 #| msgid "Call to action"
 msgid "Call to Action"
 msgstr "Call to action"
 
-#: apps/federation/models.py:321
+#: apps/federation/models.py:337
 #, fuzzy
 #| msgid "Federation access"
 msgid "Federation Info Page"
 msgstr "Federation access"
 
-#: apps/federation/models.py:322
+#: apps/federation/models.py:338
 #, fuzzy
 #| msgid "Federation access"
 msgid "Federation Info Pages"
@@ -1368,10 +1373,10 @@ msgid "Identity"
 msgstr "Identity"
 
 #: apps/members/admin.py:130 apps/website/models/pages.py:660
-#: apps/website/models/partners.py:171 apps/website/models/settings.py:121
+#: apps/website/models/partners.py:180 apps/website/models/settings.py:121
 #: apps/website/models/snippets.py:264 templates/account/profile.html:59
 #: templates/events/emails/registration_confirmation.html:40
-#: templates/website/pages/partner_page.html:91
+#: templates/website/pages/partner_page.html:104
 msgid "Address"
 msgstr "Address"
 
@@ -1826,7 +1831,7 @@ msgstr "Barcode"
 msgid "privacy/"
 msgstr "Privacy"
 
-#: apps/members/urls.py:28 clubcms/urls.py:64
+#: apps/members/urls.py:28 clubcms/urls.py:67
 #, fuzzy
 #| msgid "notifications"
 msgid "notifications/"
@@ -1930,27 +1935,27 @@ msgstr "Barcode generation not available."
 msgid "Privacy settings saved."
 msgstr "Privacy settings saved."
 
-#: apps/members/views.py:437
+#: apps/members/views.py:444
 msgid "Notification preferences saved."
 msgstr "Notification preferences saved."
 
-#: apps/members/views.py:469
+#: apps/members/views.py:476
 msgid "Mutual aid availability saved."
 msgstr "Mutual aid availability saved."
 
-#: apps/members/views.py:527 apps/members/views.py:555
+#: apps/members/views.py:534 apps/members/views.py:562
 msgid "Product not found."
 msgstr "Product info"
 
-#: apps/members/views.py:531 apps/members/views.py:559
+#: apps/members/views.py:538 apps/members/views.py:566
 msgid "You already have this membership."
 msgstr "You already have this membership."
 
-#: apps/members/views.py:539 apps/members/views.py:567
+#: apps/members/views.py:546 apps/members/views.py:574
 msgid "You already have a pending request for this product."
 msgstr "You are already registered for this event."
 
-#: apps/members/views.py:580
+#: apps/members/views.py:587
 msgid ""
 "Your membership request has been submitted! The club will contact you "
 "shortly."
@@ -2149,9 +2154,9 @@ msgstr "Optional message to the administrators explaining your request."
 #: templates/mutual_aid/mutual_aid_page.html:109
 #: templates/mutual_aid/mutual_aid_page.html:150
 #: templates/website/pages/event_detail_page.html:77
-#: templates/website/pages/event_detail_page.html:179
-#: templates/website/pages/partner_page.html:150
-#: templates/website/pages/partner_page.html:151
+#: templates/website/pages/event_detail_page.html:188
+#: templates/website/pages/partner_page.html:163
+#: templates/website/pages/partner_page.html:164
 msgid "Location"
 msgstr "Location"
 
@@ -2176,11 +2181,11 @@ msgid "Role"
 msgstr "Role"
 
 #: apps/mutual_aid/models.py:30 apps/website/forms.py:19
-#: apps/website/models/partners.py:166 apps/website/models/settings.py:115
+#: apps/website/models/partners.py:175 apps/website/models/settings.py:115
 #: apps/website/models/snippets.py:258 apps/website/models/verification.py:15
 #: templates/mutual_aid/helper_card.html:136
 #: templates/website/pages/contact_page.html:157
-#: templates/website/pages/partner_page.html:82
+#: templates/website/pages/partner_page.html:95
 msgid "Phone"
 msgstr "Phone"
 
@@ -2217,8 +2222,8 @@ msgid "Allow approved partner clubs to see our helpers."
 msgstr "Allow approved partner clubs to see our helpers."
 
 #: apps/mutual_aid/models.py:88 apps/website/blocks/common.py:61
-#: apps/website/models/pages.py:868 apps/website/models/pages.py:1262
-#: apps/website/models/partners.py:354 templates/includes/navbar.html:163
+#: apps/website/models/pages.py:868 apps/website/models/pages.py:1276
+#: apps/website/models/partners.py:364 templates/includes/navbar.html:163
 msgid "Settings"
 msgstr "Settings"
 
@@ -2632,12 +2637,12 @@ msgid "Display name"
 msgstr "Display name"
 
 #: apps/mutual_aid/models.py:540 apps/website/models/pages.py:673
-#: apps/website/models/partners.py:189
+#: apps/website/models/partners.py:198
 msgid "Latitude"
 msgstr "Latitude"
 
 #: apps/mutual_aid/models.py:541 apps/website/models/pages.py:680
-#: apps/website/models/partners.py:195
+#: apps/website/models/partners.py:204
 msgid "Longitude"
 msgstr "Longitude"
 
@@ -3028,9 +3033,9 @@ msgstr "Endpoint must use HTTPS"
 msgid "Encryption keys are required"
 msgstr "Encryption keys are required"
 
-#: apps/website/apps.py:8 apps/website/models/partners.py:155
-#: templates/federation/federation_info_page.html:102
-#: templates/website/pages/partner_page.html:62
+#: apps/website/apps.py:8 apps/website/models/partners.py:164
+#: templates/federation/federation_info_page.html:99
+#: templates/website/pages/partner_page.html:75
 msgid "Website"
 msgstr "Website"
 
@@ -4047,7 +4052,7 @@ msgstr "Document list"
 msgid "Display address (shown in the info popup)."
 msgstr "Display address (shown in the info popup)."
 
-#: apps/website/blocks/media.py:233 apps/website/models/settings.py:240
+#: apps/website/blocks/media.py:233 apps/website/models/settings.py:295
 msgid "Latitude,Longitude (e.g. '45.4642,9.1900')."
 msgstr "Latitude,Longitude (e.g. '45.4642,9.1900')."
 
@@ -4063,7 +4068,7 @@ msgstr "Map height in pixels."
 msgid "Optional marker label."
 msgstr "Optional marker label."
 
-#: apps/website/blocks/media.py:255 apps/website/models/settings.py:422
+#: apps/website/blocks/media.py:255 apps/website/models/settings.py:478
 msgid "Map"
 msgstr "Map"
 
@@ -4247,8 +4252,8 @@ msgstr "-- No event --"
 
 #: apps/website/forms.py:121 apps/website/models/pages.py:443
 #: apps/website/models/pages.py:775 apps/website/models/uploads.py:46
-#: templates/website/pages/event_detail_page.html:162
-#: templates/website/pages/event_detail_page.html:163
+#: templates/website/pages/event_detail_page.html:171
+#: templates/website/pages/event_detail_page.html:172
 #: templates/website/pages/news_page.html:65
 msgid "Tags"
 msgstr "Tags"
@@ -4272,7 +4277,7 @@ msgstr ""
 "File '%(name)s' is not an allowed format. Only JPG, PNG, and WebP are "
 "accepted."
 
-#: apps/website/models/pages.py:77 apps/website/models/pages.py:1124
+#: apps/website/models/pages.py:77 apps/website/models/pages.py:1138
 msgid "Hero badge"
 msgstr "Hero badge"
 
@@ -4339,10 +4344,10 @@ msgstr "Internal page for the secondary button."
 #: apps/website/models/pages.py:147 apps/website/models/pages.py:241
 #: apps/website/models/pages.py:287 apps/website/models/pages.py:331
 #: apps/website/models/pages.py:421 apps/website/models/pages.py:526
-#: apps/website/models/pages.py:634 apps/website/models/pages.py:1028
-#: apps/website/models/pages.py:1149 apps/website/models/pages.py:1289
-#: apps/website/models/pages.py:1338 apps/website/models/pages.py:1399
-#: apps/website/models/partners.py:48 apps/website/models/partners.py:148
+#: apps/website/models/pages.py:634 apps/website/models/pages.py:1042
+#: apps/website/models/pages.py:1163 apps/website/models/pages.py:1303
+#: apps/website/models/pages.py:1352 apps/website/models/pages.py:1413
+#: apps/website/models/partners.py:48 apps/website/models/partners.py:157
 #: apps/website/models/snippets.py:624
 msgid "Body"
 msgstr "Body"
@@ -4359,7 +4364,7 @@ msgstr "Featured event"
 msgid "Select an EventDetailPage to highlight on the homepage."
 msgstr "Select an EventDetailPage to highlight on the homepage."
 
-#: apps/website/models/pages.py:176 apps/website/models/pages.py:1225
+#: apps/website/models/pages.py:176 apps/website/models/pages.py:1239
 msgid "Hero section"
 msgstr "Hero section"
 
@@ -4379,12 +4384,12 @@ msgstr "Home page"
 msgid "Home pages"
 msgstr "Home pages"
 
-#: apps/website/models/pages.py:226 apps/website/models/pages.py:1460
+#: apps/website/models/pages.py:226 apps/website/models/pages.py:1474
 msgid "Displayed below the page title."
 msgstr "Displayed below the page title."
 
 #: apps/website/models/pages.py:234 apps/website/models/pages.py:409
-#: apps/website/models/pages.py:622
+#: apps/website/models/pages.py:622 apps/website/models/partners.py:136
 msgid "Cover image"
 msgstr "Cover image"
 
@@ -4469,7 +4474,7 @@ msgid "Tag per classificare e filtrare l'articolo."
 msgstr "Tags to classify and filter the article."
 
 #: apps/website/models/pages.py:452 apps/website/models/pages.py:783
-#: apps/website/models/partners.py:136 apps/website/models/snippets.py:366
+#: apps/website/models/partners.py:145 apps/website/models/snippets.py:366
 #: apps/website/models/snippets.py:680 apps/website/models/snippets.py:761
 msgid "Category"
 msgstr "Category"
@@ -4514,7 +4519,7 @@ msgstr "Events pages"
 msgid "Immagine di copertina per l'evento, usata anche nei listing."
 msgstr "Cover image for the event, also used in listings."
 
-#: apps/website/models/pages.py:628 apps/website/models/partners.py:142
+#: apps/website/models/pages.py:628 apps/website/models/partners.py:151
 msgid "Short description shown in listings."
 msgstr "Short description shown in listings."
 
@@ -4690,8 +4695,8 @@ msgstr "Passenger pricing"
 msgid "Pricing tiers"
 msgstr "Pricing tiers"
 
-#: apps/website/models/pages.py:867 apps/website/models/pages.py:1261
-#: apps/website/models/partners.py:353
+#: apps/website/models/pages.py:867 apps/website/models/pages.py:1275
+#: apps/website/models/partners.py:363
 msgid "Promote"
 msgstr "Promote"
 
@@ -4707,263 +4712,263 @@ msgstr "Event detail pages"
 msgid "Registration deadline must be before the event start date."
 msgstr "Registration deadline must be before the event start date."
 
-#: apps/website/models/pages.py:1013
+#: apps/website/models/pages.py:1027
 msgid "Testo introduttivo mostrato sopra le gallerie."
 msgstr "Introductory text shown above the galleries."
 
-#: apps/website/models/pages.py:1021
+#: apps/website/models/pages.py:1035
 msgid "Root collection"
 msgstr "Root collection"
 
-#: apps/website/models/pages.py:1022
+#: apps/website/models/pages.py:1036
 msgid ""
 "Starting collection for gallery display.  Sub-collections become albums."
 msgstr ""
 "Starting collection for gallery display.  Sub-collections become albums."
 
-#: apps/website/models/pages.py:1029
+#: apps/website/models/pages.py:1043
 msgid "Contenuto aggiuntivo sotto la galleria."
 msgstr "Additional content below the gallery."
 
-#: apps/website/models/pages.py:1050
+#: apps/website/models/pages.py:1064
 msgid "Gallery page"
 msgstr "Gallery page"
 
-#: apps/website/models/pages.py:1051
+#: apps/website/models/pages.py:1065
 msgid "Gallery pages"
 msgstr "Gallery pages"
 
-#: apps/website/models/pages.py:1118
+#: apps/website/models/pages.py:1132
 msgid "Hero image"
 msgstr "Hero badge"
 
-#: apps/website/models/pages.py:1119
+#: apps/website/models/pages.py:1133
 msgid "Optional background image for the page header."
 msgstr "Optional background image. Falls back to event cover image."
 
-#: apps/website/models/pages.py:1125
+#: apps/website/models/pages.py:1139
 msgid "Small text above the title (e.g. 'Let's Talk')."
 msgstr "Small badge text above the title (e.g. 'Est. 2010')."
 
-#: apps/website/models/pages.py:1131
+#: apps/website/models/pages.py:1145
 msgid "Testo introduttivo mostrato sopra il form di contatto."
 msgstr "Introductory text shown above the contact form."
 
-#: apps/website/models/pages.py:1136
+#: apps/website/models/pages.py:1150
 msgid "Contact us"
 msgstr "Contact us"
 
-#: apps/website/models/pages.py:1137
+#: apps/website/models/pages.py:1151
 msgid "Form title"
 msgstr "Form title"
 
-#: apps/website/models/pages.py:1138
+#: apps/website/models/pages.py:1152
 msgid "Titolo mostrato sopra il form di contatto."
 msgstr "Title shown above the contact form."
 
-#: apps/website/models/pages.py:1142
+#: apps/website/models/pages.py:1156
 msgid "Success message"
 msgstr "Success message"
 
-#: apps/website/models/pages.py:1143
+#: apps/website/models/pages.py:1157
 msgid "Confirmation shown after form submission."
 msgstr "Confirmation shown after form submission."
 
-#: apps/website/models/pages.py:1150
+#: apps/website/models/pages.py:1164
 msgid "Contenuto aggiuntivo sotto il form."
 msgstr "Additional content below the form."
 
-#: apps/website/models/pages.py:1156
+#: apps/website/models/pages.py:1170
 msgid "Enable captcha"
 msgstr "Enable captcha"
 
-#: apps/website/models/pages.py:1157
+#: apps/website/models/pages.py:1171
 msgid "Attiva la protezione anti-spam sul form."
 msgstr "Enable anti-spam protection on the form."
 
-#: apps/website/models/pages.py:1164
+#: apps/website/models/pages.py:1178
 msgid "Honeypot + Time check"
 msgstr "Honeypot + Time check"
 
-#: apps/website/models/pages.py:1165 apps/website/models/settings.py:32
+#: apps/website/models/pages.py:1179 apps/website/models/settings.py:32
 msgid "Cloudflare Turnstile"
 msgstr "Cloudflare Turnstile"
 
-#: apps/website/models/pages.py:1166 apps/website/models/settings.py:33
+#: apps/website/models/pages.py:1180 apps/website/models/settings.py:33
 msgid "hCaptcha"
 msgstr "hCaptcha"
 
-#: apps/website/models/pages.py:1168
+#: apps/website/models/pages.py:1182
 msgid "Captcha provider"
 msgstr "Captcha provider"
 
-#: apps/website/models/pages.py:1169
+#: apps/website/models/pages.py:1183
 msgid "Servizio anti-spam da utilizzare."
 msgstr "Anti-spam service to use."
 
-#: apps/website/models/pages.py:1174
+#: apps/website/models/pages.py:1188
 msgid "Captcha site key"
 msgstr "Captcha site key"
 
-#: apps/website/models/pages.py:1175 apps/website/models/settings.py:219
+#: apps/website/models/pages.py:1189 apps/website/models/settings.py:228
 msgid "Chiave pubblica del servizio CAPTCHA."
 msgstr "CAPTCHA service public key."
 
-#: apps/website/models/pages.py:1180
+#: apps/website/models/pages.py:1194
 msgid "Captcha secret key"
 msgstr "Captcha secret key"
 
-#: apps/website/models/pages.py:1181 apps/website/models/settings.py:223
+#: apps/website/models/pages.py:1195 apps/website/models/settings.py:232
 msgid "Chiave segreta del servizio CAPTCHA."
 msgstr "CAPTCHA service secret key."
 
-#: apps/website/models/pages.py:1188
+#: apps/website/models/pages.py:1202
 msgid "Membership CTA title"
 msgstr "Membership alerts"
 
-#: apps/website/models/pages.py:1189
+#: apps/website/models/pages.py:1203
 msgid "E.g. 'Become a Member'"
 msgstr "Become a member"
 
-#: apps/website/models/pages.py:1193
+#: apps/website/models/pages.py:1207
 msgid "Membership CTA description"
 msgstr "Membership expiring"
 
-#: apps/website/models/pages.py:1194
+#: apps/website/models/pages.py:1208
 msgid "Brief description of membership benefits."
 msgstr "Detailed description of this event."
 
-#: apps/website/models/pages.py:1199
+#: apps/website/models/pages.py:1213
 msgid "Membership price"
 msgstr "Membership expiring"
 
-#: apps/website/models/pages.py:1200
+#: apps/website/models/pages.py:1214
 msgid "E.g. 'Annual fee €80'"
 msgstr "E.g. 'Annual fee €80'"
 
-#: apps/website/models/pages.py:1205
+#: apps/website/models/pages.py:1219
 msgid "Membership CTA button text"
 msgstr "Membership alerts"
 
-#: apps/website/models/pages.py:1206
+#: apps/website/models/pages.py:1220
 msgid "E.g. 'Request Form'"
 msgstr "E.g. 'Request Form'"
 
-#: apps/website/models/pages.py:1210
+#: apps/website/models/pages.py:1224
 msgid "Membership CTA URL"
 msgstr "Membership Card"
 
-#: apps/website/models/pages.py:1211
+#: apps/website/models/pages.py:1225
 msgid "Link to membership form or page."
 msgstr "Link to membership form or page."
 
-#: apps/website/models/pages.py:1239
+#: apps/website/models/pages.py:1253
 msgid "Membership CTA"
 msgstr "Membership"
 
-#: apps/website/models/pages.py:1251
+#: apps/website/models/pages.py:1265
 msgid "Anti-spam settings"
 msgstr "Anti-spam settings"
 
-#: apps/website/models/pages.py:1260
+#: apps/website/models/pages.py:1274
 msgid "Anti-spam"
 msgstr "Anti-spam"
 
-#: apps/website/models/pages.py:1272
+#: apps/website/models/pages.py:1286
 msgid "Contact page"
 msgstr "Contact page"
 
-#: apps/website/models/pages.py:1273
+#: apps/website/models/pages.py:1287
 msgid "Contact pages"
 msgstr "Contact pages"
 
-#: apps/website/models/pages.py:1290
+#: apps/website/models/pages.py:1304
 msgid "Contenuto della pagina privacy/informativa."
 msgstr "Privacy/policy page content."
 
-#: apps/website/models/pages.py:1295
+#: apps/website/models/pages.py:1309
 msgid "Last updated"
 msgstr "Last updated"
 
-#: apps/website/models/pages.py:1296
+#: apps/website/models/pages.py:1310
 msgid "Date the policy was last revised."
 msgstr "Date the policy was last revised."
 
-#: apps/website/models/pages.py:1316
+#: apps/website/models/pages.py:1330
 msgid "Privacy page"
 msgstr "Privacy page"
 
-#: apps/website/models/pages.py:1317
+#: apps/website/models/pages.py:1331
 msgid "Privacy pages"
 msgstr "Privacy pages"
 
-#: apps/website/models/pages.py:1332
+#: apps/website/models/pages.py:1346
 msgid "Testo introduttivo per la sezione trasparenza."
 msgstr "Introductory text for the transparency section."
 
-#: apps/website/models/pages.py:1339
+#: apps/website/models/pages.py:1353
 msgid "Use document-list and accordion blocks for organising documents."
 msgstr "Use document-list and accordion blocks for organising documents."
 
-#: apps/website/models/pages.py:1360
+#: apps/website/models/pages.py:1374
 msgid "Transparency page"
 msgstr "Transparency page"
 
-#: apps/website/models/pages.py:1361
+#: apps/website/models/pages.py:1375
 msgid "Transparency pages"
 msgstr "Transparency pages"
 
-#: apps/website/models/pages.py:1376
+#: apps/website/models/pages.py:1390
 msgid "Testo introduttivo per l'ufficio stampa."
 msgstr "Introductory text for the press office."
 
-#: apps/website/models/pages.py:1380
+#: apps/website/models/pages.py:1394
 msgid "Press email"
 msgstr "Press email"
 
-#: apps/website/models/pages.py:1381
+#: apps/website/models/pages.py:1395
 msgid "Email dedicata per i contatti stampa."
 msgstr "Dedicated email for press contacts."
 
-#: apps/website/models/pages.py:1386
+#: apps/website/models/pages.py:1400
 msgid "Press phone"
 msgstr "Press phone"
 
-#: apps/website/models/pages.py:1387
+#: apps/website/models/pages.py:1401
 msgid "Telefono dedicato per i contatti stampa."
 msgstr "Dedicated phone for press contacts."
 
-#: apps/website/models/pages.py:1392
+#: apps/website/models/pages.py:1406
 msgid "Press contact person"
 msgstr "Press contact person"
 
-#: apps/website/models/pages.py:1393
+#: apps/website/models/pages.py:1407
 msgid "Nome del referente stampa."
 msgstr "Press contact person name."
 
-#: apps/website/models/pages.py:1400
+#: apps/website/models/pages.py:1414
 msgid "Contenuto aggiuntivo per la pagina stampa."
 msgstr "Additional content for the press page."
 
-#: apps/website/models/pages.py:1416 templates/website/pages/press_page.html:23
+#: apps/website/models/pages.py:1430 templates/website/pages/press_page.html:23
 msgid "Press contact"
 msgstr "Press contact"
 
-#: apps/website/models/pages.py:1429
+#: apps/website/models/pages.py:1443
 msgid "Press page"
 msgstr "Press page"
 
-#: apps/website/models/pages.py:1430
+#: apps/website/models/pages.py:1444
 msgid "Press pages"
 msgstr "Press pages"
 
-#: apps/website/models/pages.py:1479
+#: apps/website/models/pages.py:1493
 #, fuzzy
 #| msgid "View Membership Plans"
 msgid "Membership plans page"
 msgstr "Membership alerts"
 
-#: apps/website/models/pages.py:1480
+#: apps/website/models/pages.py:1494
 #, fuzzy
 #| msgid "Membership alerts"
 msgid "Membership plans pages"
@@ -4990,186 +4995,193 @@ msgid "Logo del partner, mostrato nei listing e nella pagina."
 msgstr "Partner logo, shown in listings and on the page."
 
 #: apps/website/models/partners.py:137
+#, fuzzy
+#| msgid "Immagine di copertina mostrata in alto nella pagina."
+msgid "Immagine di copertina mostrata tra il titolo e il contenuto."
+msgstr "Cover image shown at the top of the page."
+
+#: apps/website/models/partners.py:146
 msgid "Categoria del partner (es. Sponsor, Tecnico)."
 msgstr "Partner category (e.g. Sponsor, Technical)."
 
-#: apps/website/models/partners.py:149
+#: apps/website/models/partners.py:158
 msgid "Descrizione completa del partner."
 msgstr "Full partner description."
 
-#: apps/website/models/partners.py:156
+#: apps/website/models/partners.py:165
 msgid "Sito web del partner."
 msgstr "Partner website."
 
-#: apps/website/models/partners.py:161
+#: apps/website/models/partners.py:170
 msgid "Email di contatto del partner."
 msgstr "Partner contact email."
 
-#: apps/website/models/partners.py:167
+#: apps/website/models/partners.py:176
 msgid "Numero di telefono del partner."
 msgstr "Partner phone number."
 
-#: apps/website/models/partners.py:172
+#: apps/website/models/partners.py:181
 msgid "Indirizzo fisico del partner."
 msgstr "Partner physical address."
 
-#: apps/website/models/partners.py:178
+#: apps/website/models/partners.py:187
 msgid "Città di riferimento del partner."
 msgstr "Partner reference city."
 
-#: apps/website/models/partners.py:183
+#: apps/website/models/partners.py:192
 msgid "Country"
 msgstr "Country"
 
-#: apps/website/models/partners.py:184
+#: apps/website/models/partners.py:193
 msgid "ISO 3166-1 alpha-2 country code."
 msgstr "ISO 3166-1 alpha-2 country code."
 
-#: apps/website/models/partners.py:190
+#: apps/website/models/partners.py:199
 msgid "Latitudine per la mappa (es. 45.6950)."
 msgstr ""
 
-#: apps/website/models/partners.py:196
+#: apps/website/models/partners.py:205
 msgid "Longitudine per la mappa (es. 9.6700)."
 msgstr ""
 
-#: apps/website/models/partners.py:202 apps/website/models/settings.py:130
+#: apps/website/models/partners.py:211 apps/website/models/settings.py:130
 msgid "Facebook URL"
 msgstr "Facebook URL"
 
-#: apps/website/models/partners.py:203
+#: apps/website/models/partners.py:212
 msgid "URL pagina Facebook del partner."
 msgstr "Partner Facebook page URL."
 
-#: apps/website/models/partners.py:207 apps/website/models/settings.py:133
+#: apps/website/models/partners.py:216 apps/website/models/settings.py:133
 msgid "Instagram URL"
 msgstr "Instagram URL"
 
-#: apps/website/models/partners.py:208
+#: apps/website/models/partners.py:217
 msgid "URL profilo Instagram del partner."
 msgstr "Partner Instagram profile URL."
 
-#: apps/website/models/partners.py:212 apps/website/models/settings.py:142
+#: apps/website/models/partners.py:221 apps/website/models/settings.py:142
 msgid "LinkedIn URL"
 msgstr "LinkedIn URL"
 
-#: apps/website/models/partners.py:213
+#: apps/website/models/partners.py:222
 msgid "URL pagina LinkedIn del partner."
 msgstr "Partner LinkedIn page URL."
 
-#: apps/website/models/partners.py:217 apps/website/models/settings.py:139
+#: apps/website/models/partners.py:226 apps/website/models/settings.py:139
 msgid "YouTube URL"
 msgstr "YouTube URL"
 
-#: apps/website/models/partners.py:218
+#: apps/website/models/partners.py:227
 msgid "URL canale YouTube del partner."
 msgstr "Partner YouTube channel URL."
 
-#: apps/website/models/partners.py:222 apps/website/models/settings.py:136
+#: apps/website/models/partners.py:231 apps/website/models/settings.py:136
 msgid "Twitter / X URL"
 msgstr "Twitter / X URL"
 
-#: apps/website/models/partners.py:223
+#: apps/website/models/partners.py:232
 msgid "URL profilo Twitter/X del partner."
 msgstr "Partner Twitter/X profile URL."
 
-#: apps/website/models/partners.py:233
+#: apps/website/models/partners.py:242
 msgid "Partner owner"
 msgstr "Partner owner"
 
-#: apps/website/models/partners.py:234
+#: apps/website/models/partners.py:243
 msgid "User account that manages this partner page."
 msgstr "User account that manages this partner page."
 
-#: apps/website/models/partners.py:238
+#: apps/website/models/partners.py:247
 msgid "Owner email"
 msgstr "Owner email"
 
-#: apps/website/models/partners.py:239
+#: apps/website/models/partners.py:248
 msgid "Contact email for the partner owner."
 msgstr "Contact email for the partner owner."
 
-#: apps/website/models/partners.py:245 apps/website/models/snippets.py:423
+#: apps/website/models/partners.py:254 apps/website/models/snippets.py:423
+#: templates/website/pages/partner_index_page.html:69
 msgid "Featured"
 msgstr "Featured"
 
-#: apps/website/models/partners.py:246
+#: apps/website/models/partners.py:255
 msgid "Show this partner prominently."
 msgstr "Show this partner prominently."
 
-#: apps/website/models/partners.py:250
+#: apps/website/models/partners.py:259
 msgid "Display order"
 msgstr "Display order"
 
-#: apps/website/models/partners.py:251 apps/website/models/snippets.py:371
+#: apps/website/models/partners.py:260 apps/website/models/snippets.py:371
 #: apps/website/models/snippets.py:589 apps/website/models/snippets.py:706
 #: apps/website/models/snippets.py:766 apps/website/models/snippets.py:825
 msgid "Lower numbers appear first."
 msgstr "Lower numbers appear first."
 
-#: apps/website/models/partners.py:255
+#: apps/website/models/partners.py:264
 msgid "Show on homepage"
 msgstr "Show on homepage"
 
-#: apps/website/models/partners.py:256
+#: apps/website/models/partners.py:265
 msgid "Mostra il logo del partner nella homepage."
 msgstr "Show the partner logo on the homepage."
 
-#: apps/website/models/partners.py:261
+#: apps/website/models/partners.py:270
 msgid "Partnership start"
 msgstr "Partnership start"
 
-#: apps/website/models/partners.py:262
+#: apps/website/models/partners.py:271
 msgid "Data di inizio della partnership."
 msgstr "Partnership start date."
 
-#: apps/website/models/partners.py:267
+#: apps/website/models/partners.py:276
 msgid "Partnership end"
 msgstr "Partnership end"
 
-#: apps/website/models/partners.py:268
+#: apps/website/models/partners.py:277
 msgid "Leave blank for ongoing partnerships."
 msgstr "Leave blank for ongoing partnerships."
 
-#: apps/website/models/partners.py:300
+#: apps/website/models/partners.py:310
 #: templates/website/pages/contact_page.html:107
 msgid "Contact information"
 msgstr "Contact information"
 
-#: apps/website/models/partners.py:313 apps/website/models/settings.py:359
+#: apps/website/models/partners.py:323 apps/website/models/settings.py:414
 #: templates/includes/footer.html:22
 msgid "Social media"
 msgstr "Social media"
 
-#: apps/website/models/partners.py:323 apps/website/models/partners.py:351
+#: apps/website/models/partners.py:333 apps/website/models/partners.py:361
 msgid "Ownership"
 msgstr "Ownership"
 
-#: apps/website/models/partners.py:340
+#: apps/website/models/partners.py:350
 msgid "Display settings"
 msgstr "Display settings"
 
-#: apps/website/models/partners.py:349 apps/website/models/settings.py:342
-#: apps/website/models/settings.py:345 templates/includes/footer.html:106
-#: templates/website/pages/partner_page.html:58
+#: apps/website/models/partners.py:359 apps/website/models/settings.py:397
+#: apps/website/models/settings.py:400 templates/includes/footer.html:106
+#: templates/website/pages/partner_page.html:71
 msgid "Contact"
 msgstr "Contact"
 
-#: apps/website/models/partners.py:350 apps/website/models/settings.py:362
+#: apps/website/models/partners.py:360 apps/website/models/settings.py:417
 #: apps/website/models/snippets.py:496
-#: templates/website/pages/partner_page.html:108
+#: templates/website/pages/partner_page.html:121
 msgid "Social"
 msgstr "Social"
 
-#: apps/website/models/partners.py:352
+#: apps/website/models/partners.py:362
 msgid "Display"
 msgstr "Display"
 
-#: apps/website/models/partners.py:366
+#: apps/website/models/partners.py:376
 msgid "Partner page"
 msgstr "Partner page"
 
-#: apps/website/models/partners.py:367
+#: apps/website/models/partners.py:377
 msgid "Partner pages"
 msgstr "Partner pages"
 
@@ -5237,8 +5249,8 @@ msgstr "Site description"
 msgid "Default meta description for SEO."
 msgstr "Default meta description for SEO."
 
-#: apps/website/models/settings.py:72 apps/website/models/settings.py:313
-#: apps/website/models/settings.py:316 templates/includes/footer.html:153
+#: apps/website/models/settings.py:72 apps/website/models/settings.py:368
+#: apps/website/models/settings.py:371 templates/includes/footer.html:158
 msgid "Theme"
 msgstr "Theme"
 
@@ -5378,278 +5390,374 @@ msgstr "PWA icon 512x512"
 msgid "Icona PWA 512x512px (PNG, sfondo trasparente)."
 msgstr "PWA icon 512x512px (PNG, transparent background)."
 
-#: apps/website/models/settings.py:201
+#: apps/website/models/settings.py:206
+msgid "Apple touch icon 180x180"
+msgstr ""
+
+#: apps/website/models/settings.py:207
+msgid "Icona per iOS home screen 180x180px (PNG)."
+msgstr ""
+
+#: apps/website/models/settings.py:210
 msgid "PWA theme colour"
 msgstr "PWA theme colour"
 
-#: apps/website/models/settings.py:202
+#: apps/website/models/settings.py:211
 msgid "Colore tema della barra del browser (hex)."
 msgstr "Browser bar theme colour (hex)."
 
-#: apps/website/models/settings.py:205
+#: apps/website/models/settings.py:214
 msgid "PWA background colour"
 msgstr "PWA background colour"
 
-#: apps/website/models/settings.py:206
+#: apps/website/models/settings.py:215
 msgid "Colore di sfondo della splash screen (hex)."
 msgstr "Splash screen background colour (hex)."
 
-#: apps/website/models/settings.py:214
+#: apps/website/models/settings.py:223
 msgid "CAPTCHA provider"
 msgstr "CAPTCHA provider"
 
-#: apps/website/models/settings.py:215
+#: apps/website/models/settings.py:224
 msgid "Sistema anti-spam per i form del sito."
 msgstr "Anti-spam system for site forms."
 
-#: apps/website/models/settings.py:218
+#: apps/website/models/settings.py:227
 msgid "CAPTCHA site key"
 msgstr "CAPTCHA site key"
 
-#: apps/website/models/settings.py:222
+#: apps/website/models/settings.py:231
 msgid "CAPTCHA secret key"
 msgstr "CAPTCHA secret key"
 
-#: apps/website/models/settings.py:231
+#: apps/website/models/settings.py:237
+msgid "Allow search engine indexing"
+msgstr ""
+
+#: apps/website/models/settings.py:239
+msgid ""
+"Se disattivato, tutte le pagine avranno il meta tag 'noindex, nofollow'. "
+"Utile per siti in staging/anteprima."
+msgstr ""
+
+#: apps/website/models/settings.py:244
+msgid "Allow AI bot crawling"
+msgstr ""
+
+#: apps/website/models/settings.py:246
+msgid ""
+"Se disattivato, robots.txt bloccherà i bot AI (GPTBot, ChatGPT-User, Google-"
+"Extended, CCBot, Anthropic, Meta, Bytespider, PerplexityBot)."
+msgstr ""
+
+#: apps/website/models/settings.py:252
+#, fuzzy
+#| msgid "Additional guests"
+msgid "Additional robots.txt rules"
+msgstr "Additional guests"
+
+#: apps/website/models/settings.py:254
+msgid ""
+"Regole aggiuntive per robots.txt (es. 'Disallow: /private/'). Verranno "
+"aggiunte dopo le regole di base."
+msgstr ""
+
+#: apps/website/models/settings.py:259
+msgid "Canonical domain"
+msgstr ""
+
+#: apps/website/models/settings.py:261
+msgid ""
+"Dominio canonico del sito (es. 'https://www.example.com'). Se vuoto il "
+"canonical URL usa il dominio della richiesta."
+msgstr ""
+
+#: apps/website/models/settings.py:268
+msgid "Tracking code"
+msgstr ""
+
+#: apps/website/models/settings.py:270
+msgid ""
+"Codice di monitoraggio statistiche (es. Matomo, Google Analytics). Verrà "
+"inserito prima della chiusura </body>."
+msgstr ""
+
+#: apps/website/models/settings.py:277
+msgid "GitHub repository URL"
+msgstr ""
+
+#: apps/website/models/settings.py:278
+msgid ""
+"URL del repository GitHub. Se compilato, mostra un badge 'Fork me on GitHub' "
+"nell'angolo in alto a destra."
+msgstr ""
+
+#: apps/website/models/settings.py:286
 msgid "Map routing service"
 msgstr "Map routing service"
 
-#: apps/website/models/settings.py:232
+#: apps/website/models/settings.py:287
 msgid "Servizio mappe per le pagine eventi."
 msgstr "Map service for event pages."
 
-#: apps/website/models/settings.py:235
+#: apps/website/models/settings.py:290
 msgid "Map API key"
 msgstr "Map API key"
 
-#: apps/website/models/settings.py:236
+#: apps/website/models/settings.py:291
 msgid "Required for Google Maps / Mapbox."
 msgstr "Required for Google Maps / Mapbox."
 
-#: apps/website/models/settings.py:239
+#: apps/website/models/settings.py:294
 msgid "Default map centre"
 msgstr "Default map centre"
 
-#: apps/website/models/settings.py:243
+#: apps/website/models/settings.py:298
 msgid "Default map zoom"
 msgstr "Default map zoom"
 
-#: apps/website/models/settings.py:244
+#: apps/website/models/settings.py:299
 msgid "Livello di zoom iniziale della mappa (1-18)."
 msgstr "Initial map zoom level (1-18)."
 
-#: apps/website/models/settings.py:300 apps/website/models/settings.py:303
+#: apps/website/models/settings.py:355 apps/website/models/settings.py:358
 msgid "General"
 msgstr "General"
 
-#: apps/website/models/settings.py:327 apps/website/models/settings.py:330
+#: apps/website/models/settings.py:382 apps/website/models/settings.py:385
 msgid "Branding"
 msgstr "Branding"
 
-#: apps/website/models/settings.py:372 apps/website/models/settings.py:375
+#: apps/website/models/settings.py:427 apps/website/models/settings.py:430
 msgid "Navigation"
 msgstr "Navigation"
 
-#: apps/website/models/settings.py:390
+#: apps/website/models/settings.py:446
 msgid "Progressive Web App"
 msgstr "Progressive Web App"
 
-#: apps/website/models/settings.py:393
+#: apps/website/models/settings.py:449
 msgid "PWA"
 msgstr "PWA"
 
-#: apps/website/models/settings.py:404
+#: apps/website/models/settings.py:460
 msgid "Anti-spam / CAPTCHA"
 msgstr "Anti-spam / CAPTCHA"
 
-#: apps/website/models/settings.py:407
+#: apps/website/models/settings.py:463
 msgid "Forms"
 msgstr "Forms"
 
-#: apps/website/models/settings.py:419
+#: apps/website/models/settings.py:475
 msgid "Map & routing"
 msgstr "Map & routing"
 
-#: apps/website/models/settings.py:440 apps/website/models/settings.py:441
+#: apps/website/models/settings.py:489
+msgid "Indexing & canonical"
+msgstr ""
+
+#: apps/website/models/settings.py:495
+msgid "robots.txt"
+msgstr ""
+
+#: apps/website/models/settings.py:498
+msgid "SEO"
+msgstr ""
+
+#: apps/website/models/settings.py:507
+#, fuzzy
+#| msgid "Statistics"
+msgid "Statistics & monitoring"
+msgstr "Statistics"
+
+#: apps/website/models/settings.py:510
+msgid "Analytics"
+msgstr ""
+
+#: apps/website/models/settings.py:519 apps/website/models/settings.py:522
+msgid "GitHub"
+msgstr ""
+
+#: apps/website/models/settings.py:543 apps/website/models/settings.py:544
 msgid "site settings"
 msgstr "site settings"
 
-#: apps/website/models/settings.py:463
+#: apps/website/models/settings.py:566
 msgid "Test"
 msgstr "Test"
 
-#: apps/website/models/settings.py:464
+#: apps/website/models/settings.py:567
 msgid "Live"
 msgstr "Live"
 
-#: apps/website/models/settings.py:482
+#: apps/website/models/settings.py:585
 msgid "Payment mode"
 msgstr "Payment mode"
 
-#: apps/website/models/settings.py:483
+#: apps/website/models/settings.py:586
 msgid "Only credentials for the selected mode are used at runtime."
 msgstr "Only credentials for the selected mode are used at runtime."
 
-#: apps/website/models/settings.py:488
+#: apps/website/models/settings.py:591
 msgid "Stripe enabled (test)"
 msgstr "Stripe enabled (test)"
 
-#: apps/website/models/settings.py:489
+#: apps/website/models/settings.py:592
 msgid "Abilita Stripe in modalità test."
 msgstr "Enable Stripe in test mode."
 
-#: apps/website/models/settings.py:492
+#: apps/website/models/settings.py:595
 msgid "Stripe public key (test)"
 msgstr "Stripe public key (test)"
 
-#: apps/website/models/settings.py:493
+#: apps/website/models/settings.py:596
 msgid "Chiave pubblica Stripe test (pk_test_...)."
 msgstr "Stripe test public key (pk_test_...)."
 
-#: apps/website/models/settings.py:496
+#: apps/website/models/settings.py:599
 msgid "Stripe secret key (test)"
 msgstr "Stripe secret key (test)"
 
-#: apps/website/models/settings.py:497
+#: apps/website/models/settings.py:600
 msgid "Chiave segreta Stripe test (sk_test_...)."
 msgstr "Stripe test secret key (sk_test_...)."
 
-#: apps/website/models/settings.py:500
+#: apps/website/models/settings.py:603
 msgid "Stripe webhook secret (test)"
 msgstr "Stripe webhook secret (test)"
 
-#: apps/website/models/settings.py:501
+#: apps/website/models/settings.py:604
 msgid "Secret del webhook Stripe test (whsec_...)."
 msgstr "Stripe test webhook secret (whsec_...)."
 
-#: apps/website/models/settings.py:506
+#: apps/website/models/settings.py:609
 msgid "PayPal enabled (test)"
 msgstr "PayPal enabled (test)"
 
-#: apps/website/models/settings.py:507
+#: apps/website/models/settings.py:610
 msgid "Abilita PayPal in modalità sandbox."
 msgstr "Enable PayPal in sandbox mode."
 
-#: apps/website/models/settings.py:510
+#: apps/website/models/settings.py:613
 msgid "PayPal client ID (test)"
 msgstr "PayPal client ID (test)"
 
-#: apps/website/models/settings.py:511
+#: apps/website/models/settings.py:614
 msgid "Client ID PayPal sandbox."
 msgstr "PayPal sandbox Client ID."
 
-#: apps/website/models/settings.py:514
+#: apps/website/models/settings.py:617
 msgid "PayPal secret (test)"
 msgstr "PayPal secret (test)"
 
-#: apps/website/models/settings.py:515
+#: apps/website/models/settings.py:618
 msgid "Secret PayPal sandbox."
 msgstr "PayPal sandbox secret."
 
-#: apps/website/models/settings.py:520
+#: apps/website/models/settings.py:623
 msgid "Stripe enabled (live)"
 msgstr "Stripe enabled (live)"
 
-#: apps/website/models/settings.py:521
+#: apps/website/models/settings.py:624
 msgid "Abilita Stripe in modalità produzione."
 msgstr "Enable Stripe in production mode."
 
-#: apps/website/models/settings.py:524
+#: apps/website/models/settings.py:627
 msgid "Stripe public key (live)"
 msgstr "Stripe public key (live)"
 
-#: apps/website/models/settings.py:525
+#: apps/website/models/settings.py:628
 msgid "Chiave pubblica Stripe live (pk_live_...)."
 msgstr "Stripe live public key (pk_live_...)."
 
-#: apps/website/models/settings.py:528
+#: apps/website/models/settings.py:631
 msgid "Stripe secret key (live)"
 msgstr "Stripe secret key (live)"
 
-#: apps/website/models/settings.py:529
+#: apps/website/models/settings.py:632
 msgid "Chiave segreta Stripe live (sk_live_...)."
 msgstr "Stripe live secret key (sk_live_...)."
 
-#: apps/website/models/settings.py:532
+#: apps/website/models/settings.py:635
 msgid "Stripe webhook secret (live)"
 msgstr "Stripe webhook secret (live)"
 
-#: apps/website/models/settings.py:533
+#: apps/website/models/settings.py:636
 msgid "Secret del webhook Stripe live (whsec_...)."
 msgstr "Stripe live webhook secret (whsec_...)."
 
-#: apps/website/models/settings.py:538
+#: apps/website/models/settings.py:641
 msgid "PayPal enabled (live)"
 msgstr "PayPal enabled (live)"
 
-#: apps/website/models/settings.py:539
+#: apps/website/models/settings.py:642
 msgid "Abilita PayPal in modalità produzione."
 msgstr "Enable PayPal in production mode."
 
-#: apps/website/models/settings.py:542
+#: apps/website/models/settings.py:645
 msgid "PayPal client ID (live)"
 msgstr "PayPal client ID (live)"
 
-#: apps/website/models/settings.py:543
+#: apps/website/models/settings.py:646
 msgid "Client ID PayPal produzione."
 msgstr "PayPal production Client ID."
 
-#: apps/website/models/settings.py:546
+#: apps/website/models/settings.py:649
 msgid "PayPal secret (live)"
 msgstr "PayPal secret (live)"
 
-#: apps/website/models/settings.py:547
+#: apps/website/models/settings.py:650
 msgid "Secret PayPal produzione."
 msgstr "PayPal production secret."
 
-#: apps/website/models/settings.py:552
+#: apps/website/models/settings.py:655
 msgid "Bank transfer enabled"
 msgstr "Bank transfer enabled"
 
-#: apps/website/models/settings.py:553
+#: apps/website/models/settings.py:656
 msgid "Abilita il pagamento tramite bonifico bancario."
 msgstr "Enable bank transfer payment."
 
-#: apps/website/models/settings.py:556
+#: apps/website/models/settings.py:659
 #: templates/events/payment_bank_transfer.html:19
 msgid "Account holder"
 msgstr "Account holder"
 
-#: apps/website/models/settings.py:557
+#: apps/website/models/settings.py:660
 msgid "Intestatario del conto corrente."
 msgstr "Bank account holder name."
 
-#: apps/website/models/settings.py:560
+#: apps/website/models/settings.py:663
 #: templates/events/payment_bank_transfer.html:22
 msgid "IBAN"
 msgstr "IBAN"
 
-#: apps/website/models/settings.py:561
+#: apps/website/models/settings.py:664
 msgid "Codice IBAN del conto corrente."
 msgstr "Bank account IBAN code."
 
-#: apps/website/models/settings.py:564
+#: apps/website/models/settings.py:667
 #: templates/events/payment_bank_transfer.html:26
 msgid "BIC / SWIFT"
 msgstr "BIC / SWIFT"
 
-#: apps/website/models/settings.py:565
+#: apps/website/models/settings.py:668
 msgid "Codice BIC/SWIFT della banca."
 msgstr "Bank BIC/SWIFT code."
 
-#: apps/website/models/settings.py:568
+#: apps/website/models/settings.py:671
 msgid "Bank name"
 msgstr "Bank name"
 
-#: apps/website/models/settings.py:569
+#: apps/website/models/settings.py:672
 msgid "Nome della banca (es. 'Banca Intesa')."
 msgstr "Bank name (e.g. 'Banca Intesa')."
 
-#: apps/website/models/settings.py:573
+#: apps/website/models/settings.py:676
 msgid "Bank transfer instructions"
 msgstr "Bank transfer instructions"
 
-#: apps/website/models/settings.py:574
+#: apps/website/models/settings.py:677
 msgid ""
 "Additional instructions shown to the user (e.g. 'Include the reference in "
 "the description')."
@@ -5657,51 +5765,51 @@ msgstr ""
 "Additional instructions shown to the user (e.g. 'Include the reference in "
 "the description')."
 
-#: apps/website/models/settings.py:578
+#: apps/website/models/settings.py:681
 msgid "Bank transfer expiry (days)"
 msgstr "Bank transfer expiry (days)"
 
-#: apps/website/models/settings.py:579
+#: apps/website/models/settings.py:682
 msgid "Days allowed for the user to complete the bank transfer."
 msgstr "Days allowed for the user to complete the bank transfer."
 
-#: apps/website/models/settings.py:654
+#: apps/website/models/settings.py:757
 msgid "Active mode"
 msgstr "Active mode"
 
-#: apps/website/models/settings.py:657
+#: apps/website/models/settings.py:760
 msgid "Mode"
 msgstr "Mode"
 
-#: apps/website/models/settings.py:669
+#: apps/website/models/settings.py:772
 msgid "Stripe (test)"
 msgstr "Stripe (test)"
 
-#: apps/website/models/settings.py:677
+#: apps/website/models/settings.py:780
 msgid "PayPal (test)"
 msgstr "PayPal (test)"
 
-#: apps/website/models/settings.py:680
+#: apps/website/models/settings.py:783
 msgid "Test configuration"
 msgstr "Test configuration"
 
-#: apps/website/models/settings.py:692
+#: apps/website/models/settings.py:795
 msgid "Stripe (live)"
 msgstr "Stripe (live)"
 
-#: apps/website/models/settings.py:700
+#: apps/website/models/settings.py:803
 msgid "PayPal (live)"
 msgstr "PayPal (live)"
 
-#: apps/website/models/settings.py:703
+#: apps/website/models/settings.py:806
 msgid "Live configuration"
 msgstr "Live configuration"
 
-#: apps/website/models/settings.py:718 apps/website/models/settings.py:721
+#: apps/website/models/settings.py:821 apps/website/models/settings.py:824
 msgid "Bank transfer"
 msgstr "Bank transfer"
 
-#: apps/website/models/settings.py:734 apps/website/models/settings.py:735
+#: apps/website/models/settings.py:837 apps/website/models/settings.py:838
 msgid "payment settings"
 msgstr "payment settings"
 
@@ -6500,27 +6608,27 @@ msgstr ""
 msgid "Rejected by moderator."
 msgstr "Rejected by moderator."
 
-#: clubcms/urls.py:50
+#: clubcms/urls.py:53
 msgid "account/"
 msgstr ""
 
-#: clubcms/urls.py:53
+#: clubcms/urls.py:56
 msgid "members/<str:username>/"
 msgstr ""
 
-#: clubcms/urls.py:58
+#: clubcms/urls.py:61
 #, fuzzy
 #| msgid "Events"
 msgid "events/"
 msgstr "Events"
 
-#: clubcms/urls.py:60
+#: clubcms/urls.py:63
 #, fuzzy
 #| msgid "Mutual Aid"
 msgid "mutual-aid/"
 msgstr "Mutual Aid"
 
-#: clubcms/urls.py:66
+#: clubcms/urls.py:69
 #, fuzzy
 #| msgid "event category"
 msgid "events/partner/"
@@ -6540,7 +6648,7 @@ msgstr ""
 "members in need can see you are available to help within your specified "
 "radius."
 
-#: templates/account/aid.html:19 templates/account/notifications.html:12
+#: templates/account/aid.html:19 templates/account/notifications.html:25
 #: templates/account/privacy.html:19 templates/account/profile.html:19
 msgid "Please correct the errors below."
 msgstr "Please correct the errors below."
@@ -6715,7 +6823,6 @@ msgstr "My profile"
 #: templates/events/my_events_archive.html:83
 #: templates/events/my_registrations.html:70
 #: templates/mutual_aid/mutual_aid_page.html:182
-#: templates/notifications/history.html:37
 #: templates/website/uploads/moderation_queue.html:89
 #: templates/website/uploads/my_uploads.html:66
 msgid "Pagination"
@@ -6728,7 +6835,6 @@ msgstr "Pagination"
 #: templates/events/my_registrations.html:73
 #: templates/includes/pagination.html:9 templates/includes/pagination.html:14
 #: templates/mutual_aid/mutual_aid_page.html:184
-#: templates/notifications/history.html:39
 #: templates/search/search_results.html:196
 #: templates/search/search_results.html:201
 #: templates/website/pages/news_page.html:85
@@ -6755,7 +6861,6 @@ msgstr ""
 #: templates/events/my_registrations.html:79
 #: templates/includes/pagination.html:41 templates/includes/pagination.html:46
 #: templates/mutual_aid/mutual_aid_page.html:194
-#: templates/notifications/history.html:49
 #: templates/search/search_results.html:228
 #: templates/search/search_results.html:233
 #: templates/website/pages/news_page.html:91
@@ -6936,25 +7041,77 @@ msgid "Submit your first contribution"
 msgstr "Submit your first contribution"
 
 #: templates/account/notifications.html:4
-#: templates/account/notifications.html:8
+#: templates/account/notifications.html:15
 msgid "Notification Preferences"
 msgstr "Notification Preferences"
 
-#: templates/account/notifications.html:20
+#: templates/account/notifications.html:17
+msgid "Choose how and when you want to be notified"
+msgstr ""
+
+#: templates/account/notifications.html:37
 msgid "Channels"
 msgstr "Channels"
 
-#: templates/account/notifications.html:29
+#: templates/account/notifications.html:56
+#, fuzzy
+#| msgid "Browse Events"
+msgid "Browser Push"
+msgstr "Partner Events"
+
+#: templates/account/notifications.html:59
+msgid "Checking..."
+msgstr ""
+
+#: templates/account/notifications.html:60
+#, fuzzy
+#| msgid "Push notifications"
+msgid "Enable push notifications"
+msgstr "Push notifications"
+
+#: templates/account/notifications.html:61
+#, fuzzy
+#| msgid "Push notifications"
+msgid "Disable push notifications"
+msgstr "Push notifications"
+
+#: templates/account/notifications.html:70
 msgid "What to notify"
 msgstr "What to notify"
 
-#: templates/account/notifications.html:38
+#: templates/account/notifications.html:88
 msgid "Digest"
 msgstr "Digest"
 
-#: templates/account/notifications.html:46
+#: templates/account/notifications.html:102
 msgid "Save Preferences"
 msgstr "Save Preferences"
+
+#: templates/account/notifications.html:125
+msgid "Push not configured on server"
+msgstr ""
+
+#: templates/account/notifications.html:143
+#, fuzzy
+#| msgid "Push notifications"
+msgid "Push notifications active"
+msgstr "Push notifications"
+
+#: templates/account/notifications.html:148
+#, fuzzy
+#| msgid "Push notifications"
+msgid "Push notifications disabled"
+msgstr "Push notifications"
+
+#: templates/account/notifications.html:163
+msgid "Permission denied by browser"
+msgstr ""
+
+#: templates/account/notifications.html:180
+#, fuzzy
+#| msgid "Verification value"
+msgid "Subscription failed"
+msgstr "Verification value"
 
 #: templates/account/password_reset.html:4
 msgid "Reset password"
@@ -7317,8 +7474,22 @@ msgstr "View details"
 msgid "Save the request first to enable actions."
 msgstr "Save the request first to enable actions."
 
-#: templates/base.html:58
+#: templates/base.html:69
 msgid "Skip to main content"
+msgstr ""
+
+#: templates/base.html:91
+msgid "Install this app on your device"
+msgstr ""
+
+#: templates/base.html:92
+#, fuzzy
+#| msgid "Instagram"
+msgid "Install"
+msgstr "Instagram"
+
+#: templates/base.html:93
+msgid "Dismiss"
 msgstr ""
 
 #: templates/events/emails/registration_confirmation.html:6
@@ -7689,25 +7860,25 @@ msgstr "Partner Events"
 msgid "How It Works"
 msgstr ""
 
-#: templates/federation/federation_info_page.html:85
+#: templates/federation/federation_info_page.html:82
 #, fuzzy
 #| msgid "Events"
 msgid "events"
 msgstr "Events"
 
-#: templates/federation/federation_info_page.html:89
+#: templates/federation/federation_info_page.html:86
 #, fuzzy
 #| msgid "Since"
 msgid "since"
 msgstr "Since"
 
-#: templates/federation/federation_info_page.html:96
+#: templates/federation/federation_info_page.html:93
 #, fuzzy
 #| msgid "Partner events"
 msgid "View events"
 msgstr "Partner events"
 
-#: templates/federation/federation_info_page.html:116
+#: templates/federation/federation_info_page.html:113
 #, fuzzy
 #| msgid "Frequently asked questions"
 msgid "Frequently Asked Questions"
@@ -7841,7 +8012,7 @@ msgstr "Introduction"
 msgid "All rights reserved."
 msgstr "All rights reserved."
 
-#: templates/includes/footer.html:156
+#: templates/includes/footer.html:161
 msgid "Select theme"
 msgstr "Select member"
 
@@ -8225,30 +8396,19 @@ msgid "View all notifications"
 msgstr "View all notifications"
 
 #: templates/notifications/history.html:4
-#: templates/notifications/history.html:8
+#: templates/notifications/history.html:14
 msgid "Notification history"
 msgstr "Notification history"
 
-#: templates/notifications/history.html:23
+#: templates/notifications/history.html:44
 msgid "View"
 msgstr "View"
 
-#: templates/notifications/history.html:28
+#: templates/notifications/history.html:49
 msgid "ago"
 msgstr "ago"
 
-#: templates/notifications/history.html:43
-#, python-format
-msgid ""
-"\n"
-"                Page %(current)s of %(total)s\n"
-"                "
-msgstr ""
-"\n"
-"                Page %(current)s of %(total)s\n"
-"                "
-
-#: templates/notifications/history.html:56
+#: templates/notifications/history.html:65
 msgid "No notifications yet."
 msgstr "No notifications yet."
 
@@ -8445,8 +8605,8 @@ msgid "Seconds"
 msgstr ""
 
 #: templates/website/blocks/hero_countdown_block.html:51
-#: templates/website/pages/event_detail_page.html:152
-#: templates/website/pages/event_detail_page.html:153
+#: templates/website/pages/event_detail_page.html:161
+#: templates/website/pages/event_detail_page.html:162
 #, fuzzy
 #| msgid "Register"
 msgid "Register Now"
@@ -8613,8 +8773,20 @@ msgstr "Close"
 msgid "attendees"
 msgstr "Max attendees"
 
-#: templates/website/pages/event_detail_page.html:203
-#: templates/website/pages/partner_page.html:178
+#: templates/website/pages/event_detail_page.html:153
+#, fuzzy
+#| msgid "Registered"
+msgid "You are registered"
+msgstr "Registered"
+
+#: templates/website/pages/event_detail_page.html:155
+#, fuzzy
+#| msgid "My Registrations"
+msgid "My registrations"
+msgstr "My Registrations"
+
+#: templates/website/pages/event_detail_page.html:212
+#: templates/website/pages/partner_page.html:191
 #, fuzzy
 #| msgid "reactions"
 msgid "Get directions"
@@ -8722,41 +8894,41 @@ msgstr "Tags"
 msgid "News navigation"
 msgstr "Main navigation"
 
-#: templates/website/pages/partner_index_page.html:86
+#: templates/website/pages/partner_index_page.html:97
 msgid "No partners found."
 msgstr "No partner events found."
 
-#: templates/website/pages/partner_page.html:33
+#: templates/website/pages/partner_page.html:21
 msgid "Featured Partner"
 msgstr "Featured content"
 
-#: templates/website/pages/partner_page.html:41
+#: templates/website/pages/partner_page.html:29
 #, fuzzy
 #| msgid "Event detail pages"
 msgid "Partner content and details"
 msgstr "Event detail pages"
 
-#: templates/website/pages/partner_page.html:54
+#: templates/website/pages/partner_page.html:56
 #, fuzzy
 #| msgid "Transfer Details"
 msgid "Partner Details"
 msgstr "Transfer Details"
 
-#: templates/website/pages/partner_page.html:109
+#: templates/website/pages/partner_page.html:122
 #, fuzzy
 #| msgid "Social media"
 msgid "Social media links"
 msgstr "Social media"
 
-#: templates/website/pages/partner_page.html:132
+#: templates/website/pages/partner_page.html:145
 msgid "Partnership"
 msgstr "Partnership end"
 
-#: templates/website/pages/partner_page.html:134
+#: templates/website/pages/partner_page.html:147
 msgid "Since"
 msgstr "Since"
 
-#: templates/website/pages/partner_page.html:139
+#: templates/website/pages/partner_page.html:152
 msgid "Until"
 msgstr "Until"
 
@@ -8986,6 +9158,19 @@ msgstr ""
 #: templates/website/verification/verify_result.html:65
 msgid "Verify Another Member"
 msgstr ""
+
+#~ msgid "Optional logo URL"
+#~ msgstr "Optional logo URL"
+
+#, python-format
+#~ msgid ""
+#~ "\n"
+#~ "                Page %(current)s of %(total)s\n"
+#~ "                "
+#~ msgstr ""
+#~ "\n"
+#~ "                Page %(current)s of %(total)s\n"
+#~ "                "
 
 #, fuzzy
 #~| msgid "Phone"

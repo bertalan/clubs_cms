@@ -197,6 +197,15 @@ class SiteSettings(BaseSiteSetting):
         verbose_name=_("PWA icon 512x512"),
         help_text=_("Icona PWA 512x512px (PNG, sfondo trasparente)."),
     )
+    pwa_icon_180 = models.ForeignKey(
+        "wagtailimages.Image",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name=_("Apple touch icon 180x180"),
+        help_text=_("Icona per iOS home screen 180x180px (PNG)."),
+    )
     pwa_theme_color = models.CharField(
         max_length=7, default="#0F172A", verbose_name=_("PWA theme colour"),
         help_text=_("Colore tema della barra del browser (hex)."),
@@ -430,6 +439,7 @@ class SiteSettings(BaseSiteSetting):
                     FieldPanel("pwa_description"),
                     FieldPanel("pwa_icon_192"),
                     FieldPanel("pwa_icon_512"),
+                    FieldPanel("pwa_icon_180"),
                     FieldPanel("pwa_theme_color"),
                     FieldPanel("pwa_background_color"),
                 ],

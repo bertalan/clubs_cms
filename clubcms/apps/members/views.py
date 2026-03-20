@@ -433,6 +433,13 @@ class NotificationPrefsView(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         return self.request.user
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        from django.conf import settings as django_settings
+        vapid = getattr(django_settings, "WEBPUSH_SETTINGS", {})
+        ctx["vapid_public_key"] = vapid.get("VAPID_PUBLIC_KEY", "")
+        return ctx
+
     def form_valid(self, form):
         messages.success(self.request, _("Notification preferences saved."))
         return super().form_valid(form)

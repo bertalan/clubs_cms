@@ -46,6 +46,27 @@ class TestPWAManifest(TestCase):
         self.assertIn("icons", data)
         self.assertIsInstance(data["icons"], list)
 
+    def test_manifest_has_scope(self):
+        resp = self.client.get("/manifest.json")
+        data = json.loads(resp.content)
+        self.assertEqual(data.get("scope"), "/")
+
+    def test_manifest_has_orientation(self):
+        resp = self.client.get("/manifest.json")
+        data = json.loads(resp.content)
+        self.assertEqual(data.get("orientation"), "portrait-primary")
+
+    def test_manifest_has_lang(self):
+        resp = self.client.get("/manifest.json")
+        data = json.loads(resp.content)
+        self.assertIn("lang", data)
+
+    def test_manifest_has_categories(self):
+        resp = self.client.get("/manifest.json")
+        data = json.loads(resp.content)
+        self.assertIn("categories", data)
+        self.assertIsInstance(data["categories"], list)
+
 
 class TestPWAServiceWorker(TestCase):
     """GET /sw.js must return valid service worker JavaScript."""
@@ -77,6 +98,26 @@ class TestPWAServiceWorker(TestCase):
         resp = self.client.get("/sw.js")
         content = resp.content.decode()
         self.assertIn("/offline/", content)
+
+    def test_sw_contains_push_handler(self):
+        resp = self.client.get("/sw.js")
+        content = resp.content.decode()
+        self.assertIn("addEventListener('push'", content)
+
+    def test_sw_contains_notificationclick_handler(self):
+        resp = self.client.get("/sw.js")
+        content = resp.content.decode()
+        self.assertIn("addEventListener('notificationclick'", content)
+
+    def test_sw_push_shows_notification(self):
+        resp = self.client.get("/sw.js")
+        content = resp.content.decode()
+        self.assertIn("showNotification", content)
+
+    def test_sw_notificationclick_opens_window(self):
+        resp = self.client.get("/sw.js")
+        content = resp.content.decode()
+        self.assertIn("openWindow", content)
 
 
 class TestPWAOfflinePage(TestCase):

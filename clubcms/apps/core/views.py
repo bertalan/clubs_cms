@@ -81,7 +81,11 @@ class PWAManifestView(View):
             "short_name": getattr(site_settings, "pwa_short_name", "") or "Club",
             "description": getattr(site_settings, "pwa_description", "") or "",
             "start_url": "/",
+            "scope": "/",
             "display": "standalone",
+            "orientation": "portrait-primary",
+            "lang": request.LANGUAGE_CODE if hasattr(request, "LANGUAGE_CODE") else "en",
+            "categories": ["social"],
             "background_color": getattr(site_settings, "pwa_background_color", "#ffffff"),
             "theme_color": getattr(site_settings, "pwa_theme_color", "#0F172A"),
             "icons": [],
@@ -179,6 +183,39 @@ self.addEventListener('fetch', event => {
         );
         return;
     }
+});
+
+// Push: show notification from server payload
+self.addEventListener('push', event => {
+    let data = { title: 'Club CMS', body: '', url: '/', type: '' };
+    if (event.data) {
+        try { data = Object.assign(data, event.data.json()); } catch (e) {}
+    }
+    event.waitUntil(
+        self.registration.showNotification(data.title, {
+            body: data.body,
+            icon: '/static/icons/icon-192.png',
+            badge: '/static/icons/badge-72.png',
+            data: { url: data.url || '/' },
+            vibrate: [100, 50, 100],
+            tag: data.type || 'general',
+            renotify: true
+        })
+    );
+});
+
+// Notification click: open target URL
+self.addEventListener('notificationclick', event => {
+    event.notification.close();
+    const url = (event.notification.data && event.notification.data.url) || '/';
+    event.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
+            for (const client of windowClients) {
+                if (client.url === url && 'focus' in client) return client.focus();
+            }
+            return clients.openWindow(url);
+        })
+    );
 });
 """
         return HttpResponse(

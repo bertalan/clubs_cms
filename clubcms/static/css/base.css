@@ -141,6 +141,53 @@ table {
   .github-ribbon { display: none; }
 }
 
+/* PWA install banner (structural) */
+.pwa-install-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .75rem 1.25rem;
+  background: var(--color-surface, #fff);
+  color: var(--color-text-primary, #1a1a1a);
+  border-top: 2px solid var(--color-primary, #0066FF);
+  box-shadow: 0 -2px 12px rgba(0,0,0,.15);
+  font-size: .9rem;
+}
+.pwa-install-text { flex: 1; }
+.pwa-install-dismiss {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-text-muted, #666);
+  padding: 0 .25rem;
+}
+
+/* Push subscription status */
+.push-status {
+  font-size: .9rem;
+  padding: .35rem .75rem;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+.push-status--active {
+  background: #d4edda;
+  color: #155724;
+}
+.push-status--inactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+.dark-mode .push-status--active { background: #1e3a2a; color: #a3d9b1; }
+.dark-mode .push-status--inactive { background: #3a1e1e; color: #d9a3a3; }
+
 .sr-only {
   position: absolute;
   width: 1px;
