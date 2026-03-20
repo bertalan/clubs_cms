@@ -88,11 +88,6 @@
     {# PWA install banner — universal, platform-adaptive #}
     {% if settings.website.SiteSettings.pwa_name %}
     <div id="pwa-install-banner" class="pwa-install-banner" hidden role="alert">
-        <span class="pwa-install-icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 5v14M5 12l7-7 7 7"/>
-            </svg>
-        </span>
         <span class="pwa-install-msg" id="pwa-install-msg"></span>
         <button class="pwa-install-btn" type="button" id="pwa-install-action" hidden></button>
         <button class="pwa-install-dismiss" type="button" id="pwa-install-close" aria-label="{% trans 'Dismiss' %}">&times;</button>
@@ -187,7 +182,7 @@
         /* ---------- Fallback: if no beforeinstallprompt after 3s, show generic tip ---------- */
         else {
             var fallbackTimer = setTimeout(function() {
-                if (!deferredPrompt && !banner.hidden === false) show(t.generic);
+                if (!deferredPrompt && banner.hidden) show(t.generic);
             }, 3000);
             window.addEventListener('beforeinstallprompt', function() { clearTimeout(fallbackTimer); });
         }
@@ -205,7 +200,7 @@
         window.addEventListener('appinstalled', hide);
 
         /* ---------- Auto-dismiss after 20s ---------- */
-        setTimeout(function() { if (!banner.hidden) banner.hidden = true; }, 20000);
+        setTimeout(function() { if (!banner.hidden) hide(); }, 20000);
     })();
     </script>
     {% endif %}
