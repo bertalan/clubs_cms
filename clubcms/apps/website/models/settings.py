@@ -223,6 +223,21 @@ class SiteSettings(BaseSiteSetting):
         help_text=_("Chiave segreta del servizio CAPTCHA."),
     )
 
+    # -- Analytics tab ------------------------------------------------------
+    tracking_code = models.TextField(
+        blank=True, verbose_name=_("Tracking code"),
+        help_text=_(
+            "Codice di monitoraggio statistiche (es. Matomo, Google Analytics). "
+            "Verrà inserito prima della chiusura </body>."
+        ),
+    )
+
+    # -- GitHub tab ---------------------------------------------------------
+    github_url = models.URLField(
+        blank=True, verbose_name=_("GitHub repository URL"),
+        help_text=_("URL del repository GitHub. Se compilato, mostra un badge 'Fork me on GitHub' nell'angolo in alto a destra."),
+    )
+
     # -- Map tab ------------------------------------------------------------
     map_routing_service = models.CharField(
         max_length=20,
@@ -422,6 +437,30 @@ class SiteSettings(BaseSiteSetting):
         heading=_("Map"),
     )
 
+    analytics_panels = ObjectList(
+        [
+            MultiFieldPanel(
+                [
+                    FieldPanel("tracking_code"),
+                ],
+                heading=_("Statistics & monitoring"),
+            ),
+        ],
+        heading=_("Analytics"),
+    )
+
+    github_panels = ObjectList(
+        [
+            MultiFieldPanel(
+                [
+                    FieldPanel("github_url"),
+                ],
+                heading=_("GitHub"),
+            ),
+        ],
+        heading=_("GitHub"),
+    )
+
     edit_handler = TabbedInterface(
         [
             general_panels,
@@ -433,6 +472,8 @@ class SiteSettings(BaseSiteSetting):
             pwa_panels,
             forms_panels,
             map_panels,
+            analytics_panels,
+            github_panels,
         ]
     )
 

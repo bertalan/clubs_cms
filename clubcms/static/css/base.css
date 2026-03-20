@@ -103,6 +103,37 @@ table {
   top: 0;
 }
 
+/* GitHub "Fork me" badge — top-right corner */
+.github-badge {
+  position: fixed;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 9999;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  background: #24292f;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  opacity: 0.85;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.github-badge:hover,
+.github-badge:focus {
+  opacity: 1;
+  transform: scale(1.05);
+  color: #fff;
+  text-decoration: none;
+}
+.github-badge svg {
+  flex-shrink: 0;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -720,6 +751,127 @@ h4, .h4 {
 .site-nav__toggle {
   min-height: 44px;
   min-width: 44px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1002;
+}
+.site-nav__toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+/* Hamburger → X animation when open */
+.site-nav__toggle[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.site-nav__toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+.site-nav__toggle[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* --------------------------------------------------------------------------
+   Mobile Navigation Panel
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  .site-nav .container {
+    flex-wrap: wrap;
+  }
+  .site-nav__links {
+    display: none;
+    width: 100%;
+    order: 3;
+  }
+  .site-nav__links.open {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0.75rem 0 1rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.2);
+    animation: navSlideDown 0.25s ease-out;
+  }
+  @keyframes navSlideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .site-nav__links.open > a,
+  .site-nav__links.open > .site-nav__dropdown,
+  .site-nav__links.open > .site-nav__search,
+  .site-nav__links.open > .site-nav__user,
+  .site-nav__links.open > .site-nav__lang {
+    width: 100%;
+  }
+  .site-nav__links.open > a {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+  }
+  .site-nav__dropdown-toggle {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+  }
+  .site-nav .site-nav__dropdown-menu {
+    position: static;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    padding-left: 1rem;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    min-width: 0;
+  }
+  .site-nav .site-nav__dropdown-menu a {
+    padding: 0.6rem 0;
+    font-size: 0.9rem;
+    opacity: 0.85;
+  }
+  .site-nav .site-nav__lang-menu {
+    position: static;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    min-width: 0;
+  }
+  .site-nav__user {
+    margin-left: 0;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.15);
+    margin-top: 0.5rem;
+  }
+  .site-nav__user-menu {
+    right: auto;
+    left: 0;
+  }
+  .site-nav__cta {
+    display: inline-flex;
+    margin-top: 0.5rem;
+    text-align: center;
+    justify-content: center;
+  }
+  .site-nav__lang {
+    margin-left: 0;
+    padding-top: 0.5rem;
+  }
+  .site-nav__search {
+    margin-top: 0.5rem;
+    margin-left: 0;
+    width: 100%;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -3431,30 +3583,7 @@ h4, .h4 {
   align-items: center;
 }
 
-/* Mobile: accordion-style dropdowns */
-@media (max-width: 767px) {
-  .site-nav__links.open {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    padding: 1rem 0;
-  }
-  .site-nav__dropdown-menu {
-    position: static;
-    box-shadow: none;
-    border: none;
-    border-radius: 0;
-    padding-left: 1rem;
-    background: transparent;
-  }
-  .site-nav__dropdown.open .site-nav__dropdown-menu {
-    display: block;
-  }
-  .site-nav__user-menu {
-    right: auto;
-    left: 0;
-  }
-}
+/* Mobile: accordion-style dropdowns — see "Mobile Navigation Panel" block above */
 
 /* --------------------------------------------------------------------------
    Auth Pages (signup, login, password reset)

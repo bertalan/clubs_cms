@@ -294,10 +294,45 @@
     var navToggle = document.querySelector('.site-nav__toggle');
     var navLinks = document.getElementById('nav-links');
     if (navToggle && navLinks) {
+        function closeNav() {
+            navLinks.classList.remove('open');
+            navToggle.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+        function openNav() {
+            navLinks.classList.add('open');
+            navToggle.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        }
         navToggle.addEventListener('click', function() {
-            var isOpen = navLinks.classList.contains('open');
-            navLinks.classList.toggle('open', !isOpen);
-            navToggle.setAttribute('aria-expanded', String(!isOpen));
+            navLinks.classList.contains('open') ? closeNav() : openNav();
+        });
+        // Close on Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+                closeNav();
+                navToggle.focus();
+            }
+        });
+        // Close when clicking outside nav on mobile
+        document.addEventListener('click', function(e) {
+            if (navLinks.classList.contains('open') && !e.target.closest('.site-nav')) {
+                closeNav();
+            }
+        });
+        // Focus trap within open mobile menu
+        navLinks.addEventListener('keydown', function(e) {
+            if (e.key !== 'Tab' || !navLinks.classList.contains('open')) return;
+            var focusable = [navToggle].concat(
+                Array.from(navLinks.querySelectorAll('a[href], button:not([disabled]), input:not([hidden])'))
+            );
+            var first = focusable[0];
+            var last = focusable[focusable.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault(); last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault(); first.focus();
+            }
         });
     }
 
