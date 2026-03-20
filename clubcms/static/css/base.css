@@ -138,8 +138,7 @@ table {
   color: #fff;
 }
 @media (max-width: 767px) {
-  .github-ribbon { width: 100px; height: 100px; }
-  .github-ribbon span { width: 170px; padding: 4px 0; font-size: 0.6rem; top: 24px; right: -40px; }
+  .github-ribbon { display: none; }
 }
 
 .sr-only {
@@ -682,6 +681,15 @@ h4, .h4 {
 }
 .site-footer__bottom p {
   margin: 0;
+}
+.site-footer__github {
+  margin-left: 1rem;
+  color: inherit;
+  opacity: 0.7;
+  text-decoration: none;
+}
+.site-footer__github:hover {
+  opacity: 1;
 }
 
 /* --------------------------------------------------------------------------

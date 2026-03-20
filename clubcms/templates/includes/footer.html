@@ -137,13 +137,18 @@
 
         </div>
 
-        {# Bottom bar — copyright + theme switcher #}
+        {# Bottom bar — copyright + GitHub link + theme switcher #}
         <div class="site-footer__bottom">
             <p>
                 {% if footer.copyright_text %}
                     {{ footer.copyright_text }}
                 {% else %}
                     &copy; {% now "Y" %} {{ site.site_name }}. {% trans "All rights reserved." %}
+                {% endif %}
+                {% if settings.website.SiteSettings.github_url %}
+                <a href="{{ settings.website.SiteSettings.github_url }}" class="site-footer__github" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
+                </a>
                 {% endif %}
             </p>
 
