@@ -2847,6 +2847,51 @@ a:hover {
   min-height: 60vh;
 }
 
+/* ==========================================================================
+   TRANSPARENCY PAGE — Heritage
+   ========================================================================== */
+.page-transparency__title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.page-transparency__intro {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.75;
+}
+
+.page-transparency__body {
+  line-height: 1.8;
+}
+
+.page-transparency__body h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  font-weight: 600;
+}
+
+.page-transparency__body h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+  font-weight: 600;
+  font-style: italic;
+}
+
+.page-transparency__body p {
+  color: var(--color-text-primary);
+}
+
+.page-transparency__body li {
+  line-height: 1.8;
+}
+
+/* ==========================================================================
+   PRIVACY SETTINGS PAGE — Heritage
+   ========================================================================== */
 .page-privacy__header {
   margin-bottom: 3rem;
   text-align: center;

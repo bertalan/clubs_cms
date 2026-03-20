@@ -1652,7 +1652,7 @@ h4, .h4 {
 .page-membership-plans__intro,
 .page-federation__intro {
   max-width: 700px;
-  margin: 1rem auto 0;
+  margin: 1rem auto 2.5rem;
   color: var(--color-text-muted);
 }
 
@@ -3209,10 +3209,21 @@ h4, .h4 {
 .page-about__body h4,
 .page-board__body h2,
 .page-board__body h3,
-.page-board__body h4 {
-  margin-top: 1.5em;
-  margin-bottom: 0.5em;
+.page-board__body h4,
+.page-transparency__body h2,
+.page-transparency__body h3,
+.page-transparency__body h4,
+.page-privacy__body h2,
+.page-privacy__body h3,
+.page-privacy__body h4 {
+  margin-top: 2em;
+  margin-bottom: 0.6em;
   color: var(--color-text-primary);
+}
+
+.page-transparency__body h2:first-child,
+.page-privacy__body h2:first-child {
+  margin-top: 0;
 }
 
 .page-event-detail__body blockquote,

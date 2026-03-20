@@ -3082,6 +3082,48 @@ a:hover {
 /* ==========================================================================
    PRIVACY SETTINGS PAGE - Tricolore Theme
    ========================================================================== */
+/* ==========================================================================
+   TRANSPARENCY PAGE — Tricolore
+   ========================================================================== */
+.page-transparency__title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 900;
+  color: var(--color-primary);
+}
+
+.page-transparency__intro {
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.page-transparency__body {
+  line-height: 1.8;
+}
+
+.page-transparency__body h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  font-weight: 900;
+}
+
+.page-transparency__body h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+  font-weight: 800;
+}
+
+.page-transparency__body p {
+  color: var(--color-text-primary);
+}
+
+.page-transparency__body li {
+  line-height: 1.8;
+}
+
+/* ==========================================================================
+   PRIVACY SETTINGS PAGE — Tricolore
+   ========================================================================== */
 .page-privacy {
   padding: 6rem 0;
   background: var(--color-surface, #FFFFFF);
