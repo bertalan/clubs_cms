@@ -134,82 +134,95 @@ class PWAServiceWorkerView(View):
 
     def get(self, request, *args, **kwargs):
         sw_js = """
-// ClubCMS Service Worker — v2
-const CACHE_NAME = 'clubcms-v2';
+// ClubCMS Service Worker
+const CACHE_NAME = 'clubcms-v1';
 const OFFLINE_URL = '/offline/';
+const STATIC_ASSETS = [];
 
+// Install: cache offline page
 self.addEventListener('install', event => {
-    event.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll([OFFLINE_URL])));
+    event.waitUntil(
+        caches.open(CACHE_NAME).then(cache => {
+            return cache.addAll([OFFLINE_URL]);
+        })
+    );
     self.skipWaiting();
 });
 
+// Activate: clean old caches
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(keys =>
-            Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+            Promise.all(
+                keys.filter(key => key !== CACHE_NAME)
+                    .map(key => caches.delete(key))
+            )
         )
     );
     self.clients.claim();
 });
 
+// Fetch: network-first for HTML, cache-first for static assets
 self.addEventListener('fetch', event => {
-    if (event.request.method !== 'GET') return;
+    const request = event.request;
 
-    // Static assets → cache-first
-    if (event.request.url.match(/\\.(css|js|woff2?|ttf|eot|png|jpg|jpeg|gif|svg|webp|ico)$/)) {
+    // Skip non-GET requests
+    if (request.method !== 'GET') return;
+
+    // Static assets: cache-first
+    if (request.url.match(/\\.(css|js|woff2?|ttf|eot|png|jpg|jpeg|gif|svg|webp|ico)$/)) {
         event.respondWith(
-            caches.match(event.request).then(cached => {
+            caches.match(request).then(cached => {
                 if (cached) return cached;
-                return fetch(event.request).then(resp => {
-                    if (resp.ok) {
-                        const clone = resp.clone();
-                        caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
+                return fetch(request).then(response => {
+                    if (response.ok) {
+                        const clone = response.clone();
+                        caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
                     }
-                    return resp;
-                }).catch(() => caches.match(event.request));
+                    return response;
+                }).catch(() => caches.match(request));
             })
         );
         return;
     }
 
-    // HTML pages → network-first with offline fallback
-    if (event.request.headers.get('Accept') &&
-        event.request.headers.get('Accept').includes('text/html')) {
+    // HTML pages: network-first
+    if (request.headers.get('Accept') && request.headers.get('Accept').includes('text/html')) {
         event.respondWith(
-            fetch(event.request).then(resp => {
-                if (resp.ok) {
-                    const clone = resp.clone();
-                    caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
-                }
-                return resp;
-            }).catch(() => caches.match(event.request).then(c => c || caches.match(OFFLINE_URL)))
+            fetch(request).catch(() => caches.match(OFFLINE_URL))
         );
         return;
     }
 });
 
-// Push notifications
+// Push: show notification from server payload
 self.addEventListener('push', event => {
-    let data = { title: 'Notification', body: '', url: '/', type: '' };
+    let data = { title: 'Club CMS', body: '', url: '/', type: '' };
     if (event.data) {
-        try { Object.assign(data, event.data.json()); } catch(e) { data.body = event.data.text(); }
+        try { data = Object.assign(data, event.data.json()); } catch (e) {}
     }
     event.waitUntil(
         self.registration.showNotification(data.title, {
             body: data.body,
+            icon: '/static/icons/icon-192.png',
+            badge: '/static/icons/badge-72.png',
             data: { url: data.url || '/' },
             vibrate: [100, 50, 100],
-            tag: data.type || 'general'
+            tag: data.type || 'general',
+            renotify: true
         })
     );
 });
 
+// Notification click: open target URL
 self.addEventListener('notificationclick', event => {
     event.notification.close();
     const url = (event.notification.data && event.notification.data.url) || '/';
     event.waitUntil(
-        clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
-            for (const c of list) { if (c.url === url && 'focus' in c) return c.focus(); }
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
+            for (const client of windowClients) {
+                if (client.url === url && 'focus' in client) return client.focus();
+            }
             return clients.openWindow(url);
         })
     );

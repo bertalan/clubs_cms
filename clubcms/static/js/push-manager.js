@@ -28,7 +28,7 @@
       subscribeUrl: "/notifications/push/subscribe/",
       unsubscribeUrl: "/notifications/push/unsubscribe/",
       csrfToken: "",
-      serviceWorkerUrl: "/sw.js",
+      serviceWorkerUrl: "/static/js/service-worker.js",
     },
 
     /**
