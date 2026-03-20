@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n l10n %}
 
 {% block title %}{{ event.event_name }} | {% trans "Partner Events" %}{% endblock %}
 
@@ -67,10 +67,12 @@
             {% if event.location_address %}<p>{{ event.location_address }}</p>{% endif %}
             {% if event.location_lat and event.location_lon %}
                 <p>
+                    {% localize off %}
                     <a href="https://www.google.com/maps?q={{ event.location_lat }},{{ event.location_lon }}"
                        target="_blank" rel="noopener noreferrer">
                         {% trans "View on Google Maps" %}
                     </a>
+                    {% endlocalize %}
                 </p>
             {% endif %}
         </div>
