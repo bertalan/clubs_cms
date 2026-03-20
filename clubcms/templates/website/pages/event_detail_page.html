@@ -196,8 +196,10 @@
                 crossorigin=""></script>
         <script>
         (function() {
-            var lat = {{ page.latitude|unlocalize }};
-            var lng = {{ page.longitude|unlocalize }};
+            {% localize off %}
+            var lat = {{ page.latitude }};
+            var lng = {{ page.longitude }};
+            {% endlocalize %}
             var map = L.map('event-map').setView([lat, lng], 14);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
