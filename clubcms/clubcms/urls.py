@@ -17,7 +17,7 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.contrib.sitemaps.views import sitemap
 from wagtail.documents import urls as wagtaildocs_urls
 
-from apps.core.views import HealthCheckView, PWAManifestView, PWAOfflineView, PWAServiceWorkerView
+from apps.core.views import HealthCheckView, PWAManifestView, PWAOfflineView, PWAServiceWorkerView, RobotsTxtView
 from apps.members.views import PublicProfileView
 
 # Non-i18n URLs (admin, API, documents - no language prefix)
@@ -27,6 +27,9 @@ urlpatterns = [
     path("manifest.json", PWAManifestView.as_view(), name="pwa-manifest"),
     path("sw.js", PWAServiceWorkerView.as_view(), name="pwa-sw"),
     path("offline/", PWAOfflineView.as_view(), name="pwa-offline"),
+    # SEO: robots.txt and sitemap.xml must be at the root
+    path("robots.txt", RobotsTxtView.as_view(), name="robots-txt"),
+    path("sitemap.xml", sitemap, name="sitemap-xml"),
     path("django-admin/", admin.site.urls),
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
@@ -66,8 +69,7 @@ _i18n_urls = [
     path(_("events/partner/"), include("apps.federation.urls_frontend")),
     # Core feeds, robots.txt
     path("", include("apps.core.urls")),
-    # Sitemap
-    path("sitemap.xml", sitemap),
+    # Sitemap (also available at root /sitemap.xml above)
 ]
 
 # django-allauth routes (login, signup, logout, password reset)

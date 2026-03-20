@@ -14,7 +14,7 @@ from django.urls import path
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.feeds import LatestNewsAtomFeed, LatestNewsFeed, UpcomingEventsFeed
-from apps.core.views import RobotsTxtView, SearchView
+from apps.core.views import SearchView
 
 urlpatterns = [
     # Site-wide search
@@ -23,6 +23,4 @@ urlpatterns = [
     path("feed/rss/", LatestNewsFeed(), name="feed-news-rss"),
     path("feed/atom/", LatestNewsAtomFeed(), name="feed-news-atom"),
     path("feed/events/rss/", UpcomingEventsFeed(), name="feed-events-rss"),
-    # robots.txt
-    path("robots.txt", RobotsTxtView.as_view(), name="robots-txt"),
 ]

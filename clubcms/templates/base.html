@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% elif self.title %}{{ self.title }}{% endif %} | {{ settings.website.SiteSettings.site_name }}{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}{% if self.search_description %}{{ self.search_description }}{% else %}{{ settings.website.SiteSettings.description }}{% endif %}{% endblock %}">
+    {% if not settings.website.SiteSettings.seo_indexing %}<meta name="robots" content="noindex, nofollow">{% endif %}
 
     {# Favicon #}
     {% if settings.website.SiteSettings.favicon %}

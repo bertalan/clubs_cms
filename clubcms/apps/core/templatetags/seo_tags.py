@@ -211,13 +211,24 @@ def breadcrumb_json_ld_tag(context):
 def canonical_url_tag(context):
     """
     Output a ``<link rel="canonical">`` tag for the current page.
+
+    If ``SiteSettings.canonical_domain`` is set, uses that domain
+    instead of the request host.
     """
     request = context.get("request")
     page = context.get("self")
     if not page or not request:
         return ""
 
-    url = request.build_absolute_uri(page.url)
+    site_settings = _get_site_settings(request)
+    canonical_domain = (
+        getattr(site_settings, "canonical_domain", "") or ""
+    ).rstrip("/")
+
+    if canonical_domain:
+        url = f"{canonical_domain}{page.url}"
+    else:
+        url = request.build_absolute_uri(page.url)
     return mark_safe(f'<link rel="canonical" href="{url}">')
 
 

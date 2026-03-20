@@ -198,24 +198,87 @@ class PWAOfflineView(TemplateView):
 # ───────────────────────────────────────────────────────────────────────────
 
 
+# AI bot user-agents to block when allow_ai_bots is False
+_AI_BOT_AGENTS = [
+    "GPTBot",
+    "ChatGPT-User",
+    "Google-Extended",
+    "CCBot",
+    "anthropic-ai",
+    "Claude-Web",
+    "Meta-ExternalAgent",
+    "FacebookBot",
+    "Bytespider",
+    "PerplexityBot",
+    "Amazonbot",
+    "YouBot",
+]
+
+
 class RobotsTxtView(View):
     """
-    Serve a ``robots.txt`` with references to the sitemap and feeds.
+    Serve a ``robots.txt`` built from base rules + SiteSettings overrides.
 
-    In production the web server can serve a static file instead;
-    this view is a convenient fallback.
+    Reads ``seo_indexing``, ``allow_ai_bots``, and ``robots_txt_extra``
+    from SiteSettings to produce a dynamic output.
     """
 
     def get(self, request, *args, **kwargs):
-        lines = [
-            "User-agent: *",
-            "Allow: /",
-            "",
-            "# Disallow admin areas",
-            "Disallow: /admin/",
-            "Disallow: /django-admin/",
-            "Disallow: /account/",
-            "",
+        from wagtail.models import Site
+
+        site_settings = None
+        try:
+            from apps.website.models.settings import SiteSettings
+            site_settings = SiteSettings.for_site(Site.find_for_request(request))
+        except Exception:
+            pass
+
+        seo_indexing = getattr(site_settings, "seo_indexing", True)
+        allow_ai = getattr(site_settings, "allow_ai_bots", False)
+        extra = (getattr(site_settings, "robots_txt_extra", "") or "").strip()
+
+        lines = []
+
+        if not seo_indexing:
+            # Block everything when indexing is disabled
+            lines += [
+                "# Indexing disabled via Site Settings",
+                "User-agent: *",
+                "Disallow: /",
+                "",
+            ]
+        else:
+            lines += [
+                "User-agent: *",
+                "Allow: /",
+                "",
+                "# Disallow admin areas",
+                "Disallow: /admin/",
+                "Disallow: /django-admin/",
+                "Disallow: /account/",
+                "",
+            ]
+
+        # AI bot blocking
+        if not allow_ai:
+            lines.append("# AI bot crawlers — blocked")
+            for agent in _AI_BOT_AGENTS:
+                lines += [
+                    f"User-agent: {agent}",
+                    "Disallow: /",
+                    "",
+                ]
+
+        # Custom rules from admin
+        if extra:
+            lines += [
+                "# Custom rules",
+                extra,
+                "",
+            ]
+
+        # Sitemap & feeds
+        lines += [
             "# Sitemap",
             f"Sitemap: {request.build_absolute_uri('/sitemap.xml')}",
             "",
@@ -224,6 +287,7 @@ class RobotsTxtView(View):
             f"# Atom: {request.build_absolute_uri('/feed/atom/')}",
             "",
         ]
+
         return HttpResponse(
             "\n".join(lines),
             content_type="text/plain; charset=utf-8",

@@ -223,6 +223,37 @@ class SiteSettings(BaseSiteSetting):
         help_text=_("Chiave segreta del servizio CAPTCHA."),
     )
 
+    # -- SEO tab ------------------------------------------------------------
+    seo_indexing = models.BooleanField(
+        default=True, verbose_name=_("Allow search engine indexing"),
+        help_text=_(
+            "Se disattivato, tutte le pagine avranno il meta tag "
+            "'noindex, nofollow'. Utile per siti in staging/anteprima."
+        ),
+    )
+    allow_ai_bots = models.BooleanField(
+        default=False, verbose_name=_("Allow AI bot crawling"),
+        help_text=_(
+            "Se disattivato, robots.txt bloccherà i bot AI "
+            "(GPTBot, ChatGPT-User, Google-Extended, CCBot, "
+            "Anthropic, Meta, Bytespider, PerplexityBot)."
+        ),
+    )
+    robots_txt_extra = models.TextField(
+        blank=True, verbose_name=_("Additional robots.txt rules"),
+        help_text=_(
+            "Regole aggiuntive per robots.txt (es. 'Disallow: /private/'). "
+            "Verranno aggiunte dopo le regole di base."
+        ),
+    )
+    canonical_domain = models.URLField(
+        blank=True, verbose_name=_("Canonical domain"),
+        help_text=_(
+            "Dominio canonico del sito (es. 'https://www.example.com'). "
+            "Se vuoto il canonical URL usa il dominio della richiesta."
+        ),
+    )
+
     # -- Analytics tab ------------------------------------------------------
     tracking_code = models.TextField(
         blank=True, verbose_name=_("Tracking code"),
@@ -437,6 +468,26 @@ class SiteSettings(BaseSiteSetting):
         heading=_("Map"),
     )
 
+    seo_panels = ObjectList(
+        [
+            MultiFieldPanel(
+                [
+                    FieldPanel("seo_indexing"),
+                    FieldPanel("allow_ai_bots"),
+                    FieldPanel("canonical_domain"),
+                ],
+                heading=_("Indexing & canonical"),
+            ),
+            MultiFieldPanel(
+                [
+                    FieldPanel("robots_txt_extra"),
+                ],
+                heading=_("robots.txt"),
+            ),
+        ],
+        heading=_("SEO"),
+    )
+
     analytics_panels = ObjectList(
         [
             MultiFieldPanel(
@@ -472,6 +523,7 @@ class SiteSettings(BaseSiteSetting):
             pwa_panels,
             forms_panels,
             map_panels,
+            seo_panels,
             analytics_panels,
             github_panels,
         ]
