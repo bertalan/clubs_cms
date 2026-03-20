@@ -85,11 +85,24 @@
         {% block content %}{% endblock %}
     </main>
 
-    {# PWA install banner (hidden until beforeinstallprompt fires) #}
+    {# PWA install banner — Chromium + iOS variants #}
     {% if settings.website.SiteSettings.pwa_name %}
     <div id="pwa-install-banner" class="pwa-install-banner" hidden role="alert">
-        <span class="pwa-install-text">{% trans "Install this app on your device" %}</span>
-        <button class="btn btn--primary btn--sm pwa-install-btn" type="button">{% trans "Install" %}</button>
+        {# Chromium variant (beforeinstallprompt) #}
+        <span class="pwa-install-text pwa-install-text--chromium" hidden>
+            {% trans "Install this app on your device" %}
+        </span>
+        <button class="btn btn--sm pwa-install-btn" type="button" hidden>{% trans "Install app" %}</button>
+        {# iOS variant (manual share instructions) #}
+        <span class="pwa-install-text pwa-install-text--ios" hidden>
+            {% trans "Install: tap" %}
+            <svg class="pwa-share-icon" width="18" height="18" viewBox="0 0 50 50" fill="currentColor" aria-label="{% trans 'Share' %}">
+                <path d="M30.3 13.7L25 8.4l-5.3 5.3-1.4-1.4L25 5.6l6.7 6.7z"/>
+                <path d="M24 7h2v21h-2z"/>
+                <path d="M35 40H15c-1.7 0-3-1.3-3-3V19c0-1.7 1.3-3 3-3h7v2h-7c-.6 0-1 .4-1 1v18c0 .6.4 1 1 1h20c.6 0 1-.4 1-1V19c0-.6-.4-1-1-1h-7v-2h7c1.7 0 3 1.3 3 3v18c0 1.7-1.3 3-3 3z"/>
+            </svg>
+            {% trans "then 'Add to Home Screen'" %}
+        </span>
         <button class="pwa-install-dismiss" type="button" aria-label="{% trans 'Dismiss' %}">&times;</button>
     </div>
     {% endif %}
@@ -100,7 +113,7 @@
     {# Theme Switcher #}
     <script src="{% static 'js/theme-switcher.js' %}"></script>
 
-    {# PWA service worker registration + install prompt #}
+    {# PWA service worker registration + install prompt (Chromium + iOS) #}
     {% if settings.website.SiteSettings.pwa_name %}
     <script>
         if ('serviceWorker' in navigator) {
@@ -109,31 +122,57 @@
                     console.warn('ServiceWorker registration failed:', err);
                 });
         }
-        /* A2HS install prompt */
+        /* A2HS install prompt — works on Chromium + iOS Safari */
         (function() {
-            var deferredPrompt = null;
+            var STORAGE_KEY = 'pwa-install-dismissed';
             var banner = document.getElementById('pwa-install-banner');
+            if (!banner) return;
+            /* Already running as standalone or dismissed recently */
+            if (window.matchMedia('(display-mode: standalone)').matches ||
+                navigator.standalone === true) return;
+            if (localStorage.getItem(STORAGE_KEY)) return;
+
+            var chromiumText = banner.querySelector('.pwa-install-text--chromium');
+            var iosText = banner.querySelector('.pwa-install-text--ios');
+            var installBtn = banner.querySelector('.pwa-install-btn');
+            var dismissBtn = banner.querySelector('.pwa-install-dismiss');
+            var deferredPrompt = null;
+
+            function showBanner() { banner.hidden = false; }
+            function hideBanner() {
+                banner.hidden = true;
+                localStorage.setItem(STORAGE_KEY, Date.now());
+            }
+
+            /* Chromium: intercept beforeinstallprompt */
             window.addEventListener('beforeinstallprompt', function(e) {
                 e.preventDefault();
                 deferredPrompt = e;
-                if (banner) banner.hidden = false;
+                if (chromiumText) chromiumText.hidden = false;
+                if (installBtn) installBtn.hidden = false;
+                showBanner();
             });
-            if (banner) {
-                var btn = banner.querySelector('.pwa-install-btn');
-                var dismiss = banner.querySelector('.pwa-install-dismiss');
-                if (btn) btn.addEventListener('click', function() {
-                    if (deferredPrompt) {
-                        deferredPrompt.prompt();
-                        deferredPrompt.userChoice.then(function() { deferredPrompt = null; });
-                    }
-                    banner.hidden = true;
-                });
-                if (dismiss) dismiss.addEventListener('click', function() {
-                    banner.hidden = true;
-                });
+
+            /* iOS Safari detection (not Chrome-iOS, not already standalone) */
+            var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            var isSafari = /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS|OPiOS|EdgiOS/.test(navigator.userAgent);
+            if (isIOS && isSafari) {
+                if (iosText) iosText.hidden = false;
+                showBanner();
             }
+
+            if (installBtn) installBtn.addEventListener('click', function() {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then(function() { deferredPrompt = null; });
+                }
+                hideBanner();
+            });
+            if (dismissBtn) dismissBtn.addEventListener('click', hideBanner);
+
             window.addEventListener('appinstalled', function() {
-                if (banner) banner.hidden = true;
+                hideBanner();
                 deferredPrompt = null;
             });
         })();

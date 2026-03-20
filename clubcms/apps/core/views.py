@@ -80,6 +80,7 @@ class PWAManifestView(View):
             "name": getattr(site_settings, "pwa_name", "") or "Club CMS",
             "short_name": getattr(site_settings, "pwa_short_name", "") or "Club",
             "description": getattr(site_settings, "pwa_description", "") or "",
+            "id": "/",
             "start_url": "/",
             "scope": "/",
             "display": "standalone",
@@ -102,6 +103,7 @@ class PWAManifestView(View):
                         "src": rendition.url,
                         "sizes": "192x192",
                         "type": "image/png",
+                        "purpose": "any",
                     })
                 except Exception:
                     pass
@@ -112,6 +114,14 @@ class PWAManifestView(View):
                         "src": rendition.url,
                         "sizes": "512x512",
                         "type": "image/png",
+                        "purpose": "any",
+                    })
+                    # Maskable variant for Android adaptive icons
+                    manifest["icons"].append({
+                        "src": rendition.url,
+                        "sizes": "512x512",
+                        "type": "image/png",
+                        "purpose": "maskable",
                     })
                 except Exception:
                     pass
