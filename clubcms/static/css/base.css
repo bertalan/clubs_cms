@@ -158,13 +158,18 @@ table {
   font-size: .95rem;
   line-height: 1.4;
 }
-.pwa-install-text { flex: 1; }
-.pwa-share-icon {
-  display: inline-block;
-  vertical-align: middle;
-  margin: 0 .2rem;
-  fill: #fff;
+.pwa-install-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(255,255,255,.12);
+  border-radius: 8px;
+  color: #fff;
 }
+.pwa-install-msg { flex: 1; }
 .pwa-install-btn {
   white-space: nowrap;
   padding: .55rem 1.2rem;
@@ -184,6 +189,7 @@ table {
   color: #fff;
 }
 .pwa-install-dismiss {
+  flex-shrink: 0;
   background: none;
   border: none;
   font-size: 1.5rem;

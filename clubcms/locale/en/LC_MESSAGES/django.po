@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ClubCMS 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-20 16:25+0100\n"
+"POT-Creation-Date: 2026-03-20 17:13+0100\n"
 "PO-Revision-Date: 2024-01-01 00:00+0000\n"
 "Last-Translator: ClubCMS Team\n"
 "Language-Team: English\n"
@@ -397,7 +397,7 @@ msgstr "Events"
 msgid "search/"
 msgstr "Search"
 
-#: apps/core/views.py:581
+#: apps/core/views.py:591
 msgid "Your contribution has been submitted and is awaiting moderation."
 msgstr "Your contribution has been submitted and is awaiting moderation."
 
@@ -7478,17 +7478,7 @@ msgstr "Save the request first to enable actions."
 msgid "Skip to main content"
 msgstr ""
 
-#: templates/base.html:91
-msgid "Install this app on your device"
-msgstr ""
-
-#: templates/base.html:92
-#, fuzzy
-#| msgid "Instagram"
-msgid "Install"
-msgstr "Instagram"
-
-#: templates/base.html:93
+#: templates/base.html:98
 msgid "Dismiss"
 msgstr ""
 
@@ -9158,6 +9148,11 @@ msgstr ""
 #: templates/website/verification/verify_result.html:65
 msgid "Verify Another Member"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Instagram"
+#~ msgid "Install"
+#~ msgstr "Instagram"
 
 #~ msgid "Optional logo URL"
 #~ msgstr "Optional logo URL"

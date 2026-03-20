@@ -85,25 +85,17 @@
         {% block content %}{% endblock %}
     </main>
 
-    {# PWA install banner — Chromium + iOS variants #}
+    {# PWA install banner — universal, platform-adaptive #}
     {% if settings.website.SiteSettings.pwa_name %}
     <div id="pwa-install-banner" class="pwa-install-banner" hidden role="alert">
-        {# Chromium variant (beforeinstallprompt) #}
-        <span class="pwa-install-text pwa-install-text--chromium" hidden>
-            {% trans "Install this app on your device" %}
-        </span>
-        <button class="btn btn--sm pwa-install-btn" type="button" hidden>{% trans "Install app" %}</button>
-        {# iOS variant (manual share instructions) #}
-        <span class="pwa-install-text pwa-install-text--ios" hidden>
-            {% trans "Install: tap" %}
-            <svg class="pwa-share-icon" width="18" height="18" viewBox="0 0 50 50" fill="currentColor" aria-label="{% trans 'Share' %}">
-                <path d="M30.3 13.7L25 8.4l-5.3 5.3-1.4-1.4L25 5.6l6.7 6.7z"/>
-                <path d="M24 7h2v21h-2z"/>
-                <path d="M35 40H15c-1.7 0-3-1.3-3-3V19c0-1.7 1.3-3 3-3h7v2h-7c-.6 0-1 .4-1 1v18c0 .6.4 1 1 1h20c.6 0 1-.4 1-1V19c0-.6-.4-1-1-1h-7v-2h7c1.7 0 3 1.3 3 3v18c0 1.7-1.3 3-3 3z"/>
+        <span class="pwa-install-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M5 12l7-7 7 7"/>
             </svg>
-            {% trans "then 'Add to Home Screen'" %}
         </span>
-        <button class="pwa-install-dismiss" type="button" aria-label="{% trans 'Dismiss' %}">&times;</button>
+        <span class="pwa-install-msg" id="pwa-install-msg"></span>
+        <button class="pwa-install-btn" type="button" id="pwa-install-action" hidden></button>
+        <button class="pwa-install-dismiss" type="button" id="pwa-install-close" aria-label="{% trans 'Dismiss' %}">&times;</button>
     </div>
     {% endif %}
 
@@ -113,69 +105,108 @@
     {# Theme Switcher #}
     <script src="{% static 'js/theme-switcher.js' %}"></script>
 
-    {# PWA service worker registration + install prompt (Chromium + iOS) #}
+    {# PWA service worker + install prompt #}
     {% if settings.website.SiteSettings.pwa_name %}
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register("{% url 'pwa-sw' %}")
-                .catch(function(err) {
-                    console.warn('ServiceWorker registration failed:', err);
-                });
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register("{% url 'pwa-sw' %}")
+            .catch(function(e) { console.warn('SW registration failed:', e); });
+    }
+    (function() {
+        var banner = document.getElementById('pwa-install-banner');
+        if (!banner) return;
+
+        /* ---------- Standalone detection (covers all browsers) ---------- */
+        var isStandalone = window.navigator.standalone === true
+            || window.matchMedia('(display-mode: standalone)').matches
+            || window.matchMedia('(display-mode: fullscreen)').matches
+            || document.referrer.includes('android-app://');
+        if (isStandalone) return;
+
+        /* ---------- Dismiss memory (7 days) ---------- */
+        var KEY = 'pwa-install-dismissed';
+        var dismissed = localStorage.getItem(KEY);
+        if (dismissed && (Date.now() - Number(dismissed)) < 7 * 86400000) return;
+
+        var msg = document.getElementById('pwa-install-msg');
+        var btn = document.getElementById('pwa-install-action');
+        var close = document.getElementById('pwa-install-close');
+        var deferredPrompt = null;
+
+        /* ---------- i18n messages ---------- */
+        var lang = document.documentElement.lang || 'en';
+        var L = {
+            it: { installBtn: 'Installa', chromium: 'Installa l\u2019app sul tuo dispositivo',
+                  iosShare: 'Per installare: tocca il pulsante Condividi \u2B06 poi \u00ABSalva nella schermata Home\u00BB',
+                  firefox: 'Per installare: menu \u22EE poi \u00ABInstalla\u00BB o \u00ABAggiungi alla schermata Home\u00BB',
+                  generic: 'Puoi installare questa app dal menu del browser' },
+            en: { installBtn: 'Install', chromium: 'Install this app on your device',
+                  iosShare: 'To install: tap the Share button \u2B06 then \u201CAdd to Home Screen\u201D',
+                  firefox: 'To install: tap \u22EE menu then \u201CInstall\u201D or \u201CAdd to Home Screen\u201D',
+                  generic: 'You can install this app from the browser menu' },
+            de: { installBtn: 'Installieren', chromium: 'App auf Ihrem Ger\u00E4t installieren',
+                  iosShare: 'Zum Installieren: Teilen-Button \u2B06 antippen, dann \u201EZum Home-Bildschirm\u201C',
+                  firefox: 'Zum Installieren: \u22EE Men\u00FC, dann \u201EInstallieren\u201C oder \u201EZum Startbildschirm hinzuf\u00FCgen\u201C',
+                  generic: 'Sie k\u00F6nnen diese App \u00FCber das Browser-Men\u00FC installieren' },
+            fr: { installBtn: 'Installer', chromium: 'Installer cette application',
+                  iosShare: 'Pour installer : touchez Partager \u2B06 puis \u00AB Sur l\u2019\u00E9cran d\u2019accueil \u00BB',
+                  firefox: 'Pour installer : menu \u22EE puis \u00AB Installer \u00BB ou \u00AB Ajouter \u00E0 l\u2019\u00E9cran d\u2019accueil \u00BB',
+                  generic: 'Vous pouvez installer cette app depuis le menu du navigateur' },
+            es: { installBtn: 'Instalar', chromium: 'Instala esta app en tu dispositivo',
+                  iosShare: 'Para instalar: toca Compartir \u2B06 y luego \u00ABA\u00F1adir a pantalla de inicio\u00BB',
+                  firefox: 'Para instalar: men\u00FA \u22EE y luego \u00ABInstalar\u00BB o \u00ABA\u00F1adir a pantalla de inicio\u00BB',
+                  generic: 'Puedes instalar esta app desde el men\u00FA del navegador' }
+        };
+        var t = L[lang.substring(0, 2)] || L.en;
+
+        /* ---------- Platform detection ---------- */
+        var ua = navigator.userAgent;
+        var isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        var isFirefox = /Firefox|FxiOS/.test(ua);
+
+        function show(text) { msg.textContent = text; banner.hidden = false; }
+        function hide() { banner.hidden = true; localStorage.setItem(KEY, String(Date.now())); }
+
+        /* ---------- Chromium: beforeinstallprompt ---------- */
+        window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            deferredPrompt = e;
+            btn.textContent = t.installBtn;
+            btn.hidden = false;
+            show(t.chromium);
+        });
+
+        /* ---------- iOS Safari ---------- */
+        if (isIOS && !isFirefox) {
+            show(t.iosShare);
         }
-        /* A2HS install prompt — works on Chromium + iOS Safari */
-        (function() {
-            var STORAGE_KEY = 'pwa-install-dismissed';
-            var banner = document.getElementById('pwa-install-banner');
-            if (!banner) return;
-            /* Already running as standalone or dismissed recently */
-            if (window.matchMedia('(display-mode: standalone)').matches ||
-                navigator.standalone === true) return;
-            if (localStorage.getItem(STORAGE_KEY)) return;
+        /* ---------- Firefox (Android/desktop) ---------- */
+        else if (isFirefox && !isIOS) {
+            show(t.firefox);
+        }
+        /* ---------- Fallback: if no beforeinstallprompt after 3s, show generic tip ---------- */
+        else {
+            var fallbackTimer = setTimeout(function() {
+                if (!deferredPrompt && !banner.hidden === false) show(t.generic);
+            }, 3000);
+            window.addEventListener('beforeinstallprompt', function() { clearTimeout(fallbackTimer); });
+        }
 
-            var chromiumText = banner.querySelector('.pwa-install-text--chromium');
-            var iosText = banner.querySelector('.pwa-install-text--ios');
-            var installBtn = banner.querySelector('.pwa-install-btn');
-            var dismissBtn = banner.querySelector('.pwa-install-dismiss');
-            var deferredPrompt = null;
-
-            function showBanner() { banner.hidden = false; }
-            function hideBanner() {
-                banner.hidden = true;
-                localStorage.setItem(STORAGE_KEY, Date.now());
+        /* ---------- Button actions ---------- */
+        btn.addEventListener('click', function() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(function() { deferredPrompt = null; hide(); });
+            } else {
+                hide();
             }
+        });
+        close.addEventListener('click', hide);
+        window.addEventListener('appinstalled', hide);
 
-            /* Chromium: intercept beforeinstallprompt */
-            window.addEventListener('beforeinstallprompt', function(e) {
-                e.preventDefault();
-                deferredPrompt = e;
-                if (chromiumText) chromiumText.hidden = false;
-                if (installBtn) installBtn.hidden = false;
-                showBanner();
-            });
-
-            /* iOS Safari detection (not Chrome-iOS, not already standalone) */
-            var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-                        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-            var isSafari = /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS|OPiOS|EdgiOS/.test(navigator.userAgent);
-            if (isIOS && isSafari) {
-                if (iosText) iosText.hidden = false;
-                showBanner();
-            }
-
-            if (installBtn) installBtn.addEventListener('click', function() {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then(function() { deferredPrompt = null; });
-                }
-                hideBanner();
-            });
-            if (dismissBtn) dismissBtn.addEventListener('click', hideBanner);
-
-            window.addEventListener('appinstalled', function() {
-                hideBanner();
-                deferredPrompt = null;
-            });
-        })();
+        /* ---------- Auto-dismiss after 20s ---------- */
+        setTimeout(function() { if (!banner.hidden) banner.hidden = true; }, 20000);
+    })();
     </script>
     {% endif %}
 
