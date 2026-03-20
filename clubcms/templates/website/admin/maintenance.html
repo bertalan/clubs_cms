@@ -1,0 +1,123 @@
+{% extends "wagtailadmin/generic/base.html" %}
+{% load i18n %}
+
+{% block titletag %}{% trans "Maintenance" %}{% endblock %}
+
+{% block content %}
+
+<header class="w-flex w-items-center w-mb-8">
+    <div>
+        <h1 class="w-text-2xl w-font-bold">{% trans "Maintenance" %}</h1>
+        <p class="w-text-grey-400 w-mt-1">{% trans "Manage cache, sessions, and background task logs." %}</p>
+    </div>
+</header>
+
+<div class="w-grid w-grid-cols-1 md:w-grid-cols-2 xl:w-grid-cols-3 w-gap-6 w-mb-8">
+
+    {# Cache card #}
+    <div class="w-panel">
+        <div class="w-panel__header">
+            <h2 class="w-panel__heading w-flex w-items-center w-gap-2">
+                <svg class="icon icon-cog w-w-5 w-h-5" aria-hidden="true"><use href="#icon-cog"></use></svg>
+                {% trans "Cache" %}
+            </h2>
+        </div>
+        <div class="w-panel__content">
+            <dl class="w-grid w-grid-cols-2 w-gap-2 w-mb-4">
+                <dt class="w-text-grey-400">{% trans "Backend" %}</dt>
+                <dd>{{ cache_backend }}</dd>
+            </dl>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="clear_cache">
+                <button type="submit" class="button button-small button--icon">
+                    <svg class="icon icon-bin w-w-4 w-h-4" aria-hidden="true"><use href="#icon-bin"></use></svg>
+                    {% trans "Clear cache" %}
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {# Sessions card #}
+    <div class="w-panel">
+        <div class="w-panel__header">
+            <h2 class="w-panel__heading w-flex w-items-center w-gap-2">
+                <svg class="icon icon-user w-w-5 w-h-5" aria-hidden="true"><use href="#icon-user"></use></svg>
+                {% trans "Sessions" %}
+            </h2>
+        </div>
+        <div class="w-panel__content">
+            <dl class="w-grid w-grid-cols-2 w-gap-2 w-mb-4">
+                <dt class="w-text-grey-400">{% trans "Total" %}</dt>
+                <dd>{{ sessions_total }}</dd>
+                <dt class="w-text-grey-400">{% trans "Expired" %}</dt>
+                <dd>{{ sessions_expired }}</dd>
+            </dl>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="clear_sessions">
+                <button type="submit" class="button button-small button--icon" {% if sessions_expired == 0 %}disabled{% endif %}>
+                    <svg class="icon icon-bin w-w-4 w-h-4" aria-hidden="true"><use href="#icon-bin"></use></svg>
+                    {% trans "Clear expired" %}
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {# Task Queue card #}
+    <div class="w-panel">
+        <div class="w-panel__header">
+            <h2 class="w-panel__heading w-flex w-items-center w-gap-2">
+                <svg class="icon icon-list-ul w-w-5 w-h-5" aria-hidden="true"><use href="#icon-list-ul"></use></svg>
+                {% trans "Task Queue (Django-Q)" %}
+            </h2>
+        </div>
+        <div class="w-panel__content">
+            <dl class="w-grid w-grid-cols-2 w-gap-2 w-mb-4">
+                <dt class="w-text-grey-400">{% trans "Queued" %}</dt>
+                <dd>{{ q_queued }}</dd>
+                <dt class="w-text-grey-400">{% trans "Completed" %}</dt>
+                <dd>{{ q_success }}</dd>
+                <dt class="w-text-grey-400">{% trans "Failed" %}</dt>
+                <dd>{{ q_failure }}</dd>
+                <dt class="w-text-grey-400">{% trans "Schedules" %}</dt>
+                <dd>{{ q_schedules }}</dd>
+            </dl>
+            <div class="w-flex w-gap-2 w-flex-wrap">
+                <form method="post" class="w-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="clear_q_success">
+                    <button type="submit" class="button button-small button--icon" {% if q_success == 0 %}disabled{% endif %}>
+                        <svg class="icon icon-bin w-w-4 w-h-4" aria-hidden="true"><use href="#icon-bin"></use></svg>
+                        {% trans "Clear completed" %}
+                    </button>
+                </form>
+                <form method="post" class="w-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="clear_q_failure">
+                    <button type="submit" class="button button-small button--icon" {% if q_failure == 0 %}disabled{% endif %}>
+                        <svg class="icon icon-bin w-w-4 w-h-4" aria-hidden="true"><use href="#icon-bin"></use></svg>
+                        {% trans "Clear failed" %}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{# Clear all #}
+<div class="w-panel">
+    <div class="w-panel__content w-flex w-items-center w-justify-between">
+        <p class="w-text-grey-400 w-m-0">{% trans "Clear everything: cache, expired sessions, and all task logs." %}</p>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="clear_all">
+            <button type="submit" class="button button-small serious">
+                {% trans "Clear all" %}
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
