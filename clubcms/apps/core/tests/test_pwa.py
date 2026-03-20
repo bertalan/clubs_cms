@@ -9,12 +9,18 @@ from django.test import TestCase
 from django.urls import reverse
 
 from apps.notifications.models import PushSubscription
+from apps.website.models.settings import SiteSettings
+from wagtail.models import Site
 
 User = get_user_model()
 
 
 class TestPWAManifest(TestCase):
     """GET /manifest.json must return valid PWA manifest."""
+
+    def setUp(self):
+        self.site = Site.objects.get(is_default_site=True)
+        self.site_settings = SiteSettings.for_site(self.site)
 
     def test_manifest_returns_200(self):
         resp = self.client.get("/manifest.json")
@@ -67,9 +73,25 @@ class TestPWAManifest(TestCase):
         self.assertIn("categories", data)
         self.assertIsInstance(data["categories"], list)
 
+    def test_manifest_defaults_name_to_site_name(self):
+        self.site_settings.site_name = "Moto Club Test"
+        self.site_settings.pwa_name = ""
+        self.site_settings.pwa_short_name = ""
+        self.site_settings.save()
+
+        resp = self.client.get("/manifest.json")
+        data = json.loads(resp.content)
+
+        self.assertEqual(data["name"], "Moto Club Test")
+        self.assertEqual(data["short_name"], "Moto Club Test")
+
 
 class TestPWAServiceWorker(TestCase):
     """GET /sw.js must return valid service worker JavaScript."""
+
+    def setUp(self):
+        self.site = Site.objects.get(is_default_site=True)
+        self.site_settings = SiteSettings.for_site(self.site)
 
     def test_sw_returns_200(self):
         resp = self.client.get("/sw.js")
@@ -118,6 +140,16 @@ class TestPWAServiceWorker(TestCase):
         resp = self.client.get("/sw.js")
         content = resp.content.decode()
         self.assertIn("openWindow", content)
+
+    def test_sw_uses_site_name_for_default_notification_title(self):
+        self.site_settings.site_name = "Moto Club Test"
+        self.site_settings.pwa_name = ""
+        self.site_settings.save()
+
+        resp = self.client.get("/sw.js")
+        content = resp.content.decode()
+
+        self.assertIn("title: \"Moto Club Test\"", content)
 
 
 class TestPWAOfflinePage(TestCase):

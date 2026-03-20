@@ -77,9 +77,14 @@ class PWAManifestView(View):
         except Exception:
             pass
 
+        resolved_pwa_name = getattr(site_settings, "resolved_pwa_name", "") or getattr(
+            site_settings, "site_name", ""
+        ) or getattr(settings, "WAGTAIL_SITE_NAME", "Club CMS")
+        resolved_pwa_short_name = getattr(site_settings, "resolved_pwa_short_name", "") or resolved_pwa_name
+
         manifest = {
-            "name": getattr(site_settings, "pwa_name", "") or "Club CMS",
-            "short_name": getattr(site_settings, "pwa_short_name", "") or "Club",
+            "name": resolved_pwa_name,
+            "short_name": resolved_pwa_short_name,
             "description": getattr(site_settings, "pwa_description", "") or "",
             "id": "/",
             "start_url": "/",
@@ -114,6 +119,18 @@ class PWAServiceWorkerView(View):
     """Serve the PWA service worker JavaScript."""
 
     def get(self, request, *args, **kwargs):
+        from wagtail.models import Site
+
+        notification_title = getattr(settings, "WAGTAIL_SITE_NAME", "Club CMS")
+        try:
+            from apps.website.models.settings import SiteSettings
+
+            site = Site.find_for_request(request)
+            site_settings = SiteSettings.for_site(site)
+            notification_title = getattr(site_settings, "resolved_pwa_name", "") or notification_title
+        except Exception:
+            pass
+
         sw_js = """
 // ClubCMS Service Worker
 const CACHE_NAME = 'clubcms-v1';
@@ -178,7 +195,7 @@ self.addEventListener('fetch', event => {
 
 // Push: show notification from server payload
 self.addEventListener('push', event => {
-    let data = { title: 'Club CMS', body: '', url: '/', type: '' };
+    let data = { title: __PWA_NOTIFICATION_TITLE__, body: '', url: '/', type: '' };
     if (event.data) {
         try { data = Object.assign(data, event.data.json()); } catch (e) {}
     }
@@ -208,7 +225,7 @@ self.addEventListener('notificationclick', event => {
         })
     );
 });
-"""
+""".replace("__PWA_NOTIFICATION_TITLE__", json.dumps(notification_title))
         return HttpResponse(
             sw_js.strip(),
             content_type="application/javascript",

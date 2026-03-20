@@ -52,7 +52,7 @@
     <meta name="theme-color" content="{{ settings.website.SiteSettings.pwa_theme_color|default:'#0F172A' }}">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="{{ settings.website.SiteSettings.pwa_short_name|default:settings.website.SiteSettings.pwa_name }}">
+    <meta name="apple-mobile-web-app-title" content="{{ settings.website.SiteSettings.resolved_pwa_short_name }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'pwa/apple-touch-icon.png' %}">
     {% endif %}
 

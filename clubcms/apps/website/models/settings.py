@@ -5,6 +5,7 @@ Uses ``BaseSiteSetting`` so each Wagtail Site can have its own configuration.
 Access in templates via ``{{ settings.website.SiteSettings }}``.
 """
 
+from django.conf import settings as django_settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -306,6 +307,18 @@ class SiteSettings(BaseSiteSetting):
     )
 
     # -- Computed helpers ---------------------------------------------------
+
+    @property
+    def resolved_site_name(self):
+        return self.site_name or getattr(django_settings, "WAGTAIL_SITE_NAME", "Club CMS")
+
+    @property
+    def resolved_pwa_name(self):
+        return self.pwa_name or self.resolved_site_name
+
+    @property
+    def resolved_pwa_short_name(self):
+        return self.pwa_short_name or self.resolved_pwa_name
 
     @property
     def map_latitude(self):
