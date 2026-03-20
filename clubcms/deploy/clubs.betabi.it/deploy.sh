@@ -184,9 +184,9 @@ python manage.py configure_sites
 echo "[7/9] Compilazione traduzioni..."
 python manage.py compilemessages
 
-echo "[8/9] Controllo permessi media..."
-chown -R www:www "\$DOMAIN_DIR/clubcms/clubcms/media/"
-echo "  Permessi media OK (www:www)"
+echo "[8/9] Correzione permessi..."
+chown -R www:www "\$DOMAIN_DIR"
+echo "  Permessi OK (www:www su \$DOMAIN_DIR)"
 
 echo "[9/9] Riavvio servizi..."
 systemctl restart clubcms clubcms-qcluster
