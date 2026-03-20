@@ -11,6 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import connection
 from django.http import HttpResponse, JsonResponse
+from django.templatetags.static import static
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views import View
@@ -89,42 +90,22 @@ class PWAManifestView(View):
             "categories": ["social"],
             "background_color": getattr(site_settings, "pwa_background_color", "#ffffff"),
             "theme_color": getattr(site_settings, "pwa_theme_color", "#0F172A"),
-            "icons": [],
+            "prefer_related_applications": False,
+            "icons": [
+                {
+                    "src": static("pwa/icon-192.png"),
+                    "sizes": "192x192",
+                    "type": "image/png",
+                    "purpose": "any",
+                },
+                {
+                    "src": static("pwa/icon-512.png"),
+                    "sizes": "512x512",
+                    "type": "image/png",
+                    "purpose": "any maskable",
+                },
+            ],
         }
-
-        # Add icons if configured
-        if site_settings:
-            icon_192 = getattr(site_settings, "pwa_icon_192", None)
-            icon_512 = getattr(site_settings, "pwa_icon_512", None)
-            if icon_192:
-                try:
-                    rendition = icon_192.get_rendition("fill-192x192|format-png")
-                    manifest["icons"].append({
-                        "src": rendition.url,
-                        "sizes": "192x192",
-                        "type": "image/png",
-                        "purpose": "any",
-                    })
-                except Exception:
-                    pass
-            if icon_512:
-                try:
-                    rendition = icon_512.get_rendition("fill-512x512|format-png")
-                    manifest["icons"].append({
-                        "src": rendition.url,
-                        "sizes": "512x512",
-                        "type": "image/png",
-                        "purpose": "any",
-                    })
-                    # Maskable variant for Android adaptive icons
-                    manifest["icons"].append({
-                        "src": rendition.url,
-                        "sizes": "512x512",
-                        "type": "image/png",
-                        "purpose": "maskable",
-                    })
-                except Exception:
-                    pass
 
         return JsonResponse(manifest)
 
@@ -204,8 +185,8 @@ self.addEventListener('push', event => {
     event.waitUntil(
         self.registration.showNotification(data.title, {
             body: data.body,
-            icon: '/static/icons/icon-192.png',
-            badge: '/static/icons/badge-72.png',
+            icon: '/static/pwa/icon-192.png',
+            badge: '/static/pwa/badge-72.png',
             data: { url: data.url || '/' },
             vibrate: [100, 50, 100],
             tag: data.type || 'general',
