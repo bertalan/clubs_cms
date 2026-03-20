@@ -1,0 +1,25 @@
+.admin-colorpicker-source {
+  display: inline-flex;
+  width: min(28rem, 100%);
+}
+
+.admin-colorpicker-wrap {
+  display: inline-flex;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+.admin-colorpicker-input {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid #c8cdd2;
+  border-radius: 0.4rem;
+  background: #fff;
+  padding: 0.1rem;
+  cursor: pointer;
+}
+
+.admin-colorpicker-input:focus-visible {
+  outline: 2px solid #1f8bff;
+  outline-offset: 1px;
+}

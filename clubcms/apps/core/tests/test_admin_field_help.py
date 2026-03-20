@@ -18,7 +18,12 @@ from django.utils.functional import Promise
 from wagtail.models import Page
 from wagtail.snippets.models import get_snippet_models
 
-from apps.core.wagtail_hooks import admin_field_help_css, admin_field_help_js
+from apps.core.wagtail_hooks import (
+    admin_colorpicker_css,
+    admin_colorpicker_js,
+    admin_field_help_css,
+    admin_field_help_js,
+)
 
 
 # Fields to exclude from help_text checks
@@ -100,6 +105,16 @@ class TestAdminFieldHelpHooks(TestCase):
         self.assertIn("admin_field_help.js", str(result))
         self.assertIn("<script", str(result))
 
+    def test_admin_colorpicker_css_hook_registered(self):
+        result = admin_colorpicker_css()
+        self.assertIn("admin_colorpicker.css", str(result))
+        self.assertIn("<link", str(result))
+
+    def test_admin_colorpicker_js_hook_registered(self):
+        result = admin_colorpicker_js()
+        self.assertIn("admin_colorpicker.js", str(result))
+        self.assertIn("<script", str(result))
+
     def test_css_hook_in_wagtail_hooks(self):
         from wagtail import hooks as wagtail_hooks
 
@@ -107,6 +122,7 @@ class TestAdminFieldHelpHooks(TestCase):
         css_results = [fn() for fn in css_hooks]
         css_html = " ".join(str(r) for r in css_results)
         self.assertIn("admin_field_help.css", css_html)
+        self.assertIn("admin_colorpicker.css", css_html)
 
     def test_js_hook_in_wagtail_hooks(self):
         from wagtail import hooks as wagtail_hooks
@@ -115,6 +131,7 @@ class TestAdminFieldHelpHooks(TestCase):
         js_results = [fn() for fn in js_hooks]
         js_html = " ".join(str(r) for r in js_results)
         self.assertIn("admin_field_help.js", js_html)
+        self.assertIn("admin_colorpicker.js", js_html)
 
 
 class TestStaticFilesExist(TestCase):
@@ -131,6 +148,20 @@ class TestStaticFilesExist(TestCase):
         js_path = os.path.join(
             os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
             "static", "js", "admin_field_help.js",
+        )
+        self.assertTrue(os.path.isfile(js_path), f"Missing: {js_path}")
+
+    def test_admin_colorpicker_css_file_exists(self):
+        css_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
+            "static", "css", "admin_colorpicker.css",
+        )
+        self.assertTrue(os.path.isfile(css_path), f"Missing: {css_path}")
+
+    def test_admin_colorpicker_js_file_exists(self):
+        js_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
+            "static", "js", "admin_colorpicker.js",
         )
         self.assertTrue(os.path.isfile(js_path), f"Missing: {js_path}")
 

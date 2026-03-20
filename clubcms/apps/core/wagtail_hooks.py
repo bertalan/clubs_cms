@@ -36,9 +36,25 @@ def admin_field_help_css():
     )
 
 
+@hooks.register("insert_global_admin_css")
+def admin_colorpicker_css():
+    return format_html(
+        '<link rel="stylesheet" href="{}">',
+        static("css/admin_colorpicker.css"),
+    )
+
+
 @hooks.register("insert_global_admin_js")
 def admin_field_help_js():
     return format_html(
         '<script src="{}"></script>',
         static("js/admin_field_help.js"),
+    )
+
+
+@hooks.register("insert_global_admin_js")
+def admin_colorpicker_js():
+    return format_html(
+        '<script src="{}"></script>',
+        static("js/admin_colorpicker.js"),
     )
