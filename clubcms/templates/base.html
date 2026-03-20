@@ -111,96 +111,121 @@
         var banner = document.getElementById('pwa-install-banner');
         if (!banner) return;
 
-        /* ---------- Standalone detection (covers all browsers) ---------- */
-        var isStandalone = window.navigator.standalone === true
-            || window.matchMedia('(display-mode: standalone)').matches
-            || window.matchMedia('(display-mode: fullscreen)').matches
-            || document.referrer.includes('android-app://');
-        if (isStandalone) return;
+        try {
+            var KEY = 'pwa-install-dismissed';
+            var msg = document.getElementById('pwa-install-msg');
+            var btn = document.getElementById('pwa-install-action');
+            var close = document.getElementById('pwa-install-close');
+            var deferredPrompt = null;
+            var lang = document.documentElement.lang || 'en';
+            var L = {
+                it: { installBtn: 'Installa', chromium: 'Installa l\u2019app sul tuo dispositivo',
+                      iosShare: 'Per installare: tocca il pulsante Condividi \u2B06 poi \u00ABSalva nella schermata Home\u00BB',
+                      firefox: 'Per installare: menu \u22EE poi \u00ABInstalla\u00BB o \u00ABAggiungi alla schermata Home\u00BB',
+                      generic: 'Puoi installare questa app dal menu del browser' },
+                en: { installBtn: 'Install', chromium: 'Install this app on your device',
+                      iosShare: 'To install: tap the Share button \u2B06 then \u201CAdd to Home Screen\u201D',
+                      firefox: 'To install: tap \u22EE menu then \u201CInstall\u201D or \u201CAdd to Home Screen\u201D',
+                      generic: 'You can install this app from the browser menu' },
+                de: { installBtn: 'Installieren', chromium: 'App auf Ihrem Ger\u00E4t installieren',
+                      iosShare: 'Zum Installieren: Teilen-Button \u2B06 antippen, dann \u201EZum Home-Bildschirm\u201C',
+                      firefox: 'Zum Installieren: \u22EE Men\u00FC, dann \u201EInstallieren\u201C oder \u201EZum Startbildschirm hinzuf\u00FCgen\u201C',
+                      generic: 'Sie k\u00F6nnen diese App \u00FCber das Browser-Men\u00FC installieren' },
+                fr: { installBtn: 'Installer', chromium: 'Installer cette application',
+                      iosShare: 'Pour installer : touchez Partager \u2B06 puis \u00AB Sur l\u2019\u00E9cran d\u2019accueil \u00BB',
+                      firefox: 'Pour installer : menu \u22EE puis \u00AB Installer \u00BB ou \u00AB Ajouter \u00E0 l\u2019\u00E9cran d\u2019accueil \u00BB',
+                      generic: 'Vous pouvez installer cette app depuis le menu du navigateur' },
+                es: { installBtn: 'Instalar', chromium: 'Instala esta app en tu dispositivo',
+                      iosShare: 'Para instalar: toca Compartir \u2B06 y luego \u00ABA\u00F1adir a pantalla de inicio\u00BB',
+                      firefox: 'Para instalar: men\u00FA \u22EE y luego \u00ABInstalar\u00BB o \u00ABA\u00F1adir a pantalla de inicio\u00BB',
+                      generic: 'Puedes instalar esta app desde el men\u00FA del navegador' }
+            };
+            var t = L[lang.substring(0, 2)] || L.en;
+            var isStandalone = window.navigator.standalone === true
+                || window.matchMedia('(display-mode: standalone)').matches
+                || window.matchMedia('(display-mode: fullscreen)').matches
+                || document.referrer.includes('android-app://');
+            var ua = navigator.userAgent;
+            var isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            var isFirefox = /Firefox|FxiOS/.test(ua);
 
-        /* ---------- Dismiss memory (7 days) ---------- */
-        var KEY = 'pwa-install-dismissed';
-        var dismissed = localStorage.getItem(KEY);
-        if (dismissed && (Date.now() - Number(dismissed)) < 7 * 86400000) return;
-
-        var msg = document.getElementById('pwa-install-msg');
-        var btn = document.getElementById('pwa-install-action');
-        var close = document.getElementById('pwa-install-close');
-        var deferredPrompt = null;
-
-        /* ---------- i18n messages ---------- */
-        var lang = document.documentElement.lang || 'en';
-        var L = {
-            it: { installBtn: 'Installa', chromium: 'Installa l\u2019app sul tuo dispositivo',
-                  iosShare: 'Per installare: tocca il pulsante Condividi \u2B06 poi \u00ABSalva nella schermata Home\u00BB',
-                  firefox: 'Per installare: menu \u22EE poi \u00ABInstalla\u00BB o \u00ABAggiungi alla schermata Home\u00BB',
-                  generic: 'Puoi installare questa app dal menu del browser' },
-            en: { installBtn: 'Install', chromium: 'Install this app on your device',
-                  iosShare: 'To install: tap the Share button \u2B06 then \u201CAdd to Home Screen\u201D',
-                  firefox: 'To install: tap \u22EE menu then \u201CInstall\u201D or \u201CAdd to Home Screen\u201D',
-                  generic: 'You can install this app from the browser menu' },
-            de: { installBtn: 'Installieren', chromium: 'App auf Ihrem Ger\u00E4t installieren',
-                  iosShare: 'Zum Installieren: Teilen-Button \u2B06 antippen, dann \u201EZum Home-Bildschirm\u201C',
-                  firefox: 'Zum Installieren: \u22EE Men\u00FC, dann \u201EInstallieren\u201C oder \u201EZum Startbildschirm hinzuf\u00FCgen\u201C',
-                  generic: 'Sie k\u00F6nnen diese App \u00FCber das Browser-Men\u00FC installieren' },
-            fr: { installBtn: 'Installer', chromium: 'Installer cette application',
-                  iosShare: 'Pour installer : touchez Partager \u2B06 puis \u00AB Sur l\u2019\u00E9cran d\u2019accueil \u00BB',
-                  firefox: 'Pour installer : menu \u22EE puis \u00AB Installer \u00BB ou \u00AB Ajouter \u00E0 l\u2019\u00E9cran d\u2019accueil \u00BB',
-                  generic: 'Vous pouvez installer cette app depuis le menu du navigateur' },
-            es: { installBtn: 'Instalar', chromium: 'Instala esta app en tu dispositivo',
-                  iosShare: 'Para instalar: toca Compartir \u2B06 y luego \u00ABA\u00F1adir a pantalla de inicio\u00BB',
-                  firefox: 'Para instalar: men\u00FA \u22EE y luego \u00ABInstalar\u00BB o \u00ABA\u00F1adir a pantalla de inicio\u00BB',
-                  generic: 'Puedes instalar esta app desde el men\u00FA del navegador' }
-        };
-        var t = L[lang.substring(0, 2)] || L.en;
-
-        /* ---------- Platform detection ---------- */
-        var ua = navigator.userAgent;
-        var isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-        var isFirefox = /Firefox|FxiOS/.test(ua);
-
-        function show(text) { msg.textContent = text; banner.hidden = false; }
-        function hide() { banner.hidden = true; localStorage.setItem(KEY, String(Date.now())); }
-
-        /* ---------- Chromium: beforeinstallprompt ---------- */
-        window.addEventListener('beforeinstallprompt', function(e) {
-            e.preventDefault();
-            deferredPrompt = e;
-            btn.textContent = t.installBtn;
-            btn.hidden = false;
-            show(t.chromium);
-        });
-
-        /* ---------- iOS Safari ---------- */
-        if (isIOS && !isFirefox) {
-            show(t.iosShare);
-        }
-        /* ---------- Firefox (Android/desktop) ---------- */
-        else if (isFirefox && !isIOS) {
-            show(t.firefox);
-        }
-        /* ---------- Fallback: if no beforeinstallprompt after 3s, show generic tip ---------- */
-        else {
-            var fallbackTimer = setTimeout(function() {
-                if (!deferredPrompt && banner.hidden) show(t.generic);
-            }, 3000);
-            window.addEventListener('beforeinstallprompt', function() { clearTimeout(fallbackTimer); });
-        }
-
-        /* ---------- Button actions ---------- */
-        btn.addEventListener('click', function() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then(function() { deferredPrompt = null; hide(); });
-            } else {
-                hide();
+            function storageGet(key) {
+                try { return window.localStorage.getItem(key); } catch (e) { return null; }
             }
-        });
-        close.addEventListener('click', hide);
-        window.addEventListener('appinstalled', hide);
 
-        /* ---------- Auto-dismiss after 20s ---------- */
-        setTimeout(function() { if (!banner.hidden) hide(); }, 20000);
+            function storageSet(key, value) {
+                try { window.localStorage.setItem(key, value); } catch (e) {}
+            }
+
+            function show(text, buttonText) {
+                msg.textContent = text || '';
+                if (buttonText) {
+                    btn.textContent = buttonText;
+                    btn.hidden = false;
+                } else {
+                    btn.hidden = true;
+                    btn.textContent = '';
+                }
+                banner.hidden = false;
+            }
+
+            function hide() {
+                banner.hidden = true;
+                storageSet(KEY, String(Date.now()));
+            }
+
+            close.addEventListener('click', hide);
+
+            if (isStandalone) {
+                hide();
+                return;
+            }
+
+            var dismissed = storageGet(KEY);
+            if (dismissed && (Date.now() - Number(dismissed)) < 7 * 86400000) {
+                return;
+            }
+
+            window.addEventListener('beforeinstallprompt', function(e) {
+                e.preventDefault();
+                deferredPrompt = e;
+                show(t.chromium, t.installBtn);
+            });
+
+            if (isIOS && !isFirefox) {
+                show(t.iosShare);
+            } else if (isFirefox && !isIOS) {
+                show(t.firefox);
+            } else {
+                var fallbackTimer = setTimeout(function() {
+                    if (!deferredPrompt && banner.hidden) {
+                        show(t.generic);
+                    }
+                }, 3000);
+                window.addEventListener('beforeinstallprompt', function() { clearTimeout(fallbackTimer); });
+            }
+
+            btn.addEventListener('click', function() {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then(function() {
+                        deferredPrompt = null;
+                        hide();
+                    }).catch(hide);
+                } else {
+                    hide();
+                }
+            });
+            window.addEventListener('appinstalled', hide);
+            setTimeout(function() {
+                if (!banner.hidden) {
+                    hide();
+                }
+            }, 20000);
+        } catch (e) {
+            banner.hidden = true;
+            console.warn('PWA banner disabled after runtime error:', e);
+        }
     })();
     </script>
     {% endif %}

@@ -158,6 +158,10 @@ table {
   font-size: .95rem;
   line-height: 1.4;
 }
+.pwa-install-banner[hidden],
+.pwa-install-btn[hidden] {
+  display: none !important;
+}
 .pwa-install-msg { flex: 1; }
 .pwa-install-btn {
   white-space: nowrap;
