@@ -2569,6 +2569,58 @@ a:hover {
   text-align: center;
 }
 
+/* --- Event Registration Form --- */
+.register-summary,
+.register-pricing {
+  border-radius: 8px;
+  border: 2px solid var(--color-primary);
+  border-left: 4px solid var(--color-accent);
+}
+
+.register-fieldset__legend {
+  border-bottom: 2px solid var(--color-accent);
+}
+
+.register-form input,
+.register-form select,
+.register-form textarea {
+  border-radius: 4px;
+  border: 2px solid rgba(45, 59, 45, 0.25);
+}
+
+.register-form input:focus,
+.register-form select:focus,
+.register-form textarea:focus {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.15);
+}
+
+.register-form .btn--block {
+  border-radius: 4px;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.register-form .btn--block:hover {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+.register-pricing__row--total {
+  border-top: 2px solid var(--color-accent);
+}
+
+.register-summary-review {
+  border: 2px solid var(--color-secondary);
+  border-radius: 8px;
+}
+
+.field-help-modal__content {
+  border-radius: 8px;
+  border: 2px solid var(--color-primary);
+}
+
 @media (max-width: 768px) {
   .page-registrations { padding: 3rem 0; }
   .page-registrations__table th,

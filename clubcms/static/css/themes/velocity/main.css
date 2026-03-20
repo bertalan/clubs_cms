@@ -2767,6 +2767,58 @@ a:hover {
   text-align: center;
 }
 
+/* --- Event Registration Form --- */
+.register-summary,
+.register-pricing {
+  border-radius: var(--velocity-radius);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: var(--velocity-shadow);
+}
+
+.register-fieldset__legend {
+  border-bottom-color: rgba(245, 158, 11, 0.3);
+}
+
+.register-form input,
+.register-form select,
+.register-form textarea {
+  border-radius: var(--velocity-radius-sm);
+  border-color: rgba(15, 23, 42, 0.15);
+}
+
+.register-form input:focus,
+.register-form select:focus,
+.register-form textarea:focus {
+  border-color: var(--color-secondary);
+  box-shadow: var(--velocity-glow);
+}
+
+.register-form .btn--block {
+  border-radius: var(--velocity-radius-pill);
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.register-form .btn--block:hover {
+  box-shadow: var(--velocity-glow);
+  transform: translateY(-2px);
+}
+
+.register-pricing__row--total {
+  border-top-color: rgba(245, 158, 11, 0.3);
+}
+
+.register-summary-review {
+  border-radius: var(--velocity-radius);
+}
+
+.field-help-modal__content {
+  border-radius: var(--velocity-radius);
+  box-shadow: var(--velocity-shadow-lg);
+}
+
 @media (max-width: 768px) {
   .page-registrations { padding: 3rem 0; }
   .page-registrations__content { border-radius: 12px; }

@@ -2622,6 +2622,68 @@ a:hover {
   text-align: center;
 }
 
+/* --- Event Registration Form --- */
+.register-summary,
+.register-pricing {
+  border-radius: var(--heritage-radius);
+  border: 1px solid var(--color-secondary);
+  background: var(--color-surface-alt);
+}
+
+.register-fieldset__legend {
+  font-family: 'Playfair Display', serif;
+  border-bottom: 1px solid var(--color-secondary);
+}
+
+.register-title {
+  font-family: 'Playfair Display', serif;
+}
+
+.register-form input,
+.register-form select,
+.register-form textarea {
+  border-radius: var(--heritage-radius-sm);
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.register-form input:focus,
+.register-form select:focus,
+.register-form textarea:focus {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+.register-form .btn--block {
+  border-radius: var(--heritage-radius);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.register-form .btn--block:hover {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+.register-pricing__heading {
+  font-family: 'Playfair Display', serif;
+}
+
+.register-pricing__row--total {
+  border-top-color: var(--color-secondary);
+}
+
+.register-summary-review {
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+.field-help-modal__content {
+  border-radius: var(--heritage-radius);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  background: var(--color-surface);
+}
+
 @media (max-width: 768px) {
   .page-registrations { padding: 3rem 0; }
   .page-registrations__table th,
