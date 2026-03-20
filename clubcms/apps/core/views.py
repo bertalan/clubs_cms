@@ -98,7 +98,7 @@ class PWAManifestView(View):
             icon_512 = getattr(site_settings, "pwa_icon_512", None)
             if icon_192:
                 try:
-                    rendition = icon_192.get_rendition("fill-192x192")
+                    rendition = icon_192.get_rendition("fill-192x192|format-png")
                     manifest["icons"].append({
                         "src": rendition.url,
                         "sizes": "192x192",
@@ -109,7 +109,7 @@ class PWAManifestView(View):
                     pass
             if icon_512:
                 try:
-                    rendition = icon_512.get_rendition("fill-512x512")
+                    rendition = icon_512.get_rendition("fill-512x512|format-png")
                     manifest["icons"].append({
                         "src": rendition.url,
                         "sizes": "512x512",

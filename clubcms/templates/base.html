@@ -50,10 +50,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="{{ settings.website.SiteSettings.pwa_short_name|default:settings.website.SiteSettings.pwa_name }}">
     {% if settings.website.SiteSettings.pwa_icon_180 %}
-        {% image settings.website.SiteSettings.pwa_icon_180 fill-180x180 as apple_icon %}
+        {% image settings.website.SiteSettings.pwa_icon_180 fill-180x180 format-png as apple_icon %}
         <link rel="apple-touch-icon" href="{{ apple_icon.url }}">
     {% elif settings.website.SiteSettings.pwa_icon_192 %}
-        {% image settings.website.SiteSettings.pwa_icon_192 fill-180x180 as apple_icon_fallback %}
+        {% image settings.website.SiteSettings.pwa_icon_192 fill-180x180 format-png as apple_icon_fallback %}
         <link rel="apple-touch-icon" href="{{ apple_icon_fallback.url }}">
     {% endif %}
     {% endif %}
