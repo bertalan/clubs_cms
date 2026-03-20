@@ -185,7 +185,7 @@ echo "[7/9] Compilazione traduzioni..."
 python manage.py compilemessages
 
 echo "[8/9] Correzione permessi..."
-chown -R www:www "\$DOMAIN_DIR"
+find "\$DOMAIN_DIR" -not -name '.user.ini' -exec chown www:www {} + 2>/dev/null || true
 echo "  Permessi OK (www:www su \$DOMAIN_DIR)"
 
 echo "[9/9] Riavvio servizi..."
