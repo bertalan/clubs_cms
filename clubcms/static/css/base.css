@@ -2930,6 +2930,7 @@ h4, .h4 {
 
 /* --- Page title --- */
 .register-title {
+  margin-top: 4rem;
   margin-bottom: 2.5rem;
 }
 
@@ -3294,6 +3295,7 @@ h4, .h4 {
 /* --- Submit button --- */
 .register-form .btn--block {
   margin-top: 2rem;
+  margin-bottom: 4rem;
   padding: 1rem 2rem;
   font-size: 1.05rem;
 }
