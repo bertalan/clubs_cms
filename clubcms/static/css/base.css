@@ -832,6 +832,12 @@ h4, .h4 {
 /* --------------------------------------------------------------------------
    WCAG 2.2 — Target Size (Level AAA: 44×44px)
    -------------------------------------------------------------------------- */
+.site-nav__logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
 .site-nav__links a {
   min-height: 44px;
   display: inline-flex;

@@ -110,6 +110,12 @@ class SiteSettings(BaseSiteSetting):
         verbose_name=_("Favicon"),
         help_text=_("Icona del sito mostrata nella scheda del browser."),
     )
+    logo_text = models.TextField(
+        blank=True,
+        default="",
+        verbose_name=_("Logo text"),
+        help_text=_("Testo mostrato accanto al logo nella navbar. Gli accapi vengono rispettati."),
+    )
 
     # -- Contact tab --------------------------------------------------------
     phone = models.CharField(max_length=30, blank=True, verbose_name=_("Phone"),
@@ -378,6 +384,7 @@ class SiteSettings(BaseSiteSetting):
                     FieldPanel("logo"),
                     FieldPanel("logo_dark"),
                     FieldPanel("favicon"),
+                    FieldPanel("logo_text"),
                 ],
                 heading=_("Branding"),
             ),

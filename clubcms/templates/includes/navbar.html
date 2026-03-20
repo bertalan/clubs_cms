@@ -11,7 +11,10 @@
             {% elif settings.website.SiteSettings.logo %}
                 {% image settings.website.SiteSettings.logo max-200x60 as site_logo %}
                 <img src="{{ site_logo.url }}" alt="{{ settings.website.SiteSettings.site_name }}" width="{{ site_logo.width }}" height="{{ site_logo.height }}">
-            {% else %}
+            {% endif %}
+            {% if settings.website.SiteSettings.logo_text %}
+                <span class="site-nav__logo-text">{{ settings.website.SiteSettings.logo_text|linebreaksbr }}</span>
+            {% elif not navbar.logo and not settings.website.SiteSettings.logo %}
                 <span>{{ settings.website.SiteSettings.site_name }}</span>
             {% endif %}
         </a>
