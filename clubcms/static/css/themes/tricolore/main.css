@@ -3761,6 +3761,34 @@ a:hover {
   background: #a82230;
 }
 
+/* ── Event registration badge ─────────────────────────────────── */
+.page-event-detail__registered-badge {
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(0, 146, 70, 0.3);
+  border-radius: 50px;
+  font-weight: 700;
+  color: var(--color-primary, #009246);
+}
+.page-event-detail__registered-badge > i {
+  color: var(--color-primary, #009246);
+  font-size: 1.1rem;
+}
+.page-event-detail__my-regs-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-secondary, #CE2B37);
+}
+.page-event-detail__my-regs-link:hover {
+  color: var(--color-accent, #C9A227);
+}
+.dark-mode .page-event-detail__registered-badge {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(0, 146, 70, 0.5);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page-my-events__nav-link,
   .page-my-events__card,

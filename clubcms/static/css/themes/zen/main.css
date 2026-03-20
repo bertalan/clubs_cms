@@ -4436,6 +4436,40 @@ a:hover {
   border-top-color: rgba(255, 255, 255, 0.15);
 }
 
+/* ── Event registration badge ─────────────────────────────────── */
+.page-event-detail__registered-badge {
+  padding: 0.75rem 1rem;
+  background: #FFD700;
+  border: 2px solid #0a0a0a;
+  border-radius: 20px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #0a0a0a;
+  box-shadow: 4px 4px 0 #0a0a0a;
+}
+.page-event-detail__registered-badge > i {
+  color: #0a0a0a;
+  font-size: 1.1rem;
+}
+.page-event-detail__my-regs-link {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-secondary, #FF3366);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.page-event-detail__my-regs-link:hover {
+  color: #FFD700;
+}
+.dark-mode .page-event-detail__registered-badge {
+  background: #FFD700;
+  border-color: #fff;
+  color: #0a0a0a;
+  box-shadow: 4px 4px 0 #fff;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page-my-events__nav-link,
   .page-my-events__card,

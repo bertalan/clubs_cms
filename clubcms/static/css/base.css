@@ -2978,6 +2978,24 @@ h4, .h4 {
   width: 100%;
 }
 
+/* "You are registered" badge — layout only, themed in each main.css */
+.page-event-detail__registered-badge {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.page-event-detail__my-regs-link {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  text-decoration: none;
+}
+.page-event-detail__my-regs-link:hover {
+  text-decoration: underline;
+}
+
 /* Tags (shared) */
 .page-event-detail__tags,
 .page-news-detail__tags {

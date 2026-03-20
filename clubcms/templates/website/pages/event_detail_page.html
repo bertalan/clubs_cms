@@ -146,8 +146,17 @@
                     </div>
                     {% endif %}
 
+                    {# User already registered — badge + link #}
+                    {% if user_registration %}
+                    <div class="page-event-detail__registered-badge" role="status">
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        <span>{% trans "You are registered" %}</span>
+                        <a href="{% url 'events:my_registrations' %}" class="page-event-detail__my-regs-link">
+                            {% trans "My registrations" %} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    {% elif page.is_registration_open and not page.is_past %}
                     {# Register button #}
-                    {% if page.is_registration_open and not page.is_past %}
                     <div class="page-event-detail__register">
                         <a href="{% url 'events:register' event_pk=page.pk %}" class="btn btn-primary" role="link" aria-label="{% trans "Register Now" %} — {{ page.title }}">
                             {% trans "Register Now" %}

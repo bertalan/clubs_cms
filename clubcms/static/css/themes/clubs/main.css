@@ -5469,6 +5469,38 @@ html.dark-mode {
   border-radius: var(--clubs-radius-sm, 0);
 }
 
+/* ── Event registration badge ─────────────────────────────────── */
+.page-event-detail__registered-badge {
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--color-secondary, #C41E3A);
+  border-radius: 0;
+  font-weight: 900;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-secondary, #C41E3A);
+}
+.page-event-detail__registered-badge > i {
+  color: var(--color-secondary, #C41E3A);
+  font-size: 1.1rem;
+}
+.page-event-detail__my-regs-link {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-accent, #E02547);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.page-event-detail__my-regs-link:hover {
+  color: #fff;
+}
+.dark-mode .page-event-detail__registered-badge {
+  border-bottom-color: var(--color-accent, #E02547);
+  color: var(--color-accent, #E02547);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page-my-events__nav-link,
   .page-my-events__card,

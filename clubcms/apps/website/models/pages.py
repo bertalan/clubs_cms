@@ -997,6 +997,20 @@ class EventDetailPage(Page):
             price = price * (1 - discount)
         return price
 
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        if request.user.is_authenticated:
+            from apps.events.models import EventRegistration
+
+            context["user_registration"] = (
+                EventRegistration.objects.filter(
+                    event=self,
+                    user=request.user,
+                    status__in=["registered", "confirmed"],
+                ).first()
+            )
+        return context
+
 
 # ═══════════════════════════════════════════════════════════════════════════
 # 8. GalleryPage

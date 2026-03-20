@@ -3389,6 +3389,32 @@ a:hover {
   transition: all var(--terra-transition);
 }
 
+/* ── Event registration badge ─────────────────────────────────── */
+.page-event-detail__registered-badge {
+  padding: 0.75rem 1rem;
+  background: rgba(74, 124, 89, 0.08);
+  border-left: 4px solid var(--color-secondary, #4A7C59);
+  border-radius: var(--terra-radius-sm, 4px);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+.page-event-detail__registered-badge > i {
+  color: var(--color-secondary, #4A7C59);
+  font-size: 1.1rem;
+}
+.page-event-detail__my-regs-link {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-secondary, #4A7C59);
+}
+.page-event-detail__my-regs-link:hover {
+  color: var(--color-accent, #F2C94C);
+}
+.dark-mode .page-event-detail__registered-badge {
+  background: rgba(74, 124, 89, 0.12);
+  border-left-color: var(--color-secondary, #4A7C59);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page-my-events__nav-link,
   .page-my-events__card,
