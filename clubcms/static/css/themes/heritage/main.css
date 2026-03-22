@@ -29,6 +29,7 @@
   --heritage-shadow-lg: 0 6px 24px rgba(0, 0, 0, 0.1);
   --heritage-transition: 0.3s ease;
   --heritage-gold-border: 1px solid var(--color-secondary);
+  --color-focus-ring: #5E1028;
 }
 
 /* --------------------------------------------------------------------------
@@ -351,7 +352,7 @@ a:hover {
   position: absolute;
   inset: 0;
   background: var(--color-primary);
-  opacity: 0.5;
+  opacity: 0.7;
   z-index: 1;
 }
 

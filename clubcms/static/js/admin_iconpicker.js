@@ -10,89 +10,107 @@
 (function () {
   'use strict';
 
-  /* ── Popular FA 6 icon set (curated for club/event/social context) ── */
-  var ICONS = [
-    /* Transport & Vehicles */
-    'fa-solid fa-motorcycle', 'fa-solid fa-car', 'fa-solid fa-car-side',
-    'fa-solid fa-van-shuttle', 'fa-solid fa-truck', 'fa-solid fa-bicycle',
-    'fa-solid fa-bus', 'fa-solid fa-plane', 'fa-solid fa-ship',
-    'fa-solid fa-helicopter', 'fa-solid fa-gas-pump', 'fa-solid fa-road',
-    'fa-solid fa-route', 'fa-solid fa-gauge-high', 'fa-solid fa-trailer',
-    /* Events & Activities */
-    'fa-solid fa-calendar', 'fa-solid fa-calendar-days', 'fa-solid fa-calendar-check',
-    'fa-solid fa-clock', 'fa-solid fa-trophy', 'fa-solid fa-medal',
-    'fa-solid fa-award', 'fa-solid fa-flag', 'fa-solid fa-flag-checkered',
-    'fa-solid fa-champagne-glasses', 'fa-solid fa-cake-candles',
-    'fa-solid fa-gift', 'fa-solid fa-ticket', 'fa-solid fa-star',
-    /* Social & Communication */
-    'fa-solid fa-users', 'fa-solid fa-user', 'fa-solid fa-user-group',
-    'fa-solid fa-people-group', 'fa-solid fa-handshake',
-    'fa-solid fa-comments', 'fa-solid fa-comment', 'fa-solid fa-envelope',
-    'fa-solid fa-phone', 'fa-solid fa-share-nodes', 'fa-solid fa-bullhorn',
-    'fa-solid fa-bell', 'fa-solid fa-at', 'fa-solid fa-hashtag',
-    /* Social Brands */
-    'fa-brands fa-facebook', 'fa-brands fa-instagram', 'fa-brands fa-x-twitter',
-    'fa-brands fa-youtube', 'fa-brands fa-tiktok', 'fa-brands fa-whatsapp',
-    'fa-brands fa-telegram', 'fa-brands fa-linkedin', 'fa-brands fa-discord',
-    'fa-brands fa-github', 'fa-brands fa-strava', 'fa-brands fa-flickr',
-    'fa-brands fa-pinterest', 'fa-brands fa-reddit', 'fa-brands fa-threads',
-    'fa-brands fa-mastodon', 'fa-brands fa-spotify',
-    /* Location & Maps */
-    'fa-solid fa-location-dot', 'fa-solid fa-map', 'fa-solid fa-map-pin',
-    'fa-solid fa-map-location-dot', 'fa-solid fa-compass',
-    'fa-solid fa-mountain', 'fa-solid fa-mountain-sun', 'fa-solid fa-tree',
-    'fa-solid fa-earth-europe', 'fa-solid fa-globe',
-    /* Food & Drink */
-    'fa-solid fa-utensils', 'fa-solid fa-mug-hot', 'fa-solid fa-wine-glass',
-    'fa-solid fa-beer-mug-empty', 'fa-solid fa-pizza-slice',
-    'fa-solid fa-burger', 'fa-solid fa-ice-cream',
-    /* Aid & Medical */
-    'fa-solid fa-hand-holding-heart', 'fa-solid fa-heart',
-    'fa-solid fa-kit-medical', 'fa-solid fa-stethoscope',
-    'fa-solid fa-bandage', 'fa-solid fa-suitcase-medical',
-    'fa-solid fa-wheelchair', 'fa-solid fa-cross',
-    'fa-solid fa-circle-plus', 'fa-solid fa-life-ring',
-    /* Tools & Work */
-    'fa-solid fa-wrench', 'fa-solid fa-screwdriver-wrench',
-    'fa-solid fa-gears', 'fa-solid fa-gear', 'fa-solid fa-hammer',
-    'fa-solid fa-toolbox', 'fa-solid fa-bolt',
-    /* Media & Content */
-    'fa-solid fa-camera', 'fa-solid fa-image', 'fa-solid fa-images',
-    'fa-solid fa-video', 'fa-solid fa-music', 'fa-solid fa-newspaper',
-    'fa-solid fa-podcast', 'fa-solid fa-microphone',
-    'fa-solid fa-photo-film', 'fa-solid fa-film',
-    /* Commerce & Finance */
-    'fa-solid fa-shop', 'fa-solid fa-cart-shopping', 'fa-solid fa-tag',
-    'fa-solid fa-tags', 'fa-solid fa-money-bill', 'fa-solid fa-credit-card',
-    'fa-solid fa-euro-sign', 'fa-solid fa-receipt', 'fa-solid fa-barcode',
-    /* Weather & Nature */
-    'fa-solid fa-sun', 'fa-solid fa-cloud', 'fa-solid fa-cloud-sun',
-    'fa-solid fa-umbrella', 'fa-solid fa-snowflake',
-    'fa-solid fa-temperature-high', 'fa-solid fa-wind',
-    /* Objects & Misc */
-    'fa-solid fa-house', 'fa-solid fa-building', 'fa-solid fa-tent',
-    'fa-solid fa-campground', 'fa-solid fa-fire',
-    'fa-solid fa-shield', 'fa-solid fa-lock', 'fa-solid fa-key',
-    'fa-solid fa-link', 'fa-solid fa-qrcode', 'fa-solid fa-book',
-    'fa-solid fa-graduation-cap', 'fa-solid fa-lightbulb',
-    'fa-solid fa-puzzle-piece', 'fa-solid fa-palette',
-    'fa-solid fa-circle-info', 'fa-solid fa-circle-question',
-    'fa-solid fa-circle-check', 'fa-solid fa-circle-exclamation',
-    'fa-solid fa-triangle-exclamation', 'fa-solid fa-ban',
-    'fa-solid fa-check', 'fa-solid fa-xmark', 'fa-solid fa-plus',
-    'fa-solid fa-minus', 'fa-solid fa-arrows-rotate',
-    /* Arrows & Navigation */
-    'fa-solid fa-arrow-right', 'fa-solid fa-arrow-left',
-    'fa-solid fa-arrow-up', 'fa-solid fa-arrow-down',
-    'fa-solid fa-chevron-right', 'fa-solid fa-chevron-left',
-    'fa-solid fa-angles-right', 'fa-solid fa-angles-left',
-    /* Regular (outlined) variants */
-    'fa-regular fa-heart', 'fa-regular fa-star', 'fa-regular fa-bell',
-    'fa-regular fa-calendar', 'fa-regular fa-clock', 'fa-regular fa-envelope',
-    'fa-regular fa-comment', 'fa-regular fa-image', 'fa-regular fa-user',
-    'fa-regular fa-eye', 'fa-regular fa-thumbs-up', 'fa-regular fa-bookmark',
-    'fa-regular fa-file', 'fa-regular fa-folder',
+  /* ── Categorized FA 6 icon set (curated for club/event/social context) ── */
+  var CATEGORIES = [
+    { label: 'Transport', icons: [
+      'fa-solid fa-motorcycle', 'fa-solid fa-car', 'fa-solid fa-car-side',
+      'fa-solid fa-van-shuttle', 'fa-solid fa-truck', 'fa-solid fa-bicycle',
+      'fa-solid fa-bus', 'fa-solid fa-plane', 'fa-solid fa-ship',
+      'fa-solid fa-helicopter', 'fa-solid fa-gas-pump', 'fa-solid fa-road',
+      'fa-solid fa-route', 'fa-solid fa-gauge-high', 'fa-solid fa-trailer',
+    ]},
+    { label: 'Events', icons: [
+      'fa-solid fa-calendar', 'fa-solid fa-calendar-days', 'fa-solid fa-calendar-check',
+      'fa-solid fa-clock', 'fa-solid fa-trophy', 'fa-solid fa-medal',
+      'fa-solid fa-award', 'fa-solid fa-flag', 'fa-solid fa-flag-checkered',
+      'fa-solid fa-champagne-glasses', 'fa-solid fa-cake-candles',
+      'fa-solid fa-gift', 'fa-solid fa-ticket', 'fa-solid fa-star',
+    ]},
+    { label: 'People', icons: [
+      'fa-solid fa-users', 'fa-solid fa-user', 'fa-solid fa-user-group',
+      'fa-solid fa-people-group', 'fa-solid fa-handshake',
+      'fa-solid fa-comments', 'fa-solid fa-comment', 'fa-solid fa-envelope',
+      'fa-solid fa-phone', 'fa-solid fa-share-nodes', 'fa-solid fa-bullhorn',
+      'fa-solid fa-bell', 'fa-solid fa-at', 'fa-solid fa-hashtag',
+    ]},
+    { label: 'Social', icons: [
+      'fa-brands fa-facebook', 'fa-brands fa-instagram', 'fa-brands fa-x-twitter',
+      'fa-brands fa-youtube', 'fa-brands fa-tiktok', 'fa-brands fa-whatsapp',
+      'fa-brands fa-telegram', 'fa-brands fa-linkedin', 'fa-brands fa-discord',
+      'fa-brands fa-github', 'fa-brands fa-strava', 'fa-brands fa-flickr',
+      'fa-brands fa-pinterest', 'fa-brands fa-reddit', 'fa-brands fa-threads',
+      'fa-brands fa-mastodon', 'fa-brands fa-spotify',
+    ]},
+    { label: 'Location', icons: [
+      'fa-solid fa-location-dot', 'fa-solid fa-map', 'fa-solid fa-map-pin',
+      'fa-solid fa-map-location-dot', 'fa-solid fa-compass',
+      'fa-solid fa-mountain', 'fa-solid fa-mountain-sun', 'fa-solid fa-tree',
+      'fa-solid fa-earth-europe', 'fa-solid fa-globe',
+    ]},
+    { label: 'Food & Drink', icons: [
+      'fa-solid fa-utensils', 'fa-solid fa-mug-hot', 'fa-solid fa-wine-glass',
+      'fa-solid fa-beer-mug-empty', 'fa-solid fa-pizza-slice',
+      'fa-solid fa-burger', 'fa-solid fa-ice-cream',
+    ]},
+    { label: 'Aid & Medical', icons: [
+      'fa-solid fa-hand-holding-heart', 'fa-solid fa-heart',
+      'fa-solid fa-kit-medical', 'fa-solid fa-stethoscope',
+      'fa-solid fa-bandage', 'fa-solid fa-suitcase-medical',
+      'fa-solid fa-wheelchair', 'fa-solid fa-cross',
+      'fa-solid fa-circle-plus', 'fa-solid fa-life-ring',
+    ]},
+    { label: 'Tools', icons: [
+      'fa-solid fa-wrench', 'fa-solid fa-screwdriver-wrench',
+      'fa-solid fa-gears', 'fa-solid fa-gear', 'fa-solid fa-hammer',
+      'fa-solid fa-toolbox', 'fa-solid fa-bolt',
+    ]},
+    { label: 'Media', icons: [
+      'fa-solid fa-camera', 'fa-solid fa-image', 'fa-solid fa-images',
+      'fa-solid fa-video', 'fa-solid fa-music', 'fa-solid fa-newspaper',
+      'fa-solid fa-podcast', 'fa-solid fa-microphone',
+      'fa-solid fa-photo-film', 'fa-solid fa-film',
+    ]},
+    { label: 'Commerce', icons: [
+      'fa-solid fa-shop', 'fa-solid fa-cart-shopping', 'fa-solid fa-tag',
+      'fa-solid fa-tags', 'fa-solid fa-money-bill', 'fa-solid fa-credit-card',
+      'fa-solid fa-euro-sign', 'fa-solid fa-receipt', 'fa-solid fa-barcode',
+    ]},
+    { label: 'Weather', icons: [
+      'fa-solid fa-sun', 'fa-solid fa-cloud', 'fa-solid fa-cloud-sun',
+      'fa-solid fa-umbrella', 'fa-solid fa-snowflake',
+      'fa-solid fa-temperature-high', 'fa-solid fa-wind',
+    ]},
+    { label: 'Objects', icons: [
+      'fa-solid fa-house', 'fa-solid fa-building', 'fa-solid fa-tent',
+      'fa-solid fa-campground', 'fa-solid fa-fire',
+      'fa-solid fa-shield', 'fa-solid fa-lock', 'fa-solid fa-key',
+      'fa-solid fa-link', 'fa-solid fa-qrcode', 'fa-solid fa-book',
+      'fa-solid fa-graduation-cap', 'fa-solid fa-lightbulb',
+      'fa-solid fa-puzzle-piece', 'fa-solid fa-palette',
+      'fa-solid fa-circle-info', 'fa-solid fa-circle-question',
+      'fa-solid fa-circle-check', 'fa-solid fa-circle-exclamation',
+      'fa-solid fa-triangle-exclamation', 'fa-solid fa-ban',
+      'fa-solid fa-check', 'fa-solid fa-xmark', 'fa-solid fa-plus',
+      'fa-solid fa-minus', 'fa-solid fa-arrows-rotate',
+      'fa-solid fa-arrow-right', 'fa-solid fa-arrow-left',
+      'fa-solid fa-arrow-up', 'fa-solid fa-arrow-down',
+      'fa-solid fa-chevron-right', 'fa-solid fa-chevron-left',
+      'fa-solid fa-angles-right', 'fa-solid fa-angles-left',
+    ]},
+    { label: 'Outlined', icons: [
+      'fa-regular fa-heart', 'fa-regular fa-star', 'fa-regular fa-bell',
+      'fa-regular fa-calendar', 'fa-regular fa-clock', 'fa-regular fa-envelope',
+      'fa-regular fa-comment', 'fa-regular fa-image', 'fa-regular fa-user',
+      'fa-regular fa-eye', 'fa-regular fa-thumbs-up', 'fa-regular fa-bookmark',
+      'fa-regular fa-file', 'fa-regular fa-folder',
+    ]},
   ];
+
+  /* Flat list for quick lookups */
+  var ALL_ICONS = [];
+  CATEGORIES.forEach(function (cat) {
+    cat.icons.forEach(function (ic) { ALL_ICONS.push(ic); });
+  });
 
   /* Extract short name for search (e.g. "fa-solid fa-motorcycle" → "motorcycle") */
   function shortName(cls) {
@@ -126,6 +144,8 @@
   /* ── Build picker UI ─────────────────────────────────────────── */
   function enhance(input) {
     input.dataset.iconpickerEnhanced = '1';
+    /* Hide the raw text input — users interact via the picker */
+    input.style.display = 'none';
 
     var wrapper = document.createElement('div');
     wrapper.className = 'iconpicker';
@@ -139,7 +159,7 @@
     var toggleBtn = document.createElement('button');
     toggleBtn.type = 'button';
     toggleBtn.className = 'iconpicker__toggle';
-    toggleBtn.textContent = 'Browse icons';
+    toggleBtn.innerHTML = '<i class="fa-solid fa-icons"></i> Choose icon';
     toggleBtn.setAttribute('aria-expanded', 'false');
 
     /* Clear button */
@@ -223,9 +243,10 @@
   function buildGrid(grid, filter, input, preview, dropdown, clearBtn) {
     grid.innerHTML = '';
     var shown = 0;
-    ICONS.forEach(function (cls) {
+
+    function addCell(cls) {
       var name = shortName(cls);
-      if (filter && name.indexOf(filter) === -1) return;
+      if (filter && name.indexOf(filter) === -1) return false;
       shown++;
 
       var cell = document.createElement('button');
@@ -244,7 +265,6 @@
         dropdown.hidden = true;
         clearBtn.hidden = false;
         input.dispatchEvent(new Event('change', { bubbles: true }));
-        /* Remove previous active */
         grid.querySelectorAll('.iconpicker__cell--active').forEach(function (c) {
           c.classList.remove('iconpicker__cell--active');
         });
@@ -252,7 +272,22 @@
       });
 
       grid.appendChild(cell);
-    });
+      return true;
+    }
+
+    if (filter) {
+      /* Flat search across all icons */
+      ALL_ICONS.forEach(function (cls) { addCell(cls); });
+    } else {
+      /* Show by category */
+      CATEGORIES.forEach(function (cat) {
+        var catLabel = document.createElement('div');
+        catLabel.className = 'iconpicker__category';
+        catLabel.textContent = cat.label;
+        grid.appendChild(catLabel);
+        cat.icons.forEach(function (cls) { addCell(cls); });
+      });
+    }
 
     if (shown === 0) {
       var empty = document.createElement('div');

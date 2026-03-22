@@ -102,6 +102,7 @@
         lightboxLinks.forEach(function(link) {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
+                var trigger = this;
                 var src = this.getAttribute('data-lightbox-src');
                 var caption = this.getAttribute('data-lightbox-caption') || '';
 
@@ -121,19 +122,38 @@
                 document.body.appendChild(overlay);
                 document.body.style.overflow = 'hidden';
 
+                var closeBtn = overlay.querySelector('.lightbox__close');
+                closeBtn.focus();
+
                 function closeLightbox() {
                     document.body.removeChild(overlay);
                     document.body.style.overflow = '';
+                    document.removeEventListener('keydown', onKeyDown);
+                    trigger.focus();
                 }
 
-                overlay.querySelector('.lightbox__close').addEventListener('click', closeLightbox);
-                overlay.querySelector('.lightbox__backdrop').addEventListener('click', closeLightbox);
-                document.addEventListener('keydown', function onEsc(e) {
+                var focusable = overlay.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])');
+                function onKeyDown(e) {
                     if (e.key === 'Escape') {
                         closeLightbox();
-                        document.removeEventListener('keydown', onEsc);
+                        return;
                     }
-                });
+                    if (e.key === 'Tab' && focusable.length) {
+                        var first = focusable[0];
+                        var last = focusable[focusable.length - 1];
+                        if (e.shiftKey && document.activeElement === first) {
+                            e.preventDefault();
+                            last.focus();
+                        } else if (!e.shiftKey && document.activeElement === last) {
+                            e.preventDefault();
+                            first.focus();
+                        }
+                    }
+                }
+
+                closeBtn.addEventListener('click', closeLightbox);
+                overlay.querySelector('.lightbox__backdrop').addEventListener('click', closeLightbox);
+                document.addEventListener('keydown', onKeyDown);
             });
         });
     });

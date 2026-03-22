@@ -8,6 +8,7 @@
         <div class="block-stats__grid">
             {% for stat in self.stats %}
             <div class="block-stats__item">
+                {% if stat.value.icon %}<span class="block-stats__icon {{ stat.value.icon }}"></span>{% endif %}
                 <span class="block-stats__value">{{ stat.value.value }}</span>
                 <span class="block-stats__label">{{ stat.value.label }}</span>
             </div>

@@ -33,6 +33,7 @@
   --tricolore-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   --tricolore-shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.15);
   --tricolore-transition: 0.3s ease;
+  --color-focus-ring: #7A6310;
 }
 
 /* --------------------------------------------------------------------------
@@ -448,7 +449,7 @@ a:hover {
 .block-hero-video__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(0, 146, 70, 0.75), rgba(0, 146, 70, 0.5));
+  background: linear-gradient(135deg, rgba(0, 146, 70, 0.88), rgba(0, 146, 70, 0.72));
   z-index: 1;
 }
 
@@ -769,7 +770,7 @@ a:hover {
 }
 
 .page-home__spotlight-cta-text {
-  color: rgba(255, 255, 255, 0.84);
+  color: rgba(255, 255, 255, 0.95);
 }
 
 .page-home__spotlight-cta .btn {

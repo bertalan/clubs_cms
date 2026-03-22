@@ -244,20 +244,31 @@ class HomePage(Page):
         raw_stats_value = promoted_raw_values.get("stats") or {}
         for item in raw_stats_value.get("stats", []):
             if isinstance(item, dict):
-                stats_items.append(
-                    {
-                        "value": item.get("value", ""),
-                        "label": item.get("label", ""),
-                    }
-                )
+                # ListBlock wraps items: {"type": "item", "value": {...}}
+                inner = item.get("value", item) if "type" in item else item
+                if isinstance(inner, dict):
+                    stats_items.append(
+                        {
+                            "value": inner.get("value", ""),
+                            "label": inner.get("label", ""),
+                            "icon": inner.get("icon", ""),
+                        }
+                    )
+                else:
+                    stats_items.append({"value": inner, "label": "", "icon": ""})
         for item in raw_stats_value.get("items", []):
             if isinstance(item, dict):
-                stats_items.append(
-                    {
-                        "value": item.get("number", ""),
-                        "label": item.get("label", ""),
-                    }
-                )
+                inner = item.get("value", item) if "type" in item else item
+                if isinstance(inner, dict):
+                    stats_items.append(
+                        {
+                            "value": inner.get("number", ""),
+                            "label": inner.get("label", ""),
+                            "icon": inner.get("icon", ""),
+                        }
+                    )
+                else:
+                    stats_items.append({"value": inner, "label": "", "icon": ""})
 
         return {
             "enabled": enabled,

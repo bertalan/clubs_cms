@@ -35,24 +35,28 @@
             </div>
 
             {# ── Type filter tabs ─────────────────────────────────────── #}
-            <div class="search-form__tabs" role="tablist" aria-label="{% trans 'Result type' %}">
+            <nav class="search-form__tabs" aria-label="{% trans 'Result type' %}">
                 <a href="?q={{ search_query }}&type=all{% if geo_active %}&lat={{ user_lat }}&lng={{ user_lng }}&radius={{ radius }}{% endif %}"
-                   class="search-form__tab {% if result_type == 'all' %}search-form__tab--active{% endif %}">
+                   class="search-form__tab {% if result_type == 'all' %}search-form__tab--active{% endif %}"
+                   {% if result_type == 'all' %}aria-current="page"{% endif %}>
                     {% trans "All" %}
                 </a>
                 <a href="?q={{ search_query }}&type=events{% if geo_active %}&lat={{ user_lat }}&lng={{ user_lng }}&radius={{ radius }}{% endif %}"
-                   class="search-form__tab {% if result_type == 'events' %}search-form__tab--active{% endif %}">
+                   class="search-form__tab {% if result_type == 'events' %}search-form__tab--active{% endif %}"
+                   {% if result_type == 'events' %}aria-current="page"{% endif %}>
                     {% trans "Events" %}{% if events_count %} ({{ events_count }}){% endif %}
                 </a>
                 <a href="?q={{ search_query }}&type=news{% if geo_active %}&lat={{ user_lat }}&lng={{ user_lng }}&radius={{ radius }}{% endif %}"
-                   class="search-form__tab {% if result_type == 'news' %}search-form__tab--active{% endif %}">
+                   class="search-form__tab {% if result_type == 'news' %}search-form__tab--active{% endif %}"
+                   {% if result_type == 'news' %}aria-current="page"{% endif %}>
                     {% trans "News" %}
                 </a>
                 <a href="?q={{ search_query }}&type=pages{% if geo_active %}&lat={{ user_lat }}&lng={{ user_lng }}&radius={{ radius }}{% endif %}"
-                   class="search-form__tab {% if result_type == 'pages' %}search-form__tab--active{% endif %}">
+                   class="search-form__tab {% if result_type == 'pages' %}search-form__tab--active{% endif %}"
+                   {% if result_type == 'pages' %}aria-current="page"{% endif %}>
                     {% trans "Pages" %}
                 </a>
-            </div>
+            </nav>
 
             {# ── Geo proximity controls ───────────────────────────────── #}
             <div class="search-geo" id="search-geo">
@@ -102,7 +106,7 @@
                 
                 {# Per page selector #}
                 <div class="search-results__per-page">
-                    <label for="per-page-select">{% trans "Show" %}:</label>
+                    <label for="per-page-select">{% trans "Results per page" %}</label>
                     <select id="per-page-select" onchange="updatePerPage(this.value)">
                         {% for choice in per_page_choices %}
                         <option value="{{ choice }}" {% if per_page == choice %}selected{% endif %}>{{ choice }}</option>

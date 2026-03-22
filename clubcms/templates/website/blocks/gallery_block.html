@@ -11,10 +11,10 @@
             {% if self.lightbox %}
                 {% image item.value.image max-1600x1200 as full %}
                 <a href="{{ full.url }}" data-lightbox-src="{{ full.url }}" data-lightbox-caption="{{ item.value.caption|default:'' }}">
-                    <img src="{{ thumb.url }}" alt="{{ item.value.caption|default:'' }}" loading="lazy" width="{{ thumb.width }}" height="{{ thumb.height }}">
+                    <img src="{{ thumb.url }}" alt="{{ item.value.caption|default:item.value.image.title }}" loading="lazy" width="{{ thumb.width }}" height="{{ thumb.height }}">
                 </a>
             {% else %}
-                <img src="{{ thumb.url }}" alt="{{ item.value.caption|default:'' }}" loading="lazy" width="{{ thumb.width }}" height="{{ thumb.height }}">
+                <img src="{{ thumb.url }}" alt="{{ item.value.caption|default:item.value.image.title }}" loading="lazy" width="{{ thumb.width }}" height="{{ thumb.height }}">
             {% endif %}
             {% if item.value.caption %}
             <figcaption class="block-gallery__caption">{{ item.value.caption }}</figcaption>
