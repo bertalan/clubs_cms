@@ -19,7 +19,8 @@
   --color-surface-alt: #1A1A1A;
   --color-text-primary: #FFFFFF;
   --color-text-muted: #A0A0A0;
-  --color-border: rgba(255, 255, 255, 0.3);
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-focus-ring: #C41E3A;
 
   /* Theme-specific tokens */
   --clubs-radius: 0;
@@ -47,7 +48,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: clamp(2.5rem, 7vw, 5rem);
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1;
   text-transform: uppercase;
   letter-spacing: -0.02em;
@@ -88,7 +89,7 @@ a:hover {
 }
 
 .btn:hover {
-  transform: scale(1.03);
+  transform: scale(1.05);
 }
 
 .btn-primary {
@@ -133,6 +134,40 @@ a:hover {
 .btn-dark:hover {
   background: #fff;
   color: var(--color-primary);
+}
+
+/* Focus ring — red-based shadow to match theme accent */
+:focus-visible {
+  box-shadow: 0 0 0 6px rgba(196, 30, 58, 0.18);
+}
+
+.btn:focus-visible {
+  box-shadow: 0 0 0 6px rgba(196, 30, 58, 0.18);
+}
+
+/* Square corners — clubs uses no border-radius anywhere */
+.event-card,
+.news-card,
+.partner-card,
+.federation-club-card,
+.event-card__cta,
+.event-card__category-pill,
+.event-card__badge,
+.page-about__cover,
+.page-press__contact-card,
+.press-release-card,
+.brand-asset-card,
+.page-partner__hero-image,
+.page-partner__info-card,
+.page-partner__map,
+.page-event-detail__info-card,
+.page-event-detail__map,
+.alert,
+.register-summary-review,
+.page-notification-history__panel,
+.page-my-events__card,
+.page-my-events__empty {
+  border-radius: 0;
 }
 
 /* --------------------------------------------------------------------------
@@ -690,7 +725,7 @@ a:hover {
   font-size: 0.8rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
 }
 
 .page-home__section--events .page-home__section-title,
@@ -791,7 +826,7 @@ a:hover {
 }
 
 .home-partners__card-visual {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--color-primary);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -802,7 +837,7 @@ a:hover {
 }
 
 .home-partners__card-name {
-  color: rgba(255, 255, 255, 0.85);
+  color: #fff;
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
@@ -2219,7 +2254,7 @@ html.dark-mode {
   font-size: 0.8rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   color: var(--color-secondary);
 }
 
