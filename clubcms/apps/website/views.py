@@ -21,10 +21,202 @@ from django.views.generic import FormView, ListView
 from wagtail.images import get_image_model
 
 from apps.members.decorators import active_member_required
-from apps.website.forms import PhotoUploadForm, VerificationForm
+from apps.website.forms import (
+    NewsletterSubscribeForm,
+    NewsletterUnsubscribeForm,
+    PhotoUploadForm,
+    VerificationForm,
+)
+from apps.website.models.newsletter import (
+    NewsletterCategory,
+    NewsletterSubscription,
+    SentNewsletter,
+)
 from apps.website.models.partners import PartnerPage
 from apps.website.models.uploads import PhotoUpload
 from apps.website.models.verification import VerificationLog
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 0. Newsletter views
+# ═══════════════════════════════════════════════════════════════════════════
+
+
+def _get_captcha_context():
+    """Return captcha provider/key from SiteSettings for templates."""
+    from apps.website.models.settings import SiteSettings
+    from wagtail.models import Site
+
+    site = Site.objects.filter(is_default_site=True).first()
+    if not site:
+        return {}
+    try:
+        ss = SiteSettings.for_site(site)
+    except Exception:
+        return {}
+    return {
+        "captcha_provider": ss.captcha_provider,
+        "captcha_site_key": ss.captcha_site_key,
+    }
+
+
+class NewsletterSubscribeView(View):
+    """Newsletter signup: GET shows form, POST processes subscription."""
+
+    def get(self, request):
+        form = NewsletterSubscribeForm()
+        ctx = {"form": form}
+        ctx.update(_get_captcha_context())
+        return render(request, "website/newsletter_subscribe.html", ctx)
+
+    def post(self, request):
+        from django.contrib import messages
+
+        form = NewsletterSubscribeForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            categories = form.cleaned_data.get("categories", [])
+            sub, created = NewsletterSubscription.objects.get_or_create(
+                email=email,
+                defaults={"ip_address": _get_client_ip(request)},
+            )
+            if not created and not sub.is_active:
+                sub.is_active = True
+                sub.unsubscribed_at = None
+                sub.ip_address = _get_client_ip(request)
+                sub.save(update_fields=["is_active", "unsubscribed_at", "ip_address"])
+
+            # Set categories (defaults if none selected)
+            if categories:
+                sub.categories.set(categories)
+            elif created:
+                # Auto-select default categories for new subscribers
+                defaults = NewsletterCategory.objects.filter(is_default=True)
+                if defaults.exists():
+                    sub.categories.set(defaults)
+
+            messages.success(request, _("Thanks for subscribing!"))
+            return redirect("website:newsletter-subscribe")
+
+        ctx = {"form": form}
+        ctx.update(_get_captcha_context())
+        return render(request, "website/newsletter_subscribe.html", ctx)
+
+
+class NewsletterUnsubscribeView(View):
+    """Newsletter unsubscribe: GET shows form, POST processes removal."""
+
+    def get(self, request):
+        form = NewsletterUnsubscribeForm()
+        ctx = {"form": form}
+        ctx.update(_get_captcha_context())
+        return render(request, "website/newsletter_unsubscribe.html", ctx)
+
+    def post(self, request):
+        from django.contrib import messages
+
+        form = NewsletterUnsubscribeForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            try:
+                sub = NewsletterSubscription.objects.get(email=email, is_active=True)
+                sub.is_active = False
+                sub.unsubscribed_at = timezone.now()
+                sub.save(update_fields=["is_active", "unsubscribed_at"])
+                messages.success(request, _("You have been unsubscribed."))
+            except NewsletterSubscription.DoesNotExist:
+                messages.info(request, _("This email is not subscribed to our newsletter."))
+            return redirect("website:newsletter-unsubscribe")
+
+        ctx = {"form": form}
+        ctx.update(_get_captcha_context())
+        return render(request, "website/newsletter_unsubscribe.html", ctx)
+
+
+class NewsletterArchiveView(View):
+    """
+    Public newsletter archive — lists categories and their sent newsletters.
+
+    Public newsletters are visible to everyone.
+    Private newsletters require an authenticated user who is subscribed.
+    """
+
+    def get(self, request):
+        from apps.website.render_email import render_newsletter_body_html
+
+        category_slug = request.GET.get("category")
+
+        categories = NewsletterCategory.objects.all()
+        active_category = None
+        if category_slug:
+            active_category = NewsletterCategory.objects.filter(
+                slug=category_slug
+            ).first()
+
+        # Build newsletter queryset — only sent newsletters
+        newsletters = SentNewsletter.objects.filter(status="sent")
+
+        # Visibility: public newsletters for everyone; private only for
+        # authenticated subscribers
+        is_subscriber = False
+        if request.user.is_authenticated:
+            is_subscriber = NewsletterSubscription.objects.filter(
+                email=request.user.email, is_active=True
+            ).exists()
+
+        if not is_subscriber:
+            newsletters = newsletters.filter(is_public=True)
+
+        if active_category:
+            newsletters = newsletters.filter(category=active_category)
+
+        newsletters = newsletters.select_related("category").order_by("-sent_at")[:50]
+
+        # Pre-render body preview (first block only) for listing
+        base_url = getattr(settings, "WAGTAILADMIN_BASE_URL", "").rstrip("/")
+
+        ctx = {
+            "categories": categories,
+            "active_category": active_category,
+            "newsletters": newsletters,
+            "is_subscriber": is_subscriber,
+        }
+        return render(request, "website/newsletter_archive.html", ctx)
+
+
+class NewsletterDetailView(View):
+    """
+    Public detail view for a single sent newsletter.
+
+    Public newsletters are readable by everyone.
+    Private newsletters are only visible to authenticated subscribers.
+    """
+
+    def get(self, request, pk):
+        from apps.website.render_email import render_newsletter_body_html
+
+        newsletter = get_object_or_404(SentNewsletter, pk=pk, status="sent")
+
+        # Access control for private newsletters
+        if not newsletter.is_public:
+            is_subscriber = False
+            if request.user.is_authenticated:
+                is_subscriber = NewsletterSubscription.objects.filter(
+                    email=request.user.email, is_active=True
+                ).exists()
+            if not is_subscriber:
+                from django.http import Http404
+
+                raise Http404
+
+        base_url = getattr(settings, "WAGTAILADMIN_BASE_URL", "").rstrip("/")
+        body_html = render_newsletter_body_html(newsletter, base_url=base_url)
+
+        ctx = {
+            "newsletter": newsletter,
+            "body_html": body_html,
+        }
+        return render(request, "website/newsletter_detail.html", ctx)
 
 
 # ---------------------------------------------------------------------------

@@ -5,6 +5,7 @@ Forms for partner verification, gallery photo upload, and press.
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.antispam import AntispamMixin
 from apps.website.models.snippets import PhotoTag
 from apps.website.models.pages import EventDetailPage
 
@@ -179,3 +180,47 @@ class PhotoUploadForm(forms.Form):
                 )
 
         return files
+
+
+# ---------------------------------------------------------------------------
+# Newsletter forms
+# ---------------------------------------------------------------------------
+
+
+class NewsletterSubscribeForm(AntispamMixin, forms.Form):
+    """Subscribe to newsletter — public, no login required."""
+
+    email = forms.EmailField(
+        label=_("Email address"),
+        widget=forms.EmailInput(attrs={
+            "placeholder": _("Enter your email"),
+            "class": "block-newsletter-signup__input",
+            "aria-required": "true",
+        }),
+    )
+    categories = forms.ModelMultipleChoiceField(
+        queryset=None,
+        required=False,
+        label=_("Topics of interest"),
+        widget=forms.CheckboxSelectMultiple,
+        help_text=_("Select the categories you are interested in."),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from apps.website.models.newsletter import NewsletterCategory
+
+        self.fields["categories"].queryset = NewsletterCategory.objects.all()
+
+
+class NewsletterUnsubscribeForm(AntispamMixin, forms.Form):
+    """Unsubscribe from newsletter — public, no login required."""
+
+    email = forms.EmailField(
+        label=_("Email address"),
+        widget=forms.EmailInput(attrs={
+            "placeholder": _("Enter your email"),
+            "class": "block-newsletter-signup__input",
+            "aria-required": "true",
+        }),
+    )

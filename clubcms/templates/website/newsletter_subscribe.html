@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Newsletter" %}{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<div class="page-contact">
+    <div class="container">
+        <header class="page-contact__header">
+            <h1 class="page-contact__title">{% trans "Stay Updated" %}</h1>
+            <div class="page-contact__intro">
+                <p>{% trans "Subscribe to our newsletter to receive the latest news, upcoming events, and club updates directly in your inbox." %}</p>
+            </div>
+        </header>
+
+        <section class="page-contact__form-section" aria-labelledby="newsletter-heading">
+            <form method="post" action="{% url 'website:newsletter-subscribe' %}" class="page-contact__form" novalidate>
+                {% csrf_token %}
+
+                {% if form.errors %}
+                <div class="page-contact__form-errors" role="alert" aria-live="assertive">
+                    <p>{% trans "Please correct the errors below:" %}</p>
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                <div class="page-contact__field">
+                    <label for="id_email" class="page-contact__label">{% trans "Email address" %} <span aria-hidden="true">*</span></label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                    <span class="page-contact__error" role="alert">{{ form.email.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                {% if form.categories.field.queryset.exists %}
+                <fieldset class="page-contact__field" style="border: none; padding: 0; margin: 1rem 0;">
+                    <legend class="page-contact__label">{% trans "Topics of interest" %}</legend>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+                        {{ form.categories }}
+                    </div>
+                    {% if form.categories.help_text %}
+                    <small style="color: var(--color-text-muted, #6b7280);">{{ form.categories.help_text }}</small>
+                    {% endif %}
+                </fieldset>
+                {% endif %}
+
+                {# AntispamMixin: honeypot (always rendered, hidden via inline style) #}
+                {{ form.website }}
+
+                {# AntispamMixin: timestamp #}
+                {{ form.form_ts }}
+
+                {# CAPTCHA — Turnstile #}
+                {% if captcha_provider == 'turnstile' and captcha_site_key %}
+                <div class="page-contact__captcha">
+                    <div class="cf-turnstile" data-sitekey="{{ captcha_site_key }}"></div>
+                </div>
+                {% endif %}
+
+                {# CAPTCHA — hCaptcha #}
+                {% if captcha_provider == 'hcaptcha' and captcha_site_key %}
+                <div class="page-contact__captcha">
+                    <div class="h-captcha" data-sitekey="{{ captcha_site_key }}"></div>
+                </div>
+                {% endif %}
+
+                <div class="page-contact__submit">
+                    <button type="submit" class="btn btn-primary">{% trans "Subscribe" %}</button>
+                </div>
+            </form>
+
+            <p style="margin-top:1rem;">
+                <a href="{% url 'website:newsletter-unsubscribe' %}">{% trans "Want to unsubscribe?" %}</a>
+                &nbsp;&middot;&nbsp;
+                <a href="{% url 'website:newsletter-archive' %}">{% trans "Newsletter archive" %}</a>
+            </p>
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if captcha_provider == 'turnstile' %}
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+{% elif captcha_provider == 'hcaptcha' %}
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+{% endif %}
+{% endblock %}

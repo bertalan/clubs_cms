@@ -35,7 +35,14 @@
 
   document.querySelectorAll('[data-geocoder-widget]').forEach(initWidget);
 
+  /* Allow dynamic re-initialization for admin bridge */
+  window._initGeocoderWidgets = function () {
+    document.querySelectorAll('[data-geocoder-widget]:not([data-geocoder-ready])').forEach(initWidget);
+  };
+  document.addEventListener('geocoder:init', window._initGeocoderWidgets);
+
   function initWidget(container) {
+    container.setAttribute('data-geocoder-ready', '1');
     // Resolve target fields
     var coordsSelector = container.dataset.targetCoordinates;
     var citySelector = container.dataset.targetCity;

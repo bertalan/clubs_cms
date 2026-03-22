@@ -43,3 +43,5 @@ from .verification import VerificationLog  # noqa: F401
 from .uploads import PhotoUpload  # noqa: F401
 
 from .settings import SiteSettings, PaymentSettings  # noqa: F401
+
+from .newsletter import NewsletterCategory, NewsletterSubscription, SentNewsletter  # noqa: F401

@@ -7,6 +7,7 @@ Requires superuser access.
 
 import logging
 
+from django.conf import settings
 from django.contrib import messages
 from django.core.cache import cache
 from django.shortcuts import redirect
@@ -118,3 +119,115 @@ class MaintenanceView(WagtailAdminTemplateMixin, View):
             )
 
         return redirect("maintenance_admin")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Newsletter send view
+# ═══════════════════════════════════════════════════════════════════════════
+
+
+class SendNewsletterView(WagtailAdminTemplateMixin, View):
+    """Confirm and trigger async sending of a newsletter campaign."""
+
+    template_name = "website/admin/send_newsletter.html"
+    page_title = _("Send Newsletter")
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            messages.error(request, _("Access denied."))
+            return redirect("wagtailadmin_home")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, pk):
+        from apps.website.models.newsletter import (
+            NewsletterSubscription,
+            SentNewsletter,
+        )
+        from apps.website.render_email import render_newsletter_body_html
+
+        newsletter = SentNewsletter.objects.filter(pk=pk).first()
+        if not newsletter:
+            messages.error(request, _("Newsletter not found."))
+            return redirect("wagtailadmin_home")
+
+        # Count subscribers — filter by category if set
+        qs = NewsletterSubscription.objects.filter(is_active=True)
+        if newsletter.category:
+            qs = qs.filter(categories=newsletter.category)
+        subscriber_count = qs.count()
+
+        base_url = getattr(settings, "WAGTAILADMIN_BASE_URL", "").rstrip("/")
+        body_preview = render_newsletter_body_html(newsletter, base_url=base_url)
+
+        context = self.get_context_data()
+        context.update(
+            {
+                "newsletter": newsletter,
+                "subscriber_count": subscriber_count,
+                "already_sent": newsletter.status == "sent",
+                "body_preview": body_preview,
+            }
+        )
+        return self.render_to_response(context)
+
+    def post(self, request, pk):
+        from django_q.tasks import async_task
+
+        from apps.website.models.newsletter import SentNewsletter
+
+        newsletter = SentNewsletter.objects.filter(pk=pk).first()
+        if not newsletter:
+            messages.error(request, _("Newsletter not found."))
+            return redirect("wagtailadmin_home")
+
+        if newsletter.status == "sent":
+            messages.warning(request, _("This newsletter has already been sent."))
+            return redirect("sentnewsletter:edit", pk)
+
+        async_task(
+            "apps.website.services_newsletter.send_newsletter",
+            newsletter.pk,
+            request.user.pk,
+            task_name=f"newsletter-{newsletter.pk}",
+        )
+
+        messages.success(
+            request,
+            _("Newsletter '%(subject)s' queued for sending.")
+            % {"subject": newsletter.subject},
+        )
+        return redirect("sentnewsletter:index")
+
+
+class PreviewNewsletterView(WagtailAdminTemplateMixin, View):
+    """Render a full email preview of a newsletter campaign in admin."""
+
+    template_name = "website/admin/preview_newsletter.html"
+    page_title = _("Preview Newsletter")
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            messages.error(request, _("Access denied."))
+            return redirect("wagtailadmin_home")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, pk):
+        from apps.website.models.newsletter import SentNewsletter
+        from apps.website.render_email import render_newsletter_body_html
+
+        newsletter = SentNewsletter.objects.filter(pk=pk).first()
+        if not newsletter:
+            messages.error(request, _("Newsletter not found."))
+            return redirect("wagtailadmin_home")
+
+        base_url = getattr(settings, "WAGTAILADMIN_BASE_URL", "").rstrip("/")
+        body_preview = render_newsletter_body_html(newsletter, base_url=base_url)
+
+        context = self.get_context_data()
+        context.update(
+            {
+                "newsletter": newsletter,
+                "body_preview": body_preview,
+            }
+        )
+        return self.render_to_response(context)

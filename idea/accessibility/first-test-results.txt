@@ -1,0 +1,733 @@
+Source code
+1 <html lang="en">
+2 <head>
+3 <meta charset="utf-8">
+4 <meta name="viewport" content="width=device-width, initial-scale=1">
+5 <title>Moto Club Aquile Rosse | Moto Club Aquile Rosse</title>
+6 <meta name="description" content="Sito ufficiale del Moto Club Aquile Rosse ASD di Bergamo. Organizzazione di raduni, tour, track day ed eventi benefici per motociclisti di tutte le marche.">
+7 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+8 <link rel="stylesheet" href="/static/css/base.8e4250a0141f.css">
+9 <link rel="stylesheet" href="/static/css/themes/tricolore/main.css">
+10 <script type="application/ld+json">{"@type": "Organization", "name": "Moto Club Aquile Rosse", "url": "https://clubs.betabi.it/", "description": "Sito ufficiale del Moto Club Aquile Rosse ASD di Bergamo. Organizzazione di raduni, tour, track day ed eventi benefici per motociclisti di tutte le marche.", "telephone": "+39 035 123 4567", "email": "info@aquilerosse.it", "address": {"@type": "PostalAddress", "streetAddress": "Via Borgo Palazzo 22\r\n24121 Bergamo (BG)\r\nItalia"}, "sameAs": ["https://www.facebook.com/motoclubaquilerosse", "https://www.instagram.com/aquilerosse_mc", "https://www.youtube.com/@aquilerossemc"], "@context": "https://schema.org"}
+11 </script>
+12 <script type="application/ld+json">{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Moto Club Aquile Rosse", "item": "https://clubs.betabi.it/it/"}], "@context": "https://schema.org"}
+13 </script>
+14 <meta property="og:title" content="Moto Club Aquile Rosse">
+15 <meta property="og:url" content="https://clubs.betabi.it/it/">
+16 <meta property="og:type" content="website">
+17 <meta property="og:description" content="Sito ufficiale del Moto Club Aquile Rosse ASD di Bergamo. Organizzazione di raduni, tour, track day ed eventi benefici per motociclisti di tutte le marche.">
+18 <meta property="og:image" content="https://clubs.betabi.it/media/images/demo_05d1eb0c.2e16d0ba.fill-1200x630.jpg">
+19 <meta property="og:site_name" content="Moto Club Aquile Rosse">
+20 <meta property="og:locale" content="Italiano">
+21 <meta name="twitter:card" content="summary_large_image">
+22 <meta name="twitter:title" content="Moto Club Aquile Rosse">
+23 <meta name="twitter:description" content="Sito ufficiale del Moto Club Aquile Rosse ASD di Bergamo. Organizzazione di raduni, tour, track day ed eventi benefici per motociclisti di tutte le marche.">
+24 <meta name="twitter:image" content="https://clubs.betabi.it/media/images/demo_05d1eb0c.2e16d0ba.fill-1200x630.jpg">
+25 <link rel="alternate" hreflang="en" href="https://clubs.betabi.it/en/">
+26 <link rel="alternate" hreflang="it" href="https://clubs.betabi.it/it/">
+27 <link rel="alternate" hreflang="x-default" href="https://clubs.betabi.it/it/">
+28 <link rel="canonical" href="https://clubs.betabi.it/it/">
+29 <link rel="alternate" type="application/rss+xml" title="Moto Club Aquile Rosse - Notizie (RSS)" href="/feed/rss/">
+30 <link rel="alternate" type="application/atom+xml" title="Moto Club Aquile Rosse - Notizie (Atom)" href="/feed/atom/">
+31 <link rel="alternate" type="application/rss+xml" title="Moto Club Aquile Rosse - Events (RSS)" href="/feed/events/rss/">
+32 </head>
+33 <body class="page-home">
+Error type issue icon SC 2.4.7 - Tech F78 [WCAG 2.1 (AA)]Using an author-supplied, highly visible focus indicatoropen_in_new
+Error type issue icon SC 2.4.7 - Tech G195 [WCAG 2.1 (AA)]Using an author-supplied, highly visible focus indicatoropen_in_new
+34 <a href="#main-content" class="skip-link">Vai al contenuto principale</a>
+Warning type issue icon SC 1.3.1 - 2.4.1 - Tech ARIA11 [WCAG 2.1 (A)]Using ARIA landmarks to identify regions of a pageopen_in_new
+35 <nav class="site-nav" role="navigation" aria-label="Navigazione principale">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+36 <div class="container">
+37 <a href="/" class="site-nav__logo" aria-label="Moto Club Aquile Rosse - Home">
+38 <span>Moto Club Aquile Rosse</span>
+39 </a>
+40 <button class="site-nav__toggle" type="button" aria-controls="nav-links" aria-expanded="false" aria-label="Attiva/disattiva navigazione">
+41 <span></span>
+42 <span></span>
+43 <span></span>
+44 </button>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+45 <div class="site-nav__links" id="nav-links">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+46 <div class="site-nav__dropdown">
+47 <button class="site-nav__dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+48 Chi Siamo
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+49 <span class="site-nav__dropdown-arrow" aria-hidden="true">▾</span>
+50 </button>
+51 <ul class="site-nav__dropdown-menu" role="menu">
+52 <li role="none">
+Warning type issue icon SC 4.1.2 - Tech ARIA5 [WCAG 2.1 (A)]Using WAI-ARIA state and property attributes to expose the state of a user interface componentopen_in_new
+53 <a href="/it/chi-siamo/" role="menuitem"> Chi Siamo </a>
+54 </li>
+55 <li role="none">
+Warning type issue icon SC 4.1.2 - Tech ARIA5 [WCAG 2.1 (A)]Using WAI-ARIA state and property attributes to expose the state of a user interface componentopen_in_new
+56 <a href="/it/contatti/" role="menuitem"> Contatti </a>
+57 </li>
+58 <li role="none">
+Warning type issue icon SC 4.1.2 - Tech ARIA5 [WCAG 2.1 (A)]Using WAI-ARIA state and property attributes to expose the state of a user interface componentopen_in_new
+59 <a href="/it/diventa-socio/" role="menuitem"> Diventa Socio </a>
+60 </li>
+61 <li role="none">
+Warning type issue icon SC 4.1.2 - Tech ARIA5 [WCAG 2.1 (A)]Using WAI-ARIA state and property attributes to expose the state of a user interface componentopen_in_new
+62 <a href="/it/chi-siamo/consiglio-direttivo/" role="menuitem"> Consiglio Direttivo </a>
+63 </li>
+64 <li role="none">
+Warning type issue icon SC 4.1.2 - Tech ARIA5 [WCAG 2.1 (A)]Using WAI-ARIA state and property attributes to expose the state of a user interface componentopen_in_new
+65 <a href="/it/trasparenza/" role="menuitem"> Trasparenza </a>
+66 </li>
+67 <li role="none">
+Warning type issue icon SC 4.1.2 - Tech ARIA5 [WCAG 2.1 (A)]Using WAI-ARIA state and property attributes to expose the state of a user interface componentopen_in_new
+68 <a href="/it/account/tessera/" role="menuitem"> Member Card </a>
+69 </li>
+70 <li role="none">
+Warning type issue icon SC 4.1.2 - Tech ARIA5 [WCAG 2.1 (A)]Using WAI-ARIA state and property attributes to expose the state of a user interface componentopen_in_new
+71 <a href="/it/partner/" role="menuitem"> Partner </a>
+72 </li>
+73 </ul>
+74 </div>
+75 <a href="/it/news/" class=""> News </a>
+76 <a href="/it/eventi/" class=""> Eventi </a>
+77 <a href="/it/galleria/" class=""> Galleria </a>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+78 <div class="site-nav__dropdown">
+79 <button class="site-nav__dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+80 Servizi
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+81 <span class="site-nav__dropdown-arrow" aria-hidden="true">▾</span>
+82 </button>
+83 <ul class="site-nav__dropdown-menu" role="menu">
+84 <li role="none">
+Warning type issue icon SC 4.1.2 - Tech ARIA5 [WCAG 2.1 (A)]Using WAI-ARIA state and property attributes to expose the state of a user interface componentopen_in_new
+85 <a href="/it/soccorso-stradale/" role="menuitem"> Soccorso Stradale </a>
+86 </li>
+87 <li role="none">
+Warning type issue icon SC 4.1.2 - Tech ARIA5 [WCAG 2.1 (A)]Using WAI-ARIA state and property attributes to expose the state of a user interface componentopen_in_new
+88 <a href="/it/federazione/" role="menuitem"> Federazione </a>
+89 </li>
+90 <li role="none">
+Warning type issue icon SC 4.1.2 - Tech ARIA5 [WCAG 2.1 (A)]Using WAI-ARIA state and property attributes to expose the state of a user interface componentopen_in_new
+91 <a href="/it/account/contributi/" role="menuitem"> Contributi </a>
+92 </li>
+93 <li role="none">
+Warning type issue icon SC 4.1.2 - Tech ARIA5 [WCAG 2.1 (A)]Using WAI-ARIA state and property attributes to expose the state of a user interface componentopen_in_new
+94 <a href="/it/account/notifiche/" role="menuitem"> Notifiche </a>
+95 </li>
+96 <li role="none">
+Warning type issue icon SC 4.1.2 - Tech ARIA5 [WCAG 2.1 (A)]Using WAI-ARIA state and property attributes to expose the state of a user interface componentopen_in_new
+97 <a href="/it/stampa/" role="menuitem"> Area Stampa </a>
+98 </li>
+99 </ul>
+100 </div>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+101 <div class="site-nav__search" id="nav-search">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+102 <button type="button" class="site-nav__search-toggle" aria-expanded="false" aria-controls="nav-search-form" aria-label="Cerca">
+Error type issue icon SC 1.1.1 - Tech ARIA6 [WCAG 2.1 (A)]Using aria-label to provide labels for objectsopen_in_new
+103 <svg class="site-nav__search-icon" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+104 <circle cx="11" cy="11" r="8"></circle>
+105 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+106 </svg>
+107 </button>
+108 <form id="nav-search-form" method="get" action="/it/cerca/" class="site-nav__search-form" hidden>
+109 <label for="nav-search-q" class="sr-only">Cerca</label>
+110 <input type="search" id="nav-search-q" name="q" value="" placeholder="Cerca" class="site-nav__search-input" minlength="2" autocomplete="off">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+Warning type issue icon SC 4.1.3 - Tech G199 [WCAG 2.1 (AA)]Use role=status attribute in order to notify the Assistive Technologies that the submission was successfulopen_in_new
+111 <button type="submit" class="site-nav__search-submit" aria-label="Confermato">
+Error type issue icon SC 1.1.1 - Tech ARIA6 [WCAG 2.1 (A)]Using aria-label to provide labels for objectsopen_in_new
+112 <svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+113 <circle cx="11" cy="11" r="8"></circle>
+114 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+115 </svg>
+116 </button>
+117 </form>
+118 </div>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+119 <div class="site-nav__user">
+120 <a href="/it/account/login/" class="site-nav__cta"> Accedi </a>
+121 </div>
+Warning type issue icon SC 1.3.1 - 2.4.1 - Tech ARIA11 [WCAG 2.1 (A)]Using ARIA landmarks to identify regions of a pageopen_in_new
+122 <div class="site-nav__lang" role="navigation" aria-label="Lingua">
+123 <button class="site-nav__lang-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+124 IT
+125 <span aria-hidden="true">▾</span>
+126 </button>
+127 <ul class="site-nav__lang-menu" role="menu">
+128 <li role="none">
+Warning type issue icon SC 4.1.2 - Tech ARIA5 [WCAG 2.1 (A)]Using WAI-ARIA state and property attributes to expose the state of a user interface componentopen_in_new
+129 <a href="/en/" data-lang="en" lang="en" hreflang="en" role="menuitem" class="site-nav__lang-link"> English </a>
+130 </li>
+131 <li role="none">
+132 <a href="/it/" data-lang="it" lang="it" hreflang="it" role="menuitem" class="site-nav__lang-link active" aria-current="true"> Italiano </a>
+133 </li>
+134 </ul>
+135 </div>
+136 </div>
+137 </div>
+138 </nav>
+139 <div class="nav-spacer"></div>
+140 <script>
+141 (function() {
+142 'use strict';
+143
+144 // --- Dropdown toggle ---
+145 document.querySelectorAll('.site-nav__dropdown-toggle').forEach(function(btn) {
+146 btn.addEventListener('click', function(e) {
+147 e.preventDefault();
+148 e.stopPropagation();
+149 var dropdown = this.closest('.site-nav__dropdown');
+150 var isOpen = dropdown.classList.contains('open');
+151
+152 // Close all other dropdowns
+153 document.querySelectorAll('.site-nav__dropdown.open').forEach(function(d) {
+154 if (d !== dropdown) {
+155 d.classList.remove('open');
+156 d.querySelector('.site-nav__dropdown-toggle').setAttribute('aria-expanded', 'false');
+157 }
+158 });
+159
+160 // Toggle current
+161 dropdown.classList.toggle('open', !isOpen);
+162 this.setAttribute('aria-expanded', String(!isOpen));
+163 });
+164 });
+165
+166 // Close dropdowns when clicking outside
+167 document.addEventListener('click', function(e) {
+168 if (!e.target.closest('.site-nav__dropdown')) {
+169 document.querySelectorAll('.site-nav__dropdown.open').forEach(function(d) {
+170 d.classList.remove('open');
+171 d.querySelector('.site-nav__dropdown-toggle').setAttribute('aria-expanded', 'false');
+172 });
+173 }
+174 });
+175
+176 // Keyboard: Escape closes dropdown
+177 document.addEventListener('keydown', function(e) {
+178 if (e.key === 'Escape') {
+179 document.querySelectorAll('.site-nav__dropdown.open').forEach(function(d) {
+180 d.classList.remove('open');
+181 var toggle = d.querySelector('.site-nav__dropdown-toggle');
+182 toggle.setAttribute('aria-expanded', 'false');
+183 toggle.focus();
+184 });
+185 }
+186 });
+187
+188 // --- Language switcher ---
+189 var langToggle = document.querySelector('.site-nav__lang-toggle');
+190 var langMenu = document.querySelector('.site-nav__lang-menu');
+191 if (langToggle && langMenu) {
+192 langToggle.addEventListener('click', function(e) {
+193 e.preventDefault();
+194 e.stopPropagation();
+195 var isOpen = langMenu.classList.contains('open');
+196 langMenu.classList.toggle('open', !isOpen);
+197 langToggle.setAttribute('aria-expanded', String(!isOpen));
+198 });
+199 // Set Django language cookie on link click (persists preference)
+200 langMenu.querySelectorAll('a[data-lang]').forEach(function(link) {
+201 link.addEventListener('click', function() {
+202 var lang = this.getAttribute('data-lang');
+203 document.cookie = 'django_language=' + lang + ';path=/;max-age=31536000;SameSite=Lax';
+204 });
+205 });
+206 // Close lang menu when clicking outside
+207 document.addEventListener('click', function(e) {
+208 if (!e.target.closest('.site-nav__lang')) {
+209 langMenu.classList.remove('open');
+210 langToggle.setAttribute('aria-expanded', 'false');
+211 }
+212 });
+213 // Escape closes lang menu
+214 document.addEventListener('keydown', function(e) {
+215 if (e.key === 'Escape' && langMenu.classList.contains('open')) {
+216 langMenu.classList.remove('open');
+217 langToggle.setAttribute('aria-expanded', 'false');
+218 langToggle.focus();
+219 }
+220 });
+221 }
+222
+223 // --- Mobile hamburger ---
+224 var navToggle = document.querySelector('.site-nav__toggle');
+225 var navLinks = document.getElementById('nav-links');
+226 if (navToggle && navLinks) {
+227 function closeNav() {
+228 navLinks.classList.remove('open');
+229 navToggle.setAttribute('aria-expanded', 'false');
+230 document.body.style.overflow = '';
+231 }
+232 function openNav() {
+233 navLinks.classList.add('open');
+234 navToggle.setAttribute('aria-expanded', 'true');
+235 document.body.style.overflow = 'hidden';
+236 }
+237 navToggle.addEventListener('click', function() {
+238 navLinks.classList.contains('open') ? closeNav() : openNav();
+239 });
+240 // Close on Escape
+241 document.addEventListener('keydown', function(e) {
+242 if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+243 closeNav();
+244 navToggle.focus();
+245 }
+246 });
+247 // Close when clicking outside nav on mobile
+248 document.addEventListener('click', function(e) {
+249 if (navLinks.classList.contains('open') && !e.target.closest('.site-nav')) {
+250 closeNav();
+251 }
+252 });
+253 // Focus trap within open mobile menu
+254 navLinks.addEventListener('keydown', function(e) {
+255 if (e.key !== 'Tab' || !navLinks.classList.contains('open')) return;
+256 var focusable = [navToggle].concat(
+257 Array.from(navLinks.querySelectorAll('a[href], button:not([disabled]), input:not([hidden])'))
+258 );
+259 var first = focusable[0];
+260 var last = focusable[focusable.length - 1];
+261 if (e.shiftKey && document.activeElement === first) {
+262 e.preventDefault(); last.focus();
+263 } else if (!e.shiftKey && document.activeElement === last) {
+264 e.preventDefault(); first.focus();
+265 }
+266 });
+267 }
+268
+269 // --- Navbar compact search toggle ---
+270 var searchToggle = document.querySelector('.site-nav__search-toggle');
+271 var searchForm = document.getElementById('nav-search-form');
+272 var searchWrap = document.getElementById('nav-search');
+273 if (searchToggle && searchForm && searchWrap) {
+274 searchToggle.addEventListener('click', function() {
+275 var isOpen = !searchForm.hidden;
+276 searchForm.hidden = isOpen;
+277 searchWrap.classList.toggle('open', !isOpen);
+278 searchToggle.setAttribute('aria-expanded', String(!isOpen));
+279 if (!isOpen) {
+280 searchForm.querySelector('input[type="search"]').focus();
+281 }
+282 });
+283 // Close on click outside
+284 document.addEventListener('click', function(e) {
+285 if (!e.target.closest('#nav-search')) {
+286 searchForm.hidden = true;
+287 searchWrap.classList.remove('open');
+288 searchToggle.setAttribute('aria-expanded', 'false');
+289 }
+290 });
+291 // Close on Escape
+292 document.addEventListener('keydown', function(e) {
+293 if (e.key === 'Escape' && !searchForm.hidden) {
+294 searchForm.hidden = true;
+295 searchWrap.classList.remove('open');
+296 searchToggle.setAttribute('aria-expanded', 'false');
+297 searchToggle.focus();
+298 }
+299 });
+300 }
+301 })();
+302
+303 </script>
+Warning type issue icon SC 1.3.1 - 2.4.1 - Tech ARIA11 [WCAG 2.1 (A)]Using ARIA landmarks to identify regions of a pageopen_in_new
+304 <main id="main-content">
+305 <section class="block-hero-banner page-home__hero" aria-label="Hero">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+306 <div class="page-home__hero-media">
+Warning type issue icon SC 1.1.1 - 1.2.1 - Tech F30 [WCAG 2.1 (A)]Failure of Success Criterion 1.1.1 - 1.2.1 and 1.2.1 due to using text alternatives that are not alternatives (e.g., filenames or placeholder text)open_in_new
+307 <img src="/media/images/demo_05d1eb0c.2e16d0ba.fill-1920x800.jpg" alt="" loading="eager" width="1280" height="534">
+308 </div>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+309 <div class="block-hero-banner__overlay">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+310 <div class="container page-home__hero-inner">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+311 <div class="block-hero-banner__content page-home__hero-panel">
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+312 <h1 class="block-hero-banner__title">Moto Club Aquile Rosse</h1>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+313 <p class="block-hero-banner__subtitle">Passione, avventura e fratellanza su due ruote dal 1987</p>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+314 <div class="block-hero-banner__actions">
+315 </div>
+316 </div>
+317 </div>
+318 </div>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+319 <div class="block-hero-banner__scroll-indicator" aria-hidden="true">
+Error type issue icon SC 1.1.1 - Tech ARIA6 [WCAG 2.1 (A)]Using aria-label to provide labels for objectsopen_in_new
+320 <svg viewbox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+321 <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+322 </svg>
+323 </div>
+324 </section>
+325 <section class="home-events page-home__section page-home__section--events" aria-label="Prossimi Eventi">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+326 <div class="container page-home__section-inner">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+327 <div class="home-events__header page-home__section-head">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+328 <div class="page-home__section-copy">
+329 <p class="home-events__label page-home__section-kicker">Prossimi Eventi</p>
+330 <h2 class="home-events__title page-home__section-title">Eventi</h2>
+331 </div>
+332 <a href="/it/eventi/" class="home-events__viewall page-home__viewall">Eventi →</a>
+333 </div>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+334 <div class="home-events__grid page-home__cards">
+335 <article class="home-events__card page-home__card">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+336 <div class="page-home__card-body">
+337 <p class="home-events__card-date page-home__card-meta">Apr 5, 2026</p>
+338 <h3 class="home-events__card-title page-home__card-title">
+339 <a href="/it/eventi/tour-orobie-2026/">Tour delle Orobie – Giornata Sociale</a>
+340 </h3>
+341 <p class="home-events__card-text page-home__card-text">Uscita giornaliera tra le valli bergamasche con sosta pranzo in rifugio.</p>
+342 </div>
+343 </article>
+344 <article class="home-events__card page-home__card">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+345 <div class="page-home__card-body">
+346 <p class="home-events__card-date page-home__card-meta">Apr 21, 2026</p>
+347 <h3 class="home-events__card-title page-home__card-title">
+348 <a href="/it/eventi/avviamento-motori-mandello-2026/">Avviamento Motori 2026 – Mandello del Lario</a>
+349 </h3>
+350 <p class="home-events__card-text page-home__card-text">Il tradizionale raduno di apertura stagione a Mandello del Lario.</p>
+351 </div>
+352 </article>
+353 <article class="home-events__card page-home__card">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+354 <div class="page-home__card-body">
+355 <p class="home-events__card-date page-home__card-meta">Mag 6, 2026</p>
+356 <h3 class="home-events__card-title page-home__card-title">
+357 <a href="/it/eventi/track-day-franciacorta-2026/">Track Day – Autodromo di Franciacorta</a>
+358 </h3>
+359 <p class="home-events__card-text page-home__card-text">Giornata in pista all’Autodromo di Franciacorta con istruttori professionisti.</p>
+360 </div>
+361 </article>
+362 </div>
+363 </div>
+364 </section>
+365 <section class="home-partners page-home__section page-home__section--partners" aria-label="Proprietario partner">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+366 <div class="container page-home__section-inner">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+367 <div class="page-home__section-head page-home__section-head--partners">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+368 <div class="page-home__section-copy">
+369 <p class="home-partners__label page-home__section-kicker">Our Network</p>
+370 <h2 class="home-partners__title page-home__section-title">Proprietario partner</h2>
+371 </div>
+372 <a href="/it/partner/" class="home-partners__viewall page-home__viewall">
+373 All Partners
+374 <span aria-hidden="true">→</span>
+375 </a>
+376 </div>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+377 <div class="home-partners__grid">
+378 <a href="/it/partner/bergamo-moto-magazine/" class="home-partners__card">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+379 <div class="home-partners__card-visual">
+Warning type issue icon SC 1.4.12 - Tech C21 [WCAG 2.1 (AA)]Specifying line spacing in CSSopen_in_new
+Warning type issue icon SC 1.4.4 - 1.4.12 - Tech C28 [WCAG 2.1 (AA)]Specifying the size of text containers using em unitsopen_in_new
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+380 <span class="home-partners__card-initial">…</span>
+381 </div>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+382 <div class="home-partners__card-info">
+Warning type issue icon SC 1.4.12 - Tech C21 [WCAG 2.1 (AA)]Specifying line spacing in CSSopen_in_new
+383 <p class="home-partners__card-name">Bergamo Moto Magazine</p>
+384 <p class="home-partners__card-category">Media Partner</p>
+385 </div>
+386 </a>
+387 <a href="/it/partner/concessionaria-lecco/" class="home-partners__card">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+388 <div class="home-partners__card-visual">
+Warning type issue icon SC 1.4.12 - Tech C21 [WCAG 2.1 (AA)]Specifying line spacing in CSSopen_in_new
+Warning type issue icon SC 1.4.4 - 1.4.12 - Tech C28 [WCAG 2.1 (AA)]Specifying the size of text containers using em unitsopen_in_new
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+389 <span class="home-partners__card-initial">…</span>
+390 </div>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+391 <div class="home-partners__card-info">
+Warning type issue icon SC 1.4.12 - Tech C21 [WCAG 2.1 (AA)]Specifying line spacing in CSSopen_in_new
+392 <p class="home-partners__card-name">Concessionaria Moto Lecco</p>
+393 <p class="home-partners__card-category">Main Sponsor</p>
+394 </div>
+395 </a>
+396 <a href="/it/partner/officina-moto-bergamo/" class="home-partners__card">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+397 <div class="home-partners__card-visual">
+Warning type issue icon SC 1.4.12 - Tech C21 [WCAG 2.1 (AA)]Specifying line spacing in CSSopen_in_new
+Warning type issue icon SC 1.4.4 - 1.4.12 - Tech C28 [WCAG 2.1 (AA)]Specifying the size of text containers using em unitsopen_in_new
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+398 <span class="home-partners__card-initial">…</span>
+399 </div>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+400 <div class="home-partners__card-info">
+Warning type issue icon SC 1.4.12 - Tech C21 [WCAG 2.1 (AA)]Specifying line spacing in CSSopen_in_new
+401 <p class="home-partners__card-name">Officina Moto Bergamo</p>
+402 <p class="home-partners__card-category">Technical Partner</p>
+403 </div>
+404 </a>
+405 </div>
+406 </div>
+407 </section>
+408 <section class="home-body">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+409 <div class="container">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+410 <div class="home-body__intro page-home__spotlight">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+411 <div class="page-home__spotlight-container">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+412 <div class="page-home__spotlight-shell">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+413 <div class="page-home__spotlight-copy">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+414 <div class="page-home__spotlight-copy-inner rich-text">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+415 <div class="page-home__spotlight-copy-text">
+416 <h2>Benvenuti nel Moto Club Aquile Rosse</h2>
+417 <p>Dal 1987 trasformiamo la passione per le due ruote in viaggi memorabili, amicizie vere e iniziative che tengono insieme strada, territorio e spirito di club.</p>
+418 <p>Con oltre 250 soci attivi in tutta la Lombardia, organizziamo raduni, tour panoramici, track day ed eventi benefici per vivere la moto con intensità, stile e senso di appartenenza.</p>
+419 </div>
+420 </div>
+421 </div>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+422 <div class="page-home__spotlight-bottom">
+423 <section class="page-home__spotlight-stats">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+424 <div class="page-home__spotlight-stats-grid">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+425 <div class="page-home__spotlight-stat">
+Warning type issue icon SC 1.4.12 - Tech C21 [WCAG 2.1 (AA)]Specifying line spacing in CSSopen_in_new
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+426 <span class="page-home__spotlight-stat-value">250+</span>
+Warning type issue icon SC 1.4.12 - Tech C21 [WCAG 2.1 (AA)]Specifying line spacing in CSSopen_in_new
+427 <span class="page-home__spotlight-stat-label">Soci Attivi</span>
+428 </div>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+429 <div class="page-home__spotlight-stat">
+Warning type issue icon SC 1.4.12 - Tech C21 [WCAG 2.1 (AA)]Specifying line spacing in CSSopen_in_new
+430 <span class="page-home__spotlight-stat-value">37</span>
+Warning type issue icon SC 1.4.12 - Tech C21 [WCAG 2.1 (AA)]Specifying line spacing in CSSopen_in_new
+431 <span class="page-home__spotlight-stat-label">Anni di Storia</span>
+432 </div>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+433 <div class="page-home__spotlight-stat">
+Warning type issue icon SC 1.4.12 - Tech C21 [WCAG 2.1 (AA)]Specifying line spacing in CSSopen_in_new
+434 <span class="page-home__spotlight-stat-value">50+</span>
+Warning type issue icon SC 1.4.12 - Tech C21 [WCAG 2.1 (AA)]Specifying line spacing in CSSopen_in_new
+435 <span class="page-home__spotlight-stat-label">Eventi / Anno</span>
+436 </div>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+437 <div class="page-home__spotlight-stat">
+Warning type issue icon SC 1.4.12 - Tech C21 [WCAG 2.1 (AA)]Specifying line spacing in CSSopen_in_new
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+438 <span class="page-home__spotlight-stat-value">12</span>
+Warning type issue icon SC 1.4.12 - Tech C21 [WCAG 2.1 (AA)]Specifying line spacing in CSSopen_in_new
+439 <span class="page-home__spotlight-stat-label">Tour Nazionali</span>
+440 </div>
+441 </div>
+442 </section>
+443 <section class="page-home__spotlight-cta" data-style="primary">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+444 <div class="page-home__spotlight-cta-inner">
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+445 <h2 class="page-home__spotlight-cta-title">Unisciti a Noi</h2>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+446 <div class="page-home__spotlight-cta-text rich-text">
+447 Entra nel club, accedi alle attività riservate e condividi tour, eventi e nuove strade con una comunità che vive la moto tutto l’anno.
+448 </div>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+449 <a href="/diventa-socio/" class="btn btn-primary page-home__spotlight-cta-button" target="_blank" rel="noopener noreferrer">Scopri le Tessere</a>
+450 </div>
+451 </section>
+452 </div>
+453 </div>
+454 </div>
+455 </div>
+456 </div>
+457 </section>
+458 </main>
+Warning type issue icon SC 1.3.1 - 2.4.1 - Tech ARIA11 [WCAG 2.1 (A)]Using ARIA landmarks to identify regions of a pageopen_in_new
+Warning type issue icon SC 4.1.2 - Tech ARIA5 [WCAG 2.1 (A)]Using WAI-ARIA state and property attributes to expose the state of a user interface componentopen_in_new
+459 <footer class="site-footer" role="contentinfo">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+460 <div class="container">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+461 <div class="site-footer__grid">
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+462 <div class="site-footer__col">
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+463 <h3 class="site-footer__heading">Moto Club Aquile Rosse</h3>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+464 <div class="site-footer__about">
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+465 <p>Moto Club Aquile Rosse ASD – Passion, adventure and brotherhood on two wheels since 1987.</p>
+466 </div>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+467 <div class="site-footer__social" aria-label="Social media">
+468 <a href="https://www.facebook.com/motoclubaquilerosse" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook">
+469 <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
+470 </a>
+471 <a href="https://www.instagram.com/aquilerosse_mc" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram">
+472 <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+473 </a>
+474 <a href="https://www.youtube.com/@aquilerossemc" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube">
+475 <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+476 </a>
+477 </div>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+478 <div class="site-footer__feeds" aria-label="RSS Feeds">
+479 <a href="/it/feed/rss/" aria-label="Pagina notizia RSS">
+480 <i class="fa-solid fa-rss" aria-hidden="true"></i>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+481 <span>Pagina notizia</span>
+482 </a>
+483 <a href="/it/feed/events/rss/" aria-label="Eventi RSS">
+484 <i class="fa-solid fa-rss" aria-hidden="true"></i>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+485 <span>Eventi</span>
+486 </a>
+487 </div>
+488 </div>
+Warning type issue icon SC 1.3.1 - 2.4.1 - Tech ARIA11 [WCAG 2.1 (A)]Using ARIA landmarks to identify regions of a pageopen_in_new
+489 <nav class="site-footer__col" aria-label="Navigazione footer">
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+490 <h3 class="site-footer__heading">Menu</h3>
+491 <ul class="site-footer__list">
+492 <li>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+493 <a href="/it/chi-siamo/">Chi Siamo</a>
+494 </li>
+495 <li>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+496 <a href="/it/news/">News</a>
+497 </li>
+498 <li>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+499 <a href="/it/eventi/">Eventi</a>
+500 </li>
+501 <li>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+502 <a href="/it/privacy/">Privacy Policy</a>
+503 </li>
+504 <li>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+505 <a href="/it/trasparenza/">Trasparenza</a>
+506 </li>
+507 </ul>
+508 </nav>
+Warning type issue icon SC 1.3.1 - 2.4.1 - Tech ARIA11 [WCAG 2.1 (A)]Using ARIA landmarks to identify regions of a pageopen_in_new
+509 <nav class="site-footer__col" aria-label="Servizi">
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+510 <h3 class="site-footer__heading">Servizi</h3>
+511 <ul class="site-footer__list">
+512 <li>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+513 <a href="/it/soccorso-stradale/">Soccorso Stradale</a>
+514 </li>
+515 <li>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+516 <a href="/it/federazione/">Federazione</a>
+517 </li>
+518 <li>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+519 <a href="/it/diventa-socio/">Diventa Socio</a>
+520 </li>
+521 <li>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+522 <a href="/it/account/contributi/">Contributi</a>
+523 </li>
+524 <li>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+525 <a href="/it/account/notifiche/">Notifiche</a>
+526 </li>
+527 <li>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+528 <a href="/it/account/tessera/">Tessera Associativa</a>
+529 </li>
+530 </ul>
+531 </nav>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+532 <div class="site-footer__col">
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+533 <h3 class="site-footer__heading">Contatti</h3>
+534 <address class="site-footer__address">
+535 <p>
+536 <i class="fa-solid fa-phone site-footer__icon" aria-hidden="true"></i>
+Error type issue icon SC 1.4.1 - Tech F73 [WCAG 2.1 (A)]Failure of Success Criterion 1.4.1 due to creating links that are not visually evident without color visionopen_in_new
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+537 <a href="tel:+39 035 123 4567">+39 035 123 4567</a>
+538 </p>
+539 <p>
+540 <i class="fa-solid fa-envelope site-footer__icon" aria-hidden="true"></i>
+Error type issue icon SC 1.4.1 - Tech F73 [WCAG 2.1 (A)]Failure of Success Criterion 1.4.1 due to creating links that are not visually evident without color visionopen_in_new
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+541 <a href="mailto:info@aquilerosse.it">info@aquilerosse.it</a>
+542 </p>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+543 <p>
+544 <i class="fa-solid fa-location-dot site-footer__icon" aria-hidden="true"></i>
+545 Via Borgo Palazzo 22
+546 <br>
+547 24121 Bergamo (BG)
+548 <br>
+549 Italy
+550 </p>
+551 </address>
+552 </div>
+553 </div>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+554 <div class="site-footer__bottom">
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+555 <p>
+556 © 2026 Moto Club Aquile Rosse ASD. All rights reserved.
+Error type issue icon SC 1.4.1 - Tech F73 [WCAG 2.1 (A)]Failure of Success Criterion 1.4.1 due to creating links that are not visually evident without color visionopen_in_new
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+557 <a href="https://github.com/bertalan/clubs_cms" class="site-footer__github" target="_blank" rel="noopener noreferrer">
+558 <i class="fa-brands fa-github" aria-hidden="true"></i>
+559 GitHub
+560 </a>
+561 </p>
+Warning type issue icon SC 2.5.3 - Tech F96 [WCAG 2.1 (A)]If on the page are present the tags aria-label or aria-labelledby, check that their content matches the visible name.open_in_new
+562 <div class="theme-switcher">
+563 <label class="theme-switcher__label" for="theme-switcher-select">
+564 <i class="fa-solid fa-palette theme-switcher__icon" aria-hidden="true"></i>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+565 <span>Tema</span>
+566 </label>
+567 <span class="theme-switcher__select-wrapper">
+Error type issue icon SC 1.3.5 - Tech H98 [WCAG 2.1 (AA)]Identify the purpose of inputs using the autocomplete valueopen_in_new
+568 <select id="theme-switcher-select" class="theme-switcher__select" aria-label="Seleziona socio">
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+569 <option value="velocity">Velocity</option>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+570 <option value="heritage">Heritage</option>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+571 <option value="zen">Zen</option>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+572 <option value="terra">Terra</option>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+573 <option value="tricolore">Tricolore</option>
+Error type issue icon SC 1.4.3 - Tech G18 [WCAG 2.1 (AA)]Ensuring that a contrast ratio of at least 4.5:1 exists between text (and images of text) and background behind the textopen_in_new
+574 <option value="clubs">Clubs</option>
+575 </select>
+576 </span>
+577 </div>
+578 </div>
+579 </div>
+580 </footer>
+581 <script src="/static/js/theme-switcher.cbcd5a4f6500.js"></script>
+582 <a href="https://github.com/bertalan/clubs_cms" class="github-ribbon" target="_blank" rel="noopener noreferrer" aria-label="Fork me on GitHub">
+Warning type issue icon SC 1.4.4 - 1.4.12 - Tech C28 [WCAG 2.1 (AA)]Specifying the size of text containers using em unitsopen_in_new
+583 <span>Fork me on GitHub</span>
+584 </a>
+585 </body>
+586 </html>

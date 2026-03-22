@@ -912,6 +912,7 @@ DATA = {
         {"label": "Contributions",       "link_page_slug": "",          "link_url": "reverse:account:my_contributions", "sort_order": 2, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
         {"label": "Notifications",       "link_page_slug": "",          "link_url": "reverse:account:notifications",    "sort_order": 3, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
         {"label": "Press Room",          "link_page_slug": "press",     "link_url": "",                                 "sort_order": 4, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
+        {"label": "Newsletter",           "link_page_slug": "",          "link_url": "reverse:website:newsletter-subscribe", "sort_order": 5, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
     ],
 
     # ==================================================================

@@ -851,6 +851,19 @@ class EventDetailPage(Page):
         help_text=_("Categoria principale dell'evento."),
     )
 
+    # --- Organizer ---
+    organizer_name = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name=_("Organizer name"),
+        help_text=_("Nome del Club o ente organizzatore dell'evento."),
+    )
+    organizer_url = models.URLField(
+        blank=True,
+        verbose_name=_("Organizer URL"),
+        help_text=_("Sito web del Club federato dove l'evento è pubblicato."),
+    )
+
     # --- Wagtail config ---
     parent_page_types = ["website.EventsPage"]
     subpage_types = []
@@ -878,6 +891,13 @@ class EventDetailPage(Page):
                 FieldPanel("tags"),
             ],
             heading=_("Categorisation"),
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("organizer_name"),
+                FieldPanel("organizer_url"),
+            ],
+            heading=_("Organizer"),
         ),
     ]
 

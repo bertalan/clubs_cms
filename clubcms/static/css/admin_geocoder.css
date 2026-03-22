@@ -1,0 +1,88 @@
+/* Admin Geocoder — Override styles for Wagtail admin context */
+.geocoder {
+  margin: 1em 0;
+  border: 1px solid var(--w-color-border, #e0e0e0);
+  border-radius: 6px;
+  padding: 1em;
+  background: var(--w-color-surface-page, #fff);
+}
+.geocoder__search-input {
+  width: 100%;
+  padding: 0.5em 0.75em;
+  border: 1px solid var(--w-color-border, #ccc);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background: var(--w-color-surface-field, #fff);
+  color: var(--w-color-text, #333);
+}
+.geocoder__search-row {
+  display: flex;
+  gap: 0.5em;
+  margin-bottom: 0.75em;
+}
+.geocoder__locate-btn {
+  flex-shrink: 0;
+  padding: 0.5em;
+  border: 1px solid var(--w-color-border, #ccc);
+  border-radius: 4px;
+  background: var(--w-color-surface-button-default, #f5f5f5);
+  cursor: pointer;
+}
+.geocoder__locate-btn:hover {
+  background: var(--w-color-surface-button-hover, #e8e8e8);
+}
+.geocoder__map {
+  height: 300px;
+  border-radius: 4px;
+  margin-bottom: 0.75em;
+  z-index: 0;
+}
+.geocoder__suggestions {
+  list-style: none;
+  margin: 0 0 0.5em 0;
+  padding: 0;
+  border: 1px solid var(--w-color-border, #ccc);
+  border-radius: 4px;
+  background: var(--w-color-surface-page, #fff);
+  max-height: 200px;
+  overflow-y: auto;
+}
+.geocoder__suggestion {
+  padding: 0.5em 0.75em;
+  cursor: pointer;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--w-color-border, #eee);
+}
+.geocoder__suggestion:hover,
+.geocoder__suggestion:focus {
+  background: var(--w-color-surface-button-hover, #f0f0f0);
+}
+.geocoder__manual-toggle {
+  background: none;
+  border: none;
+  color: var(--w-color-text-link-default, #007d7e);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0;
+  margin-bottom: 0.5em;
+}
+.geocoder__manual-toggle:hover {
+  text-decoration: underline;
+}
+.geocoder__manual-row {
+  display: flex;
+  gap: 1em;
+  margin-top: 0.5em;
+}
+.geocoder__coord-input {
+  width: 100%;
+  padding: 0.4em 0.6em;
+  border: 1px solid var(--w-color-border, #ccc);
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+.geocoder__status {
+  font-size: 0.85rem;
+  color: var(--w-color-text-meta, #888);
+  margin-bottom: 0.5em;
+}

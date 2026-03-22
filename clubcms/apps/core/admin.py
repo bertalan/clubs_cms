@@ -74,7 +74,7 @@ class ReactionViewSet(ModelViewSet):
     """Admin view of user reactions."""
 
     model = Reaction
-    icon = "heart"
+    icon = "bolt"
     menu_label = _("Reactions")
     menu_order = 320
     add_to_admin_menu = True

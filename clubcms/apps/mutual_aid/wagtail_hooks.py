@@ -5,6 +5,8 @@ Registers AidRequest, FederatedAidAccess, and pending access requests
 under a "Mutual Aid" menu group in the Wagtail sidebar.
 """
 
+from django.utils.translation import gettext_lazy as _
+
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet, SnippetViewSetGroup
 
@@ -22,7 +24,7 @@ class AidRequestViewSet(SnippetViewSet):
 
     model = AidRequest
     icon = "help"
-    menu_label = "Aid Requests"
+    menu_label = _("Aid Requests")
     menu_order = 100
     add_to_admin_menu = False
     list_display = [
@@ -42,7 +44,7 @@ class FederatedAidAccessViewSet(SnippetViewSet):
 
     model = FederatedAidAccess
     icon = "globe"
-    menu_label = "Federation Access"
+    menu_label = _("Federation Access")
     menu_order = 200
     add_to_admin_menu = False
     list_display = [
@@ -62,7 +64,7 @@ class AccessRequestViewSet(SnippetViewSet):
 
     model = FederatedAidAccessRequest
     icon = "mail"
-    menu_label = "Access Requests"
+    menu_label = _("Access Requests")
     menu_order = 300
     add_to_admin_menu = False
     list_display = [
@@ -78,7 +80,7 @@ class MutualAidViewSetGroup(SnippetViewSetGroup):
     """Groups mutual aid admin panels under a single menu item."""
 
     items = (AidRequestViewSet, FederatedAidAccessViewSet, AccessRequestViewSet)
-    menu_label = "Mutual Aid"
+    menu_label = _("Mutual Aid")
     menu_icon = "help"
     menu_order = 750
 

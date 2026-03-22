@@ -1190,6 +1190,7 @@ DATA = {
         {"label": "Contributi",           "link_page_slug": "",            "link_url": "reverse:account:my_contributions", "sort_order": 2, "parent_label": "Servizi", "is_cta": False, "open_new_tab": False},
         {"label": "Notifiche",            "link_page_slug": "",            "link_url": "reverse:account:notifications",    "sort_order": 3, "parent_label": "Servizi", "is_cta": False, "open_new_tab": False},
         {"label": "Area Stampa",          "link_page_slug": "stampa",      "link_url": "",                                "sort_order": 4, "parent_label": "Servizi", "is_cta": False, "open_new_tab": False},
+        {"label": "Newsletter",            "link_page_slug": "",            "link_url": "reverse:website:newsletter-subscribe", "sort_order": 5, "parent_label": "Servizi", "is_cta": False, "open_new_tab": False},
     ],
 
     # ==================================================================

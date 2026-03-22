@@ -5,12 +5,20 @@ Register admin ViewSets for transactional models (Activity, Comment, Reaction).
 Inject global admin CSS/JS for field help tooltips.
 """
 
+import os
+
 from django.templatetags.static import static
 from django.utils.html import format_html
 
 from wagtail import hooks
 
 from apps.core.admin import activity_viewset, comment_viewset, reaction_viewset
+
+
+@hooks.register("register_icons")
+def register_custom_icons(icons):
+    icons.append("wagtailadmin/icons/bolt.svg")
+    return icons
 
 
 @hooks.register("register_admin_viewset")

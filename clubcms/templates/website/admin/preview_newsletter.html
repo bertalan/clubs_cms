@@ -1,0 +1,48 @@
+{% extends "wagtailadmin/generic/base.html" %}
+{% load i18n %}
+
+{% block titletag %}{% trans "Preview Newsletter" %} — {{ newsletter.subject }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; padding: 0 1.5rem;">
+    <header class="w-mb-4" style="display: flex; align-items: center; justify-content: space-between;">
+        <h1 class="w-mb-0">{% trans "Preview" %}: {{ newsletter.subject }}</h1>
+        <a href="{% url 'sentnewsletter:edit' newsletter.pk %}" class="button button-secondary button-small">{% trans "Back to edit" %}</a>
+    </header>
+
+    <div style="background: var(--w-color-surface-page, #fff); border: 1px solid var(--w-color-border-furniture); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+        <dl style="display: grid; grid-template-columns: 150px 1fr; gap: 0.5rem 1rem; margin-bottom: 1rem;">
+            <dt style="color: var(--w-color-text-context, #666);">{% trans "Subject" %}</dt>
+            <dd><strong>{{ newsletter.subject }}</strong></dd>
+            {% if newsletter.category %}
+            <dt style="color: var(--w-color-text-context, #666);">{% trans "Category" %}</dt>
+            <dd>{{ newsletter.category }}</dd>
+            {% endif %}
+            <dt style="color: var(--w-color-text-context, #666);">{% trans "Status" %}</dt>
+            <dd>{{ newsletter.get_status_display }}</dd>
+            <dt style="color: var(--w-color-text-context, #666);">{% trans "Public" %}</dt>
+            <dd>{% if newsletter.is_public %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</dd>
+        </dl>
+    </div>
+
+    {% if body_preview %}
+    <div style="background: #ffffff; border: 1px solid var(--w-color-border-furniture); border-radius: 8px; padding: 2rem; max-width: 600px; margin: 0 auto;">
+        {{ body_preview }}
+    </div>
+    {% else %}
+    <div class="help-block help-warning">
+        {% trans "This newsletter has no content yet." %}
+    </div>
+    {% endif %}
+
+    <div style="margin-top: 1.5rem; display: flex; gap: 1rem; align-items: center;">
+        {% if newsletter.status != "sent" %}
+        <a href="{% url 'newsletter_send' newsletter.pk %}" class="button button-small" style="display: inline-flex; align-items: center; gap: 0.4em;">
+            <svg class="icon icon-mail" aria-hidden="true" style="width: 1em; height: 1em;"><use href="#icon-mail"></use></svg>
+            {% trans "Send / Schedule" %}
+        </a>
+        {% endif %}
+        <a href="{% url 'sentnewsletter:index' %}" class="button button-secondary button-small">{% trans "Back to campaigns" %}</a>
+    </div>
+</div>
+{% endblock %}

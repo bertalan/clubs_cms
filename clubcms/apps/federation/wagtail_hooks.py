@@ -5,6 +5,8 @@ Registers FederatedClub and ExternalEvent admin panels under
 a "Federation" menu group in the Wagtail sidebar.
 """
 
+from django.utils.translation import gettext_lazy as _
+
 from wagtail import hooks
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet, SnippetViewSetGroup
@@ -17,7 +19,7 @@ class FederatedClubViewSet(SnippetViewSet):
 
     model = FederatedClub
     icon = "globe"
-    menu_label = "Partner Clubs"
+    menu_label = _("Partner Clubs")
     menu_order = 100
     add_to_admin_menu = False
     list_display = [
@@ -39,7 +41,7 @@ class ExternalEventViewSet(SnippetViewSet):
 
     model = ExternalEvent
     icon = "calendar"
-    menu_label = "External Events"
+    menu_label = _("External Events")
     menu_order = 200
     add_to_admin_menu = False
     list_display = [
@@ -58,7 +60,7 @@ class FederationViewSetGroup(SnippetViewSetGroup):
     """Groups federation admin panels under a single menu item."""
 
     items = (FederatedClubViewSet, ExternalEventViewSet)
-    menu_label = "Federation"
+    menu_label = _("Federation")
     menu_icon = "globe"
     menu_order = 700
 

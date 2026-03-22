@@ -5,6 +5,8 @@ Registers EventRegistration via a Wagtail ModelViewSet with
 list/filter/search capabilities for the Wagtail admin sidebar.
 """
 
+from django.utils.translation import gettext_lazy as _
+
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel, TabbedInterface, ObjectList
 from wagtail.admin.viewsets.model import ModelViewSet
 
@@ -20,7 +22,7 @@ class EventRegistrationViewSet(ModelViewSet):
 
     model = EventRegistration
     icon = "calendar"
-    menu_label = "Registrations"
+    menu_label = _("Registrations")
     menu_order = 250
     add_to_admin_menu = True
     inspect_view_enabled = True

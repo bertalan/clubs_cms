@@ -36,7 +36,7 @@ class TestViewSetsConfiguration(TestCase):
         self.assertEqual(reaction_viewset.model, Reaction)
 
     def test_reaction_viewset_icon(self):
-        self.assertEqual(reaction_viewset.icon, "heart")
+        self.assertEqual(reaction_viewset.icon, "bolt")
 
     def test_all_viewsets_added_to_menu(self):
         self.assertTrue(comment_viewset.add_to_admin_menu)

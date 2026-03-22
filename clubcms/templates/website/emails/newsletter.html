@@ -1,0 +1,19 @@
+{% extends "notifications/emails/base.html" %}
+{% load i18n %}
+
+{% block email_title %}{{ subject }}{% endblock %}
+
+{% block email_body %}
+<h2 style="font-size: 22px; font-weight: 600; margin-bottom: 16px;">{{ subject }}</h2>
+
+{{ body_html }}
+{% endblock %}
+
+{% block email_footer %}
+<p>
+    &copy; {{ site_name }}<br>
+    <a href="{{ unsubscribe_url }}" style="color: #888888;">
+        {% trans "Unsubscribe from this newsletter" %}
+    </a>
+</p>
+{% endblock %}

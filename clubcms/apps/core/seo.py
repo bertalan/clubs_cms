@@ -307,7 +307,16 @@ def get_event_schema(page, request, site_settings=None):
         schema["isAccessibleForFree"] = True
 
     # Organizer
-    if site_settings:
+    organizer_name = getattr(page, "organizer_name", "") or ""
+    organizer_url = getattr(page, "organizer_url", "") or ""
+    if organizer_name:
+        schema["organizer"] = {
+            "@type": "Organization",
+            "name": organizer_name,
+        }
+        if organizer_url:
+            schema["organizer"]["url"] = organizer_url
+    elif site_settings:
         schema["organizer"] = {
             "@type": "Organization",
             "name": getattr(site_settings, "site_name", "") or "Club CMS",

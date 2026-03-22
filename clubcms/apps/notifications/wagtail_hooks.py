@@ -5,6 +5,8 @@ Registers admin viewsets and adds a "Notifications" menu group
 to the Wagtail admin sidebar.
 """
 
+from django.utils.translation import gettext_lazy as _
+
 from wagtail import hooks
 from wagtail.admin.menu import MenuItem, SubmenuMenuItem
 from wagtail.admin.viewsets.base import ViewSetGroup
@@ -17,7 +19,7 @@ class NotificationsViewSetGroup(ViewSetGroup):
     Groups notification-related viewsets under a single menu entry.
     """
 
-    menu_label = "Notifications"
+    menu_label = _("Notifications")
     menu_icon = "mail"
     menu_order = 700
     items = (
