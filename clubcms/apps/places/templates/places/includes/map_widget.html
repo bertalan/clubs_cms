@@ -1,0 +1,65 @@
+{% load i18n %}
+
+<div id="place-map"
+     style="height: {{ height }}; width: 100%; border-radius: var(--radius-md, 8px);"
+     role="img"
+     aria-label="{% trans 'Mappa del luogo' %}"
+     tabindex="-1">
+</div>
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+      integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZhRvQTNTluNOEfb1ZRy6D3BOw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"
+        integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjfqERvhA+zuTxNSQQFlg/1nA6FJg=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+
+<script>
+(function() {
+    var mapEl = document.getElementById('place-map');
+    if (!mapEl) return;
+
+    var map = L.map('place-map', {
+        scrollWheelZoom: false
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 18
+    }).addTo(map);
+
+    {% if place and place.latitude and place.longitude %}
+        var lat = {{ place.latitude|escapejs }};
+        var lng = {{ place.longitude|escapejs }};
+        L.marker([lat, lng])
+            .addTo(map)
+            .bindPopup("{{ place.title|escapejs }}");
+        map.setView([lat, lng], 15);
+    {% elif geojson %}
+        var geojsonData = JSON.parse('{{ geojson|escapejs }}');
+        if (geojsonData.features && geojsonData.features.length) {
+            var layer = L.geoJSON(geojsonData, {
+                onEachFeature: function(feature, layer) {
+                    var name = feature.properties.name || '';
+                    var url = feature.properties.url || '#';
+                    var safeUrl = url.replace(/[^a-zA-Z0-9\-._~:/?#\[\]@!$&'()*+,;=%]/g, '');
+                    layer.bindPopup(
+                        '<a href="' + safeUrl + '">' + name + '</a>'
+                    );
+                }
+            }).addTo(map);
+            map.fitBounds(layer.getBounds().pad(0.1));
+        } else {
+            map.setView([42.5, 12.5], 6);
+        }
+    {% else %}
+        map.setView([42.5, 12.5], 6);
+    {% endif %}
+
+    map.on('focus', function() { map.scrollWheelZoom.enable(); });
+    map.on('blur', function() { map.scrollWheelZoom.disable(); });
+})();
+</script>

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags places_tags %}
+
+{% block body_class %}page-places{% endblock %}
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block content %}
+<section class="page-places">
+    <div class="container">
+        <header class="page-places__header">
+            <h1 class="page-places__title">{{ page.title }}</h1>
+            {% if page.intro %}
+                <div class="page-places__intro rich-text">
+                    {{ page.intro|richtext }}
+                </div>
+            {% endif %}
+        </header>
+
+        {# Filtri per tipo #}
+        <nav class="page-places__filters" aria-label="{% trans 'Filtra per tipo di luogo' %}">
+            <a href="{{ page.url }}"
+               class="btn btn--sm {% if not active_type %}btn--active{% endif %}"
+               {% if not active_type %}aria-current="true"{% endif %}>
+                {% trans "Tutti" %}
+            </a>
+            {% for value, label in place_types %}
+                <a href="{{ page.url }}?type={{ value }}"
+                   class="btn btn--sm {% if active_type == value %}btn--active{% endif %}"
+                   {% if active_type == value %}aria-current="true"{% endif %}>
+                    {{ label }}
+                </a>
+            {% endfor %}
+        </nav>
+
+        {# Mappa globale #}
+        {% place_map geojson=places_geojson height="450px" %}
+
+        {# Griglia card #}
+        <div class="page-places__grid" role="list">
+            {% for place in places %}
+                {% include "places/includes/place_card.html" with place=place %}
+            {% empty %}
+                <p class="page-places__empty">{% trans "Nessun luogo trovato." %}</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

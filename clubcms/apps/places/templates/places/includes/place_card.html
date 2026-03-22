@@ -1,0 +1,34 @@
+{% load i18n wagtailcore_tags wagtailimages_tags %}
+
+<article class="place-card" role="listitem">
+    <a href="{% pageurl place %}" class="place-card__link">
+        {% if place.cover_image %}
+            <div class="place-card__image">
+                {% image place.cover_image fill-400x250 as thumb %}
+                <img src="{{ thumb.url }}"
+                     alt="{{ place.cover_image.title }}"
+                     width="{{ thumb.width }}"
+                     height="{{ thumb.height }}"
+                     loading="lazy">
+                <span class="place-card__badge" data-variant="{{ place.place_type }}" aria-label="{{ place.get_place_type_display }}">
+                    {{ place.get_place_type_display }}
+                </span>
+            </div>
+        {% endif %}
+        <div class="place-card__content">
+            {% if not place.cover_image %}
+                <span class="place-card__category">{{ place.get_place_type_display }}</span>
+            {% endif %}
+            <h3 class="place-card__title">{{ place.title }}</h3>
+            {% if place.city %}
+                <p class="place-card__city">
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    {{ place.city }}{% if place.province %} ({{ place.province }}){% endif %}
+                </p>
+            {% endif %}
+            {% if place.short_description %}
+                <p class="place-card__desc">{{ place.short_description|truncatechars:120 }}</p>
+            {% endif %}
+        </div>
+    </a>
+</article>

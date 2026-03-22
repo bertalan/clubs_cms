@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags wagtailimages_tags places_tags %}
+
+{% block body_class %}page-place-detail{% endblock %}
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block extra_css %}
+    {% place_schema_jsonld self %}
+{% endblock %}
+
+{% block content %}
+<article class="page-place-detail">
+    <div class="container">
+
+        {# Cover image #}
+        {% if page.cover_image %}
+            <figure class="page-place-detail__cover">
+                {% image page.cover_image fill-1200x500 as cover %}
+                <img src="{{ cover.url }}"
+                     alt="{{ page.cover_image.title }}"
+                     class="page-place-detail__cover-image"
+                     width="{{ cover.width }}"
+                     height="{{ cover.height }}"
+                     loading="lazy">
+                <span class="page-place-detail__badge" data-variant="{{ page.place_type }}" aria-label="{{ page.get_place_type_display }}">
+                    {{ page.get_place_type_display }}
+                </span>
+            </figure>
+        {% endif %}
+
+        {# Header #}
+        <header class="page-place-detail__header">
+            {% if not page.cover_image %}
+                <span class="page-place-detail__category">{{ page.get_place_type_display }}</span>
+            {% endif %}
+            <h1 class="page-place-detail__title">{{ page.title }}</h1>
+            {% if page.short_description %}
+                <p class="page-place-detail__intro">{{ page.short_description }}</p>
+            {% endif %}
+        </header>
+
+        <div class="page-place-detail__layout" role="region" aria-label="{% trans 'Dettagli luogo' %}">
+            {# Main content #}
+            <div class="page-place-detail__main">
+                {# Mappa #}
+                {% if page.latitude and page.longitude %}
+                <section class="page-place-detail__map-section" aria-label="{% trans 'Mappa' %}">
+                    {% place_map place=page height="350px" %}
+                </section>
+                {% endif %}
+
+                {# Descrizione #}
+                {% if page.description %}
+                    <div class="page-place-detail__body rich-text">
+                        {{ page.description|richtext }}
+                    </div>
+                {% endif %}
+
+                {# Galleria #}
+                {% with gallery=page.gallery_images.all %}
+                {% if gallery %}
+                    <section class="page-place-detail__gallery" aria-label="{% trans 'Galleria' %}">
+                        <h2>{% trans "Galleria" %}</h2>
+                        <div class="page-place-detail__gallery-grid">
+                            {% for item in gallery %}
+                                <figure class="page-place-detail__gallery-item">
+                                    {% image item.image fill-400x300 as thumb %}
+                                    <img src="{{ thumb.url }}"
+                                         alt="{{ item.caption|default:item.image.title }}"
+                                         width="{{ thumb.width }}"
+                                         height="{{ thumb.height }}"
+                                         loading="lazy">
+                                    {% if item.caption %}
+                                        <figcaption>{{ item.caption }}</figcaption>
+                                    {% endif %}
+                                </figure>
+                            {% endfor %}
+                        </div>
+                    </section>
+                {% endif %}
+                {% endwith %}
+            </div>
+
+            {# Sidebar info card #}
+            <aside class="page-place-detail__sidebar" aria-label="{% trans 'Informazioni' %}">
+                <div class="page-place-detail__info-card">
+                    <h2 class="page-place-detail__info-heading">{% trans "Informazioni" %}</h2>
+
+                    {% if page.address %}
+                        <div class="page-place-detail__info-item">
+                            <span class="page-place-detail__info-label" id="place-address-label">
+                                <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                                {% trans "Indirizzo" %}
+                            </span>
+                            <div class="page-place-detail__info-value" aria-labelledby="place-address-label">
+                                {{ page.get_full_address }}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if page.phone %}
+                        <div class="page-place-detail__info-item">
+                            <span class="page-place-detail__info-label" id="place-phone-label">
+                                <i class="fa-solid fa-phone" aria-hidden="true"></i>
+                                {% trans "Telefono" %}
+                            </span>
+                            <div class="page-place-detail__info-value" aria-labelledby="place-phone-label">
+                                <a href="tel:{{ page.phone }}">{{ page.phone }}</a>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if page.email %}
+                        <div class="page-place-detail__info-item">
+                            <span class="page-place-detail__info-label" id="place-email-label">
+                                <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                                {% trans "Email" %}
+                            </span>
+                            <div class="page-place-detail__info-value" aria-labelledby="place-email-label">
+                                <a href="mailto:{{ page.email }}">{{ page.email }}</a>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if page.website_url %}
+                        <div class="page-place-detail__info-item">
+                            <span class="page-place-detail__info-label" id="place-web-label">
+                                <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                                {% trans "Sito web" %}
+                            </span>
+                            <div class="page-place-detail__info-value" aria-labelledby="place-web-label">
+                                <a href="{{ page.website_url }}" target="_blank" rel="noopener noreferrer">
+                                    {{ page.website_url|truncatechars:40 }}
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if page.opening_hours %}
+                        <div class="page-place-detail__info-item">
+                            <span class="page-place-detail__info-label" id="place-hours-label">
+                                <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                                {% trans "Orari" %}
+                            </span>
+                            <div class="page-place-detail__info-value" aria-labelledby="place-hours-label">
+                                {{ page.opening_hours }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Tags #}
+                {% with tags=page.tags.all %}
+                {% if tags %}
+                    <nav class="page-place-detail__tags" aria-label="{% trans 'Tag' %}">
+                        <span class="page-place-detail__tags-label">{% trans "Tag" %}:</span>
+                        <ul class="page-place-detail__tags-list">
+                            {% for tag in tags %}
+                                <li><span class="page-place-detail__tag">{{ tag.name }}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                {% endif %}
+                {% endwith %}
+            </aside>
+        </div>
+    </div>
+</article>
+{% endblock %}

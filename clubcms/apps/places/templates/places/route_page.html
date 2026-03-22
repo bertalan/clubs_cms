@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags wagtailimages_tags places_tags %}
+
+{% block body_class %}page-route-detail{% endblock %}
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block extra_css %}
+    {% place_schema_jsonld self %}
+{% endblock %}
+
+{% block content %}
+<article class="page-route-detail">
+    <div class="container">
+
+        {# Cover image #}
+        {% if page.cover_image %}
+            <figure class="page-route-detail__cover">
+                {% image page.cover_image fill-1200x500 as cover %}
+                <img src="{{ cover.url }}"
+                     alt="{{ page.cover_image.title }}"
+                     class="page-route-detail__cover-image"
+                     width="{{ cover.width }}"
+                     height="{{ cover.height }}"
+                     loading="lazy">
+            </figure>
+        {% endif %}
+
+        <header class="page-route-detail__header">
+            <h1 class="page-route-detail__title">{{ page.title }}</h1>
+            {% if page.short_description %}
+                <p class="page-route-detail__intro">{{ page.short_description }}</p>
+            {% endif %}
+        </header>
+
+        {# Metadati percorso #}
+        <div class="page-route-detail__meta" role="list" aria-label="{% trans 'Dettagli percorso' %}">
+            {% if page.distance_km %}
+                <span class="page-route-detail__meta-item" role="listitem">
+                    <i class="fa-solid fa-road" aria-hidden="true"></i>
+                    <strong>{% trans "Distanza" %}:</strong> {{ page.distance_km }} km
+                </span>
+            {% endif %}
+            {% if page.estimated_duration %}
+                <span class="page-route-detail__meta-item" role="listitem">
+                    <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                    <strong>{% trans "Durata" %}:</strong> {{ page.get_duration_display }}
+                </span>
+            {% endif %}
+            <span class="page-route-detail__meta-item" role="listitem">
+                <i class="fa-solid fa-mountain" aria-hidden="true"></i>
+                <strong>{% trans "Difficoltà" %}:</strong>
+                <span class="page-route-detail__difficulty" data-level="{{ page.difficulty }}">
+                    {{ page.get_difficulty_display }}
+                </span>
+            </span>
+        </div>
+
+        {# Descrizione #}
+        {% if page.description %}
+            <div class="page-route-detail__body rich-text">
+                {{ page.description|richtext }}
+            </div>
+        {% endif %}
+
+        {# Tappe #}
+        <section class="page-route-detail__stops" aria-label="{% trans 'Tappe del percorso' %}">
+            <h2>{% trans "Tappe" %}</h2>
+            <ol class="page-route-detail__stops-list">
+                {% for stop in page.get_ordered_stops %}
+                    <li class="page-route-detail__stop-item">
+                        <a href="{% pageurl stop.place %}">{{ stop.place.title }}</a>
+                        {% if stop.note %}
+                            <span class="page-route-detail__stop-note">— {{ stop.note }}</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ol>
+        </section>
+
+        {# File GPX #}
+        {% if page.gpx_file %}
+            <div class="page-route-detail__download">
+                <a href="{{ page.gpx_file.url }}" class="btn" download>
+                    <i class="fa-solid fa-download" aria-hidden="true"></i>
+                    {% trans "Scarica traccia GPX" %}
+                </a>
+            </div>
+        {% endif %}
+
+    </div>
+</article>
+{% endblock %}

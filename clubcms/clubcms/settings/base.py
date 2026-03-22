@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "apps.federation",
     "apps.notifications",
     "apps.mutual_aid",
+    "apps.places",
 ]
 
 MIDDLEWARE = [
