@@ -127,9 +127,9 @@ DATA = {
     # PRODUCTS
     # ==================================================================
     "products": [
-        {"name": "Standard Membership", "slug": "standard-membership", "description": "Annual membership with voting rights and event participation.", "price": "50.00", "grants_vote": True, "grants_events": True, "grants_upload": True, "grants_discount": False, "discount_percent": 0, "sort_order": 1},
-        {"name": "Supporter Membership", "slug": "supporter-membership", "description": "Supporter membership with event discounts and gallery access.", "price": "30.00", "grants_vote": False, "grants_events": True, "grants_upload": False, "grants_discount": True, "discount_percent": 10, "sort_order": 2},
-        {"name": "Premium Membership", "slug": "premium-membership", "description": "Premium membership with all privileges and 20% event discount.", "price": "100.00", "grants_vote": True, "grants_events": True, "grants_upload": True, "grants_discount": True, "discount_percent": 20, "sort_order": 3},
+        {"name": "Standard Membership", "slug": "standard-membership", "translation_key": "standard", "description": "Annual membership with voting rights and event participation.", "price": "50.00", "grants_vote": True, "grants_events": True, "grants_upload": True, "grants_discount": False, "discount_percent": 0, "sort_order": 1},
+        {"name": "Supporter Membership", "slug": "supporter-membership", "translation_key": "supporter", "description": "Supporter membership with event discounts and gallery access.", "price": "30.00", "grants_vote": False, "grants_events": True, "grants_upload": False, "grants_discount": True, "discount_percent": 10, "sort_order": 2},
+        {"name": "Premium Membership", "slug": "premium-membership", "translation_key": "premium", "description": "Premium membership with all privileges and 20% event discount.", "price": "100.00", "grants_vote": True, "grants_events": True, "grants_upload": True, "grants_discount": True, "discount_percent": 20, "sort_order": 3},
     ],
 
     # ==================================================================

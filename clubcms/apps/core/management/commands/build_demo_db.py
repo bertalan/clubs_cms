@@ -100,9 +100,11 @@ class Command(BaseCommand):
         # products
         for row in data.get("products", []):
             conn.execute(
-                "INSERT INTO products VALUES (?,?,?,?,?,?,?,?,?,?)",
+                "INSERT INTO products VALUES (?,?,?,?,?,?,?,?,?,?,?)",
                 (
-                    row["name"], row["slug"], row.get("description", ""),
+                    row["name"], row["slug"],
+                    row.get("translation_key", ""),
+                    row.get("description", ""),
                     float(row["price"]),
                     int(row.get("grants_vote", False)),
                     int(row.get("grants_events", False)),

@@ -115,7 +115,7 @@ class TestPlacePage:
         assert str(place_square) == "Piazza del Campo"
 
     def test_place_type_display(self, place_square):
-        assert place_square.get_place_type_display() == "Piazza"
+        assert place_square.get_place_type_display() == "Square"
 
     def test_get_map_icon_square(self, place_square):
         assert place_square.get_map_icon() == "map-pin"

@@ -298,24 +298,26 @@ def strip_language_prefix(path):
 # ─────────────────────────────────────────────────────────────────────────────
 
 
-@register.simple_tag
-def translate_url(path, lang_code):
+@register.simple_tag(takes_context=True)
+def translate_url(context, path, lang_code):
     """
     Return the equivalent URL path in the given language.
 
-    Activates the source language (detected from the URL prefix) before
-    resolving, then reverses under the target language so translated URL
-    segments are handled (e.g. /it/eventi/miei-eventi/ → /en/events/my-events/).
+    Strategy (in order):
+    1. If the template context contains a Wagtail page (``self``), look up
+       its translation in the target locale and return that page's URL.
+    2. For Django named URL patterns (non-Wagtail), resolve/reverse under
+       the target language so translated path segments are handled.
+    3. Fallback: return the target-language homepage ``/<lang>/``.
 
-    For Wagtail catch-all pages it falls back to swapping the language prefix.
+    Usage::
 
-    Usage:
         {% translate_url request.get_full_path "en" %}
     """
     from django.urls import resolve, reverse
     from django.utils.translation import override
+    from wagtail.models import Locale, Page
 
-    # Detect the source language from the URL prefix
     lang_codes = [code for code, _ in settings.LANGUAGES]
     source_lang = None
     for code in lang_codes:
@@ -323,22 +325,38 @@ def translate_url(path, lang_code):
             source_lang = code
             break
 
-    # Try to resolve and reverse in the target language
+    # Separate query-string / fragment so URL resolution works
+    clean = path.split("?")[0].split("#")[0]
+    qs = path[len(clean):]  # preserve ?foo=bar#hash
+
+    # ---- Strategy 1: Wagtail page from template context ----
+    page = context.get("self")
+    if page and isinstance(page, Page):
+        try:
+            target_locale = Locale.objects.get(language_code=lang_code)
+            translated = page.get_translation(target_locale)
+            if translated.live and translated.url:
+                return translated.url + qs
+        except (Locale.DoesNotExist, Page.DoesNotExist):
+            pass
+
+    # ---- Strategy 2: Django named URLs (non-Wagtail views) ----
     try:
         with override(source_lang or settings.LANGUAGE_CODE):
-            match = resolve(path)
-        to_be_reversed = (
-            f"{match.namespace}:{match.url_name}" if match.namespace
-            else match.url_name
-        )
-        with override(lang_code):
-            return reverse(to_be_reversed, args=match.args, kwargs=match.kwargs)
+            match = resolve(clean)
+        # Skip Wagtail catch-all — already handled by Strategy 1
+        if match.url_name not in ("wagtail_serve", "wagtail_serve_root"):
+            to_reverse = (
+                f"{match.namespace}:{match.url_name}" if match.namespace
+                else match.url_name
+            )
+            with override(lang_code):
+                return reverse(to_reverse, args=match.args, kwargs=match.kwargs) + qs
     except Exception:
         pass
 
-    # Fallback: swap language prefix (covers Wagtail catch-all pages)
-    prefix_pattern = r"^/(" + "|".join(re.escape(c) for c in lang_codes) + r")/"
-    return re.sub(prefix_pattern, f"/{lang_code}/", path)
+    # ---- Strategy 3: homepage in target language ----
+    return f"/{lang_code}/"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -355,7 +373,8 @@ def get_active_locales():
     that are actually configured in the CMS, rather than all languages
     defined in settings.LANGUAGES.
 
-    Usage in templates:
+    Usage in templates::
+
         {% get_active_locales as locales %}
         {% for lang_code, lang_name in locales %}
             ...
@@ -375,6 +394,34 @@ def get_active_locales():
             for locale in locales
         ]
     return list(settings.LANGUAGES)
+
+
+@register.simple_tag(takes_context=True)
+def get_page_translations(context):
+    """
+    Return a dict ``{lang_code: url}`` with the available Wagtail page
+    translations of the current page (from context ``self``).
+
+    Non-Wagtail views return an empty dict so the switcher can tell which
+    languages have real page content.
+
+    Usage in templates::
+
+        {% get_page_translations as page_trans %}
+        {% if lang_code in page_trans %}…{% endif %}
+    """
+    from wagtail.models import Page
+
+    page = context.get("self")
+    if not page or not isinstance(page, Page):
+        return {}
+    result = {}
+    if page.url:
+        result[page.locale.language_code] = page.url
+    for tr in page.get_translations().live().select_related("locale"):
+        if tr.url:
+            result[tr.locale.language_code] = tr.url
+    return result
 
 
 # ─────────────────────────────────────────────────────────────────────────────

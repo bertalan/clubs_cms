@@ -55,15 +55,23 @@ docker compose exec web python manage.py createsuperuser
 
 ### Load demo content (optional)
 
-Build and load a per-language demo fixture:
+Build and load per-language demo fixtures (available: `en`, `it`):
 
 ```bash
-# Build the English fixture, then load it as the primary site
-docker compose exec web python manage.py build_demo_db --lang en
+# Build fixtures (both languages)
+docker compose exec web python manage.py build_demo_db
+
+# Load English as the primary site
 docker compose exec web python manage.py load_demo --lang en --primary --flush
+
+# Add Italian pages alongside English
+docker compose exec web python manage.py load_demo --lang it
 ```
 
-Replace `en` with `it`, `de`, `fr`, or `es` to create a demo site in another language.
+The `--primary` flag creates the Site, shared snippets (categories,
+FAQs, testimonials, press releases, brand assets), and the root page
+tree. A secondary load (without `--primary`) adds translated pages
+and products while reusing shared content.
 
 ### Access the site
 

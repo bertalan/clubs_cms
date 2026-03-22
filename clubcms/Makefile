@@ -1,4 +1,4 @@
-.PHONY: build up down logs shell migrate test superuser collectstatic
+.PHONY: build up down logs shell migrate test superuser collectstatic demo
 
 build:
 	docker compose build
@@ -25,6 +25,12 @@ superuser:
 	docker compose exec web python manage.py createsuperuser
 
 collectstatic:
+	docker compose exec web python manage.py collectstatic --noinput
+
+demo:
+	docker compose exec web python manage.py build_demo_db
+	docker compose exec web python manage.py load_demo --lang en --primary --flush
+	docker compose exec web python manage.py load_demo --lang it
 	docker compose exec web python manage.py collectstatic --noinput
 
 makemessages:

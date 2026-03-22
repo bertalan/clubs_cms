@@ -19,6 +19,12 @@ def _tk(name: str) -> str:
     return str(uuid.uuid5(_NS, name))
 
 
+PRODUCT_TRANSLATION_KEYS = {
+    "standard": _tk("product_standard"),
+    "supporter": _tk("product_supporter"),
+    "premium": _tk("product_premium"),
+}
+
 TRANSLATION_KEYS = {
     # Top-level pages
     "home": _tk("home"),
@@ -97,6 +103,7 @@ CREATE TABLE IF NOT EXISTS categories (
 CREATE TABLE IF NOT EXISTS products (
     name             TEXT NOT NULL,
     slug             TEXT NOT NULL,
+    translation_key  TEXT NOT NULL,
     description      TEXT DEFAULT '',
     price            REAL NOT NULL,
     grants_vote      INTEGER DEFAULT 0,

@@ -1985,6 +1985,87 @@ a:hover {
   color: var(--color-text-muted);
 }
 
+
+/* --------------------------------------------------------------------------
+   Places pages – Clubs overrides
+   -------------------------------------------------------------------------- */
+.place-card {
+  background: var(--color-surface-alt);
+  border: var(--clubs-border);
+  border-radius: 0;
+  box-shadow: var(--clubs-shadow);
+}
+
+.place-card:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.02);
+}
+
+.place-card__badge {
+  border-radius: 0;
+}
+
+.place-card__title {
+  text-transform: uppercase;
+  font-weight: 900;
+}
+
+.page-places__title {
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+}
+
+.page-places__filters .btn {
+  border-radius: 0;
+}
+
+.page-place-detail__cover-image {
+  border-radius: 0;
+}
+
+.page-place-detail__info-card {
+  border-radius: 0;
+  border: var(--clubs-border);
+}
+
+.page-place-detail__map-section {
+  border-radius: 0;
+}
+
+.page-place-detail__gallery-item {
+  border-radius: 0;
+}
+
+.page-place-detail__title {
+  text-transform: uppercase;
+  font-weight: 900;
+}
+
+.page-route-detail__cover-image {
+  border-radius: 0;
+}
+
+.page-route-detail__title {
+  text-transform: uppercase;
+  font-weight: 900;
+}
+
+.page-route-detail__meta {
+  border-radius: 0;
+  border: var(--clubs-border);
+}
+
+#place-map {
+  border: var(--clubs-border);
+  border-radius: 0;
+}
+
+.page-place-detail__tag {
+  border-radius: 0;
+}
+
+
 /* --------------------------------------------------------------------------
    27. Form overrides for dark theme (WCAG 2.2 SC 1.4.11)
    -------------------------------------------------------------------------- */
@@ -3599,24 +3680,38 @@ html.dark-mode {
 .site-nav__dropdown-divider {
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
-/* Language menu */
+/* Language switcher */
+.site-nav__lang-toggle {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+  border-radius: 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.site-nav__lang-toggle:hover,
+.site-nav__lang-toggle:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.4);
+}
 .site-nav__lang-menu {
   background: var(--clubs-surface-dark, #1a1a1a);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
-.site-nav__lang-menu button {
+.site-nav__lang-menu .site-nav__lang-link {
   color: rgba(255, 255, 255, 0.8);
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-.site-nav__lang-menu button:hover,
-.site-nav__lang-menu button:focus-visible {
+.site-nav__lang-menu .site-nav__lang-link:hover,
+.site-nav__lang-menu .site-nav__lang-link:focus-visible {
   background: rgba(255, 255, 255, 0.05);
+  color: #fff;
 }
-.site-nav__lang-menu button.active {
+.site-nav__lang-menu .site-nav__lang-link.active {
   color: var(--color-secondary);
 }
 .site-nav__login {
@@ -3627,15 +3722,6 @@ html.dark-mode {
 }
 .site-nav__user-toggle {
   color: rgba(255, 255, 255, 0.8);
-}
-.site-nav__lang-toggle {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.2);
-}
-.site-nav__lang-toggle:hover,
-.site-nav__lang-toggle:focus-visible {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.4);
 }
 .site-nav__search-toggle {
   color: #fff;

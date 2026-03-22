@@ -1564,7 +1564,9 @@ class MembershipPlansPage(Page):
         context = super().get_context(request, *args, **kwargs)
         from apps.website.models.snippets import Product
 
-        context["products"] = Product.objects.filter(is_active=True).order_by("order")
+        context["products"] = Product.objects.filter(
+            is_active=True, locale=self.locale
+        ).order_by("order")
         if request.user.is_authenticated:
             context["user_products"] = {
                 p.pk for p in request.user.products.all()

@@ -593,14 +593,16 @@ docker compose exec web python manage.py load_demo --lang en
 
 | Flag | Effect |
 |------|--------|
-| `--lang XX` | Language code (`en`, `it`, `de`, `fr`, `es`) |
-| `--primary` | Set this language as default, create Site + root page |
+| `--lang XX` | Language code. Fixtures available: `en`, `it` |
+| `--primary` | Set this language as default, create Site + root page + all shared (non-translatable) snippets |
 | `--flush` | Wipe existing demo content before loading |
 
 **Default behaviour (no `--primary`)**: adds pages as a secondary
-language.  Shared data (categories, products, members) is reused;
-pages are linked as translations of the primary-language pages via
-deterministic UUID keys.
+language.  Non-translatable data (categories, FAQs, testimonials,
+press releases, brand assets, photo tags, aid skills, place tags) is
+reused from the primary import.  Translatable snippets (products)
+are created as linked translations.  Pages are linked to the
+primary-language pages via deterministic UUID keys.
 
 ### What Gets Created
 

@@ -32,7 +32,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--lang",
             required=True,
-            choices=["en", "it", "de", "fr", "es"],
+            choices=["en", "it"],
             help="Language code of the fixture to load.",
         )
         parser.add_argument(

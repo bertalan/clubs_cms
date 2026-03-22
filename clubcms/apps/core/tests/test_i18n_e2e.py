@@ -113,7 +113,7 @@ class I18nContentTests(TestCase):
         content = resp.content.decode()
         for lang in ["en", "it", "de", "fr", "es"]:
             self.assertIn(
-                f'name="language" value="{lang}"',
+                f'data-lang="{lang}"',
                 content,
                 f"Language {lang} not found in switcher",
             )

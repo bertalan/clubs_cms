@@ -46,6 +46,7 @@ from apps.places.models import (
     RoutePage,
     RouteStop,
 )
+from apps.core.demo.schema import PRODUCT_TRANSLATION_KEYS
 from apps.website.models import (
     AboutPage,
     AidSkill,
@@ -155,6 +156,7 @@ class DemoLoader:
 
         self.conn = sqlite3.connect(str(self.db_path))
         self.conn.row_factory = sqlite3.Row
+        self.primary = primary
 
         try:
             self.lang = self._meta("language")
@@ -320,24 +322,50 @@ class DemoLoader:
 
     def _load_products(self):
         for row in self._rows("products"):
-            _, created = Product.objects.get_or_create(
-                slug=row["slug"],
-                defaults={
-                    "name": row["name"],
-                    "description": row["description"],
-                    "price": Decimal(str(row["price"])),
-                    "grants_vote": bool(row["grants_vote"]),
-                    "grants_events": bool(row["grants_events"]),
-                    "grants_upload": bool(row["grants_upload"]),
-                    "grants_discount": bool(row["grants_discount"]),
-                    "discount_percent": row["discount_percent"],
-                    "order": row["sort_order"],
-                },
-            )
-            if created:
+            tk_key = row["translation_key"]
+            tk_uuid = uuid.UUID(PRODUCT_TRANSLATION_KEYS[tk_key])
+
+            # Already exists in this locale?
+            existing = Product.objects.filter(
+                locale=self.locale, translation_key=tk_uuid
+            ).first()
+            if existing:
+                continue
+
+            if self.primary:
+                Product.objects.create(
+                    slug=row["slug"],
+                    name=row["name"],
+                    description=row["description"],
+                    price=Decimal(str(row["price"])),
+                    grants_vote=bool(row["grants_vote"]),
+                    grants_events=bool(row["grants_events"]),
+                    grants_upload=bool(row["grants_upload"]),
+                    grants_discount=bool(row["grants_discount"]),
+                    discount_percent=row["discount_percent"],
+                    order=row["sort_order"],
+                    translation_key=tk_uuid,
+                    locale=self.locale,
+                )
                 self.stdout.write(f"  Created Product: {row['name']}")
+            else:
+                # Secondary locale: copy from source
+                source = Product.objects.filter(
+                    translation_key=tk_uuid
+                ).exclude(locale=self.locale).first()
+                if source:
+                    translated = source.copy_for_translation(self.locale)
+                    translated.name = row["name"]
+                    translated.slug = row["slug"]
+                    translated.description = row["description"]
+                    translated.save()
+                    self.stdout.write(
+                        f"  Translated Product: {row['name']}"
+                    )
 
     def _load_testimonials(self):
+        if not self.primary:
+            return
         for row in self._rows("testimonials"):
             _, created = Testimonial.objects.get_or_create(
                 author_name=row["author_name"],
@@ -351,6 +379,8 @@ class DemoLoader:
                 self.stdout.write(f"  Created Testimonial: {row['author_name']}")
 
     def _load_faqs(self):
+        if not self.primary:
+            return
         for row in self._rows("faqs"):
             _, created = FAQ.objects.get_or_create(
                 question=row["question"],
@@ -364,6 +394,8 @@ class DemoLoader:
                 self.stdout.write(f"  Created FAQ: {row['question'][:50]}")
 
     def _load_photo_tags(self):
+        if not self.primary:
+            return
         for row in self._rows("photo_tags"):
             _, created = PhotoTag.objects.get_or_create(
                 slug=row["slug"], defaults={"name": row["name"]}
@@ -372,6 +404,8 @@ class DemoLoader:
                 self.stdout.write(f"  Created PhotoTag: {row['name']}")
 
     def _load_press_releases(self):
+        if not self.primary:
+            return
         for row in self._rows("press_releases"):
             _, created = PressRelease.objects.get_or_create(
                 title=row["title"],
@@ -385,6 +419,8 @@ class DemoLoader:
                 self.stdout.write(f"  Created PressRelease: {row['title'][:50]}")
 
     def _load_brand_assets(self):
+        if not self.primary:
+            return
         for row in self._rows("brand_assets"):
             _, created = BrandAsset.objects.get_or_create(
                 name=row["name"],
@@ -398,6 +434,8 @@ class DemoLoader:
                 self.stdout.write(f"  Created BrandAsset: {row['name'][:50]}")
 
     def _load_aid_skills(self):
+        if not self.primary:
+            return
         for row in self._rows("aid_skills"):
             _, created = AidSkill.objects.get_or_create(
                 slug=row["slug"],
@@ -412,6 +450,8 @@ class DemoLoader:
                 self.stdout.write(f"  Created AidSkill: {row['name']}")
 
     def _load_place_tags(self):
+        if not self.primary:
+            return
         for row in self._rows("place_tags"):
             PlaceTag.objects.get_or_create(
                 name=row["name"],
@@ -456,7 +496,7 @@ class DemoLoader:
             root = Page.objects.filter(depth=1).first()
 
         for row in pages_data:
-            self._create_single_page(row, root)
+            self._create_single_page(row, root, primary=primary)
 
         home = self.created_pages.get("home")
         if not home:
@@ -476,7 +516,9 @@ class DemoLoader:
             )
         return home
 
-    def _create_single_page(self, row: sqlite3.Row, root: Page):
+    def _create_single_page(
+        self, row: sqlite3.Row, root: Page, *, primary: bool
+    ):
         """Create one page and register it in self.created_pages."""
         page_type = row["page_type"]
         model = PAGE_TYPE_MAP.get(page_type)
@@ -488,14 +530,43 @@ class DemoLoader:
         tk = row["translation_key"]
 
         # Skip if this exact page already exists in this locale
-        if model.objects.filter(locale=self.locale, slug=slug).exists():
-            existing = model.objects.get(locale=self.locale, slug=slug)
+        existing = model.objects.filter(locale=self.locale, slug=slug).first()
+        if not existing:
+            # For secondary locales, also check by translation_key
+            existing = model.objects.filter(
+                locale=self.locale, translation_key=uuid.UUID(tk)
+            ).first()
+        if existing:
             self.created_pages[slug] = existing
             return
 
         fields = json.loads(row["fields"]) if row["fields"] else {}
         resolved = self._resolve_fields(model, fields)
 
+        # --- Secondary locale: use copy_for_translation if source exists ---
+        if not primary:
+            source = (
+                Page.objects.filter(translation_key=uuid.UUID(tk))
+                .exclude(locale=self.locale)
+                .first()
+            )
+            if source:
+                source = source.specific
+                translated = source.copy_for_translation(self.locale)
+                # Update title and content fields from fixture
+                translated.title = row["title"]
+                # Only override slug if it won't conflict with siblings
+                parent = translated.get_parent()
+                if Page._slug_is_available(slug, parent, page=translated):
+                    translated.slug = slug
+                for key, value in resolved.items():
+                    setattr(translated, key, value)
+                translated.save_revision().publish()
+                # Register under fixture slug for parent lookups by children
+                self.created_pages[slug] = translated
+                return
+
+        # --- Primary locale or no source page: create from scratch ---
         page = model(
             title=row["title"],
             slug=slug,
@@ -917,7 +988,6 @@ class DemoLoader:
                 user=user,
                 event=event,
                 status=row["status"],
-                ticket_type=row["ticket_type"],
                 notes=row["notes"],
                 guests=row["guests"],
                 registered_at=now - timedelta(days=row["days_ago"]),
@@ -1024,8 +1094,8 @@ class DemoLoader:
             if user:
                 Activity.objects.create(
                     user=user,
-                    activity_type=row["activity_type"],
-                    description=row["description"],
+                    action=row["activity_type"],
+                    target_title=row["description"],
                     created_at=now - timedelta(days=row["days_ago"]),
                 )
         self.stdout.write("  Created activity log")

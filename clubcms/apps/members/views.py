@@ -106,7 +106,11 @@ class CardView(LoginRequiredMixin, TemplateView):
 
         # Available products for purchase
         from apps.website.models.snippets import Product
-        context["available_products"] = Product.objects.filter(is_active=True).order_by("order")
+        from wagtail.models import Locale
+        locale = Locale.get_active()
+        context["available_products"] = Product.objects.filter(
+            is_active=True, locale=locale
+        ).order_by("order")
 
         # Contact page URL for membership requests
         from apps.website.models.pages import ContactPage

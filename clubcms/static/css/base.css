@@ -974,7 +974,7 @@ h4, .h4 {
 }
 
 /* --------------------------------------------------------------------------
-   Language Switcher
+   Language Switcher  (structural only — visual overrides in each theme)
    -------------------------------------------------------------------------- */
 .site-nav__lang {
   position: relative;
@@ -987,10 +987,18 @@ h4, .h4 {
   cursor: pointer;
   min-height: 36px;
   padding: 0.25rem 0.625rem;
+  font: inherit;
+  font-size: 0.85rem;
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  transition: background 0.2s, border-color 0.2s;
+  border-radius: 4px;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+/* a11y — visible focus fallback (themes may override outline style) */
+.site-nav__lang-toggle:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 .site-nav__lang-menu {
   display: none;
@@ -1002,13 +1010,13 @@ h4, .h4 {
   padding: 0.25rem 0;
   min-width: 140px;
   z-index: 100;
+  border-radius: 4px;
 }
 .site-nav__lang-menu.open {
   display: block;
 }
 .site-nav__lang-menu li { margin: 0; }
-.site-nav__lang-menu form { margin: 0; }
-.site-nav__lang-menu button {
+.site-nav__lang-menu .site-nav__lang-link {
   background: none;
   border: none;
   color: inherit;
@@ -1016,11 +1024,22 @@ h4, .h4 {
   display: block;
   padding: 0.5rem 1rem;
   text-align: left;
+  text-decoration: none;
+  font-size: 0.85rem;
   width: 100%;
-  transition: background 0.15s;
+  transition: background 0.15s, color 0.15s;
 }
-.site-nav__lang-menu button.active {
+/* a11y — focus fallback */
+.site-nav__lang-menu .site-nav__lang-link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}
+.site-nav__lang-menu .site-nav__lang-link.active {
   font-weight: 700;
+}
+.site-nav__lang-menu .site-nav__lang-link--unavailable {
+  opacity: 0.45;
+  pointer-events: none;
 }
 
 /* --------------------------------------------------------------------------
@@ -6484,6 +6503,15 @@ h4, .h4 {
   transform: translateY(-2px);
 }
 
+.place-card:has(.place-card__link:focus-visible) {
+  outline: 3px solid var(--color-accent, #0066FF);
+  outline-offset: 2px;
+}
+
+.place-card__link:focus-visible {
+  outline: none;
+}
+
 .place-card__link {
   display: flex;
   flex-direction: column;
@@ -6745,6 +6773,11 @@ h4, .h4 {
 
 .page-place-detail__gallery-item:hover img {
   transform: scale(1.05);
+}
+
+.page-place-detail__gallery-item:focus-within {
+  outline: 3px solid var(--color-accent, #0066FF);
+  outline-offset: 2px;
 }
 
 .page-place-detail__gallery-item figcaption {

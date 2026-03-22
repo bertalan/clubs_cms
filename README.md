@@ -35,20 +35,31 @@ docs/rebuild/
 
 ### Demo Content
 
-Two commands create and load a per-language demo fixture:
+Two commands create and load per-language demo fixtures.
+Fixtures are currently available for **English** (`en`) and **Italian** (`it`).
 
 ```bash
 cd clubcms/
 docker compose up -d
 docker compose exec web python manage.py migrate
 
-# Build the English fixture, then load it as the primary site
-docker compose exec web python manage.py build_demo_db --lang en
+# Build fixtures (both languages)
+docker compose exec web python manage.py build_demo_db
+
+# Load English as the primary site
 docker compose exec web python manage.py load_demo --lang en --primary --flush
+
+# Add Italian pages alongside English
+docker compose exec web python manage.py load_demo --lang it
 ```
 
-Replace `en` with `it`, `de`, `fr`, or `es` to create a demo site in another language.
-Each command creates a full page hierarchy, news articles, events, partners, members, and navigation.
+The `--primary` flag creates the Site object, all shared content
+(categories, FAQs, testimonials, etc.) and the root page tree.
+A secondary load (without `--primary`) adds translated pages and
+products linked to the primary content.
+
+Each fixture creates a full page hierarchy, news articles, events,
+partners, members, and navigation with locale-native slugs and URLs.
 
 ### For Club Members
 
