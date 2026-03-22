@@ -35,23 +35,20 @@ docs/rebuild/
 
 ### Demo Content
 
-Two commands populate the site with realistic demo data — choose the language for your default site:
+Two commands create and load a per-language demo fixture:
 
 ```bash
 cd clubcms/
 docker compose up -d
 docker compose exec web python manage.py migrate
 
-# Italian demo site (IT default, EN copies included)
-docker compose exec web python manage.py populate_demo_it
-
-# English demo site (EN default, IT copies included)
-docker compose exec web python manage.py populate_demo_en
+# Build the English fixture, then load it as the primary site
+docker compose exec web python manage.py build_demo_db --lang en
+docker compose exec web python manage.py load_demo --lang en --primary --flush
 ```
 
-Both commands create a full page hierarchy, 6 news articles, 6 events, 3 partners, members, and navigation.
-The IT command creates EN page copies as a translation starting point; the EN command does the same for IT.
-Other locales (DE, FR, ES) are activated from the Wagtail admin when needed.
+Replace `en` with `it`, `de`, `fr`, or `es` to create a demo site in another language.
+Each command creates a full page hierarchy, news articles, events, partners, members, and navigation.
 
 ### For Club Members
 

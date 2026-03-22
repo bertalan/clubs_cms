@@ -1,8 +1,8 @@
 """
-Tests for the populate_demo_it management command.
+Tests for the demo data loading system.
 
-Verifies that running the command creates the expected page hierarchy,
-snippets, members, and site configuration.
+Verifies that building and loading a demo fixture creates
+the expected page hierarchy, snippets, and site configuration.
 """
 
 from unittest.mock import patch
@@ -32,41 +32,36 @@ from apps.website.models import (
 )
 
 
-def _fake_download_images(self):
-    """Skip image downloads in tests — return empty dict."""
+def _noop_images(self):
     return {}
 
 
-def _fake_assign_images(self, images):
-    """No-op image assignment."""
+def _noop_assign(self):
+    pass
+
+
+def _noop_members(self):
+    return []
+
+
+def _noop_aid(self, members):
     pass
 
 
 class PopulateDemoTests(TestCase):
-    """Test that populate_demo_it creates expected content."""
+    """Test that load_demo --lang en --primary creates expected content."""
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        # Run the command once, mocking image downloads
+        call_command("build_demo_db", lang="en", verbosity=0)
         with (
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._download_images",
-                _fake_download_images,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._assign_page_images",
-                _fake_assign_images,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._create_members",
-                return_value=[],
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._create_aid_requests",
-            ),
+            patch("apps.core.demo.loader.DemoLoader._download_images", _noop_images),
+            patch("apps.core.demo.loader.DemoLoader._assign_page_images", _noop_assign),
+            patch("apps.core.demo.loader.DemoLoader._load_members", _noop_members),
+            patch("apps.core.demo.loader.DemoLoader._load_aid_requests", _noop_aid),
         ):
-            call_command("populate_demo_it", verbosity=0)
+            call_command("load_demo", lang="en", primary=True, flush=True, verbosity=0)
 
     # ── Page hierarchy ────────────────────────────────────────────────
 

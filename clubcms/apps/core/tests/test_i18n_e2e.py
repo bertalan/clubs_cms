@@ -49,12 +49,20 @@ class I18nURLTests(TestCase):
         self.assertEqual(resp.status_code, 200)
 
 
-def _noop(*args, **kwargs):
+def _noop_images(self):
     return {}
 
 
-def _noop_method(self, *args, **kwargs):
+def _noop_assign(self):
+    pass
+
+
+def _noop_members(self):
     return []
+
+
+def _noop_aid(self, members):
+    pass
 
 
 class I18nContentTests(TestCase):
@@ -63,25 +71,14 @@ class I18nContentTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        call_command("build_demo_db", lang="en", verbosity=0)
         with (
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._download_images",
-                _noop,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._assign_page_images",
-                _noop,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._create_members",
-                _noop_method,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._create_aid_requests",
-                _noop,
-            ),
+            patch("apps.core.demo.loader.DemoLoader._download_images", _noop_images),
+            patch("apps.core.demo.loader.DemoLoader._assign_page_images", _noop_assign),
+            patch("apps.core.demo.loader.DemoLoader._load_members", _noop_members),
+            patch("apps.core.demo.loader.DemoLoader._load_aid_requests", _noop_aid),
         ):
-            call_command("populate_demo_en", verbosity=0)
+            call_command("load_demo", lang="en", primary=True, flush=True, verbosity=0)
 
     def test_hreflang_current_language_present(self):
         """The homepage should include hreflang for the current page locale."""

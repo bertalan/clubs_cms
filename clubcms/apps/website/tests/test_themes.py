@@ -31,12 +31,20 @@ CSS_DIR = os.path.join(
 )
 
 
-def _noop(*a, **kw):
+def _noop_images(self):
     return {}
 
 
-def _noop_method(self, *a, **kw):
+def _noop_assign(self):
+    pass
+
+
+def _noop_members(self):
     return []
+
+
+def _noop_aid(self, members):
+    pass
 
 
 class ThemeCSSFileTests(TestCase):
@@ -83,25 +91,14 @@ class ThemeRenderTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        call_command("build_demo_db", lang="en", verbosity=0)
         with (
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._download_images",
-                _noop,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._assign_page_images",
-                _noop,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._create_members",
-                _noop_method,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._create_aid_requests",
-                _noop,
-            ),
+            patch("apps.core.demo.loader.DemoLoader._download_images", _noop_images),
+            patch("apps.core.demo.loader.DemoLoader._assign_page_images", _noop_assign),
+            patch("apps.core.demo.loader.DemoLoader._load_members", _noop_members),
+            patch("apps.core.demo.loader.DemoLoader._load_aid_requests", _noop_aid),
         ):
-            call_command("populate_demo_it", verbosity=0)
+            call_command("load_demo", lang="en", primary=True, flush=True, verbosity=0)
 
     def _set_theme(self, theme_name):
         site = Site.objects.filter(is_default_site=True).first()
@@ -111,7 +108,7 @@ class ThemeRenderTests(TestCase):
 
     def test_default_theme_is_velocity(self):
         """Without explicit setting, velocity CSS should be loaded."""
-        resp = self.client.get("/it/", follow=True)
+        resp = self.client.get("/en/", follow=True)
         content = resp.content.decode()
         self.assertIn("velocity/main.css", content)
 
@@ -119,7 +116,7 @@ class ThemeRenderTests(TestCase):
         """Switching to each theme should still render the page."""
         for theme in THEMES:
             self._set_theme(theme)
-            resp = self.client.get("/it/", follow=True)
+            resp = self.client.get("/en/", follow=True)
             self.assertEqual(
                 resp.status_code, 200, f"Theme '{theme}' returned {resp.status_code}"
             )
@@ -128,7 +125,7 @@ class ThemeRenderTests(TestCase):
         """The HTML should reference the correct theme CSS file."""
         for theme in THEMES:
             self._set_theme(theme)
-            resp = self.client.get("/it/", follow=True)
+            resp = self.client.get("/en/", follow=True)
             content = resp.content.decode()
             self.assertIn(
                 f"{theme}/main.css",
@@ -140,7 +137,7 @@ class ThemeRenderTests(TestCase):
         """base.css should be loaded regardless of theme."""
         for theme in THEMES:
             self._set_theme(theme)
-            resp = self.client.get("/it/", follow=True)
+            resp = self.client.get("/en/", follow=True)
             content = resp.content.decode()
             self.assertIn("base.css", content)
 
@@ -151,39 +148,28 @@ class A11yBasicTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        call_command("build_demo_db", lang="en", verbosity=0)
         with (
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._download_images",
-                _noop,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._assign_page_images",
-                _noop,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._create_members",
-                _noop_method,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._create_aid_requests",
-                _noop,
-            ),
+            patch("apps.core.demo.loader.DemoLoader._download_images", _noop_images),
+            patch("apps.core.demo.loader.DemoLoader._assign_page_images", _noop_assign),
+            patch("apps.core.demo.loader.DemoLoader._load_members", _noop_members),
+            patch("apps.core.demo.loader.DemoLoader._load_aid_requests", _noop_aid),
         ):
-            call_command("populate_demo_it", verbosity=0)
+            call_command("load_demo", lang="en", primary=True, flush=True, verbosity=0)
 
     def test_html_lang_attribute_present(self):
-        resp = self.client.get("/it/", follow=True)
+        resp = self.client.get("/en/", follow=True)
         content = resp.content.decode()
         self.assertRegex(content, r'<html[^>]+lang="[a-z]+"')
 
     def test_viewport_meta_present(self):
-        resp = self.client.get("/it/", follow=True)
+        resp = self.client.get("/en/", follow=True)
         content = resp.content.decode()
         self.assertIn("viewport", content)
 
     def test_skip_to_content_or_main_landmark(self):
         """Page should have a <main> landmark or skip-to-content link."""
-        resp = self.client.get("/it/", follow=True)
+        resp = self.client.get("/en/", follow=True)
         content = resp.content.decode()
         self.assertTrue(
             "<main" in content or "skip" in content.lower(),
@@ -191,13 +177,13 @@ class A11yBasicTests(TestCase):
         )
 
     def test_nav_landmark_present(self):
-        resp = self.client.get("/it/", follow=True)
+        resp = self.client.get("/en/", follow=True)
         content = resp.content.decode()
         self.assertIn("<nav", content)
 
     def test_no_empty_links(self):
         """Links should not be empty (no text or aria-label)."""
-        resp = self.client.get("/it/", follow=True)
+        resp = self.client.get("/en/", follow=True)
         content = resp.content.decode()
         # Find <a> tags with no text content and no aria-label
         empty_links = re.findall(r'<a [^>]*></a>', content)
@@ -213,7 +199,7 @@ class A11yBasicTests(TestCase):
 
     def test_images_have_alt(self):
         """All <img> tags should have alt attribute."""
-        resp = self.client.get("/it/", follow=True)
+        resp = self.client.get("/en/", follow=True)
         content = resp.content.decode()
         imgs_without_alt = re.findall(r'<img(?![^>]*\balt\b)[^>]*>', content)
         self.assertEqual(
@@ -224,7 +210,7 @@ class A11yBasicTests(TestCase):
 
     def test_contact_page_anonymous_no_error(self):
         """Contact page should render for anonymous users without errors."""
-        resp = self.client.get("/it/contatti/", follow=True)
+        resp = self.client.get("/en/contact/", follow=True)
         self.assertEqual(resp.status_code, 200)
 
 
@@ -234,29 +220,18 @@ class ContactPageHeaderTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        call_command("build_demo_db", lang="en", verbosity=0)
         with (
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._download_images",
-                _noop,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._assign_page_images",
-                _noop,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._create_members",
-                _noop_method,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._create_aid_requests",
-                _noop,
-            ),
+            patch("apps.core.demo.loader.DemoLoader._download_images", _noop_images),
+            patch("apps.core.demo.loader.DemoLoader._assign_page_images", _noop_assign),
+            patch("apps.core.demo.loader.DemoLoader._load_members", _noop_members),
+            patch("apps.core.demo.loader.DemoLoader._load_aid_requests", _noop_aid),
         ):
-            call_command("populate_demo_it", verbosity=0)
+            call_command("load_demo", lang="en", primary=True, flush=True, verbosity=0)
 
     def test_contact_page_has_centered_header(self):
         """Contact page must use shared centered header, not hero."""
-        resp = self.client.get("/it/contatti/", follow=True)
+        resp = self.client.get("/en/contact/", follow=True)
         content = resp.content.decode()
         self.assertIn('class="page-contact__header"', content)
         self.assertIn('class="page-contact__title"', content)

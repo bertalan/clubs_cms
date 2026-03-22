@@ -44,7 +44,14 @@ ClubCMS is a content management system built on Wagtail 7.x and Django 5.x, desi
 ```bash
 cd clubcms/
 docker compose up -d
-docker compose exec web python manage.py populate_demo_it
+
+# Build the demo fixture, then load it as the primary language
+docker compose exec web python manage.py build_demo_db --lang en
+docker compose exec web python manage.py load_demo --lang en --primary --flush
+
+# Optionally add Italian pages alongside English
+docker compose exec web python manage.py build_demo_db --lang it
+docker compose exec web python manage.py load_demo --lang it
 ```
 
 Then visit:
@@ -553,33 +560,78 @@ Federation allows multiple clubs to share events and coordinate activities throu
 
 ### Populating Demo Content
 
-Two demo commands are available — choose the language for your default site:
+The demo system uses **per-language SQLite fixtures**.  Each fixture
+contains a complete standalone site in one language — pages, events,
+members, navigation, images, federation data and more.
+
+### Building Fixtures
 
 ```bash
-# Italian demo (default locale: IT, IT+EN pages)
-docker compose exec web python manage.py populate_demo_it
+# Build one language
+docker compose exec web python manage.py build_demo_db --lang en
+docker compose exec web python manage.py build_demo_db --lang it
 
-# English demo (default locale: EN)
-docker compose exec web python manage.py populate_demo_en
-
-# Reset and repopulate (add --flush to either command)
-docker compose exec web python manage.py populate_demo_it --flush
-docker compose exec web python manage.py populate_demo_en --flush
+# Build all available languages at once
+docker compose exec web python manage.py build_demo_db
 ```
 
-Both commands create:
-- 4 News categories, 5 Event categories, 3 Partner categories
-- 3 Membership products
-- 3 Testimonials
-- Full page hierarchy (Home, About, Board, News, Events, Gallery, Contact, Privacy, Transparency, Press, Partners)
-- 6 news articles with realistic content
-- 6 events (rallies, touring, track day, charity ride)
-- 3 partners (sponsor, technical, media)
-- Navbar and Footer with menu items and social links
-- Complete Site Settings
+Fixtures are written to `fixtures/demo/demo_<lang>.sqlite3`.
 
-`populate_demo_it` additionally creates English copies of all pages as a starting point for translation.
-Other locales (DE, FR, ES) are activated later from the Wagtail admin.
+### Loading Demo Content
+
+```bash
+# English-primary site (clean start)
+docker compose exec web python manage.py load_demo --lang en --primary --flush
+
+# Italian-primary site (clean start)
+docker compose exec web python manage.py load_demo --lang it --primary --flush
+
+# Add a second language to an existing site (does NOT overwrite)
+docker compose exec web python manage.py load_demo --lang it
+docker compose exec web python manage.py load_demo --lang en
+```
+
+| Flag | Effect |
+|------|--------|
+| `--lang XX` | Language code (`en`, `it`, `de`, `fr`, `es`) |
+| `--primary` | Set this language as default, create Site + root page |
+| `--flush` | Wipe existing demo content before loading |
+
+**Default behaviour (no `--primary`)**: adds pages as a secondary
+language.  Shared data (categories, products, members) is reused;
+pages are linked as translations of the primary-language pages via
+deterministic UUID keys.
+
+### What Gets Created
+
+Each fixture contains:
+- 4 News categories, 5 Event categories, 3 Partner categories
+- 3 Membership products (Standard / Supporter / Premium)
+- 3 Testimonials, 4 FAQs, 6 Aid skills
+- Full page hierarchy: Home, About, Board, News (6 articles), Events (6), Gallery, Contact, Privacy, Transparency, Press, Membership Plans, Federation, Partners (3), **Places (5 + 1 Route)**
+- Navbar and Footer with menu items and social links
+- Complete Site Settings with ColorScheme
+- 5 demo members with mutual-aid profiles
+- Federation: 3 partner clubs, external events, interests, comments
+- Notifications, contributions, comments, reactions
+- 21 demo images (downloaded from LoremFlickr on first load)
+
+All slugs and URLs are native to the fixture language
+(e.g. `/en/news/` vs `/it/notizie/`).
+
+### Architecture
+
+```
+apps/core/demo/
+├── schema.py        # SQLite table definitions + deterministic UUIDs
+├── data_en.py       # Complete English data dictionary
+├── data_it.py       # Complete Italian data dictionary
+└── loader.py        # DemoLoader: reads .sqlite3 → populates Django/Wagtail
+
+apps/core/management/commands/
+├── build_demo_db.py # data_*.py → fixtures/demo/demo_*.sqlite3
+└── load_demo.py     # Orchestrator: calls DemoLoader
+```
 
 ### Demo Content Sources
 
@@ -596,7 +648,8 @@ Event data is inspired by real motorcycle club events from Northern Italy:
 
 **Site shows "Welcome to Wagtail" instead of demo content:**
 ```bash
-docker compose exec web python manage.py populate_demo_it
+docker compose exec web python manage.py build_demo_db --lang en
+docker compose exec web python manage.py load_demo --lang en --primary --flush
 ```
 
 **Database migrations out of sync:**
@@ -620,7 +673,8 @@ docker compose down -v  # WARNING: deletes all data
 docker compose up -d
 docker compose exec web python manage.py migrate
 docker compose exec web python manage.py createsuperuser
-docker compose exec web python manage.py populate_demo_it
+docker compose exec web python manage.py build_demo_db --lang en
+docker compose exec web python manage.py load_demo --lang en --primary --flush
 ```
 
 ### Checking System Health
@@ -654,10 +708,13 @@ For production, update `docker-compose.yml`:
 
 | Command | Description |
 |---------|-------------|
-| `populate_demo_it` | Create Italian demo content |
-| `populate_demo_it --flush` | Reset and recreate Italian demo content |
-| `populate_demo_en` | Create English demo content |
-| `populate_demo_en --flush` | Reset and recreate English demo content |
+| `build_demo_db --lang en` | Build English demo SQLite fixture |
+| `build_demo_db --lang it` | Build Italian demo SQLite fixture |
+| `build_demo_db` | Build all available language fixtures |
+| `load_demo --lang en --primary --flush` | Load English demo as primary (clean start) |
+| `load_demo --lang it --primary --flush` | Load Italian demo as primary (clean start) |
+| `load_demo --lang it` | Add Italian pages to existing site |
+| `load_demo --lang en` | Add English pages to existing site |
 | `createsuperuser` | Create admin user |
 | `migrate` | Apply database migrations |
 | `collectstatic` | Collect static files for production |

@@ -55,18 +55,15 @@ docker compose exec web python manage.py createsuperuser
 
 ### Load demo content (optional)
 
-Two commands populate the site with realistic demo data — pages, events,
-members, partners, and navigation menus:
+Build and load a per-language demo fixture:
 
 ```bash
-# English demo site (EN default, creates IT translation copies)
-docker compose exec web python manage.py populate_demo_en
-
-# OR Italian demo site (IT default, creates EN translation copies)
-docker compose exec web python manage.py populate_demo_it
+# Build the English fixture, then load it as the primary site
+docker compose exec web python manage.py build_demo_db --lang en
+docker compose exec web python manage.py load_demo --lang en --primary --flush
 ```
 
-Other locales (DE, FR, ES) can be activated from the Wagtail admin.
+Replace `en` with `it`, `de`, `fr`, or `es` to create a demo site in another language.
 
 ### Access the site
 

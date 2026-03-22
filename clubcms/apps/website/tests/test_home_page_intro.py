@@ -8,37 +8,34 @@ from wagtail.models import Site
 from apps.website.models import HomePage, SiteSettings
 
 
-def _noop(*args, **kwargs):
+def _noop_images(self):
     return {}
 
 
-def _noop_method(self, *args, **kwargs):
+def _noop_assign(self):
+    pass
+
+
+def _noop_members(self):
     return []
+
+
+def _noop_aid(self, members):
+    pass
 
 
 class HomePageIntroTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        call_command("build_demo_db", lang="en", verbosity=0)
         with (
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._download_images",
-                _noop,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._assign_page_images",
-                _noop,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._create_members",
-                _noop_method,
-            ),
-            patch(
-                "apps.core.management.commands.populate_demo_it.Command._create_aid_requests",
-                _noop,
-            ),
+            patch("apps.core.demo.loader.DemoLoader._download_images", _noop_images),
+            patch("apps.core.demo.loader.DemoLoader._assign_page_images", _noop_assign),
+            patch("apps.core.demo.loader.DemoLoader._load_members", _noop_members),
+            patch("apps.core.demo.loader.DemoLoader._load_aid_requests", _noop_aid),
         ):
-            call_command("populate_demo_it", verbosity=0)
+            call_command("load_demo", lang="en", primary=True, flush=True, verbosity=0)
 
     def test_opening_streamfield_blocks_are_promoted(self):
         page = HomePage.objects.live().first()
@@ -52,13 +49,13 @@ class HomePageIntroTests(TestCase):
         self.assertEqual(page.remaining_body_blocks, [])
 
     def test_homepage_renders_spotlight_section(self):
-        response = self.client.get("/it/", follow=True)
+        response = self.client.get("/en/", follow=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "page-home__spotlight")
         self.assertContains(response, 'class="home-body"')
-        self.assertContains(response, "Benvenuti nel Moto Club Aquile Rosse")
-        self.assertContains(response, "Unisciti a Noi")
+        self.assertContains(response, "Welcome to Moto Club Aquile Rosse")
+        self.assertContains(response, "Join Us")
         self.assertContains(response, "250+")
 
         content = response.content.decode()
@@ -72,7 +69,7 @@ class HomePageIntroTests(TestCase):
             settings.theme = theme
             settings.save()
 
-            response = self.client.get("/it/", follow=True)
+            response = self.client.get("/en/", follow=True)
 
             self.assertEqual(response.status_code, 200)
             self.assertContains(response, "page-home__spotlight")
