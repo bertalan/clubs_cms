@@ -851,11 +851,10 @@ class DemoLoader:
         return images
 
     def _assign_page_images(self):
-        """Assign downloaded images to pages (hero, thumbnails, etc.)."""
-        # Map image keys to page slugs
+        """Assign downloaded images to pages (hero, cover, etc.)."""
+        # Map image keys to page slugs for hero_image
         HERO_MAP = {
             "hero_homepage": "home",
-            "hero_about": self._meta("slug_about"),
             "hero_contact": self._meta("slug_contact"),
         }
         for img_key, page_slug in HERO_MAP.items():
@@ -864,11 +863,18 @@ class DemoLoader:
                 if hasattr(page, "hero_image") and not page.hero_image:
                     page.hero_image = self.images[img_key]
                     page.save()
-                elif hasattr(page, "highlight_image") and not page.highlight_image:
-                    page.highlight_image = self.images[img_key]
-                    page.save()
 
-        # Event images
+        # About page: hero_image + cover_image
+        about_slug = self._meta("slug_about")
+        if "hero_about" in self.images and about_slug in self.created_pages:
+            page = self.created_pages[about_slug]
+            if hasattr(page, "hero_image") and not page.hero_image:
+                page.hero_image = self.images["hero_about"]
+            if hasattr(page, "cover_image") and not page.cover_image:
+                page.cover_image = self.images["hero_about"]
+            page.save()
+
+        # Event images → cover_image
         event_map = {
             "event_mandello": self._meta("slug_event_mandello"),
             "event_pisa": self._meta("slug_event_pisa"),
@@ -880,11 +886,11 @@ class DemoLoader:
         for img_key, slug in event_map.items():
             if img_key in self.images and slug in self.created_pages:
                 page = self.created_pages[slug]
-                if hasattr(page, "highlight_image") and not page.highlight_image:
-                    page.highlight_image = self.images[img_key]
+                if hasattr(page, "cover_image") and not page.cover_image:
+                    page.cover_image = self.images[img_key]
                     page.save()
 
-        # News images
+        # News images → cover_image
         news_map = {
             "news_mandello": self._meta("slug_news_kickoff"),
             "news_pisa": self._meta("slug_news_pisa"),
@@ -896,9 +902,26 @@ class DemoLoader:
         for img_key, slug in news_map.items():
             if img_key in self.images and slug in self.created_pages:
                 page = self.created_pages[slug]
-                if hasattr(page, "highlight_image") and not page.highlight_image:
-                    page.highlight_image = self.images[img_key]
+                if hasattr(page, "cover_image") and not page.cover_image:
+                    page.cover_image = self.images[img_key]
                     page.save()
+
+        # Partner pages → cover_image (reuse partner_bgmoto for all)
+        if "partner_bgmoto" in self.images:
+            for slug, page in self.created_pages.items():
+                if isinstance(page, PartnerPage):
+                    if hasattr(page, "cover_image") and not page.cover_image:
+                        page.cover_image = self.images["partner_bgmoto"]
+                        page.save()
+
+        # Route pages → cover_image (reuse an event image)
+        fallback_img = self.images.get("event_garda")
+        if fallback_img:
+            for slug, page in self.created_pages.items():
+                if isinstance(page, RoutePage):
+                    if hasattr(page, "cover_image") and not page.cover_image:
+                        page.cover_image = fallback_img
+                        page.save()
 
         self.stdout.write("  Assigned images to pages")
 
