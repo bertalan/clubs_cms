@@ -43,6 +43,15 @@ from apps.federation.models import (
 from apps.members.models import ClubUser, MembershipRequest
 from apps.mutual_aid.models import AidRequest, FederatedHelper, MutualAidPage
 from apps.notifications.models import NotificationQueue
+from apps.places.models import (
+    PlaceGalleryImage,
+    PlaceIndexPage,
+    PlacePage,
+    PlaceTag,
+    PlaceType,
+    RoutePage,
+    RouteStop,
+)
 from apps.website.models import (
     AboutPage,
     AidSkill,
@@ -168,6 +177,7 @@ class Command(BaseCommand):
         self._create_membership_plans_page(home_page)
         partner_index = self._create_partner_index(home_page)
         federation_page = self._create_federation_info_page(home_page)
+        place_index = self._create_places(home_page)
 
         # Step 4: Content pages
         self._create_news_articles(news_index)
@@ -235,8 +245,13 @@ class Command(BaseCommand):
         ClubUser.objects.filter(username__startswith="demo_").delete()
         # Remove remaining aid requests with demo prefix
         AidRequest.objects.filter(requester_name__startswith="Demo:").delete()
+        # Remove places
+        RouteStop.objects.all().delete()
+        PlaceGalleryImage.objects.all().delete()
+        PlaceTag.objects.all().delete()
         # Remove pages and snippets
-        for model in [HomePage, SiteSettings, ColorScheme, Navbar, Footer,
+        for model in [HomePage, PlaceIndexPage, SiteSettings, ColorScheme,
+                      Navbar, Footer,
                       NewsCategory, EventCategory, PartnerCategory,
                       Product, Testimonial, FAQ, PhotoTag,
                       PressRelease, BrandAsset, AidSkill]:
@@ -1597,6 +1612,166 @@ class Command(BaseCommand):
             parent.add_child(instance=partner)
             partner.save_revision().publish()
             self.stdout.write(f"  Created PartnerPage: {p['title']}")
+
+    # ------------------------------------------------------------------
+    # Places
+    # ------------------------------------------------------------------
+
+    def _create_places(self, parent):
+        """Create PlaceIndexPage with demo PlacePages and a RoutePage."""
+        from datetime import timedelta
+
+        if PlaceIndexPage.objects.exists():
+            self.stdout.write("  PlaceIndexPage already exists, skipping.")
+            return PlaceIndexPage.objects.first()
+
+        self.stdout.write("\nCreating places...")
+
+        # Index
+        index = PlaceIndexPage(
+            title="Luoghi",
+            slug="luoghi",
+            intro="<p>Scopri i luoghi legati alla nostra comunità: sedi club, "
+                  "monumenti, piazze e percorsi turistici in tutta Italia.</p>",
+        )
+        parent.add_child(instance=index)
+        index.save_revision().publish()
+        self.stdout.write("  Created PlaceIndexPage")
+
+        # Tags
+        tag_data = [
+            ("Storico", "storico"),
+            ("Panoramico", "panoramico"),
+            ("Punto di ritrovo", "punto-di-ritrovo"),
+            ("Gastronomia", "gastronomia"),
+            ("Paesaggistico", "paesaggistico"),
+        ]
+        tags = {}
+        for name, slug in tag_data:
+            tag, _ = PlaceTag.objects.get_or_create(name=name, defaults={"slug": slug})
+            tags[name] = tag
+
+        # Places
+        places_data = [
+            {
+                "title": "Sede Moto Club Aquile Rosse",
+                "slug": "sede-moto-club",
+                "place_type": PlaceType.CLUBHOUSE,
+                "latitude": Decimal("45.694200"),
+                "longitude": Decimal("9.670000"),
+                "address": "Via Borgo Palazzo 42",
+                "city": "Bergamo",
+                "province": "BG",
+                "postal_code": "24125",
+                "short_description": "La sede ufficiale del Moto Club Aquile Rosse, punto di ritrovo per ogni uscita.",
+                "description": "<p>Situata nel cuore di Bergamo, la nostra sede è il punto di ritrovo "
+                               "per gli appassionati di moto dal 2005. Aperta a tutti i soci con tessera valida.</p>",
+                "opening_hours": "Sa-Do 09:00-18:00",
+                "phone": "+39 035 123 4567",
+                "website_url": "https://example.com/aquile-rosse",
+                "_tags": ["Punto di ritrovo"],
+            },
+            {
+                "title": "Colosseo",
+                "slug": "colosseo",
+                "place_type": PlaceType.MONUMENT,
+                "latitude": Decimal("41.890210"),
+                "longitude": Decimal("12.492231"),
+                "address": "Piazza del Colosseo 1",
+                "city": "Roma",
+                "province": "RM",
+                "postal_code": "00184",
+                "short_description": "L'iconico anfiteatro romano, punto di partenza per la cavalcata annuale.",
+                "description": "<p>Il Colosseo è il più grande anfiteatro antico mai costruito. "
+                               "È il nostro punto di partenza tradizionale per la cavalcata "
+                               "annuale 'Roma Caput Mundi'.</p>",
+                "_tags": ["Storico", "Paesaggistico"],
+            },
+            {
+                "title": "Piazza del Campo",
+                "slug": "piazza-del-campo",
+                "place_type": PlaceType.SQUARE,
+                "latitude": Decimal("43.318340"),
+                "longitude": Decimal("11.331650"),
+                "address": "Piazza del Campo",
+                "city": "Siena",
+                "province": "SI",
+                "postal_code": "53100",
+                "short_description": "La piazza principale di Siena a forma di conchiglia, tappa obbligata del tour toscano.",
+                "description": "<p>La splendida Piazza del Campo è famosa per il Palio. "
+                               "Ci fermiamo qui per il pranzo durante la nostra uscita annuale in Toscana.</p>",
+                "_tags": ["Storico", "Paesaggistico", "Panoramico"],
+            },
+            {
+                "title": "Trattoria da Mario",
+                "slug": "trattoria-da-mario",
+                "place_type": PlaceType.RESTAURANT,
+                "latitude": Decimal("43.771389"),
+                "longitude": Decimal("11.253611"),
+                "address": "Via Rosina 2",
+                "city": "Firenze",
+                "province": "FI",
+                "postal_code": "50123",
+                "short_description": "Un'autentica trattoria fiorentina, ristorante convenzionato per i soci.",
+                "description": "<p>Trattoria a gestione familiare dal 1953. "
+                               "I soci del club hanno il 10%% di sconto presentando la tessera valida.</p>",
+                "opening_hours": "Lu-Sa 12:00-15:00",
+                "phone": "+39 055 218550",
+                "_tags": ["Gastronomia"],
+            },
+            {
+                "title": "Passo dello Stelvio",
+                "slug": "passo-dello-stelvio",
+                "place_type": PlaceType.POI,
+                "latitude": Decimal("46.528611"),
+                "longitude": Decimal("10.453333"),
+                "address": "SS38",
+                "city": "Bormio",
+                "province": "SO",
+                "postal_code": "23032",
+                "short_description": "Il valico stradale più alto delle Alpi Orientali — una strada leggendaria.",
+                "description": "<p>A 2.757 metri, il Passo dello Stelvio offre 48 tornanti "
+                               "sul solo versante nord. Aperto da giugno a novembre, tempo permettendo.</p>",
+                "_tags": ["Paesaggistico", "Panoramico"],
+            },
+        ]
+
+        created_places = []
+        for data in places_data:
+            tag_names = data.pop("_tags", [])
+            place = PlacePage(**data)
+            index.add_child(instance=place)
+            place.save_revision().publish()
+            for tag_name in tag_names:
+                if tag_name in tags:
+                    place.tags.add(tags[tag_name])
+            created_places.append(place)
+            self.stdout.write(f"  Created PlacePage: {data['title']}")
+
+        # Route
+        route = RoutePage(
+            title="La Cavalcata Romana",
+            slug="cavalcata-romana",
+            short_description="Un panoramico giro di mezza giornata dal Colosseo attraverso le colline a sud di Roma.",
+            description="<p>Partendo dal Colosseo, questo percorso vi porta attraverso Via Appia Antica "
+                        "e nella campagna dei Castelli Romani. Perfetto per un'uscita domenicale.</p>",
+            distance_km=Decimal("85.5"),
+            estimated_duration=timedelta(hours=2, minutes=30),
+            difficulty="medium",
+        )
+        index.add_child(instance=route)
+        route.save_revision().publish()
+
+        # Add stops: sede → colosseo
+        sede = PlacePage.objects.filter(slug="sede-moto-club").first()
+        colosseo = PlacePage.objects.filter(slug="colosseo").first()
+        if sede:
+            RouteStop.objects.create(route=route, place=sede, sort_order=1, note="Ritrovo alle ore 8:00")
+        if colosseo:
+            RouteStop.objects.create(route=route, place=colosseo, sort_order=2, note="Sosta foto all'anfiteatro")
+
+        self.stdout.write(f"  Created RoutePage: La Cavalcata Romana")
+        return index
 
     # ------------------------------------------------------------------
     # Navbar

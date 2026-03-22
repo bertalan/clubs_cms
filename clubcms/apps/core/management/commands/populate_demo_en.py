@@ -26,6 +26,14 @@ from apps.federation.models import FederationInfoPage
 from apps.members.models import ClubUser
 from apps.mutual_aid.models import AidRequest
 from apps.notifications.models import NotificationQueue
+from apps.places.models import (
+    PlaceIndexPage,
+    PlacePage,
+    PlaceTag,
+    PlaceType,
+    RoutePage,
+    RouteStop,
+)
 from apps.website.models import (
     AboutPage,
     BoardPage,
@@ -1332,6 +1340,166 @@ class Command(ITCommand):
             parent.add_child(instance=partner)
             partner.save_revision().publish()
             self.stdout.write(f"  Created PartnerPage: {p['title']}")
+
+    # ------------------------------------------------------------------
+    # Override: Places (English content)
+    # ------------------------------------------------------------------
+
+    def _create_places(self, parent):
+        """Create PlaceIndexPage with demo PlacePages and a RoutePage (EN)."""
+        from datetime import timedelta
+
+        if PlaceIndexPage.objects.exists():
+            self.stdout.write("  PlaceIndexPage already exists, skipping.")
+            return PlaceIndexPage.objects.first()
+
+        self.stdout.write("\nCreating places...")
+
+        # Index
+        index = PlaceIndexPage(
+            title="Places",
+            slug="places",
+            intro="<p>Discover the places connected to our community: club headquarters, "
+                  "monuments, squares, and tourist routes across Italy.</p>",
+        )
+        parent.add_child(instance=index)
+        index.save_revision().publish()
+        self.stdout.write("  Created PlaceIndexPage")
+
+        # Tags
+        tag_data = [
+            ("Historical", "historical"),
+            ("Panoramic", "panoramic"),
+            ("Meeting Point", "meeting-point"),
+            ("Food & Drink", "food-drink"),
+            ("Scenic", "scenic"),
+        ]
+        tags = {}
+        for name, slug in tag_data:
+            tag, _ = PlaceTag.objects.get_or_create(name=name, defaults={"slug": slug})
+            tags[name] = tag
+
+        # Places
+        places_data = [
+            {
+                "title": "Moto Club Aquile Rosse HQ",
+                "slug": "moto-club-aquile-rosse-hq",
+                "place_type": PlaceType.CLUBHOUSE,
+                "latitude": Decimal("45.694200"),
+                "longitude": Decimal("9.670000"),
+                "address": "Via Borgo Palazzo 42",
+                "city": "Bergamo",
+                "province": "BG",
+                "postal_code": "24125",
+                "short_description": "The official headquarters of Moto Club Aquile Rosse, where riders meet every weekend.",
+                "description": "<p>Located in the heart of Bergamo, our clubhouse has been the gathering point "
+                               "for motorcycle enthusiasts since 2005. Open to all members with a valid card.</p>",
+                "opening_hours": "Sa-Su 09:00-18:00",
+                "phone": "+39 035 123 4567",
+                "website_url": "https://example.com/aquile-rosse",
+                "_tags": ["Meeting Point"],
+            },
+            {
+                "title": "Colosseum",
+                "slug": "colosseum",
+                "place_type": PlaceType.MONUMENT,
+                "latitude": Decimal("41.890210"),
+                "longitude": Decimal("12.492231"),
+                "address": "Piazza del Colosseo 1",
+                "city": "Roma",
+                "province": "RM",
+                "postal_code": "00184",
+                "short_description": "The iconic Roman amphitheatre, starting point for the annual ride.",
+                "description": "<p>The Colosseum is the largest ancient amphitheatre ever built. "
+                               "It's our traditional starting point for the annual "
+                               "'Roma Caput Mundi' ride.</p>",
+                "_tags": ["Historical", "Scenic"],
+            },
+            {
+                "title": "Piazza del Campo",
+                "slug": "piazza-del-campo",
+                "place_type": PlaceType.SQUARE,
+                "latitude": Decimal("43.318340"),
+                "longitude": Decimal("11.331650"),
+                "address": "Piazza del Campo",
+                "city": "Siena",
+                "province": "SI",
+                "postal_code": "53100",
+                "short_description": "Siena's shell-shaped main square, a mandatory stop on our Tuscany tour.",
+                "description": "<p>The stunning Piazza del Campo is famous for the Palio horse race. "
+                               "We stop here for lunch during our annual Tuscan ride.</p>",
+                "_tags": ["Historical", "Scenic", "Panoramic"],
+            },
+            {
+                "title": "Trattoria da Mario",
+                "slug": "trattoria-da-mario",
+                "place_type": PlaceType.RESTAURANT,
+                "latitude": Decimal("43.771389"),
+                "longitude": Decimal("11.253611"),
+                "address": "Via Rosina 2",
+                "city": "Firenze",
+                "province": "FI",
+                "postal_code": "50123",
+                "short_description": "An authentic Florentine trattoria, partner restaurant for club members.",
+                "description": "<p>Family-run trattoria since 1953. Club members get 10% discount "
+                               "showing a valid membership card.</p>",
+                "opening_hours": "Mo-Sa 12:00-15:00",
+                "phone": "+39 055 218550",
+                "_tags": ["Food & Drink"],
+            },
+            {
+                "title": "Stelvio Pass",
+                "slug": "stelvio-pass",
+                "place_type": PlaceType.POI,
+                "latitude": Decimal("46.528611"),
+                "longitude": Decimal("10.453333"),
+                "address": "SS38",
+                "city": "Bormio",
+                "province": "SO",
+                "postal_code": "23032",
+                "short_description": "The highest paved mountain pass in the Eastern Alps — a legendary motorcycle road.",
+                "description": "<p>At 2,757 metres, Stelvio Pass offers 48 hairpin bends on the north side "
+                               "alone. Open June to November, weather permitting.</p>",
+                "_tags": ["Scenic", "Panoramic"],
+            },
+        ]
+
+        created_places = []
+        for data in places_data:
+            tag_names = data.pop("_tags", [])
+            place = PlacePage(**data)
+            index.add_child(instance=place)
+            place.save_revision().publish()
+            for tag_name in tag_names:
+                if tag_name in tags:
+                    place.tags.add(tags[tag_name])
+            created_places.append(place)
+            self.stdout.write(f"  Created PlacePage: {data['title']}")
+
+        # Route
+        route = RoutePage(
+            title="The Roman Ride",
+            slug="roman-ride",
+            short_description="A scenic half-day ride from the Colosseum through the hills south of Rome.",
+            description="<p>Starting at the Colosseum, this route takes you through Via Appia Antica "
+                        "and into the Castelli Romani countryside. Perfect for a Sunday morning ride.</p>",
+            distance_km=Decimal("85.5"),
+            estimated_duration=timedelta(hours=2, minutes=30),
+            difficulty="medium",
+        )
+        index.add_child(instance=route)
+        route.save_revision().publish()
+
+        # Add stops
+        hq = PlacePage.objects.filter(slug="moto-club-aquile-rosse-hq").first()
+        colosseum = PlacePage.objects.filter(slug="colosseum").first()
+        if hq:
+            RouteStop.objects.create(route=route, place=hq, sort_order=1, note="Meeting point at 8:00 AM")
+        if colosseum:
+            RouteStop.objects.create(route=route, place=colosseum, sort_order=2, note="Photo stop at the amphitheatre")
+
+        self.stdout.write("  Created RoutePage: The Roman Ride")
+        return index
 
     # ------------------------------------------------------------------
     # Override: Navbar (English labels)

@@ -22,6 +22,7 @@ from django.utils import timezone
 from wagtail.models import Locale, Page
 
 from apps.federation.models import FederationInfoPage
+from apps.places.models import PlaceIndexPage, PlacePage, RoutePage
 from apps.website.models import (
     AboutPage,
     BoardPage,
@@ -69,6 +70,7 @@ class Command(BaseCommand):
         self._update_partner_pages(it)
         self._update_news_articles(it)
         self._update_event_detail_pages(it)
+        self._update_places(it)
 
         self.stdout.write(self.style.SUCCESS(
             "\nItalian content updated successfully!"
@@ -852,3 +854,105 @@ class Command(BaseCommand):
             for field, value in data.items():
                 setattr(page, field, value)
             self._save_and_publish(page, f"EventDetailPage: {slug}")
+
+    # ------------------------------------------------------------------
+    # Places
+    # ------------------------------------------------------------------
+
+    def _update_places(self, locale):
+        """Update Places pages with Italian content."""
+        # PlaceIndexPage
+        index = PlaceIndexPage.objects.filter(locale=locale).first()
+        if index:
+            index.title = "Luoghi"
+            index.slug = "luoghi"
+            index.intro = (
+                "<p>Scopri i luoghi legati alla nostra comunit\u00e0: sedi club, "
+                "monumenti, piazze e percorsi turistici in tutta Italia.</p>"
+            )
+            self._save_and_publish(index, "PlaceIndexPage")
+        else:
+            self.stdout.write(self.style.WARNING("  PlaceIndexPage (IT) not found"))
+
+        # PlacePages
+        places_it = {
+            "moto-club-aquile-rosse-hq": {
+                "title": "Sede Moto Club Aquile Rosse",
+                "slug": "sede-moto-club",
+                "short_description": "La sede ufficiale del Moto Club Aquile Rosse, punto di ritrovo per ogni uscita.",
+                "description": "<p>Situata nel cuore di Bergamo, la nostra sede \u00e8 il punto di ritrovo "
+                               "per gli appassionati di moto dal 2005. Aperta a tutti i soci con tessera valida.</p>",
+            },
+            "colosseum": {
+                "title": "Colosseo",
+                "slug": "colosseo",
+                "short_description": "L'iconico anfiteatro romano, punto di partenza per la cavalcata annuale.",
+                "description": "<p>Il Colosseo \u00e8 il pi\u00f9 grande anfiteatro antico mai costruito. "
+                               "\u00c8 il nostro punto di partenza tradizionale per la cavalcata "
+                               "annuale 'Roma Caput Mundi'.</p>",
+            },
+            "piazza-del-campo": {
+                "title": "Piazza del Campo",
+                "slug": "piazza-del-campo-it",
+                "short_description": "La piazza principale di Siena a forma di conchiglia, tappa obbligata del tour toscano.",
+                "description": "<p>La splendida Piazza del Campo \u00e8 famosa per il Palio. "
+                               "Ci fermiamo qui per il pranzo durante la nostra uscita annuale in Toscana.</p>",
+            },
+            "trattoria-da-mario": {
+                "title": "Trattoria da Mario",
+                "slug": "trattoria-da-mario-it",
+                "short_description": "Un'autentica trattoria fiorentina, ristorante convenzionato per i soci.",
+                "description": "<p>Trattoria a gestione familiare dal 1953. "
+                               "I soci del club hanno il 10%% di sconto presentando la tessera valida.</p>",
+            },
+            "stelvio-pass": {
+                "title": "Passo dello Stelvio",
+                "slug": "passo-dello-stelvio",
+                "short_description": "Il valico stradale pi\u00f9 alto delle Alpi Orientali \u2014 una strada leggendaria.",
+                "description": "<p>A 2.757 metri, il Passo dello Stelvio offre 48 tornanti "
+                               "sul solo versante nord. Aperto da giugno a novembre, tempo permettendo.</p>",
+            },
+        }
+
+        for en_slug, data in places_it.items():
+            # Find by translation_key: look up EN page first, then find IT version
+            en_page = PlacePage.objects.filter(slug=en_slug).first()
+            if en_page:
+                page = PlacePage.objects.filter(
+                    translation_key=en_page.translation_key, locale=locale
+                ).first()
+            else:
+                page = None
+
+            if not page:
+                self.stdout.write(self.style.WARNING(
+                    f"  PlacePage '{en_slug}' (IT) not found"
+                ))
+                continue
+            for field, value in data.items():
+                setattr(page, field, value)
+            self._save_and_publish(page, f"PlacePage: {data['title']}")
+
+        # RoutePage
+        en_route = RoutePage.objects.filter(slug="roman-ride").first()
+        if en_route:
+            route = RoutePage.objects.filter(
+                translation_key=en_route.translation_key, locale=locale
+            ).first()
+            if route:
+                route.title = "La Cavalcata Romana"
+                route.slug = "cavalcata-romana"
+                route.short_description = (
+                    "Un panoramico giro di mezza giornata dal Colosseo "
+                    "attraverso le colline a sud di Roma."
+                )
+                route.description = (
+                    "<p>Partendo dal Colosseo, questo percorso vi porta attraverso "
+                    "Via Appia Antica e nella campagna dei Castelli Romani. "
+                    "Perfetto per un'uscita domenicale.</p>"
+                )
+                self._save_and_publish(route, "RoutePage: La Cavalcata Romana")
+            else:
+                self.stdout.write(self.style.WARNING("  RoutePage (IT) not found"))
+        else:
+            self.stdout.write(self.style.WARNING("  RoutePage (EN) not found"))
