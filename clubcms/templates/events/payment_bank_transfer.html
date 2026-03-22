@@ -2,68 +2,75 @@
 {% load i18n %}
 
 {% block title %}{% trans "Bank Transfer Instructions" %} — {{ event.title }} | {{ block.super }}{% endblock %}
+{% block body_class %}page-payment{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>{% trans "Bank Transfer Instructions" %}</h1>
+<section class="page-payment" aria-labelledby="payment-title">
+    <div class="container">
+        <header class="page-payment__header">
+            <h1 id="payment-title" class="page-payment__title">{% trans "Bank Transfer Instructions" %}</h1>
+        </header>
 
-    <section class="event-summary">
-        <h2>{{ event.title }}</h2>
-        <p>{{ event.start_date }}</p>
-    </section>
+        <div class="page-payment__summary">
+            <h2 class="page-payment__event-name">{{ event.title }}</h2>
+            <p class="page-payment__event-date">{{ event.start_date }}</p>
+        </div>
 
-    <section class="bank-transfer-details">
-        <h3>{% trans "Transfer Details" %}</h3>
+        <div class="page-payment__bank-details">
+            <h3 class="page-payment__bank-heading">{% trans "Transfer Details" %}</h3>
+            <dl class="page-payment__bank-info">
+                <dt>{% trans "Account holder" %}</dt>
+                <dd>{{ payment_settings.bank_account_holder }}</dd>
 
-        <dl class="bank-info">
-            <dt>{% trans "Account holder" %}</dt>
-            <dd>{{ payment_settings.bank_account_holder }}</dd>
+                <dt>{% trans "IBAN" %}</dt>
+                <dd class="page-payment__iban">{{ payment_settings.bank_iban }}</dd>
 
-            <dt>{% trans "IBAN" %}</dt>
-            <dd class="iban-display">{{ payment_settings.bank_iban }}</dd>
+                {% if payment_settings.bank_bic %}
+                <dt>{% trans "BIC / SWIFT" %}</dt>
+                <dd>{{ payment_settings.bank_bic }}</dd>
+                {% endif %}
 
-            {% if payment_settings.bank_bic %}
-            <dt>{% trans "BIC / SWIFT" %}</dt>
-            <dd>{{ payment_settings.bank_bic }}</dd>
+                {% if payment_settings.bank_name %}
+                <dt>{% trans "Bank" %}</dt>
+                <dd>{{ payment_settings.bank_name }}</dd>
+                {% endif %}
+
+                <dt>{% trans "Amount" %}</dt>
+                <dd><strong class="page-payment__amount">{{ registration.payment_amount }} &euro;</strong></dd>
+
+                <dt>{% trans "Payment Reference" %}</dt>
+                <dd class="page-payment__reference">
+                    <code class="page-payment__reference-code">{{ registration.payment_reference }}</code>
+                    <button type="button"
+                            class="btn btn--sm page-payment__copy-btn"
+                            onclick="navigator.clipboard.writeText('{{ registration.payment_reference }}')">
+                        {% trans "Copy" %}
+                    </button>
+                </dd>
+
+                <dt>{% trans "Deadline" %}</dt>
+                <dd>{{ registration.payment_expires_at }}</dd>
+            </dl>
+
+            {% if payment_settings.bank_transfer_instructions %}
+            <div class="page-payment__extra-instructions">
+                {{ payment_settings.bank_transfer_instructions|safe }}
+            </div>
             {% endif %}
 
-            {% if payment_settings.bank_name %}
-            <dt>{% trans "Bank" %}</dt>
-            <dd>{{ payment_settings.bank_name }}</dd>
-            {% endif %}
-
-            <dt>{% trans "Amount" %}</dt>
-            <dd><strong>{{ registration.payment_amount }} &euro;</strong></dd>
-
-            <dt>{% trans "Payment Reference" %}</dt>
-            <dd class="payment-reference">
-                <code>{{ registration.payment_reference }}</code>
-                <button type="button"
-                        class="btn btn-sm"
-                        onclick="navigator.clipboard.writeText('{{ registration.payment_reference }}')">
-                    {% trans "Copy" %}
-                </button>
-            </dd>
-
-            <dt>{% trans "Deadline" %}</dt>
-            <dd>
-                {{ registration.payment_expires_at }}
-            </dd>
-        </dl>
-
-        {% if payment_settings.bank_transfer_instructions %}
-        <div class="bank-extra-instructions">
-            {{ payment_settings.bank_transfer_instructions|safe }}
+            <div class="alert alert-info page-payment__alert">
+                <p>{% trans "Please include the payment reference in the transfer description. Your registration will be confirmed once the payment is verified by the organiser." %}</p>
+            </div>
         </div>
-        {% endif %}
 
-        <div class="alert alert-info">
-            <p>{% trans "Please include the payment reference in the transfer description. Your registration will be confirmed once the payment is verified by the organiser." %}</p>
-        </div>
-    </section>
-
-    <p>
-        <a href="{% url 'events:my_registrations' %}">{% trans "Back to my registrations" %}</a>
-    </p>
-</div>
+        <footer class="page-payment__footer">
+            <a href="{% url 'events:my_registrations' %}" class="page-payment__back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+                {% trans "Back to my registrations" %}
+            </a>
+        </footer>
+    </div>
+</section>
 {% endblock %}

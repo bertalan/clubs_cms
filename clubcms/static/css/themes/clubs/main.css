@@ -166,7 +166,10 @@ a:hover {
 .register-summary-review,
 .page-notification-history__panel,
 .page-my-events__card,
-.page-my-events__empty {
+.page-my-events__empty,
+.page-payment__summary,
+.page-payment__provider-btn,
+.page-payment__bank-details {
   border-radius: 0;
 }
 
@@ -4868,6 +4871,165 @@ html.dark-mode {
   text-align: center;
 }
 
+/* --------------------------------------------------------------------------
+   29h. Payment Pages (clubs override)
+   -------------------------------------------------------------------------- */
+.page-payment {
+  padding: 6rem 0;
+  background: var(--color-surface);
+}
+
+.page-payment__title {
+  color: var(--color-text-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-payment__summary {
+  background: var(--color-surface-alt);
+  border: var(--clubs-border);
+  border-radius: 0;
+}
+
+.page-payment__event-name {
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.page-payment__event-date {
+  color: var(--color-text-muted);
+}
+
+.page-payment__details dt {
+  color: var(--color-text-muted);
+}
+
+.page-payment__details dd {
+  color: var(--color-text-primary);
+}
+
+.page-payment__amount {
+  color: var(--color-secondary);
+  font-weight: 900;
+}
+
+/* Provider buttons — dark cards */
+.page-payment__provider-btn {
+  background: var(--color-surface-alt);
+  border: var(--clubs-border);
+  border-radius: 0;
+  transition: all var(--clubs-transition);
+}
+
+.page-payment__provider-btn:hover {
+  border-color: var(--color-secondary);
+  box-shadow: none;
+  transform: scale(1.02);
+}
+
+.page-payment__provider-icon {
+  color: var(--color-secondary);
+}
+
+.page-payment__provider-name {
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.page-payment__provider-desc {
+  color: var(--color-text-muted);
+}
+
+/* Bank transfer details */
+.page-payment__bank-details {
+  background: var(--color-surface-alt);
+  border: var(--clubs-border);
+  border-radius: 0;
+}
+
+.page-payment__bank-heading {
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-payment__bank-info dt {
+  color: var(--color-text-muted);
+}
+
+.page-payment__bank-info dd {
+  color: var(--color-text-primary);
+}
+
+.page-payment__iban {
+  color: #fff;
+  font-weight: 700;
+}
+
+.page-payment__reference-code {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-secondary);
+  border-radius: 0;
+}
+
+.page-payment__copy-btn {
+  background: var(--color-secondary);
+  color: #fff;
+  border: none;
+  border-radius: 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-payment__copy-btn:hover {
+  background: var(--color-accent);
+}
+
+.page-payment__extra-instructions {
+  border-color: var(--clubs-border);
+  color: var(--color-text-muted);
+}
+
+/* Alerts within payment pages */
+.page-payment__alert.alert-info {
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 0;
+  color: #93C5FD;
+}
+
+.page-payment__alert.alert-success {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 0;
+  color: #34D399;
+}
+
+.page-payment__alert.alert-warning {
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: 0;
+  color: #FBBF24;
+}
+
+/* Footer */
+.page-payment__footer {
+  border-color: var(--clubs-border);
+}
+
+.page-payment__back-link {
+  color: var(--color-text-muted);
+}
+
+.page-payment__back-link:hover {
+  color: var(--color-secondary);
+}
+
 /* --- Event Registration Form --- */
 .register-summary,
 .register-pricing {
@@ -5427,10 +5589,10 @@ html.dark-mode {
 }
 
 .page-my-events__title {
-  color: var(--color-primary);
-  font-weight: 900;
+  color: var(--color-text-primary);
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.08em;
 }
 
 .page-my-events__nav {
@@ -5469,9 +5631,10 @@ html.dark-mode {
 }
 
 .page-my-events__year-title {
-  color: var(--color-primary);
-  font-weight: 900;
+  color: var(--color-text-primary);
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
   border-color: var(--clubs-border);
 }
 

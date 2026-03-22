@@ -2,26 +2,39 @@
 {% load i18n %}
 
 {% block title %}{% trans "Payment Cancelled" %} — {{ event.title }} | {{ block.super }}{% endblock %}
+{% block body_class %}page-payment{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>{% trans "Payment Cancelled" %}</h1>
+<section class="page-payment" aria-labelledby="payment-title">
+    <div class="container">
+        <header class="page-payment__header">
+            <h1 id="payment-title" class="page-payment__title">{% trans "Payment Cancelled" %}</h1>
+        </header>
 
-    <div class="alert alert-warning">
-        <p>{% trans "Your payment was not completed. You can try again using the link below." %}</p>
+        <div class="alert alert-warning page-payment__alert">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <p>{% trans "Your payment was not completed. You can try again using the link below." %}</p>
+        </div>
+
+        <div class="page-payment__summary">
+            <h2 class="page-payment__event-name">{{ event.title }}</h2>
+            <dl class="page-payment__details">
+                <dt>{% trans "Amount" %}</dt>
+                <dd><strong class="page-payment__amount">{{ registration.payment_amount }} &euro;</strong></dd>
+            </dl>
+        </div>
+
+        <footer class="page-payment__footer page-payment__footer--actions">
+            <a href="{% url 'events:payment_choice' registration.pk %}" class="btn btn--primary">{% trans "Try again" %}</a>
+            <a href="{% url 'events:my_registrations' %}" class="page-payment__back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+                {% trans "My Registrations" %}
+            </a>
+        </footer>
     </div>
-
-    <section class="event-summary">
-        <h2>{{ event.title }}</h2>
-        <dl>
-            <dt>{% trans "Amount" %}</dt>
-            <dd><strong>{{ registration.payment_amount }} &euro;</strong></dd>
-        </dl>
-    </section>
-
-    <p>
-        <a href="{% url 'events:payment_choice' registration.pk %}" class="btn btn-primary">{% trans "Try again" %}</a>
-        <a href="{% url 'events:my_registrations' %}">{% trans "My Registrations" %}</a>
-    </p>
-</div>
+</section>
 {% endblock %}

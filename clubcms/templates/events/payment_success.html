@@ -2,29 +2,37 @@
 {% load i18n %}
 
 {% block title %}{% trans "Payment Confirmed" %} — {{ event.title }} | {{ block.super }}{% endblock %}
+{% block body_class %}page-payment{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>{% trans "Payment Confirmed" %}</h1>
+<section class="page-payment" aria-labelledby="payment-title">
+    <div class="container">
+        <header class="page-payment__header">
+            <h1 id="payment-title" class="page-payment__title">{% trans "Payment Confirmed" %}</h1>
+        </header>
 
-    <div class="alert alert-success">
-        <p>{% trans "Your payment has been received. You are registered for this event." %}</p>
+        <div class="alert alert-success page-payment__alert">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <p>{% trans "Your payment has been received. You are registered for this event." %}</p>
+        </div>
+
+        <div class="page-payment__summary">
+            <h2 class="page-payment__event-name">{{ event.title }}</h2>
+            <dl class="page-payment__details">
+                <dt>{% trans "Date" %}</dt>
+                <dd>{{ event.start_date }}</dd>
+                {% if event.location_name %}
+                <dt>{% trans "Location" %}</dt>
+                <dd>{{ event.location_name }}</dd>
+                {% endif %}
+            </dl>
+        </div>
+
+        <footer class="page-payment__footer">
+            <a href="{% url 'events:my_registrations' %}" class="btn btn--primary">{% trans "My Registrations" %}</a>
+        </footer>
     </div>
-
-    <section class="event-summary">
-        <h2>{{ event.title }}</h2>
-        <dl>
-            <dt>{% trans "Date" %}</dt>
-            <dd>{{ event.start_date }}</dd>
-            {% if event.location_name %}
-            <dt>{% trans "Location" %}</dt>
-            <dd>{{ event.location_name }}</dd>
-            {% endif %}
-        </dl>
-    </section>
-
-    <p>
-        <a href="{% url 'events:my_registrations' %}" class="btn btn-primary">{% trans "My Registrations" %}</a>
-    </p>
-</div>
+</section>
 {% endblock %}
