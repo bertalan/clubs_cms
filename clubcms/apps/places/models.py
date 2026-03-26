@@ -106,9 +106,15 @@ class PlaceIndexPage(Page):
         if place_type and place_type in PlaceType.values:
             places = places.filter(place_type=place_type)
 
+        # Filtro per tag
+        tag_slug = request.GET.get("tag")
+        if tag_slug:
+            places = places.filter(tags__slug=tag_slug)
+
         context["places"] = places
         context["place_types"] = PlaceType.choices
         context["active_type"] = place_type
+        context["active_tag"] = tag_slug or ""
         context["places_geojson"] = self._build_geojson(places)
         return context
 

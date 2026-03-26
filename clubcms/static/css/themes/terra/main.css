@@ -412,6 +412,20 @@ a:hover {
   border-left: 4px solid var(--color-accent);
 }
 
+.block-hero-slider .btn-secondary,
+.block-hero-banner .btn-secondary,
+.block-hero-video .btn-secondary {
+  color: #fff;
+  border-color: #fff;
+}
+
+.block-hero-slider .btn-secondary:hover,
+.block-hero-banner .btn-secondary:hover,
+.block-hero-video .btn-secondary:hover {
+  background: #fff;
+  color: var(--color-primary);
+}
+
 /* --------------------------------------------------------------------------
    7b. Home — Terra-specific sections
    -------------------------------------------------------------------------- */

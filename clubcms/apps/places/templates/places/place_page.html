@@ -156,7 +156,7 @@
                         <span class="page-place-detail__tags-label">{% trans "Tag" %}:</span>
                         <ul class="page-place-detail__tags-list">
                             {% for tag in tags %}
-                                <li><span class="page-place-detail__tag">{{ tag.name }}</span></li>
+                                <li><a href="{{ page.get_parent.url }}?tag={{ tag.slug }}" class="page-place-detail__tag">{{ tag.name }}</a></li>
                             {% endfor %}
                         </ul>
                     </nav>
