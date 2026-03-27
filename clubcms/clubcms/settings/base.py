@@ -313,3 +313,10 @@ WEBPUSH_SETTINGS = {
 LOGIN_URL = reverse_lazy("account_login")
 LOGIN_REDIRECT_URL = reverse_lazy("account:profile")
 LOGOUT_REDIRECT_URL = "/"
+
+# --------------------------------------------------------------------------
+# Security headers (via SecurityMiddleware)
+# --------------------------------------------------------------------------
+
+# Send origin on cross-origin requests so OSM tile servers receive a Referer.
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
