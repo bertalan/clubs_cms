@@ -3934,7 +3934,44 @@ a:hover {
   box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
 }
 
+/* ── Favorite toggle & ICS button ── */
+.page-event-detail__favorite-icon {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.page-event-detail__favorite-btn--active .page-event-detail__favorite-icon {
+  transform: scale(1.2);
+}
+
+/* ── Verification page ── */
+.page-verification__errors {
+  border-radius: 16px;
+  background: #FEF2F2;
+  color: #991B1B;
+  border-left: 4px solid #EF4444;
+}
+.dark-mode .page-verification__errors {
+  background: rgba(239, 68, 68, 0.1);
+  color: #FCA5A5;
+}
+.page-verification__submit-btn {
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: #fff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.page-verification__submit-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* ── Unsubscribe page ── */
+.page-unsubscribe__note {
+  color: var(--color-text-muted);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .page-event-detail__favorite-icon,
+  .page-verification__submit-btn,
   .page-my-events__nav-link,
   .page-my-events__card,
   .page-my-events__btn,

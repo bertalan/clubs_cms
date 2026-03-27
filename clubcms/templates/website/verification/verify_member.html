@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block body_class %}page-verification{% endblock %}
 
@@ -6,10 +7,9 @@
 <div class="page-verification">
     <div class="page-verification__container">
         <header class="page-verification__header">
-            <h1 class="page-verification__title">Verify Member</h1>
+            <h1 class="page-verification__title">{% trans "Verify Member" %}</h1>
             <p class="page-verification__description">
-                Enter the member's card number and a secondary piece of
-                information to verify their membership status.
+                {% trans "Enter the member's card number and a secondary piece of information to verify their membership status." %}
             </p>
         </header>
 
@@ -64,7 +64,7 @@
 
                 <div class="page-verification__actions">
                     <button type="submit" class="page-verification__submit-btn">
-                        Verify Member
+                        {% trans "Verify Member" %}
                     </button>
                 </div>
             </form>

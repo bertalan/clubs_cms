@@ -26,18 +26,7 @@ urlpatterns = [
         views.PayPalReturnView.as_view(),
         name="paypal_return",
     ),
-    # Favorite toggle (JSON)
-    path(
-        _("favorite/<int:event_pk>/"),
-        views.ToggleFavoriteView.as_view(),
-        name="toggle_favorite",
-    ),
-    # ICS exports (binary)
-    path(
-        _("ics/<int:event_pk>/"),
-        views.EventICSView.as_view(),
-        name="event_ics",
-    ),
+    # ICS feeds (not page-specific, kept as Django URLs)
     path(
         _("my-events/calendar.ics"),
         views.MyEventsICSView.as_view(),

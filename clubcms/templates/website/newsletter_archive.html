@@ -49,7 +49,7 @@
                                     &middot; <span class="badge badge--subtle">{{ nl.category.name }}</span>
                                 {% endif %}
                                 {% if not nl.is_public %}
-                                    &middot; <span class="badge badge--info" title="{% trans 'Subscribers only' %}">&#128274;</span>
+                                    &middot; <span class="badge badge--info" title="{% trans 'Subscribers only' %}"><span aria-hidden="true">&#128274;</span><span class="sr-only">{% trans "Subscribers only" %}</span></span>
                                 {% endif %}
                             </p>
                         </div>

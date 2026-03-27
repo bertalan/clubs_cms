@@ -3647,7 +3647,44 @@ a:hover {
   border-left-color: var(--color-secondary, #4A7C59);
 }
 
+/* ── Favorite toggle & ICS button ── */
+.page-event-detail__favorite-icon {
+  transition: transform 0.2s ease;
+}
+.page-event-detail__favorite-btn--active .page-event-detail__favorite-icon {
+  transform: scale(1.15);
+}
+
+/* ── Verification page ── */
+.page-verification__errors {
+  border-radius: 8px;
+  background: #F8E8E0;
+  color: #7A2A00;
+  border: 2px solid #C47040;
+}
+.dark-mode .page-verification__errors {
+  background: rgba(196, 112, 64, 0.1);
+  color: #F0C4A0;
+  border-color: rgba(196, 112, 64, 0.3);
+}
+.page-verification__submit-btn {
+  border-radius: 4px;
+  background: var(--color-primary);
+  color: #fff;
+  transition: all 0.2s ease;
+}
+.page-verification__submit-btn:hover {
+  opacity: 0.9;
+}
+
+/* ── Unsubscribe page ── */
+.page-unsubscribe__note {
+  color: var(--color-text-muted);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .page-event-detail__favorite-icon,
+  .page-verification__submit-btn,
   .page-my-events__nav-link,
   .page-my-events__card,
   .page-my-events__btn,

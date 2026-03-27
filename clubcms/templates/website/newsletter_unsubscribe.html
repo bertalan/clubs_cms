@@ -16,6 +16,7 @@
         </header>
 
         <section class="page-contact__form-section" aria-labelledby="unsubscribe-heading">
+            <h2 id="unsubscribe-heading" class="sr-only">{% trans "Newsletter unsubscribe form" %}</h2>
             <form method="post" action="{% url 'website:newsletter-unsubscribe' %}" class="page-contact__form" novalidate>
                 {% csrf_token %}
 

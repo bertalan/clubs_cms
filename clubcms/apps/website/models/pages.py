@@ -1102,7 +1102,7 @@ class EventDetailPage(RoutablePageMixin, Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         if request.user.is_authenticated:
-            from apps.events.models import EventRegistration
+            from apps.events.models import EventFavorite, EventRegistration
 
             context["user_registration"] = (
                 EventRegistration.objects.filter(
@@ -1111,6 +1111,9 @@ class EventDetailPage(RoutablePageMixin, Page):
                     status__in=["registered", "confirmed"],
                 ).first()
             )
+            context["is_favorited"] = EventFavorite.objects.filter(
+                event=self, user=request.user,
+            ).exists()
         return context
 
     # ------------------------------------------------------------------
@@ -1161,6 +1164,72 @@ class EventDetailPage(RoutablePageMixin, Page):
                 "page": self,
             },
         )
+
+    @route(r"^toggle-favorite/$", name="toggle_favorite")
+    def toggle_favorite_view(self, request):
+        """
+        Toggle this event as a favorite for the authenticated user.
+
+        POST only.  Returns JSON for AJAX, redirect for plain forms.
+        Includes a server-side debounce (1 second) to prevent spamming.
+        """
+        from django.core.cache import cache
+        from django.http import Http404, JsonResponse
+        from django.shortcuts import redirect
+
+        from apps.events.models import EventFavorite
+
+        if not request.user.is_authenticated:
+            from django.conf import settings as django_settings
+
+            login_url = getattr(django_settings, "LOGIN_URL", "/account/login/")
+            return redirect(f"{login_url}?next={request.path}")
+
+        if request.method != "POST":
+            raise Http404
+
+        # Server-side debounce
+        cache_key = f"toggle_fav_{request.user.pk}"
+        if cache.get(cache_key):
+            if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+                return JsonResponse(
+                    {"error": _("Please wait before toggling again.")},
+                    status=429,
+                )
+            return redirect(request.META.get("HTTP_REFERER", self.url))
+        cache.set(cache_key, True, 1)
+
+        favorite, created = EventFavorite.objects.get_or_create(
+            user=request.user,
+            event=self,
+        )
+        if not created:
+            favorite.delete()
+
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return JsonResponse({"favorited": created, "event_pk": self.pk})
+
+        return redirect(request.META.get("HTTP_REFERER", self.url))
+
+    @route(r"^ics/$", name="event_ics")
+    def event_ics_view(self, request):
+        """Export this event as an ICS file download."""
+        from django.http import Http404, HttpResponse
+
+        from apps.events.utils import generate_single_ics
+
+        if not self.start_date:
+            raise Http404
+
+        ics_content = generate_single_ics(self)
+        response = HttpResponse(ics_content, content_type="text/calendar")
+        date_prefix = self.start_date.strftime("%Y-%m-%d")
+        slug = slugify(self.title)[:60]
+        filename = f"{date_prefix}-{slug}.ics"
+        response["Content-Disposition"] = (
+            f'attachment; filename="{filename}"'
+        )
+        return response
 
     def _process_registration(self, request, form, user):
         """Validate business rules and create the EventRegistration."""

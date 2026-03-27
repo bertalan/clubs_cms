@@ -2,34 +2,46 @@
 {% load i18n %}
 
 {% block title %}{% trans "Unsubscribe" %} | {{ block.super }}{% endblock %}
+{% block body_class %}page-unsubscribe{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 600px; margin: 4rem auto; padding: 2rem;">
+<section class="page-unsubscribe" aria-labelledby="unsubscribe-title">
+    <div class="container page-unsubscribe__container">
     {% if valid %}
-        <h1>{% trans "Unsubscribe from notifications" %}</h1>
+        <header class="page-unsubscribe__header">
+            <h1 id="unsubscribe-title" class="page-unsubscribe__title">{% trans "Unsubscribe from notifications" %}</h1>
+        </header>
 
-        <p>
-            {% blocktrans with email=masked_email type=notification_type_display %}
-            You are about to unsubscribe <strong>{{ email }}</strong> from
-            <strong>{{ type }}</strong> notifications.
-            {% endblocktrans %}
-        </p>
+        <div class="page-unsubscribe__body">
+            <p>
+                {% blocktrans with email=masked_email type=notification_type_display %}
+                You are about to unsubscribe <strong>{{ email }}</strong> from
+                <strong>{{ type }}</strong> notifications.
+                {% endblocktrans %}
+            </p>
 
-        <form method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary">
-                {% trans "Confirm unsubscribe" %}
-            </button>
-        </form>
+            <form method="post" class="page-unsubscribe__form">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary page-unsubscribe__btn">
+                    {% trans "Confirm unsubscribe" %}
+                </button>
+            </form>
 
-        <p style="margin-top: 1rem; font-size: 0.875rem; color: #666;">
-            {% trans "You can re-enable notifications at any time from your account settings." %}
-        </p>
+            <p class="page-unsubscribe__note">
+                {% trans "You can re-enable notifications at any time from your account settings." %}
+            </p>
+        </div>
     {% else %}
-        <h1>{% trans "Invalid link" %}</h1>
-        <p>
-            {% trans "This unsubscribe link is invalid or has expired. Please check the link and try again, or manage your preferences from your account settings." %}
-        </p>
+        <header class="page-unsubscribe__header">
+            <h1 id="unsubscribe-title" class="page-unsubscribe__title">{% trans "Invalid link" %}</h1>
+        </header>
+
+        <div class="page-unsubscribe__body">
+            <div class="alert alert-warning page-unsubscribe__alert" role="alert">
+                <p>{% trans "This unsubscribe link is invalid or has expired. Please check the link and try again, or manage your preferences from your account settings." %}</p>
+            </div>
+        </div>
     {% endif %}
-</div>
+    </div>
+</section>
 {% endblock %}

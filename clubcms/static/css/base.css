@@ -1623,6 +1623,8 @@ h4, .h4 {
 .page-partners,
 .page-partner,
 .page-membership-plans,
+.page-verification,
+.page-unsubscribe,
 .page-federation {
   padding: 4rem 0;
 }
@@ -1639,6 +1641,8 @@ h4, .h4 {
 .page-partners__header,
 .page-partner__header,
 .page-membership-plans__header,
+.page-verification__header,
+.page-unsubscribe__header,
 .page-federation__header {
   text-align: center;
   margin-bottom: 3rem;
@@ -1656,6 +1660,8 @@ h4, .h4 {
 .page-partners__title,
 .page-partner__title,
 .page-membership-plans__title,
+.page-verification__title,
+.page-unsubscribe__title,
 .page-federation__title {
   margin-bottom: 0.5rem;
 }
@@ -3326,6 +3332,24 @@ h4, .h4 {
 
 .page-event-detail__register .btn {
   width: 100%;
+}
+
+/* Favorite toggle button */
+.page-event-detail__favorite {
+  margin-top: 1rem;
+}
+.page-event-detail__favorite-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  justify-content: center;
+}
+.page-event-detail__favorite-icon {
+  flex-shrink: 0;
+}
+.page-event-detail__favorite-btn--active .page-event-detail__favorite-icon {
+  /* transform/transition themed in each main.css */
 }
 
 /* Add to calendar button */
@@ -7194,4 +7218,69 @@ h4, .h4 {
 #place-map .leaflet-popup-content a {
   color: var(--color-accent);
   font-weight: 600;
+}
+
+/* --- Unsubscribe Page --- */
+.page-unsubscribe__container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.page-unsubscribe__body {
+  margin-top: 1.5rem;
+}
+.page-unsubscribe__form {
+  margin: 1.5rem 0;
+}
+.page-unsubscribe__note {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+.page-unsubscribe__alert p {
+  margin: 0;
+}
+
+/* --- Verification Page --- */
+.page-verification__container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.page-verification__description {
+  color: var(--color-text-muted);
+  margin-top: 0.5rem;
+}
+.page-verification__form-wrapper {
+  margin-top: 2rem;
+}
+.page-verification__field {
+  margin-bottom: 1.25rem;
+}
+.page-verification__label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+.page-verification__help {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+.page-verification__errors {
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+.page-verification__errors ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+.page-verification__actions {
+  margin-top: 1.5rem;
+}
+.page-verification__submit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
 }

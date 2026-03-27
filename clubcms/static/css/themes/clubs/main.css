@@ -5932,7 +5932,39 @@ html.dark-mode {
   color: var(--color-accent, #E02547);
 }
 
+/* ── Favorite toggle & ICS button ── */
+.page-event-detail__favorite-icon {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.page-event-detail__favorite-btn--active .page-event-detail__favorite-icon {
+  transform: scale(1.15);
+}
+
+/* ── Verification page ── */
+.page-verification__errors {
+  border-radius: 0;
+  background: var(--color-surface-alt);
+  color: inherit;
+  border-left: 4px solid var(--color-secondary, #C41E3A);
+}
+.page-verification__submit-btn {
+  border-radius: 0;
+  background: var(--color-primary);
+  color: #fff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.page-verification__submit-btn:hover {
+  opacity: 0.9;
+}
+
+/* ── Unsubscribe page ── */
+.page-unsubscribe__note {
+  color: var(--color-text-muted);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .page-event-detail__favorite-icon,
+  .page-verification__submit-btn,
   .page-my-events__nav-link,
   .page-my-events__card,
   .page-my-events__btn,

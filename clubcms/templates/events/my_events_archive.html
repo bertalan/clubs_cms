@@ -62,7 +62,7 @@
                                 {% endif %}
                             </div>
                             <footer class="page-my-events__card-actions">
-                                <form method="post" action="{% url 'events:toggle_favorite' fav.event.pk %}" class="page-my-events__action-form">
+                                <form method="post" action="{% routablepageurl fav.event 'toggle_favorite' %}" class="page-my-events__action-form">
                                     {% csrf_token %}
                                     <button type="submit" class="page-my-events__btn page-my-events__btn--outline" aria-label="{% trans 'Remove from favorites' %}">
                                         <svg class="page-my-events__btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">

@@ -2,23 +2,30 @@
 {% load i18n seo_tags %}
 
 {% block title %}{% trans "Unsubscribed" %} | {{ block.super }}{% endblock %}
+{% block body_class %}page-unsubscribe{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 600px; margin: 4rem auto; padding: 2rem;">
-    <h1>{% trans "Successfully unsubscribed" %}</h1>
+<section class="page-unsubscribe" aria-labelledby="unsubscribe-success-title">
+    <div class="container page-unsubscribe__container">
+        <header class="page-unsubscribe__header">
+            <h1 id="unsubscribe-success-title" class="page-unsubscribe__title">{% trans "Successfully unsubscribed" %}</h1>
+        </header>
 
-    <p>
-        {% trans "You have been unsubscribed from these notifications. You will no longer receive them." %}
-    </p>
+        <div class="page-unsubscribe__body">
+            <div class="alert alert-success page-unsubscribe__alert" role="status">
+                <p>{% trans "You have been unsubscribed from these notifications. You will no longer receive them." %}</p>
+            </div>
 
-    <p>
-        {% trans "If you change your mind, you can re-enable notifications from your" %}
-        {% localized_slugurl 'members' as members_url %}
-        {% if members_url %}
-        <a href="{{ members_url }}notifications/">{% trans "account settings" %}</a>.
-        {% else %}
-        {% trans "account settings" %}.
-        {% endif %}
-    </p>
-</div>
+            <p class="page-unsubscribe__note">
+                {% trans "If you change your mind, you can re-enable notifications from your" %}
+                {% localized_slugurl 'members' as members_url %}
+                {% if members_url %}
+                <a href="{{ members_url }}notifications/">{% trans "account settings" %}</a>.
+                {% else %}
+                {% trans "account settings" %}.
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</section>
 {% endblock %}

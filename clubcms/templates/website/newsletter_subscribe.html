@@ -16,6 +16,7 @@
         </header>
 
         <section class="page-contact__form-section" aria-labelledby="newsletter-heading">
+            <h2 id="newsletter-heading" class="sr-only">{% trans "Newsletter signup form" %}</h2>
             <form method="post" action="{% url 'website:newsletter-subscribe' %}" class="page-contact__form" novalidate>
                 {% csrf_token %}
 

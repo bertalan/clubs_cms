@@ -71,10 +71,12 @@ class ToggleFavoriteView(LoginRequiredMixin, View):
         # Server-side debounce: 1 second between toggles (cache-based)
         cache_key = f"toggle_fav_{request.user.pk}"
         if cache.get(cache_key):
-            return JsonResponse(
-                {"error": _("Please wait before toggling again.")},
-                status=429,
-            )
+            if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+                return JsonResponse(
+                    {"error": _("Please wait before toggling again.")},
+                    status=429,
+                )
+            return redirect(request.META.get("HTTP_REFERER", "/"))
         cache.set(cache_key, True, 1)
 
         event_page = _get_event_page(event_pk)
@@ -86,9 +88,11 @@ class ToggleFavoriteView(LoginRequiredMixin, View):
 
         if not created:
             favorite.delete()
-            return JsonResponse({"favorited": False, "event_pk": event_pk})
 
-        return JsonResponse({"favorited": True, "event_pk": event_pk})
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return JsonResponse({"favorited": created, "event_pk": event_pk})
+
+        return redirect(request.META.get("HTTP_REFERER", event_page.url))
 
 
 # ---------------------------------------------------------------------------

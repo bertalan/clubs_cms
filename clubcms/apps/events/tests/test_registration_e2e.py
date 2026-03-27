@@ -341,7 +341,7 @@ class TestICSExport(EventE2EBase):
 
     def test_single_event_ics(self):
         event = self._create_event()
-        resp = self.client.get(reverse("events:event_ics", args=[event.pk]))
+        resp = self.client.get(event.url + event.reverse_subpage("event_ics"))
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp["Content-Type"], "text/calendar")
         content = resp.content.decode()
@@ -351,12 +351,12 @@ class TestICSExport(EventE2EBase):
 
     def test_ics_has_attachment_header(self):
         event = self._create_event()
-        resp = self.client.get(reverse("events:event_ics", args=[event.pk]))
+        resp = self.client.get(event.url + event.reverse_subpage("event_ics"))
         self.assertIn("attachment", resp["Content-Disposition"])
 
     def test_ics_filename_has_date_and_slug(self):
         event = self._create_event(title="Mountain Ride")
-        resp = self.client.get(reverse("events:event_ics", args=[event.pk]))
+        resp = self.client.get(event.url + event.reverse_subpage("event_ics"))
         disposition = resp["Content-Disposition"]
         date_str = event.start_date.strftime("%Y-%m-%d")
         self.assertIn(date_str, disposition)
@@ -364,13 +364,13 @@ class TestICSExport(EventE2EBase):
 
     def test_ics_has_dtend_fallback(self):
         event = self._create_event(end_date=None)
-        resp = self.client.get(reverse("events:event_ics", args=[event.pk]))
+        resp = self.client.get(event.url + event.reverse_subpage("event_ics"))
         content = resp.content.decode()
         self.assertIn("DTEND:", content)
 
     def test_ics_has_sequence(self):
         event = self._create_event()
-        resp = self.client.get(reverse("events:event_ics", args=[event.pk]))
+        resp = self.client.get(event.url + event.reverse_subpage("event_ics"))
         content = resp.content.decode()
         self.assertIn("SEQUENCE:0", content)
 
@@ -411,7 +411,8 @@ class TestFavorites(EventE2EBase):
     def test_toggle_favorite_add(self):
         event = self._create_event()
         self.client.login(username="member1", password="testpass123")
-        resp = self.client.post(reverse("events:toggle_favorite", args=[event.pk]))
+        url = event.url + event.reverse_subpage("toggle_favorite")
+        resp = self.client.post(url, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertTrue(data["favorited"])
@@ -426,7 +427,8 @@ class TestFavorites(EventE2EBase):
         # Clear debounce cache before toggling
         from django.core.cache import cache
         cache.delete(f"toggle_fav_{self.member.pk}")
-        resp = self.client.post(reverse("events:toggle_favorite", args=[event.pk]))
+        url = event.url + event.reverse_subpage("toggle_favorite")
+        resp = self.client.post(url, HTTP_X_REQUESTED_WITH="XMLHttpRequest")
         data = resp.json()
         self.assertFalse(data["favorited"])
         self.assertFalse(

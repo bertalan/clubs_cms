@@ -1,22 +1,31 @@
 {% extends "base.html" %}
 {% load i18n wagtailroutablepage_tags %}
 
-{% block title %}{% trans "Payment Confirmed" %} — {{ event.title }} | {{ block.super }}{% endblock %}
+{% block title %}{% if payment_verified %}{% trans "Payment Confirmed" %}{% else %}{% trans "Payment Processing" %}{% endif %} — {{ event.title }} | {{ block.super }}{% endblock %}
 {% block body_class %}page-payment{% endblock %}
 
 {% block content %}
 <section class="page-payment" aria-labelledby="payment-title">
     <div class="container">
         <header class="page-payment__header">
-            <h1 id="payment-title" class="page-payment__title">{% trans "Payment Confirmed" %}</h1>
+            <h1 id="payment-title" class="page-payment__title">{% if payment_verified %}{% trans "Payment Confirmed" %}{% else %}{% trans "Payment Processing" %}{% endif %}</h1>
         </header>
 
-        <div class="alert alert-success page-payment__alert">
+        {% if payment_verified %}
+        <div class="alert alert-success page-payment__alert" role="status">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
             </svg>
             <p>{% trans "Your payment has been received. You are registered for this event." %}</p>
         </div>
+        {% else %}
+        <div class="alert alert-info page-payment__alert" role="status">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            <p>{% trans "Your payment is being processed. You will receive a confirmation shortly." %}</p>
+        </div>
+        {% endif %}
 
         <div class="page-payment__summary">
             <h2 class="page-payment__event-name">{{ event.title }}</h2>
