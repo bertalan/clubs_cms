@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n wagtailcore_tags %}
+{% load i18n wagtailcore_tags seo_tags %}
 
 {% block title %}{{ page.title }} | {{ block.super }}{% endblock %}
 
@@ -8,6 +8,7 @@
 {% block content %}
 {% include "includes/breadcrumbs.html" %}
 
+{% localized_slugurl 'members' as members_url %}
 <section class="page-membership-plans">
     <div class="container">
         <header class="page-membership-plans__header">
@@ -50,7 +51,7 @@
                         {% trans "Sign up" %}
                     </a>
                 {% elif product.pk not in user_products %}
-                    <a href="{% url 'account:membership_request' product.pk %}" class="btn btn-primary btn-block">
+                    <a href="{{ members_url }}membership-request/{{ product.pk }}/" class="btn btn-primary btn-block">
                         {% trans "Request this membership" %}
                     </a>
                 {% endif %}

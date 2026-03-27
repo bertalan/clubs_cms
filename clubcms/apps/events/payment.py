@@ -18,6 +18,8 @@ except ImportError:
 
 from django.urls import reverse
 
+from apps.events.utils import events_area_url
+
 logger = logging.getLogger(__name__)
 
 
@@ -66,10 +68,10 @@ def create_stripe_checkout_session(registration, payment_settings, request):
     stripe.api_key = payment_settings.stripe_secret_key
 
     success_url = request.build_absolute_uri(
-        reverse("events:payment_success", args=[registration.pk])
+        events_area_url("payment_success", args=[registration.pk])
     ) + "?session_id={CHECKOUT_SESSION_ID}"
     cancel_url = request.build_absolute_uri(
-        reverse("events:payment_cancel", args=[registration.pk])
+        events_area_url("payment_cancel", args=[registration.pk])
     )
 
     session = stripe.checkout.Session.create(
@@ -154,7 +156,7 @@ def create_paypal_order(registration, payment_settings, request):
         reverse("events:paypal_return", args=[registration.pk])
     )
     cancel_url = request.build_absolute_uri(
-        reverse("events:payment_cancel", args=[registration.pk])
+        events_area_url("payment_cancel", args=[registration.pk])
     )
 
     order_body = {

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n wagtailimages_tags %}
+{% load i18n wagtailimages_tags wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Member Directory" %} | {{ block.super }}{% endblock %}
 
@@ -37,7 +37,7 @@
                 <div class="member-card__info">
                     <h3 class="member-card__name">
                         {% if member.public_profile %}
-                        <a href="{% url 'public_profile' username=member.username %}">
+                        <a href="{% routablepageurl page 'public_profile' member.username %}">
                             {{ member.visible_name }}
                         </a>
                         {% else %}
@@ -58,7 +58,7 @@
                     {% endif %}
                 </div>
                 {% if member.public_profile %}
-                <a href="{% url 'public_profile' username=member.username %}" class="member-card__link" aria-label="{% trans 'View profile' %}">
+                <a href="{% routablepageurl page 'public_profile' member.username %}" class="member-card__link" aria-label="{% trans 'View profile' %}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </a>
                 {% endif %}

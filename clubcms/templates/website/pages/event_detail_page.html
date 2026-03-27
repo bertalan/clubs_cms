@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags i18n l10n %}
+{% load wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags i18n l10n website_tags %}
 
 {% block body_class %}page-event-detail{% endblock %}
 
@@ -151,15 +151,27 @@
                     <div class="page-event-detail__registered-badge" role="status">
                         <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
                         <span>{% trans "You are registered" %}</span>
-                        <a href="{% url 'events:my_registrations' %}" class="page-event-detail__my-regs-link">
+                        <a href="{% events_area_url 'my_registrations' %}" class="page-event-detail__my-regs-link">
                             {% trans "My registrations" %} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                         </a>
                     </div>
                     {% elif page.is_registration_open and not page.is_past %}
                     {# Register button #}
                     <div class="page-event-detail__register">
-                        <a href="{% url 'events:register' event_pk=page.pk %}" class="btn btn-primary" role="link" aria-label="{% trans "Register Now" %} — {{ page.title }}">
+                        <a href="{% routablepageurl page 'register' %}" class="btn btn-primary" role="link" aria-label="{% trans "Register Now" %} — {{ page.title }}">
                             {% trans "Register Now" %}
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    {# Add to calendar #}
+                    {% if page.start_date %}
+                    <div class="page-event-detail__calendar">
+                        <a href="{% url 'events:event_ics' page.pk %}" class="btn btn--outline btn--sm page-event-detail__ics-btn" aria-label="{% trans "Add to calendar" %} — {{ page.title }}">
+                            <svg class="page-event-detail__ics-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            {% trans "Add to calendar" %}
                         </a>
                     </div>
                     {% endif %}

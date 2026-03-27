@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Payment Cancelled" %} — {{ event.title }} | {{ block.super }}{% endblock %}
 {% block body_class %}page-payment{% endblock %}
@@ -27,8 +27,8 @@
         </div>
 
         <footer class="page-payment__footer page-payment__footer--actions">
-            <a href="{% url 'events:payment_choice' registration.pk %}" class="btn btn--primary">{% trans "Try again" %}</a>
-            <a href="{% url 'events:my_registrations' %}" class="page-payment__back-link">
+            <a href="{% routablepageurl page 'payment_choice' registration.pk %}" class="btn btn--primary">{% trans "Try again" %}</a>
+            <a href="{% routablepageurl page 'my_registrations' %}" class="page-payment__back-link">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <polyline points="15 18 9 12 15 6"/>
                 </svg>

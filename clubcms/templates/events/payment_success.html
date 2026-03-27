@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Payment Confirmed" %} — {{ event.title }} | {{ block.super }}{% endblock %}
 {% block body_class %}page-payment{% endblock %}
@@ -31,7 +31,7 @@
         </div>
 
         <footer class="page-payment__footer">
-            <a href="{% url 'events:my_registrations' %}" class="btn btn--primary">{% trans "My Registrations" %}</a>
+            <a href="{% routablepageurl page 'my_registrations' %}" class="btn btn--primary">{% trans "My Registrations" %}</a>
         </footer>
     </div>
 </section>

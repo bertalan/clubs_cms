@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailroutablepage_tags %}
 
 {% block title %}{{ visible_name }} | {{ block.super }}{% endblock %}
 
@@ -61,7 +61,7 @@
             </div>
 
             <footer class="page-profile__footer">
-                <a href="{% url 'account:directory' %}" class="btn btn--secondary">
+                <a href="{% routablepageurl page 'directory' %}" class="btn btn--secondary">
                     <svg class="btn__icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
                     </svg>

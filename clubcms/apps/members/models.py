@@ -4,11 +4,21 @@ Custom user model for ClubCMS.
 This module defines ClubUser which extends Django's AbstractUser.
 AUTH_USER_MODEL = "members.ClubUser" is set in settings/base.py,
 so this model MUST exist before any migrations can run.
+
+Also defines MembersAreaPage — a RoutablePageMixin page that serves
+all member-account views (profile, card, directory, etc.) as sub-routes.
 """
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
+
+from wagtail.admin.panels import FieldPanel
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from wagtail.fields import RichTextField
+from wagtail.models import Page
 
 
 class ClubUser(AbstractUser):
@@ -543,3 +553,440 @@ class MembershipRequest(models.Model):
         self.save()
 
         return True
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# MembersAreaPage — RoutablePageMixin page for all account views
+# ═══════════════════════════════════════════════════════════════════════════
+
+
+class MembersAreaPage(RoutablePageMixin, Page):
+    """
+    Container page for all member-account views.
+
+    Routes:
+        /                       — landing (card overview if logged in)
+        /profile/               — edit profile (login required)
+        /card/                  — digital membership card (login required)
+        /privacy/               — privacy settings (login required)
+        /notifications/         — notification preferences (login required)
+        /aid/                   — mutual-aid availability (login required)
+        /directory/             — member directory (login required)
+        /membership-request/<id>/ — request a product (login required)
+        /membership-requests/   — user's request history (login required)
+        /<username>/            — public profile (public)
+    """
+
+    intro = RichTextField(
+        blank=True,
+        verbose_name=_("Introduction"),
+        help_text=_("Introductory text displayed on the members area landing page."),
+    )
+    directory_intro = RichTextField(
+        blank=True,
+        verbose_name=_("Directory introduction"),
+        help_text=_("Text shown at the top of the member directory."),
+    )
+    card_help_text = RichTextField(
+        blank=True,
+        verbose_name=_("Card help text"),
+        help_text=_("Help text displayed on the membership card page."),
+    )
+
+    max_count = 1
+    parent_page_types = ["wagtailcore.Page", "website.HomePage"]
+    subpage_types = []
+    template = "members/pages/members_area_page.html"
+
+    content_panels = Page.content_panels + [
+        FieldPanel("intro"),
+        FieldPanel("directory_intro"),
+        FieldPanel("card_help_text"),
+    ]
+
+    class Meta:
+        verbose_name = _("Members Area Page")
+        verbose_name_plural = _("Members Area Pages")
+
+    # ------------------------------------------------------------------
+    # Helpers
+    # ------------------------------------------------------------------
+
+    def _login_required(self, request):
+        """Return a redirect to login if user is not authenticated, else None."""
+        if not request.user.is_authenticated:
+            from django.conf import settings as django_settings
+            from django.shortcuts import redirect
+
+            login_url = getattr(django_settings, "LOGIN_URL", "/account/login/")
+            return redirect(f"{login_url}?next={request.path}")
+        return None
+
+    # ------------------------------------------------------------------
+    # Landing
+    # ------------------------------------------------------------------
+
+    @route(r"^$")
+    def landing_view(self, request):
+        if request.user.is_authenticated:
+            from django.shortcuts import redirect
+
+            return redirect(self.url + self.reverse_subpage("card"))
+        return self.render(request)
+
+    # ------------------------------------------------------------------
+    # Profile
+    # ------------------------------------------------------------------
+
+    @route(r"^profile/$", name="profile")
+    def profile_view(self, request):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        from django.contrib import messages
+
+        from apps.members.forms import ProfileForm
+
+        user = request.user
+        if request.method == "POST":
+            form = ProfileForm(request.POST, instance=user)
+            if form.is_valid():
+                form.save()
+                messages.success(request, _("Profile updated successfully."))
+                from django.shortcuts import redirect
+
+                return redirect(self.url + self.reverse_subpage("profile"))
+        else:
+            form = ProfileForm(instance=user)
+
+        return self.render(
+            request,
+            template="account/profile.html",
+            context_overrides={"form": form, "page": self},
+        )
+
+    # ------------------------------------------------------------------
+    # Card
+    # ------------------------------------------------------------------
+
+    @route(r"^card/$", name="card")
+    def card_view(self, request):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        import os
+
+        from django.conf import settings
+
+        user = request.user
+        ctx = {
+            "user": user,
+            "club_name": getattr(settings, "WAGTAIL_SITE_NAME", "Club CMS"),
+            "page": self,
+        }
+
+        # User's products
+        if hasattr(user, "products"):
+            ctx["user_products"] = user.products.all()
+        else:
+            ctx["user_products"] = []
+
+        # Available products for purchase
+        from apps.website.models.snippets import Product
+        from wagtail.models import Locale
+
+        locale = Locale.get_active()
+        ctx["available_products"] = Product.objects.filter(
+            is_active=True, locale=locale
+        ).order_by("order")
+
+        # Contact page URL
+        from apps.website.models.pages import ContactPage
+
+        contact_page = ContactPage.objects.live().first()
+        ctx["contact_page_url"] = contact_page.url if contact_page else "/"
+
+        # QR code and barcode images
+        if user.card_number:
+            safe_name = user.card_number.replace("/", "-").replace("\\", "-")
+            qr_path = os.path.join("members", "qr", f"{safe_name}.png")
+            barcode_path = os.path.join("members", "barcode", f"{safe_name}.png")
+            qr_full = os.path.join(settings.MEDIA_ROOT, qr_path)
+            barcode_full = os.path.join(settings.MEDIA_ROOT, barcode_path)
+            if os.path.exists(qr_full):
+                ctx["qr_url"] = settings.MEDIA_URL + qr_path
+            if os.path.exists(barcode_full):
+                ctx["barcode_url"] = settings.MEDIA_URL + barcode_path
+
+        return self.render(
+            request,
+            template="account/card.html",
+            context_overrides=ctx,
+        )
+
+    # ------------------------------------------------------------------
+    # Privacy
+    # ------------------------------------------------------------------
+
+    @route(r"^privacy/$", name="privacy")
+    def privacy_view(self, request):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        from django.contrib import messages
+
+        from apps.members.forms import PrivacySettingsForm
+
+        user = request.user
+        if request.method == "POST":
+            form = PrivacySettingsForm(request.POST, instance=user)
+            if form.is_valid():
+                form.save()
+                messages.success(request, _("Privacy settings saved."))
+                from django.shortcuts import redirect
+
+                return redirect(self.url + self.reverse_subpage("privacy"))
+        else:
+            form = PrivacySettingsForm(instance=user)
+
+        return self.render(
+            request,
+            template="account/privacy.html",
+            context_overrides={"form": form, "page": self},
+        )
+
+    # ------------------------------------------------------------------
+    # Notification preferences
+    # ------------------------------------------------------------------
+
+    @route(r"^notifications/$", name="notification_prefs")
+    def notification_prefs_view(self, request):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        from django.conf import settings as django_settings
+        from django.contrib import messages
+
+        from apps.members.forms import NotificationPreferencesForm
+
+        user = request.user
+        if request.method == "POST":
+            form = NotificationPreferencesForm(request.POST, instance=user)
+            if form.is_valid():
+                form.save()
+                messages.success(request, _("Notification preferences saved."))
+                from django.shortcuts import redirect
+
+                return redirect(
+                    self.url + self.reverse_subpage("notification_prefs")
+                )
+        else:
+            form = NotificationPreferencesForm(instance=user)
+
+        vapid = getattr(django_settings, "WEBPUSH_SETTINGS", {})
+        return self.render(
+            request,
+            template="account/notifications.html",
+            context_overrides={
+                "form": form,
+                "page": self,
+                "vapid_public_key": vapid.get("VAPID_PUBLIC_KEY", ""),
+            },
+        )
+
+    # ------------------------------------------------------------------
+    # Mutual-aid availability
+    # ------------------------------------------------------------------
+
+    @route(r"^aid/$", name="aid")
+    def aid_view(self, request):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        from django.contrib import messages
+
+        from apps.members.forms import AidAvailabilityForm
+
+        user = request.user
+        if request.method == "POST":
+            form = AidAvailabilityForm(request.POST, instance=user)
+            if form.is_valid():
+                form.save()
+                messages.success(request, _("Mutual aid availability saved."))
+                from django.shortcuts import redirect
+
+                return redirect(self.url + self.reverse_subpage("aid"))
+        else:
+            form = AidAvailabilityForm(instance=user)
+
+        ctx = {"form": form, "page": self}
+        coords = user.aid_coordinates
+        if coords and "," in coords:
+            parts = coords.split(",", 1)
+            try:
+                ctx["initial_lat"] = float(parts[0].strip())
+                ctx["initial_lng"] = float(parts[1].strip())
+            except (ValueError, IndexError):
+                pass
+
+        return self.render(
+            request,
+            template="account/aid.html",
+            context_overrides=ctx,
+        )
+
+    # ------------------------------------------------------------------
+    # Member directory
+    # ------------------------------------------------------------------
+
+    @route(r"^directory/$", name="directory")
+    def directory_view(self, request):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        from django.core.paginator import Paginator
+
+        qs = ClubUser.objects.filter(
+            show_in_directory=True, is_active=True
+        ).order_by("last_name", "first_name")
+
+        paginator = Paginator(qs, 30)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+        viewer = request.user
+        for member in page_obj:
+            member.visible_name = member.get_visible_name(viewer=viewer)
+
+        return self.render(
+            request,
+            template="account/directory.html",
+            context_overrides={
+                "members": page_obj,
+                "page_obj": page_obj,
+                "is_paginated": page_obj.has_other_pages(),
+                "page": self,
+            },
+        )
+
+    # ------------------------------------------------------------------
+    # Membership request (create)
+    # ------------------------------------------------------------------
+
+    @route(r"^membership-request/(?P<product_id>\d+)/$", name="membership_request")
+    def membership_request_view(self, request, product_id):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        from django.contrib import messages
+        from django.http import Http404
+        from django.shortcuts import redirect
+
+        from apps.website.models.snippets import Product
+
+        product_id = int(product_id)
+        try:
+            product = Product.objects.get(pk=product_id, is_active=True)
+        except Product.DoesNotExist:
+            raise Http404(_("Product not found."))
+
+        user = request.user
+        card_url = self.url + self.reverse_subpage("card")
+
+        # Already has this product
+        if product in user.products.all():
+            messages.info(request, _("You already have this membership."))
+            return redirect(card_url)
+
+        # Pending request exists
+        pending = MembershipRequest.objects.filter(
+            user=user, product=product, status="pending"
+        ).exists()
+        if pending:
+            messages.info(
+                request,
+                _("You already have a pending request for this product."),
+            )
+            return redirect(card_url)
+
+        if request.method == "POST":
+            notes = request.POST.get("notes", "").strip()
+            MembershipRequest.objects.create(
+                user=user, product=product, notes=notes
+            )
+            messages.success(
+                request,
+                _(
+                    "Your membership request has been submitted! "
+                    "The club will contact you shortly."
+                ),
+            )
+            return redirect(card_url)
+
+        return self.render(
+            request,
+            template="account/membership_request.html",
+            context_overrides={
+                "product": product,
+                "user_products": user.products.all(),
+                "page": self,
+            },
+        )
+
+    # ------------------------------------------------------------------
+    # Membership requests (list)
+    # ------------------------------------------------------------------
+
+    @route(r"^membership-requests/$", name="membership_requests")
+    def membership_requests_view(self, request):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        requests_qs = MembershipRequest.objects.filter(
+            user=request.user
+        ).order_by("-created_at")
+
+        return self.render(
+            request,
+            template="account/membership_requests.html",
+            context_overrides={
+                "requests": requests_qs,
+                "page": self,
+            },
+        )
+
+    # ------------------------------------------------------------------
+    # Public profile (no login required)
+    # ------------------------------------------------------------------
+
+    @route(r"^(?P<username>[\w.@+-]+)/$", name="public_profile")
+    def public_profile_view(self, request, username):
+        from django.http import Http404
+
+        try:
+            member = ClubUser.objects.get(
+                username=username, public_profile=True, is_active=True
+            )
+        except ClubUser.DoesNotExist:
+            raise Http404
+
+        viewer = request.user if request.user.is_authenticated else None
+        visible_name = member.get_visible_name(viewer=viewer)
+
+        return self.render(
+            request,
+            template="account/public_profile.html",
+            context_overrides={
+                "member": member,
+                "visible_name": visible_name,
+                "page": self,
+            },
+        )

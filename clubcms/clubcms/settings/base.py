@@ -311,7 +311,7 @@ WEBPUSH_SETTINGS = {
 # --------------------------------------------------------------------------
 
 LOGIN_URL = reverse_lazy("account_login")
-LOGIN_REDIRECT_URL = reverse_lazy("account:profile")
+LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
 # --------------------------------------------------------------------------

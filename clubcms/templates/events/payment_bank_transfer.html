@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Bank Transfer Instructions" %} — {{ event.title }} | {{ block.super }}{% endblock %}
 {% block body_class %}page-payment{% endblock %}
@@ -43,7 +43,8 @@
                     <code class="page-payment__reference-code">{{ registration.payment_reference }}</code>
                     <button type="button"
                             class="btn btn--sm page-payment__copy-btn"
-                            onclick="navigator.clipboard.writeText('{{ registration.payment_reference }}')">
+                            aria-label="{% trans 'Copy payment reference' %}"
+                            onclick="navigator.clipboard.writeText('{{ registration.payment_reference }}').then(function(){var b=event.currentTarget;b.textContent='{% trans "Copied!" %}';setTimeout(function(){b.textContent='{% trans "Copy" %}'},2000)})">
                         {% trans "Copy" %}
                     </button>
                 </dd>
@@ -64,7 +65,7 @@
         </div>
 
         <footer class="page-payment__footer">
-            <a href="{% url 'events:my_registrations' %}" class="page-payment__back-link">
+            <a href="{% routablepageurl page 'my_registrations' %}" class="page-payment__back-link">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <polyline points="15 18 9 12 15 6"/>
                 </svg>

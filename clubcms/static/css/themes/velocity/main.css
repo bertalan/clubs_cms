@@ -3720,6 +3720,28 @@ a:hover {
   border-radius: var(--velocity-radius-lg);
 }
 
+/* === Payment Page === */
+
+.page-payment__summary {
+  border-radius: var(--velocity-radius-lg);
+}
+
+.page-payment__provider-btn {
+  border-radius: var(--velocity-radius);
+}
+
+.page-payment__provider-btn:hover {
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.2);
+}
+
+.page-payment__bank-details {
+  border-radius: var(--velocity-radius-lg);
+}
+
+.page-payment__reference-code {
+  border-radius: var(--velocity-radius);
+}
+
 /* === Federation Info Page === */
 
 .page-federation__stats {

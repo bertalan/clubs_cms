@@ -3374,6 +3374,7 @@ a:hover {
 
 .page-my-events__card:hover {
   border-color: var(--terra-terracotta);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .page-my-events__card-title {
@@ -3432,6 +3433,28 @@ a:hover {
 .page-my-events__empty {
   background: #faf7f2;
   border-radius: var(--terra-radius-lg);
+}
+
+/* === Payment Page === */
+
+.page-payment__summary {
+  border-radius: var(--terra-radius-lg);
+}
+
+.page-payment__provider-btn {
+  border-radius: var(--terra-radius);
+}
+
+.page-payment__provider-btn:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.page-payment__bank-details {
+  border-radius: var(--terra-radius-lg);
+}
+
+.page-payment__reference-code {
+  border-radius: var(--terra-radius);
 }
 
 /* === Federation Info Page === */

@@ -188,3 +188,15 @@ def events_index_url():
     if page:
         return page.localized.url
     return "#"
+
+
+@register.simple_tag
+def events_area_url(route_name, *args):
+    """Return the URL for an EventsAreaPage routable sub-page."""
+    from apps.website.models.pages import EventsAreaPage
+
+    page = EventsAreaPage.objects.live().first()
+    if not page:
+        return "#"
+    str_args = [str(a) for a in args] if args else None
+    return page.url + page.reverse_subpage(route_name, args=str_args)

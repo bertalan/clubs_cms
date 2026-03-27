@@ -4282,6 +4282,31 @@ a:hover {
   box-shadow: 6px 6px 0 var(--color-primary);
 }
 
+/* === Payment Page === */
+
+.page-payment__summary {
+  border: 3px solid var(--color-primary);
+  border-radius: 0;
+}
+
+.page-payment__provider-btn {
+  border: 3px solid var(--color-primary);
+  border-radius: 0;
+}
+
+.page-payment__provider-btn:hover {
+  box-shadow: 4px 4px 0 var(--color-primary);
+}
+
+.page-payment__bank-details {
+  border: 3px solid var(--color-primary);
+  border-radius: 0;
+}
+
+.page-payment__reference-code {
+  border-radius: 0;
+}
+
 /* === Federation Info Page === */
 
 .page-federation__stats {

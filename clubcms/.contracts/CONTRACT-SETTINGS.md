@@ -41,11 +41,11 @@ LANGUAGE_CODE = "it"
 - `django-admin/` -> django admin
 - `admin/` -> wagtail admin
 - `documents/` -> wagtail documents
-- `account/` -> apps.members.urls (namespace="account") [pending]
-- `api/federation/` -> apps.federation.urls_api (namespace="federation_api") [pending]
+- `account/` -> apps.members.urls (namespace="account") — binary views only (card PDF/QR/barcode); all HTML views served by MembersAreaPage (RoutablePageMixin)
+- `api/federation/` -> apps.federation.urls_api (namespace="federation_api")
 - `eventi/partner/` -> apps.federation.urls_frontend (namespace="federation") [pending]
 - `mutual-aid/` -> apps.mutual_aid.urls (namespace="mutual_aid") [pending]
-- `notifications/` -> apps.notifications.urls (namespace="notifications") [pending]
+- `notifications/` -> apps.notifications.urls (namespace="notifications")
 - `""` -> wagtail.urls (catch-all, MUST be last)
 
 ## WAGTAIL
@@ -58,7 +58,7 @@ LANGUAGE_CODE = "it"
 - ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 - ACCOUNT_AUTHENTICATION_METHOD = "email"
 - ACCOUNT_USERNAME_REQUIRED = False
-- LOGIN_REDIRECT_URL = "/my-profile/"
+- LOGIN_REDIRECT_URL = "/"
 - LOGOUT_REDIRECT_URL = "/"
 
 ## PASSWORD VALIDATION

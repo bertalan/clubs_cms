@@ -36,9 +36,10 @@ from apps.federation.models import (
     FederatedClub,
     FederationInfoPage,
 )
-from apps.members.models import ClubUser, MembershipRequest
+from apps.members.models import ClubUser, MembershipRequest, MembersAreaPage
 from apps.mutual_aid.models import AidRequest, FederatedHelper, MutualAidPage
 from apps.notifications.models import NotificationQueue
+from apps.website.models.pages import EventsAreaPage
 from apps.places.models import (
     PlaceGalleryImage,
     PlaceIndexPage,
@@ -96,6 +97,7 @@ PAGE_TYPE_MAP: dict[str, type] = {
     "news": NewsPage,
     "events_page": EventsPage,
     "event": EventDetailPage,
+    "events_area": EventsAreaPage,
     "gallery": GalleryPage,
     "contact": ContactPage,
     "privacy": PrivacyPage,
@@ -107,6 +109,7 @@ PAGE_TYPE_MAP: dict[str, type] = {
     "search": SearchPage,
     "contributions": ContributionsPage,
     "notifications": NotificationsPage,
+    "members_area": MembersAreaPage,
     "partner_index": PartnerIndexPage,
     "partner": PartnerPage,
     "place_index": PlaceIndexPage,

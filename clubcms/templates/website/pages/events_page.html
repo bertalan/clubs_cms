@@ -95,7 +95,7 @@
                             {% endif %}
                         </span>
                         {% if event.is_registration_open and not event.is_past %}
-                        <a href="{% url 'events:register' event_pk=event.pk %}" class="event-card__cta">
+                        <a href="{{ event.url }}register/" class="event-card__cta">
                             {% trans "Register" %}
                         </a>
                         {% else %}

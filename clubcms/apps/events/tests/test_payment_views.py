@@ -17,6 +17,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from apps.events.models import EventRegistration
+from apps.events.utils import events_area_url
 
 User = get_user_model()
 
@@ -31,6 +32,23 @@ except ImportError:
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
+
+
+@pytest.fixture(autouse=True)
+def events_area_page(db):
+    """Create an EventsAreaPage under the default site root for URL resolution."""
+    from wagtail.models import Page, Site
+
+    from apps.website.models.pages import EventsAreaPage
+
+    # Clear Wagtail's Site root paths cache to avoid stale entries from other test classes
+    Site.clear_site_root_paths_cache()
+
+    site = Site.objects.filter(is_default_site=True).first()
+    parent = site.root_page if site else Page.objects.first()
+    page = EventsAreaPage(title="Events Area", slug="events-area")
+    parent.add_child(instance=page)
+    return page
 
 
 def _create_event_page(**kwargs):
@@ -126,7 +144,7 @@ class TestPaymentChoiceViewGET:
         self, auth_client, registration, payment_settings
     ):
         """GET renders the payment choice page with providers."""
-        url = reverse("events:payment_choice", args=[registration.pk])
+        url = events_area_url("payment_choice", args=[str(registration.pk)])
         response = auth_client.get(url)
         assert response.status_code == 200
 
@@ -136,7 +154,7 @@ class TestPaymentChoiceViewGET:
         """GET redirects to my_registrations if already paid."""
         registration.payment_status = "paid"
         registration.save(update_fields=["payment_status"])
-        url = reverse("events:payment_choice", args=[registration.pk])
+        url = events_area_url("payment_choice", args=[str(registration.pk)])
         response = auth_client.get(url)
         assert response.status_code == 302
 
@@ -149,14 +167,14 @@ class TestPaymentChoiceViewGET:
         )
         client = Client()
         client.login(username="other", password="testpass123456")
-        url = reverse("events:payment_choice", args=[registration.pk])
+        url = events_area_url("payment_choice", args=[str(registration.pk)])
         response = client.get(url)
         assert response.status_code == 404
 
     def test_requires_login(self, db, registration, payment_settings):
         """GET redirects to login for unauthenticated users."""
         client = Client()
-        url = reverse("events:payment_choice", args=[registration.pk])
+        url = events_area_url("payment_choice", args=[str(registration.pk)])
         response = client.get(url)
         assert response.status_code == 302
         assert "/accounts/login/" in response.url or "/login/" in response.url
@@ -181,7 +199,7 @@ class TestPaymentChoiceViewPOSTStripe:
         mock_session.url = "https://checkout.stripe.com/pay/cs_test_abc"
         mock_stripe.checkout.Session.create.return_value = mock_session
 
-        url = reverse("events:payment_choice", args=[registration.pk])
+        url = events_area_url("payment_choice", args=[str(registration.pk)])
         response = auth_client.post(url, {"provider": "stripe"})
 
         assert response.status_code == 302
@@ -199,7 +217,7 @@ class TestPaymentChoiceViewPOSTStripe:
         self, mock_create, auth_client, registration, payment_settings
     ):
         """Stripe failure re-renders the page with an error message."""
-        url = reverse("events:payment_choice", args=[registration.pk])
+        url = events_area_url("payment_choice", args=[str(registration.pk)])
         response = auth_client.post(url, {"provider": "stripe"})
 
         assert response.status_code == 200
@@ -243,7 +261,7 @@ class TestPaymentChoiceViewPOSTPayPal:
         mock_client.__exit__ = MagicMock(return_value=False)
         mock_client_cls.return_value = mock_client
 
-        url = reverse("events:payment_choice", args=[registration.pk])
+        url = events_area_url("payment_choice", args=[str(registration.pk)])
         response = auth_client.post(url, {"provider": "paypal"})
 
         assert response.status_code == 302
@@ -261,7 +279,7 @@ class TestPaymentChoiceViewPOSTPayPal:
         self, mock_create, auth_client, registration, payment_settings
     ):
         """PayPal failure re-renders the page with an error message."""
-        url = reverse("events:payment_choice", args=[registration.pk])
+        url = events_area_url("payment_choice", args=[str(registration.pk)])
         response = auth_client.post(url, {"provider": "paypal"})
 
         assert response.status_code == 200
@@ -276,7 +294,7 @@ class TestPaymentChoiceViewPOSTPayPal:
 class TestPaymentChoiceViewPOSTBankTransfer:
     """Tests for bank transfer flow through PaymentChoiceView."""
 
-    @patch("apps.events.views.PaymentChoiceView._setup_bank_transfer")
+    @patch("apps.website.models.pages.EventsAreaPage._setup_bank_transfer")
     def test_bank_transfer_calls_setup(
         self, mock_setup, auth_client, registration, payment_settings
     ):
@@ -284,7 +302,7 @@ class TestPaymentChoiceViewPOSTBankTransfer:
         from django.http import HttpResponseRedirect
 
         mock_setup.return_value = HttpResponseRedirect("/mocked/")
-        url = reverse("events:payment_choice", args=[registration.pk])
+        url = events_area_url("payment_choice", args=[str(registration.pk)])
         auth_client.post(url, {"provider": "bank_transfer"})
         mock_setup.assert_called_once()
 
@@ -414,7 +432,7 @@ class TestPayPalReturnView:
         response = auth_client.get(url)
 
         assert response.status_code == 302
-        expected = reverse("events:payment_success", args=[registration.pk])
+        expected = events_area_url("payment_success", args=[str(registration.pk)])
         assert response.url == expected
 
         registration.refresh_from_db()
@@ -438,7 +456,7 @@ class TestPayPalReturnView:
         response = auth_client.get(url)
 
         assert response.status_code == 302
-        expected = reverse("events:payment_cancel", args=[registration.pk])
+        expected = events_area_url("payment_cancel", args=[str(registration.pk)])
         assert response.url == expected
 
     def test_already_paid_redirects_to_success(
@@ -460,7 +478,7 @@ class TestPayPalReturnView:
         response = auth_client.get(url)
 
         assert response.status_code == 302
-        expected = reverse("events:payment_success", args=[registration.pk])
+        expected = events_area_url("payment_success", args=[str(registration.pk)])
         assert response.url == expected
 
     def test_non_paypal_registration_redirects_to_cancel(
@@ -474,7 +492,7 @@ class TestPayPalReturnView:
         response = auth_client.get(url)
 
         assert response.status_code == 302
-        expected = reverse("events:payment_cancel", args=[registration.pk])
+        expected = events_area_url("payment_cancel", args=[str(registration.pk)])
         assert response.url == expected
 
 
@@ -494,7 +512,7 @@ class TestPaymentSuccessView:
         registration.payment_status = "paid"
         registration.save(update_fields=["payment_status"])
 
-        url = reverse("events:payment_success", args=[registration.pk])
+        url = events_area_url("payment_success", args=[str(registration.pk)])
         response = auth_client.get(url)
 
         assert response.status_code == 200
@@ -503,7 +521,7 @@ class TestPaymentSuccessView:
         self, auth_client, registration, payment_settings
     ):
         """Success page renders even if webhook hasn't arrived yet."""
-        url = reverse("events:payment_success", args=[registration.pk])
+        url = events_area_url("payment_success", args=[str(registration.pk)])
         response = auth_client.get(url)
         assert response.status_code == 200
 
@@ -521,13 +539,13 @@ class TestPaymentCancelView:
         self, auth_client, registration, payment_settings
     ):
         """Cancel page renders correctly."""
-        url = reverse("events:payment_cancel", args=[registration.pk])
+        url = events_area_url("payment_cancel", args=[str(registration.pk)])
         response = auth_client.get(url)
         assert response.status_code == 200
 
     def test_requires_login(self, db, registration, payment_settings):
         """Cancel page redirects unauthenticated users."""
         client = Client()
-        url = reverse("events:payment_cancel", args=[registration.pk])
+        url = events_area_url("payment_cancel", args=[str(registration.pk)])
         response = client.get(url)
         assert response.status_code == 302

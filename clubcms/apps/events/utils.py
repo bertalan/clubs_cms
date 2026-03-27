@@ -2,7 +2,7 @@
 Utility functions for the events app.
 
 Provides pricing calculations, ICS calendar generation,
-and waitlist promotion logic.
+waitlist promotion logic, and EventsAreaPage URL resolution.
 """
 
 from datetime import timedelta
@@ -10,6 +10,34 @@ from decimal import Decimal
 
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
+
+# ---------------------------------------------------------------------------
+# EventsAreaPage URL resolver
+# ---------------------------------------------------------------------------
+
+
+def events_area_url(route_name, args=None):
+    """
+    Resolve a URL for an EventsAreaPage routable sub-page.
+
+    Args:
+        route_name: The route name (e.g. "my_registrations", "payment_choice").
+        args: Optional list of positional args for the route.
+
+    Returns:
+        str: The resolved URL path, or "/" as fallback.
+    """
+    from apps.website.models.pages import EventsAreaPage
+
+    page = EventsAreaPage.objects.live().first()
+    if page and page.url:
+        if args:
+            return page.url + page.reverse_subpage(
+                route_name, args=[str(a) for a in args]
+            )
+        return page.url + page.reverse_subpage(route_name)
+    return "/"
 
 
 # ---------------------------------------------------------------------------
@@ -151,6 +179,67 @@ def _format_dt(dt):
     return dt.strftime("%Y%m%dT%H%M%SZ")
 
 
+def _build_vevent(event, lines):
+    """Append a VEVENT block to *lines* for a single event."""
+    lines.append("BEGIN:VEVENT")
+    lines.append(f"UID:event-{event.pk}@clubcms")
+    lines.append(f"DTSTART:{_format_dt(event.start_date)}")
+
+    if event.end_date:
+        lines.append(f"DTEND:{_format_dt(event.end_date)}")
+    else:
+        # Fallback: 2-hour duration so calendar apps don't show 0-length events
+        fallback_end = event.start_date + timedelta(hours=2)
+        lines.append(f"DTEND:{_format_dt(fallback_end)}")
+
+    lines.append(f"SUMMARY:{_escape_ics(event.title)}")
+
+    # Location
+    location_parts = []
+    if getattr(event, "location_name", ""):
+        location_parts.append(event.location_name)
+    if getattr(event, "location_address", ""):
+        location_parts.append(event.location_address)
+    if location_parts:
+        lines.append(f"LOCATION:{_escape_ics(', '.join(location_parts))}")
+
+    # GEO (latitude;longitude per RFC 5545)
+    lat = getattr(event, "latitude", None)
+    lng = getattr(event, "longitude", None)
+    if lat is not None and lng is not None:
+        lines.append(f"GEO:{lat};{lng}")
+
+    # Description (no PII)
+    description = getattr(event, "search_description", "") or ""
+    if description:
+        lines.append(f"DESCRIPTION:{_escape_ics(description)}")
+
+    # URL — link back to event page
+    url = getattr(event, "full_url", "") or ""
+    if url:
+        lines.append(f"URL:{url}")
+
+    # Categories from tags
+    tags = getattr(event, "tags", None)
+    if tags:
+        try:
+            tag_names = [t.name for t in tags.all()]
+        except (AttributeError, TypeError):
+            tag_names = []
+        if tag_names:
+            lines.append(f"CATEGORIES:{_escape_ics(','.join(tag_names))}")
+
+    # SEQUENCE from last_published_at (revision counter)
+    last_pub = getattr(event, "last_published_at", None)
+    if last_pub:
+        lines.append(f"LAST-MODIFIED:{_format_dt(last_pub)}")
+
+    now_str = _format_dt(timezone.now())
+    lines.append(f"DTSTAMP:{now_str}")
+    lines.append("SEQUENCE:0")
+    lines.append("END:VEVENT")
+
+
 def generate_single_ics(event):
     """
     Generate an ICS calendar string for a single event page.
@@ -171,31 +260,7 @@ def generate_single_ics(event):
         "METHOD:PUBLISH",
     ]
 
-    lines.append("BEGIN:VEVENT")
-    lines.append(f"UID:event-{event.pk}@clubcms")
-    lines.append(f"DTSTART:{_format_dt(event.start_date)}")
-
-    if event.end_date:
-        lines.append(f"DTEND:{_format_dt(event.end_date)}")
-
-    lines.append(f"SUMMARY:{_escape_ics(event.title)}")
-
-    location_parts = []
-    if getattr(event, "location_name", ""):
-        location_parts.append(event.location_name)
-    if getattr(event, "location_address", ""):
-        location_parts.append(event.location_address)
-    if location_parts:
-        lines.append(f"LOCATION:{_escape_ics(', '.join(location_parts))}")
-
-    # Use search_description as event description (no PII)
-    description = getattr(event, "search_description", "") or ""
-    if description:
-        lines.append(f"DESCRIPTION:{_escape_ics(description)}")
-
-    now_str = _format_dt(timezone.now())
-    lines.append(f"DTSTAMP:{now_str}")
-    lines.append("END:VEVENT")
+    _build_vevent(event, lines)
     lines.append("END:VCALENDAR")
 
     return "\r\n".join(lines)
@@ -206,7 +271,7 @@ def generate_single_ics(event):
 # ---------------------------------------------------------------------------
 
 
-def generate_ics(events):
+def generate_ics(events, cal_name=None):
     """
     Generate an ICS calendar string for a list of event pages.
 
@@ -214,44 +279,28 @@ def generate_ics(events):
 
     Args:
         events: An iterable of EventDetailPage instances.
+        cal_name: Calendar display name (defaults to translated
+                  "My Favorite Events").
 
     Returns:
         str: A complete ICS calendar string with multiple VEVENTs.
     """
+    if cal_name is None:
+        cal_name = str(_("My Favorite Events"))
+
     lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
         "PRODID:-//ClubCMS//Events//EN",
         "CALSCALE:GREGORIAN",
         "METHOD:PUBLISH",
-        "X-WR-CALNAME:My Favorite Events",
+        f"X-WR-CALNAME:{_escape_ics(cal_name)}",
+        "REFRESH-INTERVAL;VALUE=DURATION:PT1H",
+        "X-PUBLISHED-TTL:PT1H",
     ]
 
     for event in events:
-        lines.append("BEGIN:VEVENT")
-        lines.append(f"UID:event-{event.pk}@clubcms")
-        lines.append(f"DTSTART:{_format_dt(event.start_date)}")
-
-        if event.end_date:
-            lines.append(f"DTEND:{_format_dt(event.end_date)}")
-
-        lines.append(f"SUMMARY:{_escape_ics(event.title)}")
-
-        location_parts = []
-        if getattr(event, "location_name", ""):
-            location_parts.append(event.location_name)
-        if getattr(event, "location_address", ""):
-            location_parts.append(event.location_address)
-        if location_parts:
-            lines.append(f"LOCATION:{_escape_ics(', '.join(location_parts))}")
-
-        description = getattr(event, "search_description", "") or ""
-        if description:
-            lines.append(f"DESCRIPTION:{_escape_ics(description)}")
-
-        now_str = _format_dt(timezone.now())
-        lines.append(f"DTSTAMP:{now_str}")
-        lines.append("END:VEVENT")
+        _build_vevent(event, lines)
 
     lines.append("END:VCALENDAR")
     return "\r\n".join(lines)

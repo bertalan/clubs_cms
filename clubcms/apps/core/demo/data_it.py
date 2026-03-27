@@ -986,6 +986,20 @@ DATA = {
             },
         },
 
+        # ---- Members Area ----
+        {
+            "slug": "area-soci",
+            "page_type": "members_area",
+            "parent_slug": "home",
+            "translation_key": TK["members_area"],
+            "title": "Area Soci",
+            "fields": {
+                "intro": "<p>Accedi alla tua tessera, aggiorna il profilo, gestisci le impostazioni di privacy e connettiti con gli altri soci.</p>",
+                "directory_intro": "<p>Sfoglia l'elenco dei soci per trovare e connetterti con gli altri membri del club.</p>",
+                "card_help_text": "<p>La tua tessera digitale. Presentala agli eventi o scarica una copia PDF.</p>",
+            },
+        },
+
         # ---- Partner Index ----
         {
             "slug": "partner",
@@ -1231,13 +1245,13 @@ DATA = {
         {"label": "Diventa Socio",        "link_page_slug": "diventa-socio",       "link_url": "", "sort_order": 2, "parent_label": "Chi Siamo", "is_cta": False, "open_new_tab": False},
         {"label": "Consiglio Direttivo",  "link_page_slug": "consiglio-direttivo", "link_url": "", "sort_order": 3, "parent_label": "Chi Siamo", "is_cta": False, "open_new_tab": False},
         {"label": "Trasparenza",          "link_page_slug": "trasparenza",         "link_url": "", "sort_order": 4, "parent_label": "Chi Siamo", "is_cta": False, "open_new_tab": False},
-        {"label": "Tessera Socio",        "link_page_slug": "",                    "link_url": "reverse:account:card", "sort_order": 5, "parent_label": "Chi Siamo", "is_cta": False, "open_new_tab": False},
+        {"label": "Tessera Socio",        "link_page_slug": "area-soci",              "link_url": "", "sort_order": 5, "parent_label": "Chi Siamo", "is_cta": False, "open_new_tab": False},
         {"label": "Partner",              "link_page_slug": "partner",             "link_url": "", "sort_order": 6, "parent_label": "Chi Siamo", "is_cta": False, "open_new_tab": False},
         # Sub: Servizi
         {"label": "Soccorso Stradale",    "link_page_slug": "soccorso-stradale", "link_url": "",                                 "sort_order": 0, "parent_label": "Servizi", "is_cta": False, "open_new_tab": False},
         {"label": "Federazione Eventi",   "link_page_slug": "federazione", "link_url": "",                                "sort_order": 1, "parent_label": "Servizi", "is_cta": False, "open_new_tab": False},
         {"label": "Contributi",           "link_page_slug": "contributi",  "link_url": "",                                "sort_order": 2, "parent_label": "Servizi", "is_cta": False, "open_new_tab": False},
-        {"label": "Notifiche",            "link_page_slug": "",            "link_url": "reverse:account:notifications",    "sort_order": 3, "parent_label": "Servizi", "is_cta": False, "open_new_tab": False},
+        {"label": "Notifiche",            "link_page_slug": "notifiche",    "link_url": "",                                 "sort_order": 3, "parent_label": "Servizi", "is_cta": False, "open_new_tab": False},
         {"label": "Area Stampa",          "link_page_slug": "stampa",      "link_url": "",                                "sort_order": 4, "parent_label": "Servizi", "is_cta": False, "open_new_tab": False},
         {"label": "Newsletter",            "link_page_slug": "",            "link_url": "reverse:website:newsletter-subscribe", "sort_order": 5, "parent_label": "Servizi", "is_cta": False, "open_new_tab": False},
     ],
@@ -1424,7 +1438,7 @@ DATA = {
         {"notification_type": "event_reminder", "recipient_username": "demo_marco",  "channel": "in_app", "title": "Promemoria: Tour delle Orobie tra 3 giorni", "body": "Il Tour delle Orobie è previsto per sabato. Ritrovo alle 8:30 in sede.", "url_type": "page", "url_ref": "tour-orobie-2026", "status": "sent", "sent_hours_ago": 2},
         {"notification_type": "event_reminder", "recipient_username": "demo_giulia", "channel": "in_app", "title": "Promemoria: Tour delle Orobie tra 3 giorni", "body": "Il Tour delle Orobie è previsto per sabato. Ritrovo alle 8:30 in sede.", "url_type": "page", "url_ref": "tour-orobie-2026", "status": "sent", "sent_hours_ago": 2},
         {"notification_type": "event_reminder", "recipient_username": "demo_marco",  "channel": "in_app", "title": "Giulia ha risposto al tuo commento", "body": "Giulia F. ha risposto al tuo commento su \u2018Avviamento Motori 2026\u2019.", "url_type": "page", "url_ref": "avviamento-motori-2026", "status": "sent", "sent_hours_ago": 12},
-        {"notification_type": "membership_expiring", "recipient_username": "demo_giulia", "channel": "email", "title": "La tua richiesta di tessera è stata approvata!", "body": "La tua richiesta per la Tessera Socio Ordinario è stata approvata. La tessera digitale è disponibile nel tuo profilo.", "url_type": "reverse", "url_ref": "account:card", "status": "sent", "sent_hours_ago": 120},
+        {"notification_type": "membership_expiring", "recipient_username": "demo_giulia", "channel": "email", "title": "La tua richiesta di tessera è stata approvata!", "body": "La tua richiesta per la Tessera Socio Ordinario è stata approvata. La tessera digitale è disponibile nel tuo profilo.", "url_type": "page", "url_ref": "area-soci", "status": "sent", "sent_hours_ago": 120},
         {"notification_type": "aid_request", "recipient_username": "demo_alessandro", "channel": "in_app", "title": "Nuova richiesta di soccorso vicino a te", "body": "Roberto C. ha bisogno di trasporto moto da Mandello del Lario. Distanza: ~25 km.", "url_type": "page", "url_ref": "soccorso-stradale", "status": "sent", "sent_hours_ago": 36},
         {"notification_type": "event_published", "recipient_username": "demo_chiara", "channel": "in_app", "title": "Nuovo evento: Track Day Franciacorta", "body": "È stato pubblicato un nuovo evento: Track Day all\u2019Autodromo di Franciacorta. Le iscrizioni sono aperte!", "url_type": "page", "url_ref": "track-day-franciacorta-2026", "status": "pending", "sent_hours_ago": 0},
         {"notification_type": "event_published", "recipient_username": "demo_roberto", "channel": "in_app", "title": "La tua proposta è stata approvata", "body": "La tua proposta \u2018Tour Sardegna 5 giorni\u2019 è stata approvata e pubblicata.", "url_type": "page", "url_ref": "contributi", "status": "sent", "sent_hours_ago": 24},

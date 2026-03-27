@@ -18,7 +18,6 @@ from wagtail.contrib.sitemaps.views import sitemap
 from wagtail.documents import urls as wagtaildocs_urls
 
 from apps.core.views import HealthCheckView, PWAManifestView, PWAOfflineView, PWAServiceWorkerView, RobotsTxtView
-from apps.members.views import PublicProfileView
 
 # Non-i18n URLs (admin, API, documents - no language prefix)
 urlpatterns = [
@@ -46,17 +45,9 @@ if settings.FEDERATION_ENABLED:
 # Build i18n URL list (order matters — Wagtail catch-all must be last)
 # Path segments wrapped in _() are translated per-language via .po files.
 _i18n_urls = [
-    # Member account pages (profile/, card/, privacy/, aid/, membership-request/, …)
-    # NOTE: allauth also mounts at /account/ (line below) for login/, signup/,
-    # logout/, password/.  The two sets do NOT overlap — members app is matched
-    # first, then allauth picks up auth-related paths.
+    # Member account pages (card/pdf, card/qr, card/barcode only — binary files)
+    # All HTML account views are served by MembersAreaPage (RoutablePageMixin).
     path(_("account/"), include("apps.members.urls")),
-    # Public member profile
-    path(
-        _("members/<str:username>/"),
-        PublicProfileView.as_view(),
-        name="public_profile",
-    ),
     # Events (registration, favorites, ICS)
     path(_("events/"), include("apps.events.urls")),
     # Website views (verification, uploads, moderation)

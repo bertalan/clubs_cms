@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n wagtailcore_tags %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags seo_tags %}
 
 {% block title %}{% trans "My Membership Requests" %} | {{ block.super }}{% endblock %}
 
@@ -61,14 +61,17 @@
         <div class="page-card__no-card">
             <div class="page-card__no-card-icon">📋</div>
             <p class="page-card__no-card-text">{% trans "You have not submitted any membership requests yet." %}</p>
-            <a href="{% slugurl 'diventa-socio' %}" class="btn btn-primary">
+            {% localized_slugurl 'diventa-socio' as membership_plans_url %}
+            {% if membership_plans_url %}
+            <a href="{{ membership_plans_url }}" class="btn btn-primary">
                 {% trans "View Membership Plans" %}
             </a>
+            {% endif %}
         </div>
         {% endif %}
 
         <div class="membership-card__actions">
-            <a href="{% url 'account:card' %}" class="btn btn-outline">
+            <a href="{% routablepageurl page 'card' %}" class="btn btn-outline">
                 {% trans "Back to My Card" %}
             </a>
         </div>

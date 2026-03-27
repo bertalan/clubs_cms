@@ -101,8 +101,11 @@
                     {% if contributions_url %}
                     <li><a href="{{ contributions_url }}">{% trans "Contributions" %}</a></li>
                     {% endif %}
-                    <li><a href="{% url 'account:notifications' %}">{% trans "Notifications" %}</a></li>
-                    <li><a href="{% url 'account:card' %}">{% trans "Membership Card" %}</a></li>
+                    {% localized_slugurl 'members' as members_url %}
+                    {% if members_url %}
+                    <li><a href="{{ members_url }}notifications/">{% trans "Notifications" %}</a></li>
+                    <li><a href="{{ members_url }}card/">{% trans "Membership Card" %}</a></li>
+                    {% endif %}
                 </ul>
             </nav>
 

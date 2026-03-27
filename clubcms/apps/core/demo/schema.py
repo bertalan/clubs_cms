@@ -43,6 +43,7 @@ TRANSLATION_KEYS = {
     "search": _tk("search"),
     "contributions": _tk("contributions"),
     "notifications": _tk("notifications"),
+    "members_area": _tk("members_area"),
     "partner_index": _tk("partner_index"),
     "place_index": _tk("place_index"),
     # Partners

@@ -722,6 +722,20 @@ DATA = {
             },
         },
 
+        # ---- Members Area ----
+        {
+            "slug": "members",
+            "page_type": "members_area",
+            "parent_slug": "home",
+            "translation_key": TK["members_area"],
+            "title": "Members Area",
+            "fields": {
+                "intro": "<p>Access your membership card, update your profile, manage privacy settings and connect with fellow members.</p>",
+                "directory_intro": "<p>Browse the club directory to find and connect with other members.</p>",
+                "card_help_text": "<p>Your digital membership card. Present it at events or download a PDF copy.</p>",
+            },
+        },
+
         # ---- Partner Index ----
         {
             "slug": "partners",
@@ -953,13 +967,13 @@ DATA = {
         {"label": "Become a Member",    "link_page_slug": "membership",         "link_url": "", "sort_order": 2, "parent_label": "About Us", "is_cta": False, "open_new_tab": False},
         {"label": "Board of Directors", "link_page_slug": "board-of-directors", "link_url": "", "sort_order": 3, "parent_label": "About Us", "is_cta": False, "open_new_tab": False},
         {"label": "Transparency",       "link_page_slug": "transparency",       "link_url": "", "sort_order": 4, "parent_label": "About Us", "is_cta": False, "open_new_tab": False},
-        {"label": "Member Card",        "link_page_slug": "",                   "link_url": "reverse:account:card", "sort_order": 5, "parent_label": "About Us", "is_cta": False, "open_new_tab": False},
+        {"label": "Member Card",        "link_page_slug": "members",                "link_url": "", "sort_order": 5, "parent_label": "About Us", "is_cta": False, "open_new_tab": False},
         {"label": "Partners",           "link_page_slug": "partners",           "link_url": "", "sort_order": 6, "parent_label": "About Us", "is_cta": False, "open_new_tab": False},
         # Sub: Services
         {"label": "Roadside Assistance", "link_page_slug": "mutual-aid","link_url": "",                                 "sort_order": 0, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
         {"label": "Federation Events",   "link_page_slug": "federation","link_url": "",                                 "sort_order": 1, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
         {"label": "Contributions",       "link_page_slug": "contributions", "link_url": "",                              "sort_order": 2, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
-        {"label": "Notifications",       "link_page_slug": "",          "link_url": "reverse:account:notifications",    "sort_order": 3, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
+        {"label": "Notifications",       "link_page_slug": "notifications", "link_url": "",                                 "sort_order": 3, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
         {"label": "Press Room",          "link_page_slug": "press",     "link_url": "",                                 "sort_order": 4, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
         {"label": "Newsletter",           "link_page_slug": "",          "link_url": "reverse:website:newsletter-subscribe", "sort_order": 5, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
     ],
@@ -1146,7 +1160,7 @@ DATA = {
         {"notification_type": "event_reminder", "recipient_username": "demo_marco",  "channel": "in_app", "title": "Reminder: Orobie Tour in 3 days", "body": "The Orobie Tour is scheduled for Saturday. Meeting at 8:30 at the clubhouse.", "url_type": "page", "url_ref": "orobie-tour-2026", "status": "sent", "sent_hours_ago": 2},
         {"notification_type": "event_reminder", "recipient_username": "demo_giulia", "channel": "in_app", "title": "Reminder: Orobie Tour in 3 days", "body": "The Orobie Tour is scheduled for Saturday. Meeting at 8:30 at the clubhouse.", "url_type": "page", "url_ref": "orobie-tour-2026", "status": "sent", "sent_hours_ago": 2},
         {"notification_type": "event_reminder", "recipient_username": "demo_marco",  "channel": "in_app", "title": "Giulia replied to your comment", "body": "Giulia F. replied to your comment on \u20182026 Season Kick-off\u2019.", "url_type": "page", "url_ref": "2026-season-kickoff", "status": "sent", "sent_hours_ago": 12},
-        {"notification_type": "membership_expiring", "recipient_username": "demo_giulia", "channel": "email", "title": "Your membership request has been approved!", "body": "Your Standard Membership Card request has been approved. The digital card is available in your profile.", "url_type": "reverse", "url_ref": "account:card", "status": "sent", "sent_hours_ago": 120},
+        {"notification_type": "membership_expiring", "recipient_username": "demo_giulia", "channel": "email", "title": "Your membership request has been approved!", "body": "Your Standard Membership Card request has been approved. The digital card is available in your profile.", "url_type": "page", "url_ref": "members", "status": "sent", "sent_hours_ago": 120},
         {"notification_type": "aid_request", "recipient_username": "demo_alessandro", "channel": "in_app", "title": "New roadside assistance request near you", "body": "Roberto C. needs motorcycle transport from Mandello del Lario. Distance: ~25 km.", "url_type": "page", "url_ref": "mutual-aid", "status": "sent", "sent_hours_ago": 36},
         {"notification_type": "event_published", "recipient_username": "demo_chiara", "channel": "in_app", "title": "New event: Franciacorta Track Day", "body": "A new event has been published: Track Day at Franciacorta Circuit. Registrations are open!", "url_type": "page", "url_ref": "franciacorta-track-day-2026", "status": "pending", "sent_hours_ago": 0},
         {"notification_type": "event_published", "recipient_username": "demo_roberto", "channel": "in_app", "title": "Your proposal has been approved", "body": "Your proposal \u20185-day Sardinia Tour\u2019 has been approved and published.", "url_type": "page", "url_ref": "contributions", "status": "sent", "sent_hours_ago": 24},

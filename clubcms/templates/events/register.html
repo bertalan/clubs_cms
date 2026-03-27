@@ -13,11 +13,13 @@
         <div class="register-summary__details">
             <div class="register-summary__item">
                 <span class="register-summary__icon" aria-hidden="true">&#128197;</span>
+                <span class="sr-only">{% trans "Date:" %} </span>
                 <span>{{ event.start_date }}{% if event.end_date %} &mdash; {{ event.end_date }}{% endif %}</span>
             </div>
             {% if event.location_name %}
             <div class="register-summary__item">
                 <span class="register-summary__icon" aria-hidden="true">&#128205;</span>
+                <span class="sr-only">{% trans "Location:" %} </span>
                 <span>{{ event.location_name }}{% if event.location_address %}, {{ event.location_address }}{% endif %}</span>
             </div>
             {% endif %}
@@ -25,7 +27,7 @@
     </div>
 
     {# ── Pricing card ── #}
-    <div class="register-pricing">
+    <div class="register-pricing" aria-live="polite" aria-atomic="true">
         <h3 class="register-pricing__heading">{% trans "Pricing" %}</h3>
         <div class="register-pricing__rows">
             <div class="register-pricing__row">
@@ -125,7 +127,7 @@
             {% endfor %}
 
             {# Passenger details (hidden until has_passenger is checked) #}
-            <div id="passenger-fields" class="register-passenger-fields" hidden>
+            <div id="passenger-fields" class="register-passenger-fields" hidden aria-labelledby="id_has_passenger">
                 {# Member toggle — only for authenticated users (privacy) #}
                 {% if user.is_authenticated %}
                 {% for field in form %}
@@ -203,6 +205,7 @@
 
     function togglePassenger() {
         passengerFields.hidden = !hasPassenger.checked;
+        hasPassenger.setAttribute('aria-expanded', hasPassenger.checked);
     }
     function toggleMemberMode() {
         if (isMember) {

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Membership Card" %} | {{ block.super }}{% endblock %}
 
@@ -51,16 +51,16 @@
         </article>
 
         <nav class="membership-card__actions" aria-label="{% trans 'Card actions' %}">
-            <a href="{% url 'account:card_pdf' %}" class="btn btn--primary" download>
+            <a href="{% url 'account:card_pdf' %}" class="btn btn--primary" download>{# stays Django URL — binary file #}
                 <svg class="btn__icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 {% trans "Download PDF" %}
             </a>
-            <a href="{% url 'account:card_qr' %}" class="btn btn--outline" aria-label="{% trans 'Download QR code image' %}" download>
+            <a href="{% url 'account:card_qr' %}" class="btn btn--outline" aria-label="{% trans 'Download QR code image' %}" download>{# stays Django URL — binary file #}
                 {% trans "QR Code" %}
             </a>
-            <a href="{% url 'account:card_barcode' %}" class="btn btn--outline" aria-label="{% trans 'Download barcode image' %}" download>
+            <a href="{% url 'account:card_barcode' %}" class="btn btn--outline" aria-label="{% trans 'Download barcode image' %}" download>{# stays Django URL — binary file #}
                 {% trans "Barcode" %}
             </a>
         </nav>
@@ -97,7 +97,7 @@
 
         {# ---- Link to My Requests ---- #}
         <div class="page-card__requests-link">
-            <a href="{% url 'account:membership_requests' %}" class="btn btn--outline">
+            <a href="{% routablepageurl page 'membership_requests' %}" class="btn btn--outline">
                 <svg class="btn__icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
@@ -135,7 +135,7 @@
                         {% endif %}
                     </ul>
                     {% if product not in user_products %}
-                    <a href="{% url 'account:membership_request' product.pk %}" class="btn btn--primary btn--block">
+                    <a href="{% routablepageurl page 'membership_request' product.pk %}" class="btn btn--primary btn--block">
                         {% trans "Request this membership" %}
                     </a>
                     {% endif %}

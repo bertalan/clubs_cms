@@ -3711,6 +3711,7 @@ a:hover {
 .page-my-events__nav-link {
   background: #fafafa;
   border: 1px solid var(--tricolore-border);
+  border-radius: 0.5rem;
   color: #374151;
   transition: all 0.3s ease;
 }
@@ -3730,6 +3731,7 @@ a:hover {
 .page-my-events__map {
   background: #fafafa;
   border: 1px solid var(--tricolore-border);
+  border-radius: 0.5rem;
 }
 
 .page-my-events__map-placeholder {
@@ -3745,6 +3747,7 @@ a:hover {
 .page-my-events__card {
   background: #fafafa;
   border: 1px solid var(--tricolore-border);
+  border-radius: 0.5rem;
   transition: all 0.3s ease;
   position: relative;
 }
@@ -3784,6 +3787,7 @@ a:hover {
 
 .page-my-events__btn--outline {
   border-color: var(--tricolore-border);
+  border-radius: 0.375rem;
   color: #374151;
 }
 
@@ -3796,6 +3800,7 @@ a:hover {
 .page-my-events__btn--primary {
   background: var(--tricolore-green);
   border-color: var(--tricolore-green);
+  border-radius: 0.375rem;
   color: #fff;
 }
 
@@ -3807,6 +3812,7 @@ a:hover {
 .page-my-events__pagination-link {
   background: #fafafa;
   border: 1px solid var(--tricolore-border);
+  border-radius: 0.375rem;
   color: var(--tricolore-green);
 }
 
@@ -3822,6 +3828,29 @@ a:hover {
 
 .page-my-events__empty {
   background: #fafafa;
+  border-radius: 0.5rem;
+}
+
+/* === Payment Page === */
+
+.page-payment__summary {
+  border-radius: 0.5rem;
+}
+
+.page-payment__provider-btn {
+  border-radius: 0.5rem;
+}
+
+.page-payment__provider-btn:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.page-payment__bank-details {
+  border-radius: 0.5rem;
+}
+
+.page-payment__reference-code {
+  border-radius: 0.25rem;
 }
 
 /* === Federation Info Page === */

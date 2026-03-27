@@ -181,8 +181,7 @@ class TestMembershipPlansPage:
 class TestLoginRedirectURL:
     """LOGIN_REDIRECT_URL is correctly set."""
 
-    def test_login_redirect_url_is_profile(self):
-        """LOGIN_REDIRECT_URL resolves to the account:profile URL."""
+    def test_login_redirect_url_is_home(self):
+        """LOGIN_REDIRECT_URL points to the home page."""
         from django.conf import settings
-        from django.urls import reverse
-        assert str(settings.LOGIN_REDIRECT_URL) == reverse("account:profile")
+        assert str(settings.LOGIN_REDIRECT_URL) == "/"

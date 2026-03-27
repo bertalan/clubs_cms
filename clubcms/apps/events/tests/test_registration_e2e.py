@@ -23,8 +23,9 @@ from django.utils import timezone
 from wagtail.models import Page, Site
 
 from apps.events.models import EventFavorite, EventRegistration, PricingTier
+from apps.events.utils import events_area_url
 from apps.members.models import ClubUser
-from apps.website.models.pages import EventDetailPage, EventsPage, HomePage
+from apps.website.models.pages import EventDetailPage, EventsAreaPage, EventsPage, HomePage
 
 
 # ---------------------------------------------------------------------------
@@ -64,6 +65,11 @@ class EventE2EBase(TestCase):
         events_index = EventsPage(title="Events", slug="events")
         home.add_child(instance=events_index)
         cls.events_index = events_index
+
+        # EventsAreaPage (routable page for registrations, payments, etc.)
+        events_area = EventsAreaPage(title="Events Area", slug="events-area")
+        home.add_child(instance=events_area)
+        cls.events_area = events_area
 
         # Users
         cls.member = ClubUser.objects.create_user(
@@ -105,7 +111,7 @@ class TestRegistrationFormRendering(EventE2EBase):
     def test_authenticated_user_sees_registration_form(self):
         event = self._create_event()
         self.client.login(username="member1", password="testpass123")
-        resp = self.client.get(reverse("events:register", args=[event.pk]))
+        resp = self.client.get(event.url + "register/")
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "accept_terms")
         # Should NOT have first_name/last_name/email fields (those are for guests)
@@ -113,7 +119,7 @@ class TestRegistrationFormRendering(EventE2EBase):
 
     def test_anonymous_user_sees_guest_form(self):
         event = self._create_event(allow_guests=True)
-        resp = self.client.get(reverse("events:register", args=[event.pk]))
+        resp = self.client.get(event.url + "register/")
         self.assertEqual(resp.status_code, 200)
         # Guest form has first_name, last_name, email
         self.assertContains(resp, 'name="first_name"')
@@ -123,7 +129,7 @@ class TestRegistrationFormRendering(EventE2EBase):
     def test_pricing_in_context(self):
         event = self._create_event(base_fee=Decimal("50.00"))
         self.client.login(username="member1", password="testpass123")
-        resp = self.client.get(reverse("events:register", args=[event.pk]))
+        resp = self.client.get(event.url + "register/")
         self.assertIn("pricing", resp.context)
         self.assertEqual(resp.context["pricing"]["base_fee"], Decimal("50.00"))
 
@@ -140,11 +146,11 @@ class TestAuthenticatedRegistration(EventE2EBase):
         event = self._create_event(base_fee=Decimal("0.00"))
         self.client.login(username="member1", password="testpass123")
         resp = self.client.post(
-            reverse("events:register", args=[event.pk]),
+            event.url + "register/",
             {"accept_terms": "on", "guests": 0},
         )
         # Free event: redirect to my_registrations
-        self.assertRedirects(resp, reverse("events:my_registrations"))
+        self.assertRedirects(resp, events_area_url("my_registrations"))
         reg = EventRegistration.objects.get(event=event, user=self.member)
         self.assertEqual(reg.status, "registered")
         self.assertEqual(reg.payment_status, "paid")
@@ -154,12 +160,12 @@ class TestAuthenticatedRegistration(EventE2EBase):
         event = self._create_event(base_fee=Decimal("25.00"))
         self.client.login(username="member1", password="testpass123")
         resp = self.client.post(
-            reverse("events:register", args=[event.pk]),
+            event.url + "register/",
             {"accept_terms": "on", "guests": 0},
         )
         reg = EventRegistration.objects.get(event=event, user=self.member)
         self.assertRedirects(
-            resp, reverse("events:payment_choice", args=[reg.pk])
+            resp, events_area_url("payment_choice", args=[str(reg.pk)])
         )
         self.assertEqual(reg.payment_status, "pending")
         self.assertEqual(reg.payment_amount, Decimal("25.00"))
@@ -168,12 +174,12 @@ class TestAuthenticatedRegistration(EventE2EBase):
         event = self._create_event()
         self.client.login(username="member1", password="testpass123")
         self.client.post(
-            reverse("events:register", args=[event.pk]),
+            event.url + "register/",
             {"accept_terms": "on", "guests": 0},
         )
         # Second registration should fail
         resp = self.client.post(
-            reverse("events:register", args=[event.pk]),
+            event.url + "register/",
             {"accept_terms": "on", "guests": 0},
         )
         self.assertEqual(resp.status_code, 200)  # re-renders form
@@ -194,7 +200,7 @@ class TestGuestRegistration(EventE2EBase):
     def test_guest_can_register(self):
         event = self._create_event(allow_guests=True, base_fee=Decimal("0.00"))
         resp = self.client.post(
-            reverse("events:register", args=[event.pk]),
+            event.url + "register/",
             {
                 "first_name": "Mario",
                 "last_name": "Rossi",
@@ -217,7 +223,7 @@ class TestGuestRegistration(EventE2EBase):
     def test_guest_missing_email_rejected(self):
         event = self._create_event(allow_guests=True)
         resp = self.client.post(
-            reverse("events:register", args=[event.pk]),
+            event.url + "register/",
             {
                 "first_name": "Mario",
                 "last_name": "Rossi",
@@ -250,7 +256,7 @@ class TestCapacityAndWaitlist(EventE2EBase):
         # Second user is rejected because is_registration_open=False
         self.client.login(username="member2", password="testpass123")
         resp = self.client.post(
-            reverse("events:register", args=[event.pk]),
+            event.url + "register/",
             {"accept_terms": "on", "guests": 0},
         )
         self.assertEqual(resp.status_code, 200)  # form re-rendered with error
@@ -268,7 +274,7 @@ class TestCapacityAndWaitlist(EventE2EBase):
         # Register member1 — fills slot 2
         self.client.login(username="member1", password="testpass123")
         self.client.post(
-            reverse("events:register", args=[event.pk]),
+            event.url + "register/",
             {"accept_terms": "on", "guests": 0},
         )
         reg = EventRegistration.objects.get(event=event, user=self.member)
@@ -278,7 +284,7 @@ class TestCapacityAndWaitlist(EventE2EBase):
         event = self._create_event(max_attendees=0)
         self.client.login(username="member1", password="testpass123")
         self.client.post(
-            reverse("events:register", args=[event.pk]),
+            event.url + "register/",
             {"accept_terms": "on", "guests": 0},
         )
         reg = EventRegistration.objects.get(event=event, user=self.member)
@@ -297,12 +303,12 @@ class TestCancellation(EventE2EBase):
         event = self._create_event()
         self.client.login(username="member1", password="testpass123")
         self.client.post(
-            reverse("events:register", args=[event.pk]),
+            event.url + "register/",
             {"accept_terms": "on", "guests": 0},
         )
         reg = EventRegistration.objects.get(event=event, user=self.member)
-        resp = self.client.post(reverse("events:cancel", args=[reg.pk]))
-        self.assertRedirects(resp, reverse("events:my_registrations"))
+        resp = self.client.post(events_area_url("cancel", args=[str(reg.pk)]))
+        self.assertRedirects(resp, events_area_url("my_registrations"))
         reg.refresh_from_db()
         self.assertEqual(reg.status, "cancelled")
 
@@ -318,7 +324,7 @@ class TestCancellation(EventE2EBase):
 
         # Cancel first registration via view
         self.client.login(username="member1", password="testpass123")
-        self.client.post(reverse("events:cancel", args=[reg1.pk]))
+        self.client.post(events_area_url("cancel", args=[str(reg1.pk)]))
 
         # Waitlisted user should be promoted
         reg2.refresh_from_db()
@@ -347,6 +353,51 @@ class TestICSExport(EventE2EBase):
         event = self._create_event()
         resp = self.client.get(reverse("events:event_ics", args=[event.pk]))
         self.assertIn("attachment", resp["Content-Disposition"])
+
+    def test_ics_filename_has_date_and_slug(self):
+        event = self._create_event(title="Mountain Ride")
+        resp = self.client.get(reverse("events:event_ics", args=[event.pk]))
+        disposition = resp["Content-Disposition"]
+        date_str = event.start_date.strftime("%Y-%m-%d")
+        self.assertIn(date_str, disposition)
+        self.assertIn("mountain-ride", disposition)
+
+    def test_ics_has_dtend_fallback(self):
+        event = self._create_event(end_date=None)
+        resp = self.client.get(reverse("events:event_ics", args=[event.pk]))
+        content = resp.content.decode()
+        self.assertIn("DTEND:", content)
+
+    def test_ics_has_sequence(self):
+        event = self._create_event()
+        resp = self.client.get(reverse("events:event_ics", args=[event.pk]))
+        content = resp.content.decode()
+        self.assertIn("SEQUENCE:0", content)
+
+    def test_all_events_ics_public(self):
+        """Test that the public all-events ICS feed works without auth."""
+        self._create_event(title="Public Event A")
+        self._create_event(title="Public Event B")
+        resp = self.client.get(reverse("events:all_events_ics"))
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp["Content-Type"], "text/calendar")
+        content = resp.content.decode()
+        self.assertIn("BEGIN:VCALENDAR", content)
+        self.assertIn("SUMMARY:Public Event A", content)
+        self.assertIn("SUMMARY:Public Event B", content)
+        self.assertIn("REFRESH-INTERVAL", content)
+
+    def test_all_events_ics_excludes_past(self):
+        """Test that past events are not included in the public feed."""
+        self._create_event(
+            title="Past Event",
+            start_date=timezone.now() - timedelta(days=10),
+        )
+        self._create_event(title="Future Event")
+        resp = self.client.get(reverse("events:all_events_ics"))
+        content = resp.content.decode()
+        self.assertNotIn("SUMMARY:Past Event", content)
+        self.assertIn("SUMMARY:Future Event", content)
 
 
 # ---------------------------------------------------------------------------
@@ -386,7 +437,7 @@ class TestFavorites(EventE2EBase):
         event = self._create_event()
         EventFavorite.objects.create(user=self.member, event=event)
         self.client.login(username="member1", password="testpass123")
-        resp = self.client.get(reverse("events:my_events"))
+        resp = self.client.get(events_area_url("my_events"))
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, event.title)
 
@@ -403,15 +454,15 @@ class TestMyRegistrations(EventE2EBase):
         event = self._create_event()
         self.client.login(username="member1", password="testpass123")
         self.client.post(
-            reverse("events:register", args=[event.pk]),
+            event.url + "register/",
             {"accept_terms": "on", "guests": 0},
         )
-        resp = self.client.get(reverse("events:my_registrations"))
+        resp = self.client.get(events_area_url("my_registrations"))
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(resp.context["registrations"]), 1)
 
     def test_my_registrations_requires_login(self):
-        resp = self.client.get(reverse("events:my_registrations"))
+        resp = self.client.get(events_area_url("my_registrations"))
         self.assertEqual(resp.status_code, 302)  # redirect to login
 
 
@@ -456,7 +507,7 @@ class TestComputedDeadline(EventE2EBase):
         )
         self.client.login(username="member1", password="testpass123")
         resp = self.client.post(
-            reverse("events:register", args=[event.pk]),
+            event.url + "register/",
             {"accept_terms": "on", "guests": 0},
         )
         # Should re-render form with error (deadline passed)
@@ -478,7 +529,7 @@ class TestPassengerRegistration(EventE2EBase):
         event = self._create_event()
         self.client.login(username="member1", password="testpass123")
         resp = self.client.post(
-            reverse("events:register", args=[event.pk]),
+            event.url + "register/",
             {
                 "accept_terms": "on",
                 "guests": 0,
@@ -488,7 +539,7 @@ class TestPassengerRegistration(EventE2EBase):
                 "passenger_last_name": "Verdi",
             },
         )
-        self.assertRedirects(resp, reverse("events:my_registrations"))
+        self.assertRedirects(resp, events_area_url("my_registrations"))
         reg = EventRegistration.objects.get(event=event, user=self.member)
         self.assertTrue(reg.has_passenger)
         self.assertEqual(reg.passenger_first_name, "Anna")
@@ -498,7 +549,7 @@ class TestPassengerRegistration(EventE2EBase):
         event = self._create_event()
         self.client.login(username="member1", password="testpass123")
         resp = self.client.post(
-            reverse("events:register", args=[event.pk]),
+            event.url + "register/",
             {
                 "accept_terms": "on",
                 "guests": 0,

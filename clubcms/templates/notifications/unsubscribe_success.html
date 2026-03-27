@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n seo_tags %}
 
 {% block title %}{% trans "Unsubscribed" %} | {{ block.super }}{% endblock %}
 
@@ -13,7 +13,12 @@
 
     <p>
         {% trans "If you change your mind, you can re-enable notifications from your" %}
-        <a href="{% url 'members:profile' %}">{% trans "account settings" %}</a>.
+        {% localized_slugurl 'members' as members_url %}
+        {% if members_url %}
+        <a href="{{ members_url }}notifications/">{% trans "account settings" %}</a>.
+        {% else %}
+        {% trans "account settings" %}.
+        {% endif %}
     </p>
 </div>
 {% endblock %}

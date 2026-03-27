@@ -49,12 +49,18 @@ def create_mock_event_page(
     location_address="",
     search_description="",
     pricing_tiers=None,
+    latitude=None,
+    longitude=None,
+    full_url="",
+    tags=None,
+    last_published_at=None,
 ):
     """
     Create a mock EventPage object.
 
     Args:
         pricing_tiers: List of mock PricingTier objects or None for empty.
+        tags: List of mock tag objects (each with .name attribute) or None.
     """
     if start_date is None:
         start_date = datetime.now(tz.utc) + timedelta(days=30)
@@ -74,6 +80,11 @@ def create_mock_event_page(
 
     tier_manager.all.return_value.order_by = order_by_mock
 
+    # Build a mock tags manager
+    tag_manager = MagicMock()
+    tag_list = tags or []
+    tag_manager.all.return_value = tag_list
+
     return SimpleNamespace(
         base_fee=base_fee,
         start_date=start_date,
@@ -86,6 +97,11 @@ def create_mock_event_page(
         location_address=location_address,
         search_description=search_description,
         pricing_tiers=tier_manager,
+        latitude=latitude,
+        longitude=longitude,
+        full_url=full_url,
+        tags=tag_manager,
+        last_published_at=last_published_at,
     )
 
 
@@ -343,7 +359,7 @@ class TestGenerateSingleIcs:
         assert "DTEND:20250803T180000Z" in result
 
     def test_generate_single_ics_no_end_date(self):
-        """Test that DTEND is not present when end_date is None."""
+        """Test that DTEND uses 2-hour fallback when end_date is None."""
         event = create_mock_event_page(
             title="Short Meetup",
             pk=50,
@@ -354,7 +370,8 @@ class TestGenerateSingleIcs:
         result = generate_single_ics(event)
 
         assert "DTSTART:20250510T180000Z" in result
-        assert "DTEND:" not in result
+        # Fallback: start + 2 hours
+        assert "DTEND:20250510T200000Z" in result
 
     def test_generate_single_ics_no_location(self):
         """Test that LOCATION is not present when location_name is empty."""
@@ -454,7 +471,7 @@ class TestGenerateIcs:
         assert "END:VEVENT" not in result
 
     def test_generate_ics_calendar_name(self):
-        """Test that the calendar has the X-WR-CALNAME header."""
+        """Test that the calendar has the X-WR-CALNAME header with translated name."""
         events = [
             create_mock_event_page(
                 title="Test Event",
@@ -465,4 +482,168 @@ class TestGenerateIcs:
 
         result = generate_ics(events)
 
-        assert "X-WR-CALNAME:My Favorite Events" in result
+        # X-WR-CALNAME is translated; just check the key exists
+        assert "X-WR-CALNAME:" in result
+
+    def test_generate_ics_refresh_interval(self):
+        """Test that the feed has polling interval headers."""
+        result = generate_ics([])
+
+        assert "REFRESH-INTERVAL;VALUE=DURATION:PT1H" in result
+        assert "X-PUBLISHED-TTL:PT1H" in result
+
+    def test_generate_ics_custom_cal_name(self):
+        """Test that cal_name parameter overrides the default."""
+        result = generate_ics([], cal_name="All Upcoming Events")
+
+        assert "X-WR-CALNAME:All Upcoming Events" in result
+
+
+# ---------------------------------------------------------------------------
+# New ICS Feature Tests
+# ---------------------------------------------------------------------------
+
+
+class TestIcsNewFeatures:
+    """Tests for enhanced ICS fields: URL, GEO, CATEGORIES, SEQUENCE, etc."""
+
+    def test_single_ics_url(self):
+        """Test that URL is present when full_url is set."""
+        event = create_mock_event_page(
+            title="Ride",
+            pk=10,
+            start_date=datetime(2025, 6, 1, 10, 0, tzinfo=tz.utc),
+            full_url="https://club.example.com/events/ride/",
+        )
+
+        result = generate_single_ics(event)
+
+        assert "URL:https://club.example.com/events/ride/" in result
+
+    def test_single_ics_no_url(self):
+        """Test that URL is absent when full_url is empty."""
+        event = create_mock_event_page(
+            title="Ride",
+            pk=10,
+            start_date=datetime(2025, 6, 1, 10, 0, tzinfo=tz.utc),
+            full_url="",
+        )
+
+        result = generate_single_ics(event)
+
+        assert "URL:" not in result
+
+    def test_single_ics_geo(self):
+        """Test that GEO is present when coordinates are set."""
+        event = create_mock_event_page(
+            title="Ride",
+            pk=10,
+            start_date=datetime(2025, 6, 1, 10, 0, tzinfo=tz.utc),
+            latitude=45.4642,
+            longitude=9.1900,
+        )
+
+        result = generate_single_ics(event)
+
+        assert "GEO:45.4642;9.19" in result
+
+    def test_single_ics_no_geo(self):
+        """Test that GEO is absent when coordinates are None."""
+        event = create_mock_event_page(
+            title="Ride",
+            pk=10,
+            start_date=datetime(2025, 6, 1, 10, 0, tzinfo=tz.utc),
+            latitude=None,
+            longitude=None,
+        )
+
+        result = generate_single_ics(event)
+
+        assert "GEO:" not in result
+
+    def test_single_ics_categories(self):
+        """Test that CATEGORIES are present when tags are set."""
+        mock_tags = [
+            SimpleNamespace(name="touring"),
+            SimpleNamespace(name="weekend"),
+        ]
+        event = create_mock_event_page(
+            title="Ride",
+            pk=10,
+            start_date=datetime(2025, 6, 1, 10, 0, tzinfo=tz.utc),
+            tags=mock_tags,
+        )
+
+        result = generate_single_ics(event)
+
+        assert "CATEGORIES:touring\\,weekend" in result
+
+    def test_single_ics_no_categories(self):
+        """Test that CATEGORIES is absent when tags are empty."""
+        event = create_mock_event_page(
+            title="Ride",
+            pk=10,
+            start_date=datetime(2025, 6, 1, 10, 0, tzinfo=tz.utc),
+            tags=[],
+        )
+
+        result = generate_single_ics(event)
+
+        assert "CATEGORIES:" not in result
+
+    def test_single_ics_last_modified(self):
+        """Test that LAST-MODIFIED is present when last_published_at is set."""
+        event = create_mock_event_page(
+            title="Ride",
+            pk=10,
+            start_date=datetime(2025, 6, 1, 10, 0, tzinfo=tz.utc),
+            last_published_at=datetime(2025, 5, 20, 12, 0, tzinfo=tz.utc),
+        )
+
+        result = generate_single_ics(event)
+
+        assert "LAST-MODIFIED:20250520T120000Z" in result
+
+    def test_single_ics_sequence(self):
+        """Test that SEQUENCE:0 is always present."""
+        event = create_mock_event_page(
+            title="Ride",
+            pk=10,
+            start_date=datetime(2025, 6, 1, 10, 0, tzinfo=tz.utc),
+        )
+
+        result = generate_single_ics(event)
+
+        assert "SEQUENCE:0" in result
+
+    def test_single_ics_dtend_fallback(self):
+        """Test DTEND is start+2h when end_date is None."""
+        event = create_mock_event_page(
+            title="Quick Ride",
+            pk=10,
+            start_date=datetime(2025, 6, 1, 10, 0, tzinfo=tz.utc),
+            end_date=None,
+        )
+
+        result = generate_single_ics(event)
+
+        assert "DTEND:20250601T120000Z" in result
+
+    def test_multi_ics_events_have_url_and_geo(self):
+        """Test that multi-event ICS includes URL and GEO per event."""
+        events = [
+            create_mock_event_page(
+                title="Event A",
+                pk=1,
+                start_date=datetime(2025, 6, 1, 10, 0, tzinfo=tz.utc),
+                full_url="https://example.com/a/",
+                latitude=45.0,
+                longitude=9.0,
+            ),
+        ]
+
+        result = generate_ics(events)
+
+        assert "URL:https://example.com/a/" in result
+        assert "GEO:45.0;9.0" in result
+        assert "SEQUENCE:0" in result

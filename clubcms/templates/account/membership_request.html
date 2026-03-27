@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Request Membership" %} | {{ block.super }}{% endblock %}
 
@@ -59,7 +59,7 @@
                     <button type="submit" class="btn btn-primary">
                         {% trans "Submit Request" %}
                     </button>
-                    <a href="{% url 'account:card' %}" class="btn btn-outline">
+                    <a href="{% routablepageurl page 'card' %}" class="btn btn-outline">
                         {% trans "Cancel" %}
                     </a>
                 </div>

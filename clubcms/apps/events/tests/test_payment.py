@@ -15,6 +15,13 @@ import pytest
 from apps.events.payment import generate_payment_reference
 
 
+@pytest.fixture(autouse=True)
+def _mock_events_area_url():
+    """Mock events_area_url to avoid DB access in pure unit tests."""
+    with patch("apps.events.payment.events_area_url", return_value="/events-area/mock/"):
+        yield
+
+
 # ---------------------------------------------------------------------------
 # Mock object factories
 # ---------------------------------------------------------------------------

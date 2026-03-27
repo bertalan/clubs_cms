@@ -1,9 +1,8 @@
 """
 URL patterns for the members app.
 
-Registered with app_name="account" and included at /account/ in the
-root URL conf.  The public profile pattern is included separately at
-/members/<username>/.
+Only binary-file views remain here (PDF, QR, barcode).
+All HTML views are served by MembersAreaPage via RoutablePageMixin.
 """
 
 from django.urls import path
@@ -14,38 +13,8 @@ from apps.members import views
 app_name = "account"
 
 urlpatterns = [
-    # Profile
-    path(_("profile/"), views.ProfileView.as_view(), name="profile"),
-    # Digital membership card
-    path(_("card/"), views.CardView.as_view(), name="card"),
+    # Binary file downloads (cannot use RoutablePageMixin rendering)
     path(_("card/pdf/"), views.CardPDFView.as_view(), name="card_pdf"),
     path(_("card/qr/"), views.QRCodeView.as_view(), name="card_qr"),
     path(_("card/barcode/"), views.BarcodeView.as_view(), name="card_barcode"),
-    # Settings
-    path(_("privacy/"), views.PrivacySettingsView.as_view(), name="privacy"),
-    path(
-        _("notifications/"),
-        views.NotificationPrefsView.as_view(),
-        name="notifications",
-    ),
-    path(_("aid/"), views.AidAvailabilityView.as_view(), name="aid"),
-    # Membership requests
-    path(
-        _("membership-request/<int:product_id>/"),
-        views.MembershipRequestCreateView.as_view(),
-        name="membership_request",
-    ),
-    path(
-        _("membership-requests/"),
-        views.MembershipRequestListView.as_view(),
-        name="membership_requests",
-    ),
-    # Directory
-    path(_("directory/"), views.MemberDirectoryView.as_view(), name="directory"),
-]
-
-# Public profile pattern — included separately in root urlconf at
-# path("members/<str:username>/", ...)
-public_profile_urlpatterns = [
-    path("", views.PublicProfileView.as_view(), name="public_profile"),
 ]

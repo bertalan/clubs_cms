@@ -97,25 +97,36 @@ A user's permissions are the **union** of all their assigned product privileges.
 
 ## URL Patterns
 
-### Account URLs (`app_name="account"`, prefix `/account/`)
+### MembersAreaPage Routes (RoutablePageMixin)
+
+All HTML member views are served by `MembersAreaPage` (a Wagtail Page with `RoutablePageMixin`).
+The page lives under a translatable slug (EN: `/en/members/`, IT: `/it/area-soci/`).
+
+| Sub-route | Route name | Method | Auth | Template |
+|---|---|---|---|---|
+| `/` | (index) | GET | No | `members/pages/members_area_page.html` |
+| `profile/` | `profile` | GET, POST | Login required | `account/profile.html` |
+| `card/` | `card` | GET | Login required | `account/card.html` |
+| `privacy/` | `privacy` | GET, POST | Login required | `account/privacy.html` |
+| `notifications/` | `notification_prefs` | GET, POST | Login required | `account/notifications.html` |
+| `aid/` | `aid` | GET, POST | Login required | `account/aid.html` |
+| `directory/` | `directory` | GET | Login + active member | `account/directory.html` |
+| `membership-request/<product_id>/` | `membership_request` | GET, POST | Login required | `account/membership_request.html` |
+| `membership-requests/` | `membership_requests` | GET | Login + staff | `account/membership_requests.html` |
+| `<username>/` | `public_profile` | GET | No (respects privacy) | `account/public_profile.html` |
+
+URL resolution in templates uses `{% routablepageurl page 'route_name' %}` when `page` context is available,
+or `{% localized_slugurl 'members' as members_url %}` + path concatenation from navbar/footer templates.
+
+### Binary File Views (`app_name="account"`, prefix `/<lang>/account/`)
+
+These remain as standard Django views because they return binary content (PDF, PNG), not HTML pages.
 
 | URL | Name | View | Method |
 |---|---|---|---|
-| `/account/profile/` | `account:profile` | ProfileView | GET, POST |
-| `/account/card/` | `account:card` | CardView | GET |
-| `/account/card/pdf/` | `account:card_pdf` | CardPDFView | GET |
-| `/account/card/qr/` | `account:card_qr` | QRCodeView | GET |
-| `/account/card/barcode/` | `account:card_barcode` | BarcodeView | GET |
-| `/account/privacy/` | `account:privacy` | PrivacySettingsView | GET, POST |
-| `/account/notifications/` | `account:notifications` | NotificationPrefsView | GET, POST |
-| `/account/aid/` | `account:aid` | AidAvailabilityView | GET, POST |
-| `/account/directory/` | `account:directory` | MemberDirectoryView | GET |
-
-### Public Profile URL (root urlconf)
-
-| URL | Name | View |
-|---|---|---|
-| `/members/<username>/` | `public_profile` | PublicProfileView |
+| `account/card/pdf/` | `account:card_pdf` | CardPDFView | GET |
+| `account/card/qr/` | `account:card_qr` | QRCodeView | GET |
+| `account/card/barcode/` | `account:card_barcode` | BarcodeView | GET |
 
 ---
 
@@ -188,16 +199,21 @@ Tabbed interface: Personal, Identity, Address, Membership, Privacy, Notification
 
 ## Templates
 
-All in `templates/account/`, extending `base.html`, using `{% load i18n %}`.
+All in `templates/account/`, extending `base.html`, using `{% load i18n wagtailroutablepage_tags %}`.
+Rendered by `MembersAreaPage` via `self.render(request, template, context_overrides={...})`.
 
-| Template | View |
+| Template | MembersAreaPage route |
 |---|---|
-| `profile.html` | ProfileView |
-| `card.html` | CardView |
-| `privacy.html` | PrivacySettingsView |
-| `notifications.html` | NotificationPrefsView |
-| `aid.html` | AidAvailabilityView |
-| `directory.html` | MemberDirectoryView |
+| `members/pages/members_area_page.html` | (index — anonymous landing) |
+| `profile.html` | `profile` |
+| `card.html` | `card` |
+| `privacy.html` | `privacy` |
+| `notifications.html` | `notification_prefs` |
+| `aid.html` | `aid` |
+| `directory.html` | `directory` |
+| `membership_request.html` | `membership_request` |
+| `membership_requests.html` | `membership_requests` |
+| `public_profile.html` | `public_profile` |
 | `public_profile.html` | PublicProfileView |
 
 ---

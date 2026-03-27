@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags i18n %}
+
+{% block title %}{{ page.title }} | {{ block.super }}{% endblock %}
+
+{% block body_class %}page-members-area{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<section class="page-members-area">
+    <div class="container">
+        <header class="page-members-area__header">
+            <h1 class="page-members-area__title">{{ page.title }}</h1>
+            {% if page.intro %}
+            <div class="page-members-area__intro">
+                {{ page.intro|richtext }}
+            </div>
+            {% endif %}
+        </header>
+
+        <div class="page-members-area__actions">
+            <a href="{% url 'account_login' %}" class="btn btn-primary btn-lg">
+                {% trans "Sign In" %}
+            </a>
+            <a href="{% url 'account_signup' %}" class="btn btn-secondary btn-lg">
+                {% trans "Register" %}
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

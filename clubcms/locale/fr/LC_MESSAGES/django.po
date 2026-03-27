@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ClubCMS 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-23 00:10+0100\n"
+"POT-Creation-Date: 2026-03-27 20:15+0100\n"
 "PO-Revision-Date: 2024-01-01 00:00+0000\n"
 "Last-Translator: ClubCMS Team\n"
 "Language-Team: French\n"
@@ -61,17 +61,17 @@ msgstr "Événements à Venir"
 msgid "Upcoming events and activities"
 msgstr "Événements à Venir"
 
-#: apps/core/forms.py:24 apps/core/models.py:297
+#: apps/core/forms.py:24 apps/core/models.py:308
 msgid "Type"
 msgstr "Type"
 
-#: apps/core/forms.py:25 apps/core/models.py:302
+#: apps/core/forms.py:25 apps/core/models.py:313
 #: apps/website/models/snippets.py:618
 msgid "Title"
 msgstr "Titre"
 
-#: apps/core/forms.py:26 apps/core/models.py:190 apps/core/models.py:306
-#: apps/website/models/pages.py:962 apps/website/models/pages.py:1371
+#: apps/core/forms.py:26 apps/core/models.py:201 apps/core/models.py:317
+#: apps/website/models/pages.py:966 apps/website/models/pages.py:2311
 #: apps/website/models/partners.py:358
 msgid "Content"
 msgstr "Contenu"
@@ -96,190 +96,190 @@ msgstr ""
 "Vous avez trop de contributions en attente. Veuillez attendre la modération "
 "avant d'en soumettre d'autres."
 
-#: apps/core/models.py:28
+#: apps/core/models.py:39
 msgid "Upload"
 msgstr "Téléversé par"
 
-#: apps/core/models.py:29 apps/website/models/pages.py:964
+#: apps/core/models.py:40 apps/website/models/pages.py:968
 #: templates/website/pages/event_detail_page.html:114
 msgid "Registration"
 msgstr "Inscription"
 
-#: apps/core/models.py:30
+#: apps/core/models.py:41
 msgid "Comment"
 msgstr "Publier le Commentaire"
 
-#: apps/core/models.py:31 apps/core/models.py:125
+#: apps/core/models.py:42 apps/core/models.py:136
 msgid "Reaction"
 msgstr "Section"
 
-#: apps/core/models.py:32
+#: apps/core/models.py:43
 msgid "Profile update"
 msgstr "Actualités partenaires"
 
-#: apps/core/models.py:33
+#: apps/core/models.py:44
 msgid "Login"
 msgstr "Connexion"
 
-#: apps/core/models.py:40 apps/core/models.py:118 apps/core/models.py:186
+#: apps/core/models.py:51 apps/core/models.py:129 apps/core/models.py:197
 #: apps/events/models.py:70 apps/events/models.py:338
-#: apps/members/models.py:433
+#: apps/members/models.py:443
 msgid "User"
 msgstr "Utilisateur"
 
-#: apps/core/models.py:41
+#: apps/core/models.py:52
 msgid "Utente che ha eseguito l'azione."
 msgstr "Utilisateur ayant effectué l'action."
 
-#: apps/core/models.py:46 apps/website/admin_newsletter.py:130
+#: apps/core/models.py:57 apps/website/admin_newsletter.py:130
 msgid "Action"
 msgstr "Actions"
 
-#: apps/core/models.py:47
+#: apps/core/models.py:58
 msgid "Tipo di azione registrata nel log attività."
 msgstr "Type d'action enregistré dans le journal d'activité."
 
-#: apps/core/models.py:56
+#: apps/core/models.py:67
 msgid "Target content type"
 msgstr "type de contenu"
 
-#: apps/core/models.py:57
+#: apps/core/models.py:68
 msgid "Tipo di contenuto dell'oggetto collegato."
 msgstr "Type de contenu de l'objet associé."
 
-#: apps/core/models.py:62
+#: apps/core/models.py:73
 msgid "Target ID"
 msgstr "ID de paiement"
 
-#: apps/core/models.py:63
+#: apps/core/models.py:74
 msgid "ID dell'oggetto collegato a questa attività."
 msgstr "ID de l'objet associé à cette activité."
 
-#: apps/core/models.py:69
+#: apps/core/models.py:80
 msgid "Target title"
 msgstr "Titre de la carte."
 
-#: apps/core/models.py:70
+#: apps/core/models.py:81
 msgid "Titolo dell'oggetto collegato, salvato per riferimento rapido."
 msgstr "Titre de l'objet associé, sauvegardé pour référence rapide."
 
-#: apps/core/models.py:74
+#: apps/core/models.py:85
 msgid "Target URL"
 msgstr "URL cible"
 
-#: apps/core/models.py:75
+#: apps/core/models.py:86
 msgid "URL dell'oggetto collegato, se disponibile."
 msgstr "URL de l'objet associé, si disponible."
 
-#: apps/core/models.py:80 apps/core/models.py:144 apps/core/models.py:238
-#: apps/core/models.py:334 apps/website/models/newsletter.py:161
+#: apps/core/models.py:91 apps/core/models.py:155 apps/core/models.py:249
+#: apps/core/models.py:345 apps/website/models/newsletter.py:161
 #: apps/website/models/verification.py:61
 msgid "Created at"
 msgstr "Créé le"
 
-#: apps/core/models.py:81
+#: apps/core/models.py:92
 msgid "Data e ora di registrazione dell'attività."
 msgstr "Date et heure d'enregistrement de l'activité."
 
-#: apps/core/models.py:86
+#: apps/core/models.py:97
 msgid "activity"
 msgstr "actif"
 
-#: apps/core/models.py:87
+#: apps/core/models.py:98
 msgid "activities"
 msgstr "actif"
 
-#: apps/core/models.py:110
+#: apps/core/models.py:121
 msgid "Like"
 msgstr "J'aime"
 
-#: apps/core/models.py:111
+#: apps/core/models.py:122
 msgid "Love"
 msgstr "J'adore"
 
-#: apps/core/models.py:119
+#: apps/core/models.py:130
 msgid "Utente che ha lasciato la reazione."
 msgstr "Utilisateur ayant laissé la réaction."
 
-#: apps/core/models.py:126
+#: apps/core/models.py:137
 msgid "Tipo di reazione: Like o Love."
 msgstr "Type de réaction : J'aime ou J'adore."
 
-#: apps/core/models.py:133 apps/core/models.py:198
+#: apps/core/models.py:144 apps/core/models.py:209
 msgid "Content type"
 msgstr "type de contenu"
 
-#: apps/core/models.py:134
+#: apps/core/models.py:145
 msgid "Tipo di contenuto dell'oggetto a cui è associata la reazione."
 msgstr "Type de contenu de l'objet auquel la réaction est associée."
 
-#: apps/core/models.py:137 apps/core/models.py:202
+#: apps/core/models.py:148 apps/core/models.py:213
 msgid "Object ID"
 msgstr "ID d'objet"
 
-#: apps/core/models.py:138
+#: apps/core/models.py:149
 msgid "ID dell'oggetto a cui è associata la reazione."
 msgstr "ID de l'objet auquel la réaction est associée."
 
-#: apps/core/models.py:145
+#: apps/core/models.py:156
 msgid "Data e ora in cui è stata lasciata la reazione."
 msgstr "Date et heure à laquelle la réaction a été laissée."
 
-#: apps/core/models.py:150
+#: apps/core/models.py:161
 msgid "reaction"
 msgstr "Section"
 
-#: apps/core/models.py:151
+#: apps/core/models.py:162
 msgid "reactions"
 msgstr "Actions"
 
-#: apps/core/models.py:177 apps/core/models.py:282 apps/events/models.py:30
-#: apps/members/models.py:423 apps/mutual_aid/models.py:396
-#: apps/notifications/models.py:54
+#: apps/core/models.py:188 apps/core/models.py:293 apps/events/models.py:30
+#: apps/members/models.py:433 apps/mutual_aid/models.py:894
+#: apps/notifications/models.py:65
 #: templates/account/membership_requests.html:38
 msgid "Pending"
 msgstr "En attente"
 
-#: apps/core/models.py:178 apps/core/models.py:283 apps/members/models.py:424
-#: apps/mutual_aid/models.py:397 apps/website/models/uploads.py:52
+#: apps/core/models.py:189 apps/core/models.py:294 apps/members/models.py:434
+#: apps/mutual_aid/models.py:895 apps/website/models/uploads.py:52
 #: templates/account/membership_requests.html:40
 #: templates/website/uploads/my_uploads.html:46
 msgid "Approved"
 msgstr "Approuvé"
 
-#: apps/core/models.py:179 apps/core/models.py:284 apps/members/models.py:425
+#: apps/core/models.py:190 apps/core/models.py:295 apps/members/models.py:435
 #: templates/account/membership_requests.html:42
 #: templates/website/uploads/my_uploads.html:48
 msgid "Rejected"
 msgstr "Rejeté"
 
-#: apps/core/models.py:187
+#: apps/core/models.py:198
 msgid "Utente autore del commento."
 msgstr "Utilisateur auteur du commentaire."
 
-#: apps/core/models.py:191
+#: apps/core/models.py:202
 msgid "Testo del commento."
 msgstr "Texte du commentaire."
 
-#: apps/core/models.py:199
+#: apps/core/models.py:210
 msgid "Tipo di contenuto dell'oggetto commentato."
 msgstr "Type de contenu de l'objet commenté."
 
-#: apps/core/models.py:203
+#: apps/core/models.py:214
 msgid "ID dell'oggetto commentato."
 msgstr "ID de l'objet commenté."
 
-#: apps/core/models.py:214
+#: apps/core/models.py:225
 msgid "Reply to"
 msgstr "Répondre à"
 
-#: apps/core/models.py:215
+#: apps/core/models.py:226
 msgid "Commento genitore, se questo è una risposta."
 msgstr "Commentaire parent, s'il s'agit d'une réponse."
 
-#: apps/core/models.py:223 apps/core/models.py:314 apps/events/models.py:77
-#: apps/members/models.py:447 apps/mutual_aid/models.py:264
-#: apps/mutual_aid/models.py:418 apps/website/models/newsletter.py:151
+#: apps/core/models.py:234 apps/core/models.py:325 apps/events/models.py:77
+#: apps/members/models.py:457 apps/mutual_aid/models.py:762
+#: apps/mutual_aid/models.py:916 apps/website/models/newsletter.py:151
 #: templates/account/membership_requests.html:21
 #: templates/admin/members/panels/request_actions.html:11
 #: templates/admin/members/panels/request_actions.html:58
@@ -289,98 +289,139 @@ msgstr "Commentaire parent, s'il s'agit d'une réponse."
 msgid "Status"
 msgstr "Statut"
 
-#: apps/core/models.py:224
+#: apps/core/models.py:235
 msgid "Stato di moderazione: in attesa, approvato o rifiutato."
 msgstr "Statut de modération : en attente, approuvé ou rejeté."
 
-#: apps/core/models.py:232 apps/core/models.py:323
+#: apps/core/models.py:243 apps/core/models.py:334
 msgid "Moderated by"
 msgstr "Modéré"
 
-#: apps/core/models.py:233
+#: apps/core/models.py:244
 msgid "Moderatore che ha revisionato il commento."
 msgstr "Modérateur ayant examiné le commentaire."
 
-#: apps/core/models.py:239
+#: apps/core/models.py:250
 msgid "Data e ora di creazione del commento."
 msgstr "Date et heure de création du commentaire."
 
-#: apps/core/models.py:243 apps/core/models.py:339
+#: apps/core/models.py:254 apps/core/models.py:350
 msgid "Updated at"
 msgstr "Téléversé le"
 
-#: apps/core/models.py:244 apps/core/models.py:340
+#: apps/core/models.py:255 apps/core/models.py:351
 msgid "Data e ora dell'ultima modifica."
 msgstr "Date et heure de la dernière modification."
 
-#: apps/core/models.py:249
+#: apps/core/models.py:260
 msgid "comment"
 msgstr "Ajouter un commentaire"
 
-#: apps/core/models.py:250
+#: apps/core/models.py:261
 msgid "comments"
 msgstr "Documents"
 
-#: apps/core/models.py:277
+#: apps/core/models.py:288
 msgid "Story"
 msgstr "Récit"
 
-#: apps/core/models.py:278
+#: apps/core/models.py:289
 msgid "Event proposal"
 msgstr "Période de l'événement"
 
-#: apps/core/models.py:279
+#: apps/core/models.py:290
 msgid "Announcement"
 msgstr "Document"
 
-#: apps/core/models.py:291 apps/website/models/pages.py:513
+#: apps/core/models.py:302 apps/website/models/pages.py:514
 #: apps/website/models/snippets.py:435
 msgid "Author"
 msgstr "Auteur"
 
-#: apps/core/models.py:292
+#: apps/core/models.py:303
 msgid "Utente autore del contributo."
 msgstr "Utilisateur auteur de la contribution."
 
-#: apps/core/models.py:298
+#: apps/core/models.py:309
 msgid "Tipo di contributo: storia, proposta evento o annuncio."
 msgstr "Type de contribution : récit, proposition d'événement ou annonce."
 
-#: apps/core/models.py:303
+#: apps/core/models.py:314
 msgid "Titolo del contributo (max 255 caratteri)."
 msgstr "Titre de la contribution (max 255 caractères)."
 
-#: apps/core/models.py:307
+#: apps/core/models.py:318
 msgid "Corpo del contributo. Supporta testo semplice."
 msgstr "Corps de la contribution. Supporte le texte brut."
 
-#: apps/core/models.py:315
+#: apps/core/models.py:326
 msgid "Stato di moderazione del contributo."
 msgstr "Statut de modération de la contribution."
 
-#: apps/core/models.py:324
+#: apps/core/models.py:335
 msgid "Moderatore che ha revisionato il contributo."
 msgstr "Modérateur ayant examiné la contribution."
 
-#: apps/core/models.py:329
+#: apps/core/models.py:340
 msgid "Moderation note"
 msgstr "Modéré"
 
-#: apps/core/models.py:330
+#: apps/core/models.py:341
 msgid "Nota del moderatore visibile all'autore."
 msgstr "Note du modérateur visible par l'auteur."
 
-#: apps/core/models.py:335
+#: apps/core/models.py:346
 msgid "Data e ora di invio del contributo."
 msgstr "Date et heure de soumission de la contribution."
 
-#: apps/core/models.py:345
+#: apps/core/models.py:356
 msgid "contribution"
 msgstr "Introduction"
 
-#: apps/core/models.py:346
+#: apps/core/models.py:357
 msgid "contributions"
 msgstr "Introduction"
+
+#: apps/core/models.py:408 apps/core/models.py:600
+#: apps/federation/models.py:355 apps/members/models.py:582
+#: apps/mutual_aid/models.py:65 apps/website/models/pages.py:304
+#: apps/website/models/pages.py:359 apps/website/models/pages.py:403
+#: apps/website/models/pages.py:598 apps/website/models/pages.py:1300
+#: apps/website/models/pages.py:1807 apps/website/models/pages.py:2182
+#: apps/website/models/pages.py:2383 apps/website/models/pages.py:2427
+#: apps/website/models/pages.py:2511 apps/website/models/partners.py:41
+#: apps/website/models/partners.py:150
+#: templates/website/pages/about_page.html:29
+msgid "Introduction"
+msgstr "Introduction"
+
+#: apps/core/models.py:418
+#, fuzzy
+#| msgid "per page"
+msgid "Search page"
+msgstr "Page d'accueil"
+
+#: apps/core/models.py:419
+#, fuzzy
+#| msgid "per page"
+msgid "Search pages"
+msgstr "Page d'accueil"
+
+#: apps/core/models.py:610
+#, fuzzy
+#| msgid "contributions"
+msgid "Contributions page"
+msgstr "Introduction"
+
+#: apps/core/models.py:611
+#, fuzzy
+#| msgid "contributions"
+msgid "Contributions pages"
+msgstr "Introduction"
+
+#: apps/core/models.py:658
+msgid "Your contribution has been submitted and is awaiting moderation."
+msgstr "Votre contribution a été soumise et est en attente de modération."
 
 #: apps/core/templatetags/seo_tags.py:256
 msgid "News (RSS)"
@@ -395,16 +436,6 @@ msgstr ""
 #| msgid "Events"
 msgid "Events (RSS)"
 msgstr "Événements"
-
-#: apps/core/urls.py:21
-#, fuzzy
-#| msgid "Search"
-msgid "search/"
-msgstr "Rechercher"
-
-#: apps/core/views.py:589
-msgid "Your contribution has been submitted and is awaiting moderation."
-msgstr "Votre contribution a été soumise et est en attente de modération."
 
 #: apps/events/admin.py:25
 #, fuzzy
@@ -430,8 +461,8 @@ msgid "Guest names"
 msgstr "Noms des invités"
 
 #: apps/events/forms.py:68 apps/events/models.py:97 apps/members/admin.py:185
-#: apps/members/forms.py:269 apps/members/models.py:452
-#: apps/mutual_aid/models.py:543 templates/mutual_aid/helper_card.html:124
+#: apps/members/forms.py:269 apps/members/models.py:462
+#: apps/mutual_aid/models.py:1041 templates/mutual_aid/helper_card.html:124
 msgid "Notes"
 msgstr "Notes"
 
@@ -592,7 +623,7 @@ msgid "Your family name. Example: Rossi"
 msgstr "Votre nom de famille. Exemple : Dupont"
 
 #: apps/events/forms.py:241 apps/events/models.py:151 apps/members/forms.py:97
-#: apps/notifications/models.py:48 apps/places/models.py:214
+#: apps/notifications/models.py:59 apps/places/models.py:220
 #: apps/places/templates/places/place_page.html:117
 #: apps/website/admin_newsletter.py:67 apps/website/models/partners.py:169
 #: apps/website/models/settings.py:125 apps/website/models/snippets.py:261
@@ -619,8 +650,8 @@ msgstr "Inscrit"
 msgid "Confirmed"
 msgstr "Confirmé"
 
-#: apps/events/models.py:25 apps/members/models.py:426
-#: apps/mutual_aid/models.py:187 templates/account/membership_requests.html:44
+#: apps/events/models.py:25 apps/members/models.py:436
+#: apps/mutual_aid/models.py:685 templates/account/membership_requests.html:44
 #: templates/events/my_registrations.html:60
 msgid "Cancelled"
 msgstr "Annulé"
@@ -647,11 +678,11 @@ msgstr "Expire"
 msgid "Stripe"
 msgstr "Stripe"
 
-#: apps/events/models.py:38 templates/events/payment_choice.html:33
+#: apps/events/models.py:38 templates/events/payment_choice.html:42
 msgid "PayPal"
 msgstr "PayPal"
 
-#: apps/events/models.py:39 templates/events/payment_choice.html:40
+#: apps/events/models.py:39 templates/events/payment_choice.html:52
 msgid "Bank Transfer"
 msgstr "Virement Bancaire"
 
@@ -662,7 +693,7 @@ msgstr "Gratuit"
 #: apps/events/models.py:61 apps/events/models.py:345 apps/website/forms.py:115
 #: apps/website/models/uploads.py:39
 #: templates/events/emails/registration_confirmation.html:19
-#: templates/events/my_registrations.html:20 templates/events/register.html:171
+#: templates/events/my_registrations.html:20 templates/events/register.html:173
 #: templates/search/search_results.html:135
 msgid "Event"
 msgstr "Événement"
@@ -960,70 +991,37 @@ msgstr ""
 "Votre virement bancaire pour {event} n'a pas été reçu à temps. Votre "
 "inscription a été annulée."
 
-#: apps/events/urls.py:18
-msgid "register/<int:event_pk>/"
-msgstr ""
-
-#: apps/events/urls.py:23
-msgid "cancel/<int:pk>/"
-msgstr ""
-
-#: apps/events/urls.py:29
-msgid "payment/<int:pk>/"
-msgstr ""
-
-#: apps/events/urls.py:34
-msgid "payment/<int:pk>/bank-transfer/"
-msgstr ""
-
-#: apps/events/urls.py:39
-msgid "payment/<int:pk>/success/"
-msgstr ""
-
-#: apps/events/urls.py:44
-msgid "payment/<int:pk>/cancel/"
-msgstr ""
-
-#: apps/events/urls.py:54
+#: apps/events/urls.py:25
 msgid "payment/<int:pk>/paypal-return/"
 msgstr ""
 
-#: apps/events/urls.py:60
-#, fuzzy
-#| msgid "My Registrations"
-msgid "my-registrations/"
-msgstr "Mes Inscriptions"
-
-#: apps/events/urls.py:66
-#, fuzzy
-#| msgid "Events"
-msgid "my-events/"
-msgstr "Événements"
-
-#: apps/events/urls.py:71
-#, fuzzy
-#| msgid "Events Archive"
-msgid "my-events/archive/"
-msgstr "Archives des Événements"
-
-#: apps/events/urls.py:76
-msgid "my-events/calendar.ics"
-msgstr ""
-
-#: apps/events/urls.py:81
+#: apps/events/urls.py:31
 msgid "favorite/<int:event_pk>/"
 msgstr ""
 
-#: apps/events/urls.py:87
+#: apps/events/urls.py:37
 msgid "ics/<int:event_pk>/"
 msgstr ""
 
-#: apps/events/utils.py:310
+#: apps/events/urls.py:42
+msgid "my-events/calendar.ics"
+msgstr ""
+
+#: apps/events/urls.py:47
+msgid "calendar.ics"
+msgstr ""
+
+#: apps/events/utils.py:289 templates/events/my_events.html:4
+#: templates/events/my_events.html:11 templates/events/my_registrations.html:97
+msgid "My Favorite Events"
+msgstr "Mes Événements Favoris"
+
+#: apps/events/utils.py:359
 #, python-brace-format
 msgid "Spot available: {event}"
 msgstr "Place disponible : {event}"
 
-#: apps/events/utils.py:314
+#: apps/events/utils.py:363
 #, python-brace-format
 msgid ""
 "A spot has opened up! You have been promoted from the waitlist for {event}."
@@ -1031,344 +1029,313 @@ msgstr ""
 "Une place s'est libérée ! Vous avez été promu de la liste d'attente pour "
 "{event}."
 
-#: apps/events/views.py:114
-msgid "Registration is not open for this event."
-msgstr "Les inscriptions ne sont pas ouvertes pour cet événement."
-
-#: apps/events/views.py:120
-msgid "The registration deadline has passed."
-msgstr "La date limite d'inscription est dépassée."
-
-#: apps/events/views.py:130
-msgid ""
-"Your membership does not include event registration. Please upgrade your "
-"membership."
-msgstr ""
-"Votre adhésion n'inclut pas l'inscription aux événements. Veuillez mettre à "
-"jour votre adhésion."
-
-#: apps/events/views.py:146
-msgid "You are already registered for this event."
-msgstr "Vous êtes déjà inscrit(e) à cet événement."
-
-#: apps/events/views.py:344
+#: apps/events/views.py:75
 msgid "Please wait before toggling again."
 msgstr "Veuillez patienter avant de changer à nouveau."
 
-#: apps/events/views.py:531
-#, python-brace-format
-msgid "Payment instructions: {event}"
-msgstr "Instructions de paiement : {event}"
-
-#: apps/events/views.py:535
-#, python-brace-format
-msgid ""
-"Please complete the bank transfer of €{amount} with reference {ref} by "
-"{expires}."
-msgstr ""
-"Veuillez effectuer le virement bancaire de {amount} € avec la référence "
-"{ref} avant le {expires}."
-
-#: apps/events/views.py:570 apps/events/views.py:589
-msgid "Payment service temporarily unavailable. Please try again."
-msgstr "Service de paiement temporairement indisponible. Veuillez réessayer."
+#: apps/events/views.py:208
+msgid "All Upcoming Events"
+msgstr "Tous les événements à venir"
 
 #: apps/federation/apps.py:8 apps/federation/wagtail_hooks.py:63
-#: templates/includes/footer.html:91
+#: templates/includes/footer.html:94
 msgid "Federation"
 msgstr "Fédération"
 
-#: apps/federation/models.py:27
+#: apps/federation/models.py:39
 msgid "Display name of the partner club"
 msgstr "Nom d'affichage du club partenaire"
 
-#: apps/federation/models.py:29
+#: apps/federation/models.py:41
 msgid "URL-safe identifier"
 msgstr "Identifiant compatible URL"
 
-#: apps/federation/models.py:34 apps/members/forms.py:267
-#: apps/mutual_aid/models.py:539 apps/website/forms.py:19
+#: apps/federation/models.py:46 apps/members/forms.py:267
+#: apps/mutual_aid/models.py:1037 apps/website/forms.py:19
 #: apps/website/models/partners.py:186 apps/website/models/verification.py:14
 #: templates/mutual_aid/helper_card.html:115
 msgid "City"
 msgstr "Ville"
 
-#: apps/federation/models.py:35
+#: apps/federation/models.py:47
 #, fuzzy
 #| msgid "Display name of the partner club"
 msgid "City where the partner club is based."
 msgstr "Nom d'affichage du club partenaire"
 
-#: apps/federation/models.py:37
+#: apps/federation/models.py:49
 msgid "Partner site base URL"
 msgstr "URL de base du site partenaire"
 
-#: apps/federation/models.py:40
+#: apps/federation/models.py:52
 #, fuzzy
 #| msgid "A short description about yourself. Visible on your profile page."
 msgid "Short description of the partner club (visible on federation page)."
 msgstr "Une courte description de vous. Visible sur votre page de profil."
 
-#: apps/federation/models.py:45
+#: apps/federation/models.py:57
 msgid ""
 "Logo URL (external) or static path (e.g. /static/img/federation/logo.svg)."
 msgstr ""
 
-#: apps/federation/models.py:48
+#: apps/federation/models.py:60
 msgid "Their public API key (given to us)"
 msgstr "Leur clé API publique (fournie à nous)"
 
-#: apps/federation/models.py:51
+#: apps/federation/models.py:63
 msgid "Our key we gave them (auto-generated)"
 msgstr "Notre clé fournie à eux (générée automatiquement)"
 
-#: apps/federation/models.py:54
+#: apps/federation/models.py:66
 msgid "Attiva la connessione con questo club partner."
 msgstr "Activer la connexion avec ce club partenaire."
 
-#: apps/federation/models.py:57
+#: apps/federation/models.py:69
 msgid "Il club partner è stato verificato e approvato."
 msgstr "Le club partenaire a été vérifié et approuvé."
 
-#: apps/federation/models.py:60
+#: apps/federation/models.py:72
 msgid "Share our events with this partner"
 msgstr "Partager nos événements avec ce partenaire"
 
-#: apps/federation/models.py:63
+#: apps/federation/models.py:75
 msgid "Auto-approve imported events"
 msgstr "Approuver automatiquement les événements importés"
 
-#: apps/federation/models.py:66
+#: apps/federation/models.py:78
 msgid "Data e ora dell'ultima sincronizzazione eventi."
 msgstr "Date et heure de la dernière synchronisation des événements."
 
-#: apps/federation/models.py:69
+#: apps/federation/models.py:81
 msgid "Ultimo messaggio di errore durante la sincronizzazione."
 msgstr "Dernier message d'erreur lors de la synchronisation."
 
-#: apps/federation/models.py:72
+#: apps/federation/models.py:84
 msgid "Data di creazione del record."
 msgstr "Date de création de l'enregistrement."
 
-#: apps/federation/models.py:80
+#: apps/federation/models.py:92
 msgid "Amministratore che ha aggiunto il club partner."
 msgstr "Administrateur ayant ajouté le club partenaire."
 
-#: apps/federation/models.py:84
+#: apps/federation/models.py:96
 msgid "Federated Club"
 msgstr "Club Fédéré"
 
-#: apps/federation/models.py:85
+#: apps/federation/models.py:97
 msgid "Federated Clubs"
 msgstr "Clubs Fédérés"
 
-#: apps/federation/models.py:96
+#: apps/federation/models.py:108
 msgid "Logo must be a URL (http/https) or a /static/ path."
 msgstr ""
 
-#: apps/federation/models.py:119
+#: apps/federation/models.py:131
 msgid "Club partner che ha pubblicato l'evento."
 msgstr "Club partenaire ayant publié l'événement."
 
-#: apps/federation/models.py:122
+#: apps/federation/models.py:134
 msgid "ID univoco dell'evento nel sistema del partner."
 msgstr "ID unique de l'événement dans le système du partenaire."
 
-#: apps/federation/models.py:125
+#: apps/federation/models.py:137
 msgid "Nome dell'evento come fornito dal partner."
 msgstr "Nom de l'événement tel que fourni par le partenaire."
 
-#: apps/federation/models.py:128 apps/website/models/pages.py:719
+#: apps/federation/models.py:140 apps/website/models/pages.py:723
 msgid "Data e ora di inizio dell'evento."
 msgstr "Date et heure de début de l'événement."
 
-#: apps/federation/models.py:131
+#: apps/federation/models.py:143
 msgid "Data e ora di fine dell'evento."
 msgstr "Date et heure de fin de l'événement."
 
-#: apps/federation/models.py:134
+#: apps/federation/models.py:146
 msgid "Nome del luogo dell'evento."
 msgstr "Nom du lieu de l'événement."
 
-#: apps/federation/models.py:137
+#: apps/federation/models.py:149
 msgid "Indirizzo completo del luogo."
 msgstr "Adresse complète du lieu."
 
-#: apps/federation/models.py:140
+#: apps/federation/models.py:152
 msgid "Latitudine della posizione."
 msgstr "Latitude de la position."
 
-#: apps/federation/models.py:143
+#: apps/federation/models.py:155
 msgid "Longitudine della posizione."
 msgstr "Longitude de la position."
 
-#: apps/federation/models.py:145
+#: apps/federation/models.py:157
 msgid "Sanitized HTML"
 msgstr "HTML assaini"
 
-#: apps/federation/models.py:148
+#: apps/federation/models.py:160
 msgid "Stato corrente dell'evento."
 msgstr "Statut actuel de l'événement."
 
-#: apps/federation/models.py:151
+#: apps/federation/models.py:163
 msgid "URL dell'immagine di copertina."
 msgstr "URL de l'image de couverture."
 
-#: apps/federation/models.py:154
+#: apps/federation/models.py:166
 msgid "URL della pagina dell'evento sul sito partner."
 msgstr "URL de la page de l'événement sur le site partenaire."
 
-#: apps/federation/models.py:157
+#: apps/federation/models.py:169
 msgid "L'evento è visibile ai soci."
 msgstr "L'événement est visible par les membres."
 
-#: apps/federation/models.py:160
+#: apps/federation/models.py:172
 msgid "Nascondi l'evento dall'elenco pubblico."
 msgstr "Masquer l'événement de la liste publique."
 
-#: apps/federation/models.py:163
+#: apps/federation/models.py:175
 msgid "Data del primo import dell'evento."
 msgstr "Date du premier import de l'événement."
 
-#: apps/federation/models.py:166
+#: apps/federation/models.py:178
 msgid "Data dell'ultimo aggiornamento."
 msgstr "Date de la dernière mise à jour."
 
-#: apps/federation/models.py:170
+#: apps/federation/models.py:182
 msgid "External Event"
 msgstr "Événement Externe"
 
-#: apps/federation/models.py:171 apps/federation/wagtail_hooks.py:44
+#: apps/federation/models.py:183 apps/federation/wagtail_hooks.py:44
 msgid "External Events"
 msgstr "Événements Externes"
 
-#: apps/federation/models.py:199
+#: apps/federation/models.py:211
 msgid "Socio che ha espresso interesse."
 msgstr "Membre ayant exprimé son intérêt."
 
-#: apps/federation/models.py:203
+#: apps/federation/models.py:215
 msgid "Evento esterno di interesse."
 msgstr "Titre de l'événement ou étape."
 
-#: apps/federation/models.py:206
+#: apps/federation/models.py:218
 msgid "Livello di interesse per l'evento."
 msgstr "Niveau d'intérêt pour l'événement."
 
-#: apps/federation/models.py:209
+#: apps/federation/models.py:221
 msgid "Data di espressione dell'interesse."
 msgstr "Date d'expression de l'intérêt."
 
-#: apps/federation/models.py:212 apps/federation/models.py:251
+#: apps/federation/models.py:224 apps/federation/models.py:263
 msgid "Data dell'ultima modifica."
 msgstr "Date de la dernière modification."
 
-#: apps/federation/models.py:216
+#: apps/federation/models.py:228
 msgid "External Event Interest"
 msgstr "Intérêt pour Événement Externe"
 
-#: apps/federation/models.py:217
+#: apps/federation/models.py:229
 msgid "External Event Interests"
 msgstr "Intérêts pour Événements Externes"
 
-#: apps/federation/models.py:238
+#: apps/federation/models.py:250
 msgid "Socio autore del commento."
 msgstr "Membre auteur du commentaire."
 
-#: apps/federation/models.py:242
+#: apps/federation/models.py:254
 msgid "Evento esterno commentato."
 msgstr "Événement externe commenté."
 
-#: apps/federation/models.py:245
+#: apps/federation/models.py:257
 msgid "Testo del commento (non condiviso col partner)."
 msgstr "Texte du commentaire (non partagé avec le partenaire)."
 
-#: apps/federation/models.py:248
+#: apps/federation/models.py:260
 msgid "Data di creazione del commento."
 msgstr "Date de création du commentaire."
 
-#: apps/federation/models.py:254
+#: apps/federation/models.py:266
 msgid "Il commento è stato cancellato (soft delete)."
 msgstr "Le commentaire a été supprimé (suppression logique)."
 
-#: apps/federation/models.py:258
+#: apps/federation/models.py:270
 msgid "External Event Comment"
 msgstr "Commentaire d'Événement Externe"
 
-#: apps/federation/models.py:259
+#: apps/federation/models.py:271
 msgid "External Event Comments"
 msgstr "Commentaires d'Événements Externes"
 
-#: apps/federation/models.py:284 apps/mutual_aid/models.py:52
-#: apps/website/models/pages.py:303 apps/website/models/pages.py:358
-#: apps/website/models/pages.py:402 apps/website/models/pages.py:597
-#: apps/website/models/pages.py:1124 apps/website/models/pages.py:1242
-#: apps/website/models/pages.py:1443 apps/website/models/pages.py:1487
-#: apps/website/models/pages.py:1571 apps/website/models/partners.py:41
-#: apps/website/models/partners.py:150
-#: templates/website/pages/about_page.html:29
-msgid "Introduction"
-msgstr "Introduction"
-
-#: apps/federation/models.py:285
+#: apps/federation/models.py:356
 #, fuzzy
 #| msgid "Introductory text displayed above the helpers map."
 msgid "Introductory text displayed below the page title."
 msgstr "Texte d'introduction affiché au-dessus de la carte des aidants."
 
-#: apps/federation/models.py:291
+#: apps/federation/models.py:362
 msgid "How it works"
 msgstr ""
 
-#: apps/federation/models.py:292
+#: apps/federation/models.py:363
 msgid "Steps explaining the federation process."
 msgstr ""
 
-#: apps/federation/models.py:298 apps/website/blocks/content.py:753
+#: apps/federation/models.py:369 apps/website/blocks/content.py:753
 #: apps/website/models/snippets.py:383
 msgid "FAQ"
 msgstr "FAQ"
 
-#: apps/federation/models.py:304
+#: apps/federation/models.py:375
 #, fuzzy
 #| msgid "Additional guests"
 msgid "Additional content"
 msgstr "Invités supplémentaires"
 
-#: apps/federation/models.py:309
+#: apps/federation/models.py:380
 #, fuzzy
 #| msgid "Membership CTA button text"
 msgid "CTA button text"
 msgstr "Alertes adhésion"
 
-#: apps/federation/models.py:310
+#: apps/federation/models.py:381
 #, fuzzy
 #| msgid "Call-to-action buttons"
 msgid "Label for the call-to-action button."
 msgstr "Boutons d'appel à l'action"
 
-#: apps/federation/models.py:316
+#: apps/federation/models.py:385
 #, fuzzy
-#| msgid "CTA page link"
-msgid "CTA link"
-msgstr "Lien page CTA"
+#| msgid "Event Registration"
+msgid "Events page introduction"
+msgstr "Inscription à l'Événement"
 
-#: apps/federation/models.py:317
-msgid "URL the CTA button links to."
-msgstr ""
-
-#: apps/federation/models.py:325
+#: apps/federation/models.py:386
 #, fuzzy
-#| msgid "Call to action"
-msgid "Call to Action"
-msgstr "Appel à l'action"
+#| msgid "Introductory text displayed above the helpers map."
+msgid "Introductory text for the partner events listing page."
+msgstr "Texte d'introduction affiché au-dessus de la carte des aidants."
 
-#: apps/federation/models.py:337
+#: apps/federation/models.py:390
+#, fuzzy
+#| msgid "Events page"
+msgid "Events per page"
+msgstr "Page des événements"
+
+#: apps/federation/models.py:391
+#, fuzzy
+#| msgid "Maximum number of posts to display."
+msgid "Number of events to display per page."
+msgstr "Nombre maximum de publications à afficher."
+
+#: apps/federation/models.py:403
+#, fuzzy
+#| msgid "Events navigation"
+msgid "Events Section"
+msgstr "Navigation principale"
+
+#: apps/federation/models.py:415
 #, fuzzy
 #| msgid "Federation access"
 msgid "Federation Info Page"
 msgstr "Accès fédération"
 
-#: apps/federation/models.py:338
+#: apps/federation/models.py:416
 #, fuzzy
 #| msgid "Federation access"
 msgid "Federation Info Pages"
@@ -1395,7 +1362,7 @@ msgstr "Personnel"
 msgid "Identity"
 msgstr "Identité"
 
-#: apps/members/admin.py:130 apps/website/models/pages.py:738
+#: apps/members/admin.py:130 apps/website/models/pages.py:742
 #: apps/website/models/partners.py:180 apps/website/models/settings.py:128
 #: apps/website/models/snippets.py:264 templates/account/profile.html:59
 #: templates/events/emails/registration_confirmation.html:40
@@ -1412,8 +1379,8 @@ msgid "Privacy"
 msgstr "Confidentialité"
 
 #: apps/members/admin.py:133 apps/notifications/apps.py:8
-#: apps/notifications/wagtail_hooks.py:22 templates/includes/footer.html:98
-#: templates/includes/navbar.html:161
+#: apps/notifications/wagtail_hooks.py:22 templates/includes/footer.html:106
+#: templates/includes/navbar.html:164
 msgid "Notifications"
 msgstr "Notifications"
 
@@ -1430,7 +1397,7 @@ msgstr "Notifications"
 msgid "Mutual Aid"
 msgstr "Entraide"
 
-#: apps/members/admin.py:151 apps/members/models.py:482
+#: apps/members/admin.py:151 apps/members/models.py:492
 msgid "Membership Requests"
 msgstr "Alertes adhésion"
 
@@ -1511,7 +1478,7 @@ msgstr "Actualités partenaires"
 msgid "Mutual aid requests"
 msgstr "Demandes d'entraide"
 
-#: apps/members/forms.py:236 apps/notifications/models.py:30
+#: apps/members/forms.py:236 apps/notifications/models.py:41
 msgid "Partner events"
 msgstr "Événements partenaires"
 
@@ -1528,7 +1495,7 @@ msgid "I am available for mutual aid"
 msgstr "Je suis disponible pour l'entraide"
 
 #: apps/members/forms.py:266 apps/mutual_aid/forms.py:141
-#: apps/mutual_aid/models.py:542
+#: apps/mutual_aid/models.py:1040
 msgid "Radius (km)"
 msgstr "Rayon (km)"
 
@@ -1536,90 +1503,90 @@ msgstr "Rayon (km)"
 msgid "Coordinates (lat,lon)"
 msgstr "Coordonnées (lat,lon)"
 
-#: apps/members/models.py:26
+#: apps/members/models.py:36
 msgid ""
 "Choose a nickname that will be shown publicly instead of your real name."
 msgstr ""
 "Choisissez un pseudo qui sera affiché publiquement à la place de votre vrai "
 "nom."
 
-#: apps/members/models.py:30
+#: apps/members/models.py:40
 msgid "When enabled, active members can see your real first and last name."
 msgstr ""
 "Lorsqu'activé, les membres actifs peuvent voir vos vrais prénom et nom."
 
-#: apps/members/models.py:36
+#: apps/members/models.py:46
 msgid "Landline number with country prefix. Example: +39 02 1234567"
 msgstr "Numéro fixe avec indicatif pays. Exemple : +33 1 23 45 67 89"
 
-#: apps/members/models.py:40
+#: apps/members/models.py:50
 msgid "Mobile number with country prefix. Example: +39 333 1234567"
 msgstr "Numéro de portable avec indicatif pays. Exemple : +33 6 12 34 56 78"
 
-#: apps/members/models.py:44
+#: apps/members/models.py:54
 msgid ""
 "Your date of birth. Used for birthday greetings and age-restricted events."
 msgstr ""
 "Votre date de naissance. Utilisée pour les vœux d'anniversaire et les "
 "événements soumis à restriction d'âge."
 
-#: apps/members/models.py:48
+#: apps/members/models.py:58
 msgid "City or town where you were born."
 msgstr "Ville ou commune de naissance."
 
-#: apps/members/models.py:56
+#: apps/members/models.py:66
 msgid "Foto profilo del socio."
 msgstr "Photo de profil du membre."
 
-#: apps/members/models.py:61
+#: apps/members/models.py:71
 msgid "Codice fiscale italiano (16 caratteri)."
 msgstr "Code fiscal italien (16 caractères)."
 
-#: apps/members/models.py:70
+#: apps/members/models.py:80
 msgid "Tipo di documento di identità."
 msgstr "Type de pièce d'identité."
 
-#: apps/members/models.py:73
+#: apps/members/models.py:83
 msgid "Numero del documento di identità."
 msgstr "Numéro de la pièce d'identité."
 
-#: apps/members/models.py:76
+#: apps/members/models.py:86
 msgid "Data di scadenza del documento."
 msgstr "Date d'expiration du document."
 
-#: apps/members/models.py:82
+#: apps/members/models.py:92
 msgid "Street address. Example: Via Roma 42"
 msgstr "Adresse. Exemple : 42 rue de la Paix"
 
-#: apps/members/models.py:86
+#: apps/members/models.py:96
 msgid "City or town of residence."
 msgstr "Ville de résidence."
 
-#: apps/members/models.py:90
+#: apps/members/models.py:100
 msgid "Two-letter province code. Example: MI"
 msgstr "Code département à deux chiffres. Exemple : 75"
 
-#: apps/members/models.py:94
+#: apps/members/models.py:104
 msgid "5-digit postal code. Example: 20100"
 msgstr "Code postal. Exemple : 75001"
 
-#: apps/members/models.py:98
+#: apps/members/models.py:108
 msgid "Two-letter country code (ISO 3166-1). Example: IT"
 msgstr "Code pays à deux lettres (ISO 3166-1). Exemple : FR"
 
-#: apps/members/models.py:103
+#: apps/members/models.py:113
 msgid "Numero tessera socio (generato automaticamente)."
 msgstr "Numéro de carte membre (généré automatiquement)."
 
-#: apps/members/models.py:106
+#: apps/members/models.py:116
 msgid "Data di prima iscrizione al club."
 msgstr "Date de première inscription au club."
 
-#: apps/members/models.py:109
+#: apps/members/models.py:119
 msgid "Data di scadenza della tessera."
 msgstr "Date d'expiration de la carte."
 
-#: apps/members/models.py:113 apps/website/admin_newsletter.py:68
+#: apps/members/models.py:123 apps/website/admin_newsletter.py:68
 #: apps/website/models/newsletter.py:68 apps/website/models/snippets.py:820
 #: templates/account/card.html:75
 #: templates/admin/members/panels/card_actions.html:62
@@ -1627,36 +1594,36 @@ msgstr "Date d'expiration de la carte."
 msgid "Active"
 msgstr "Actif"
 
-#: apps/members/models.py:114
+#: apps/members/models.py:124
 #: templates/admin/members/panels/card_actions.html:71
 msgid "Suspended"
 msgstr "Suspendu"
 
-#: apps/members/models.py:115
+#: apps/members/models.py:125
 #: templates/admin/members/panels/card_actions.html:75
 msgid "Terminated"
 msgstr "Résilié"
 
-#: apps/members/models.py:121
+#: apps/members/models.py:131
 msgid "Status of the membership card. Suspended cards can be reactivated."
 msgstr ""
 "Statut de la carte de membre. Les cartes suspendues peuvent être réactivées."
 
-#: apps/members/models.py:125
+#: apps/members/models.py:135
 msgid "Reason for suspension or termination."
 msgstr "Motif de suspension ou de résiliation."
 
-#: apps/members/models.py:130
+#: apps/members/models.py:140
 msgid "When the card status was last changed."
 msgstr "Date du dernier changement de statut de la carte."
 
-#: apps/members/models.py:136
+#: apps/members/models.py:146
 msgid "Receive our periodic newsletter with club news and upcoming events."
 msgstr ""
 "Recevez notre newsletter périodique avec les actualités du club et les "
 "événements à venir."
 
-#: apps/members/models.py:140
+#: apps/members/models.py:150
 msgid ""
 "When enabled, your display name appears in the member directory visible to "
 "other members."
@@ -1664,348 +1631,333 @@ msgstr ""
 "Lorsqu'activé, votre pseudo apparaît dans l'annuaire des membres visible par "
 "les autres membres."
 
-#: apps/members/models.py:144
+#: apps/members/models.py:154
 msgid ""
 "When enabled, your profile page is visible to anyone, including non-members."
 msgstr ""
 "Lorsqu'activé, votre page de profil est visible par tous, y compris les non-"
 "membres."
 
-#: apps/members/models.py:148
+#: apps/members/models.py:158
 msgid "A short description about yourself. Visible on your profile page."
 msgstr "Une courte description de vous. Visible sur votre page de profil."
 
-#: apps/members/models.py:154
+#: apps/members/models.py:164
 msgid "Enable this to appear in the mutual aid helper directory."
 msgstr "Activez pour apparaître dans l'annuaire des bénévoles d'entraide."
 
-#: apps/members/models.py:158
+#: apps/members/models.py:168
 msgid "Maximum distance in km you are willing to travel to help. Example: 25"
 msgstr ""
 "Distance maximale en km que vous êtes prêt à parcourir pour aider. Exemple : "
 "25"
 
-#: apps/members/models.py:162
+#: apps/members/models.py:172
 msgid "The city where you are usually based for mutual aid."
 msgstr "La ville où vous êtes habituellement basé pour l'entraide."
 
-#: apps/members/models.py:166
+#: apps/members/models.py:176
 msgid "Latitude and longitude, comma-separated. Example: 45.4642,9.1900"
 msgstr ""
 "Latitude et longitude, séparées par une virgule. Exemple : 48.8566,2.3522"
 
-#: apps/members/models.py:170
+#: apps/members/models.py:180
 msgid ""
 "Additional information: tools, skills, vehicle type, availability hours."
 msgstr ""
 "Informations complémentaires : outils, compétences, type de véhicule, heures "
 "de disponibilité."
 
-#: apps/members/models.py:176
+#: apps/members/models.py:186
 msgid "Receive notifications via email."
 msgstr "Recevoir les notifications par email."
 
-#: apps/members/models.py:180
+#: apps/members/models.py:190
 msgid "Receive push notifications in your browser (requires PWA support)."
 msgstr ""
 "Recevoir les notifications push dans votre navigateur (nécessite le support "
 "PWA)."
 
-#: apps/members/models.py:184
+#: apps/members/models.py:194
 msgid "Get notified when new articles or announcements are published."
 msgstr "Être notifié lors de la publication de nouveaux articles ou annonces."
 
-#: apps/members/models.py:188
+#: apps/members/models.py:198
 msgid "Get notified about new events and changes to events you registered for."
 msgstr ""
 "Être notifié des nouveaux événements et des modifications aux événements "
 "auxquels vous êtes inscrit."
 
-#: apps/members/models.py:192
+#: apps/members/models.py:202
 msgid "Receive a reminder before events you are registered for."
 msgstr "Recevoir un rappel avant les événements auxquels vous êtes inscrit."
 
-#: apps/members/models.py:196
+#: apps/members/models.py:206
 msgid "Alerts about membership expiry, renewal, and card updates."
 msgstr ""
 "Alertes concernant l'expiration de l'adhésion, le renouvellement et les "
 "mises à jour de la carte."
 
-#: apps/members/models.py:200
+#: apps/members/models.py:210
 msgid "News and promotions from partner clubs."
 msgstr "Actualités et promotions des clubs partenaires."
 
-#: apps/members/models.py:204
+#: apps/members/models.py:214
 msgid "Notifications when someone nearby requests mutual aid."
 msgstr "Notifications lorsque quelqu'un proche demande de l'entraide."
 
-#: apps/members/models.py:208
+#: apps/members/models.py:218
 msgid "Events published by federated partner clubs."
 msgstr "Événements publiés par les clubs partenaires fédérés."
 
-#: apps/members/models.py:212
+#: apps/members/models.py:222
 msgid "Comments on partner events you showed interest in."
 msgstr ""
 "Commentaires sur les événements partenaires auxquels vous avez montré de "
 "l'intérêt."
 
-#: apps/members/models.py:216
+#: apps/members/models.py:226
 msgid "Immediate"
 msgstr "Immédiat"
 
-#: apps/members/models.py:217
+#: apps/members/models.py:227
 msgid "Daily"
 msgstr "Quotidien"
 
-#: apps/members/models.py:218
+#: apps/members/models.py:228
 msgid "Weekly"
 msgstr "Hebdomadaire"
 
-#: apps/members/models.py:222
+#: apps/members/models.py:232
 msgid "How often to receive a digest email summarising your notifications."
 msgstr "Fréquence de réception d'un email récapitulatif de vos notifications."
 
-#: apps/members/models.py:230
+#: apps/members/models.py:240
 msgid "Products"
 msgstr "Produits"
 
-#: apps/members/models.py:231
+#: apps/members/models.py:241
 msgid "Prodotti/abbonamenti acquistati dal socio."
 msgstr "Produits/abonnements achetés par le membre."
 
-#: apps/members/models.py:235
+#: apps/members/models.py:245
 msgid "Club User"
 msgstr "Utilisateur du Club"
 
-#: apps/members/models.py:236
+#: apps/members/models.py:246
 msgid "Club Users"
 msgstr "Utilisateurs du Club"
 
-#: apps/members/models.py:434
+#: apps/members/models.py:444
 msgid "Socio che ha inviato la richiesta."
 msgstr "Membre ayant envoyé la demande."
 
-#: apps/members/models.py:440 templates/account/membership_requests.html:19
+#: apps/members/models.py:450 templates/account/membership_requests.html:19
 msgid "Product"
 msgstr "Produits"
 
-#: apps/members/models.py:441
+#: apps/members/models.py:451
 msgid "Prodotto/abbonamento richiesto."
 msgstr "Produit/abonnement demandé."
 
-#: apps/members/models.py:448
+#: apps/members/models.py:458
 msgid "Stato della richiesta di adesione."
 msgstr "Statut de la demande d'adhésion."
 
-#: apps/members/models.py:453
+#: apps/members/models.py:463
 msgid "Any additional information or requests."
 msgstr "Toute information ou demande complémentaire."
 
-#: apps/members/models.py:457
+#: apps/members/models.py:467
 msgid "Admin Notes"
 msgstr "Notes"
 
-#: apps/members/models.py:458
+#: apps/members/models.py:468
 msgid "Internal notes for administrators."
 msgstr "Notes internes pour les administrateurs."
 
-#: apps/members/models.py:460
+#: apps/members/models.py:470
 msgid "Created"
 msgstr "Créé le"
 
-#: apps/members/models.py:461 apps/mutual_aid/models.py:285
-#: apps/mutual_aid/models.py:437
+#: apps/members/models.py:471 apps/mutual_aid/models.py:783
+#: apps/mutual_aid/models.py:935
 msgid "Data e ora di invio della richiesta."
 msgstr "Date et heure de soumission de la demande."
 
-#: apps/members/models.py:463
+#: apps/members/models.py:473
 msgid "Updated"
 msgstr "Restez informé"
 
-#: apps/members/models.py:464 apps/mutual_aid/models.py:288
+#: apps/members/models.py:474 apps/mutual_aid/models.py:786
 msgid "Data e ora dell'ultimo aggiornamento."
 msgstr "Date et heure de la dernière mise à jour."
 
-#: apps/members/models.py:468
+#: apps/members/models.py:478
 msgid "Processed at"
 msgstr "créé le"
 
-#: apps/members/models.py:469
+#: apps/members/models.py:479
 msgid "Data e ora di elaborazione da parte dell'admin."
 msgstr "Date et heure de traitement par l'administrateur."
 
-#: apps/members/models.py:476
+#: apps/members/models.py:486
 msgid "Processed by"
 msgstr "Approuvé par"
 
-#: apps/members/models.py:477
+#: apps/members/models.py:487
 msgid "Amministratore che ha gestito la richiesta."
 msgstr "Administrateur ayant traité la demande."
 
-#: apps/members/models.py:481
+#: apps/members/models.py:491
 msgid "Membership Request"
 msgstr "Alertes adhésion"
 
-#: apps/members/urls.py:19
+#: apps/members/models.py:583
 #, fuzzy
-#| msgid "My profile"
-msgid "profile/"
-msgstr "Mon profil"
+#| msgid "Introductory text displayed above the helpers map."
+msgid "Introductory text displayed on the members area landing page."
+msgstr "Texte d'introduction affiché au-dessus de la carte des aidants."
 
-#: apps/members/urls.py:21
-msgid "card/"
+#: apps/members/models.py:587
+#, fuzzy
+#| msgid "Introduction"
+msgid "Directory introduction"
+msgstr "Introduction"
+
+#: apps/members/models.py:588
+#, fuzzy
+#| msgid "Show me in the member directory"
+msgid "Text shown at the top of the member directory."
+msgstr "M'afficher dans l'annuaire des membres"
+
+#: apps/members/models.py:592
+msgid "Card help text"
 msgstr ""
 
-#: apps/members/urls.py:22
-msgid "card/pdf/"
-msgstr ""
-
-#: apps/members/urls.py:23
-msgid "card/qr/"
-msgstr ""
-
-#: apps/members/urls.py:24
+#: apps/members/models.py:593
 #, fuzzy
-#| msgid "Barcode"
-msgid "card/barcode/"
-msgstr "Code-barres"
+#| msgid "This user does not have a membership card yet."
+msgid "Help text displayed on the membership card page."
+msgstr "Cet utilisateur n'a pas encore de carte de membre."
 
-#: apps/members/urls.py:26
+#: apps/members/models.py:608
 #, fuzzy
-#| msgid "Privacy"
-msgid "privacy/"
-msgstr "Confidentialité"
-
-#: apps/members/urls.py:28 clubcms/urls.py:67
-#, fuzzy
-#| msgid "notifications"
-msgid "notifications/"
-msgstr "notifications"
-
-#: apps/members/urls.py:32
-msgid "aid/"
-msgstr ""
-
-#: apps/members/urls.py:35
-msgid "membership-request/<int:product_id>/"
-msgstr ""
-
-#: apps/members/urls.py:40
-#, fuzzy
-#| msgid "My Membership Requests"
-msgid "membership-requests/"
+#| msgid "View Membership Plans"
+msgid "Members Area Page"
 msgstr "Alertes adhésion"
 
-#: apps/members/urls.py:45
+#: apps/members/models.py:609
 #, fuzzy
-#| msgid "Member directory"
-msgid "directory/"
-msgstr "Annuaire des membres"
+#| msgid "Membership alerts"
+msgid "Members Area Pages"
+msgstr "Alertes adhésion"
 
-#: apps/members/urls.py:48
-#, fuzzy
-#| msgid "contributions"
-msgid "contributions/"
-msgstr "Introduction"
-
-#: apps/members/urls.py:53
-#, fuzzy
-#| msgid "contributions"
-msgid "contributions/submit/"
-msgstr "Introduction"
-
-#: apps/members/views.py:44
+#: apps/members/models.py:656
 msgid "Profile updated successfully."
 msgstr "Profil mis à jour avec succès."
 
-#: apps/members/views.py:156 apps/members/views.py:351
-#: apps/members/views.py:383
-msgid "No membership card available."
-msgstr "Aucune carte de membre disponible."
-
-#: apps/members/views.py:201
-msgid "MEMBERSHIP CARD"
-msgstr ""
-
-#: apps/members/views.py:219
-msgid "MEMBER SINCE"
-msgstr ""
-
-#: apps/members/views.py:220
-#, fuzzy
-#| msgid "EXPIRED"
-msgid "EXPIRES"
-msgstr "EXPIRÉ"
-
-#: apps/members/views.py:300
-msgid "Tel:"
-msgstr ""
-
-#: apps/members/views.py:308
-msgid "This card remains property of the club. Present upon request."
-msgstr ""
-
-#: apps/members/views.py:325 templates/account/card.html:4
-#: templates/account/card.html:10 templates/includes/footer.html:99
-msgid "Membership Card"
-msgstr "Carte de Membre"
-
-#: apps/members/views.py:326
-#, fuzzy
-#| msgid "Name"
-msgid "Name:"
-msgstr "Nom"
-
-#: apps/members/views.py:327
-#, fuzzy
-#| msgid "Card"
-msgid "Card:"
-msgstr "Carte"
-
-#: apps/members/views.py:330
-#, fuzzy
-#| msgid "Expires"
-msgid "Expires:"
-msgstr "Expire"
-
-#: apps/members/views.py:362
-msgid "QR code generation not available."
-msgstr "Génération de code QR non disponible."
-
-#: apps/members/views.py:395
-msgid "Barcode generation not available."
-msgstr "Génération de code-barres non disponible."
-
-#: apps/members/views.py:421
+#: apps/members/models.py:748
 msgid "Privacy settings saved."
 msgstr "Paramètres de confidentialité enregistrés."
 
-#: apps/members/views.py:448
+#: apps/members/models.py:781
 msgid "Notification preferences saved."
 msgstr "Préférences de notification enregistrées."
 
-#: apps/members/views.py:480
+#: apps/members/models.py:820
 msgid "Mutual aid availability saved."
 msgstr "Disponibilité d'entraide enregistrée."
 
-#: apps/members/views.py:538 apps/members/views.py:566
+#: apps/members/models.py:898
 msgid "Product not found."
 msgstr "Info produit"
 
-#: apps/members/views.py:542 apps/members/views.py:570
+#: apps/members/models.py:905
 msgid "You already have this membership."
 msgstr "Vous avez déjà cette adhésion."
 
-#: apps/members/views.py:550 apps/members/views.py:578
+#: apps/members/models.py:915
 msgid "You already have a pending request for this product."
 msgstr "Vous êtes déjà inscrit(e) à cet événement."
 
-#: apps/members/views.py:591
+#: apps/members/models.py:927
 msgid ""
 "Your membership request has been submitted! The club will contact you "
 "shortly."
 msgstr ""
 "Votre demande d'adhésion a été soumise ! Le club vous contactera sous peu."
+
+#: apps/members/urls.py:17
+msgid "card/pdf/"
+msgstr ""
+
+#: apps/members/urls.py:18
+msgid "card/qr/"
+msgstr ""
+
+#: apps/members/urls.py:19
+#, fuzzy
+#| msgid "Barcode"
+msgid "card/barcode/"
+msgstr "Code-barres"
+
+#: apps/members/views.py:32 apps/members/views.py:227 apps/members/views.py:259
+msgid "No membership card available."
+msgstr "Aucune carte de membre disponible."
+
+#: apps/members/views.py:77
+msgid "MEMBERSHIP CARD"
+msgstr ""
+
+#: apps/members/views.py:95
+msgid "MEMBER SINCE"
+msgstr ""
+
+#: apps/members/views.py:96
+#, fuzzy
+#| msgid "EXPIRED"
+msgid "EXPIRES"
+msgstr "EXPIRÉ"
+
+#: apps/members/views.py:176
+msgid "Tel:"
+msgstr ""
+
+#: apps/members/views.py:184
+msgid "This card remains property of the club. Present upon request."
+msgstr ""
+
+#: apps/members/views.py:201 templates/account/card.html:4
+#: templates/account/card.html:10 templates/includes/footer.html:107
+msgid "Membership Card"
+msgstr "Carte de Membre"
+
+#: apps/members/views.py:202
+#, fuzzy
+#| msgid "Name"
+msgid "Name:"
+msgstr "Nom"
+
+#: apps/members/views.py:203
+#, fuzzy
+#| msgid "Card"
+msgid "Card:"
+msgstr "Carte"
+
+#: apps/members/views.py:206
+#, fuzzy
+#| msgid "Expires"
+msgid "Expires:"
+msgstr "Expire"
+
+#: apps/members/views.py:238
+msgid "QR code generation not available."
+msgstr "Génération de code QR non disponible."
+
+#: apps/members/views.py:271
+msgid "Barcode generation not available."
+msgstr "Génération de code-barres non disponible."
 
 #: apps/members/wagtail_hooks.py:52
 #, python-format
@@ -2184,7 +2136,7 @@ msgstr "Afficher vos horaires de disponibilité."
 msgid "Why do you need access? (optional)"
 msgstr "Pourquoi avez-vous besoin d'un accès ? (facultatif)"
 
-#: apps/mutual_aid/forms.py:117 apps/mutual_aid/models.py:411
+#: apps/mutual_aid/forms.py:117 apps/mutual_aid/models.py:909
 #: templates/website/pages/contact_page.html:70
 msgid "Message"
 msgstr "Message"
@@ -2193,16 +2145,16 @@ msgstr "Message"
 msgid "Optional message to the administrators explaining your request."
 msgstr "Message facultatif aux administrateurs pour expliquer votre demande."
 
-#: apps/mutual_aid/forms.py:131 apps/mutual_aid/models.py:250
-#: apps/website/models/pages.py:954 apps/website/models/pages.py:963
+#: apps/mutual_aid/forms.py:131 apps/mutual_aid/models.py:748
+#: apps/website/models/pages.py:958 apps/website/models/pages.py:967
 #: templates/account/aid.html:35 templates/account/public_profile.html:44
 #: templates/events/emails/registration_confirmation.html:34
-#: templates/events/payment_success.html:20
+#: templates/events/payment_success.html:27
 #: templates/federation/external_event_detail.html:65
 #: templates/mutual_aid/mutual_aid_page.html:109
 #: templates/mutual_aid/mutual_aid_page.html:150
 #: templates/website/pages/event_detail_page.html:77
-#: templates/website/pages/event_detail_page.html:188
+#: templates/website/pages/event_detail_page.html:200
 #: templates/website/pages/partner_page.html:163
 #: templates/website/pages/partner_page.html:164
 msgid "Location"
@@ -2214,7 +2166,7 @@ msgstr "Lieu"
 msgid "City or address…"
 msgstr "Rechercher"
 
-#: apps/mutual_aid/models.py:28 apps/website/models/newsletter.py:28
+#: apps/mutual_aid/models.py:40 apps/website/models/newsletter.py:28
 #: apps/website/models/snippets.py:42 apps/website/models/snippets.py:137
 #: apps/website/models/snippets.py:247 apps/website/models/snippets.py:458
 #: apps/website/models/snippets.py:506 apps/website/models/snippets.py:544
@@ -2224,11 +2176,11 @@ msgstr "Rechercher"
 msgid "Name"
 msgstr "Nom"
 
-#: apps/mutual_aid/models.py:29
+#: apps/mutual_aid/models.py:41
 msgid "Role"
 msgstr "Rôle"
 
-#: apps/mutual_aid/models.py:30 apps/website/forms.py:20
+#: apps/mutual_aid/models.py:42 apps/website/forms.py:20
 #: apps/website/models/partners.py:175 apps/website/models/settings.py:122
 #: apps/website/models/snippets.py:258 apps/website/models/verification.py:15
 #: templates/mutual_aid/helper_card.html:136
@@ -2237,242 +2189,250 @@ msgstr "Rôle"
 msgid "Phone"
 msgstr "Téléphone"
 
-#: apps/mutual_aid/models.py:34
+#: apps/mutual_aid/models.py:46
 msgid "Emergency Contact"
 msgstr "Contact d'Urgence"
 
-#: apps/mutual_aid/models.py:53
+#: apps/mutual_aid/models.py:66
 msgid "Introductory text displayed above the helpers map."
 msgstr "Texte d'introduction affiché au-dessus de la carte des aidants."
 
-#: apps/mutual_aid/models.py:61
+#: apps/mutual_aid/models.py:74
 msgid "Emergency contacts"
 msgstr "Contacts d'urgence"
 
-#: apps/mutual_aid/models.py:62
+#: apps/mutual_aid/models.py:75
 msgid "Contatti di emergenza configurabili dall'admin."
 msgstr "Contacts d'urgence configurables par l'administrateur."
 
-#: apps/mutual_aid/models.py:66
+#: apps/mutual_aid/models.py:79
 msgid "Default map radius (km)"
 msgstr "Rayon de carte par défaut (km)"
 
-#: apps/mutual_aid/models.py:67
+#: apps/mutual_aid/models.py:80
 msgid "Default radius for the helpers map view."
 msgstr "Rayon par défaut pour la vue cartographique des aidants."
 
-#: apps/mutual_aid/models.py:71
+#: apps/mutual_aid/models.py:84
 msgid "Enable federation"
 msgstr "Activer la fédération"
 
-#: apps/mutual_aid/models.py:72
+#: apps/mutual_aid/models.py:85
 msgid "Allow approved partner clubs to see our helpers."
 msgstr "Autoriser les clubs partenaires approuvés à voir nos aidants."
 
-#: apps/mutual_aid/models.py:88 apps/website/blocks/common.py:61
-#: apps/website/models/pages.py:966 apps/website/models/pages.py:1374
-#: apps/website/models/partners.py:364 templates/includes/navbar.html:166
+#: apps/mutual_aid/models.py:101 apps/website/blocks/common.py:61
+#: apps/website/models/pages.py:970 apps/website/models/pages.py:2314
+#: apps/website/models/partners.py:364 templates/includes/navbar.html:169
 msgid "Settings"
 msgstr "Parametres"
 
-#: apps/mutual_aid/models.py:93
+#: apps/mutual_aid/models.py:106
 msgid "Mutual Aid Page"
 msgstr "Page d'Entraide"
 
-#: apps/mutual_aid/models.py:94
+#: apps/mutual_aid/models.py:107
 msgid "Mutual Aid Pages"
 msgstr "Pages d'Entraide"
 
-#: apps/mutual_aid/models.py:114
+#: apps/mutual_aid/models.py:345
+msgid "Your help request has been sent."
+msgstr "Votre demande d'aide a été envoyée."
+
+#: apps/mutual_aid/models.py:475
+msgid "Your access request has been submitted."
+msgstr "Votre demande d'accès a été soumise."
+
+#: apps/mutual_aid/models.py:612
 msgid "Utente a cui si applicano le impostazioni privacy."
 msgstr "Utilisateur auquel s'appliquent les paramètres de confidentialité."
 
-#: apps/mutual_aid/models.py:118
+#: apps/mutual_aid/models.py:616
 msgid "Show phone number"
 msgstr "Afficher le numéro de téléphone"
 
-#: apps/mutual_aid/models.py:119
+#: apps/mutual_aid/models.py:617
 msgid "Mostra il telefono fisso nella scheda aiuto."
 msgstr "Afficher le téléphone fixe dans la fiche d'aide."
 
-#: apps/mutual_aid/models.py:123
+#: apps/mutual_aid/models.py:621
 msgid "Show mobile number"
 msgstr "Afficher le numéro de mobile"
 
-#: apps/mutual_aid/models.py:124
+#: apps/mutual_aid/models.py:622
 msgid "Mostra il cellulare nella scheda aiuto."
 msgstr "Afficher le portable dans la fiche d'aide."
 
-#: apps/mutual_aid/models.py:128
+#: apps/mutual_aid/models.py:626
 msgid "Show WhatsApp availability"
 msgstr "Afficher la disponibilité WhatsApp"
 
-#: apps/mutual_aid/models.py:129
+#: apps/mutual_aid/models.py:627
 msgid "Mostra la disponibilità WhatsApp."
 msgstr "Afficher la disponibilité WhatsApp."
 
-#: apps/mutual_aid/models.py:133
+#: apps/mutual_aid/models.py:631
 msgid "Show email address"
 msgstr "Afficher l'adresse e-mail"
 
-#: apps/mutual_aid/models.py:134
+#: apps/mutual_aid/models.py:632
 msgid "Mostra l'email nella scheda aiuto."
 msgstr "Afficher l'e-mail dans la fiche d'aide."
 
-#: apps/mutual_aid/models.py:138
+#: apps/mutual_aid/models.py:636
 msgid "Show exact location"
 msgstr "Afficher la position exacte"
 
-#: apps/mutual_aid/models.py:139
+#: apps/mutual_aid/models.py:637
 msgid "If disabled, only the city name is shown."
 msgstr "Si désactivé, seul le nom de la ville est affiché."
 
-#: apps/mutual_aid/models.py:143
+#: apps/mutual_aid/models.py:641
 msgid "Show profile photo"
 msgstr "Afficher la photo de profil"
 
-#: apps/mutual_aid/models.py:144
+#: apps/mutual_aid/models.py:642
 msgid "Mostra la foto profilo nella scheda aiuto."
 msgstr "Afficher la photo de profil dans la fiche d'aide."
 
-#: apps/mutual_aid/models.py:148
+#: apps/mutual_aid/models.py:646
 msgid "Show bio"
 msgstr "Afficher la biographie"
 
-#: apps/mutual_aid/models.py:149
+#: apps/mutual_aid/models.py:647
 msgid "Mostra la bio nella scheda aiuto."
 msgstr "Afficher la bio dans la fiche d'aide."
 
-#: apps/mutual_aid/models.py:153
+#: apps/mutual_aid/models.py:651
 msgid "Show availability hours"
 msgstr "Afficher les heures de disponibilité"
 
-#: apps/mutual_aid/models.py:154
+#: apps/mutual_aid/models.py:652
 msgid "Mostra gli orari di disponibilità."
 msgstr "Afficher les horaires de disponibilité."
 
-#: apps/mutual_aid/models.py:158 apps/mutual_aid/models.py:159
+#: apps/mutual_aid/models.py:656 apps/mutual_aid/models.py:657
 msgid "Aid Privacy Settings"
 msgstr "Paramètres de Confidentialité d'Aide"
 
-#: apps/mutual_aid/models.py:176
+#: apps/mutual_aid/models.py:674
 msgid "Low - can wait"
 msgstr "Faible - peut attendre"
 
-#: apps/mutual_aid/models.py:177
+#: apps/mutual_aid/models.py:675
 msgid "Medium - within a day"
 msgstr "Moyen - dans la journée"
 
-#: apps/mutual_aid/models.py:178
+#: apps/mutual_aid/models.py:676
 msgid "High - urgent"
 msgstr "Élevé - urgent"
 
-#: apps/mutual_aid/models.py:179
+#: apps/mutual_aid/models.py:677
 msgid "Emergency - immediate"
 msgstr "Urgence - immédiat"
 
-#: apps/mutual_aid/models.py:183
+#: apps/mutual_aid/models.py:681
 #: templates/website/pages/event_detail_page.html:119
 msgid "Open"
 msgstr "Ouvert"
 
-#: apps/mutual_aid/models.py:184
+#: apps/mutual_aid/models.py:682
 msgid "Accepted"
 msgstr "Accepté"
 
-#: apps/mutual_aid/models.py:185
+#: apps/mutual_aid/models.py:683
 msgid "In progress"
 msgstr "En cours"
 
-#: apps/mutual_aid/models.py:186
+#: apps/mutual_aid/models.py:684
 msgid "Resolved"
 msgstr "Résolu"
 
-#: apps/mutual_aid/models.py:191
+#: apps/mutual_aid/models.py:689
 msgid "Breakdown"
 msgstr "Panne"
 
-#: apps/mutual_aid/models.py:192
+#: apps/mutual_aid/models.py:690
 msgid "Flat tire"
 msgstr "Crevaison"
 
-#: apps/mutual_aid/models.py:193
+#: apps/mutual_aid/models.py:691
 msgid "Out of fuel"
 msgstr "En panne de carburant"
 
-#: apps/mutual_aid/models.py:194
+#: apps/mutual_aid/models.py:692
 msgid "Accident"
 msgstr "Accident"
 
-#: apps/mutual_aid/models.py:195
+#: apps/mutual_aid/models.py:693
 msgid "Need towing"
 msgstr "Besoin de remorquage"
 
-#: apps/mutual_aid/models.py:196
+#: apps/mutual_aid/models.py:694
 msgid "Need tools"
 msgstr "Besoin d'outils"
 
-#: apps/mutual_aid/models.py:197
+#: apps/mutual_aid/models.py:695
 msgid "Need transport"
 msgstr "Besoin de transport"
 
-#: apps/mutual_aid/models.py:198
+#: apps/mutual_aid/models.py:696
 msgid "Need accommodation"
 msgstr "Besoin d'hébergement"
 
-#: apps/mutual_aid/models.py:199 apps/website/models/snippets.py:736
+#: apps/mutual_aid/models.py:697 apps/website/models/snippets.py:736
 msgid "Other"
 msgstr "Autre"
 
-#: apps/mutual_aid/models.py:207 apps/mutual_aid/models.py:476
+#: apps/mutual_aid/models.py:705 apps/mutual_aid/models.py:974
 msgid "Helper"
 msgstr "Aidant"
 
-#: apps/mutual_aid/models.py:208
+#: apps/mutual_aid/models.py:706
 msgid "Soccorritore a cui è indirizzata la richiesta."
 msgstr "Secouriste à qui la demande est adressée."
 
-#: apps/mutual_aid/models.py:212
+#: apps/mutual_aid/models.py:710
 msgid "Requester name"
 msgstr "Nom du demandeur"
 
-#: apps/mutual_aid/models.py:213
+#: apps/mutual_aid/models.py:711
 msgid "Nome di chi richiede aiuto."
 msgstr "Nom du demandeur d'aide."
 
-#: apps/mutual_aid/models.py:218
+#: apps/mutual_aid/models.py:716
 msgid "Requester phone"
 msgstr "Téléphone du demandeur"
 
-#: apps/mutual_aid/models.py:219
+#: apps/mutual_aid/models.py:717
 msgid "Telefono di chi richiede aiuto."
 msgstr "Téléphone du demandeur d'aide."
 
-#: apps/mutual_aid/models.py:223
+#: apps/mutual_aid/models.py:721
 msgid "Requester email"
 msgstr "E-mail du demandeur"
 
-#: apps/mutual_aid/models.py:224
+#: apps/mutual_aid/models.py:722
 msgid "Email di chi richiede aiuto."
 msgstr "E-mail du demandeur d'aide."
 
-#: apps/mutual_aid/models.py:232
+#: apps/mutual_aid/models.py:730
 msgid "Requester (if member)"
 msgstr "Demandeur (si membre)"
 
-#: apps/mutual_aid/models.py:233
+#: apps/mutual_aid/models.py:731
 msgid "Socio richiedente (se autenticato)."
 msgstr "Membre demandeur (si authentifié)."
 
-#: apps/mutual_aid/models.py:240
+#: apps/mutual_aid/models.py:738
 msgid "Issue type"
 msgstr "Type de problème"
 
-#: apps/mutual_aid/models.py:241
+#: apps/mutual_aid/models.py:739
 msgid "Tipo di problema riscontrato."
 msgstr "Type de problème rencontré."
 
-#: apps/mutual_aid/models.py:244 apps/website/blocks/content.py:492
+#: apps/mutual_aid/models.py:742 apps/website/blocks/content.py:492
 #: apps/website/models/newsletter.py:37 apps/website/models/snippets.py:251
 #: apps/website/models/snippets.py:464 apps/website/models/snippets.py:580
 #: apps/website/models/snippets.py:701 apps/website/models/snippets.py:750
@@ -2480,264 +2440,238 @@ msgstr "Type de problème rencontré."
 msgid "Description"
 msgstr "Description"
 
-#: apps/mutual_aid/models.py:245
+#: apps/mutual_aid/models.py:743
 msgid "Describe what you need help with."
 msgstr "Décrivez ce pour quoi vous avez besoin d'aide."
 
-#: apps/mutual_aid/models.py:251
+#: apps/mutual_aid/models.py:749
 msgid "Where are you? Address or coordinates."
 msgstr "Où êtes-vous ? Adresse ou coordonnées."
 
-#: apps/mutual_aid/models.py:257
+#: apps/mutual_aid/models.py:755
 msgid "Urgency"
 msgstr "Urgence"
 
-#: apps/mutual_aid/models.py:258
+#: apps/mutual_aid/models.py:756
 msgid "Livello di urgenza della richiesta."
 msgstr "Niveau d'urgence de la demande."
 
-#: apps/mutual_aid/models.py:265
+#: apps/mutual_aid/models.py:763
 msgid "Stato corrente della richiesta di aiuto."
 msgstr "Statut actuel de la demande d'aide."
 
-#: apps/mutual_aid/models.py:271
+#: apps/mutual_aid/models.py:769
 msgid "From federation"
 msgstr "De la fédération"
 
-#: apps/mutual_aid/models.py:272
+#: apps/mutual_aid/models.py:770
 msgid "La richiesta proviene da un club federato."
 msgstr "La demande provient d'un club fédéré."
 
-#: apps/mutual_aid/models.py:280
+#: apps/mutual_aid/models.py:778
 msgid "Federation access"
 msgstr "Accès fédération"
 
-#: apps/mutual_aid/models.py:281
+#: apps/mutual_aid/models.py:779
 msgid "Accesso federato che ha generato la richiesta."
 msgstr "Accès fédéré ayant généré la demande."
 
-#: apps/mutual_aid/models.py:292
+#: apps/mutual_aid/models.py:790
 msgid "Aid Request"
 msgstr "Demande d'Aide"
 
-#: apps/mutual_aid/models.py:293 apps/mutual_aid/wagtail_hooks.py:27
+#: apps/mutual_aid/models.py:791 apps/mutual_aid/wagtail_hooks.py:27
 msgid "Aid Requests"
 msgstr "Demandes d'Aide"
 
-#: apps/mutual_aid/models.py:318
+#: apps/mutual_aid/models.py:816
 msgid "View helpers list only"
 msgstr "Voir la liste des aidants uniquement"
 
-#: apps/mutual_aid/models.py:319
+#: apps/mutual_aid/models.py:817
 msgid "Can contact helpers"
 msgstr "Peut contacter les aidants"
 
-#: apps/mutual_aid/models.py:327 apps/mutual_aid/models.py:531
+#: apps/mutual_aid/models.py:825 apps/mutual_aid/models.py:1029
 msgid "Source club"
 msgstr "Club d'origine"
 
-#: apps/mutual_aid/models.py:328
+#: apps/mutual_aid/models.py:826
 msgid "Club federato che ha concesso l'accesso."
 msgstr "Club fédéré ayant accordé l'accès."
 
-#: apps/mutual_aid/models.py:332
+#: apps/mutual_aid/models.py:830
 msgid "External user ID"
 msgstr "ID utilisateur externe"
 
-#: apps/mutual_aid/models.py:333
+#: apps/mutual_aid/models.py:831
 msgid "ID dell'utente nel sistema del club partner."
 msgstr "ID de l'utilisateur dans le système du club partenaire."
 
-#: apps/mutual_aid/models.py:337
+#: apps/mutual_aid/models.py:835
 msgid "External display name"
 msgstr "Nom d'affichage externe"
 
-#: apps/mutual_aid/models.py:338
+#: apps/mutual_aid/models.py:836
 msgid "Nome visualizzato dell'utente federato."
 msgstr "Nom affiché de l'utilisateur fédéré."
 
-#: apps/mutual_aid/models.py:342
+#: apps/mutual_aid/models.py:840
 msgid "Contacts unlocked"
 msgstr "Contacts débloqués"
 
-#: apps/mutual_aid/models.py:343
+#: apps/mutual_aid/models.py:841
 msgid "Number of helper contacts this user has unlocked."
 msgstr "Nombre de contacts d'aidants débloqués par cet utilisateur."
 
-#: apps/mutual_aid/models.py:349
+#: apps/mutual_aid/models.py:847
 msgid "Access level"
 msgstr "Niveau d'accès"
 
-#: apps/mutual_aid/models.py:350
+#: apps/mutual_aid/models.py:848
 msgid "Livello di accesso alla directory soccorritori."
 msgstr "Niveau d'accès au répertoire des secouristes."
 
-#: apps/mutual_aid/models.py:353
+#: apps/mutual_aid/models.py:851
 msgid "L'accesso è attualmente attivo."
 msgstr "L'accès est actuellement actif."
 
-#: apps/mutual_aid/models.py:361 apps/website/models/uploads.py:60
+#: apps/mutual_aid/models.py:859 apps/website/models/uploads.py:60
 msgid "Approved by"
 msgstr "Approuvé par"
 
-#: apps/mutual_aid/models.py:362
+#: apps/mutual_aid/models.py:860
 msgid "Amministratore che ha approvato l'accesso."
 msgstr "Administrateur ayant approuvé l'accès."
 
-#: apps/mutual_aid/models.py:365
+#: apps/mutual_aid/models.py:863
 msgid "Data di concessione dell'accesso."
 msgstr "Date d'octroi de l'accès."
 
-#: apps/mutual_aid/models.py:370
+#: apps/mutual_aid/models.py:868
 msgid "Expires at"
 msgstr "Expire le"
 
-#: apps/mutual_aid/models.py:371
+#: apps/mutual_aid/models.py:869
 msgid "Scadenza dell'accesso. Vuoto = nessuna scadenza."
 msgstr "Expiration de l'accès. Vide = pas d'expiration."
 
-#: apps/mutual_aid/models.py:375
+#: apps/mutual_aid/models.py:873
 msgid "Federated Aid Access"
 msgstr "Accès Aide Fédérée"
 
-#: apps/mutual_aid/models.py:376
+#: apps/mutual_aid/models.py:874
 msgid "Federated Aid Access Grants"
 msgstr "Autorisations d'Accès Aide Fédérée"
 
-#: apps/mutual_aid/models.py:398
+#: apps/mutual_aid/models.py:896
 msgid "Denied"
 msgstr "Refusé"
 
-#: apps/mutual_aid/models.py:406 apps/mutual_aid/models.py:469
+#: apps/mutual_aid/models.py:904 apps/mutual_aid/models.py:967
 msgid "Federated access"
 msgstr "Accès fédéré"
 
-#: apps/mutual_aid/models.py:407
+#: apps/mutual_aid/models.py:905
 msgid "Accesso federato di riferimento."
 msgstr "Accès fédéré de référence."
 
-#: apps/mutual_aid/models.py:412
+#: apps/mutual_aid/models.py:910
 msgid "Why are you requesting access?"
 msgstr "Pourquoi demandez-vous l'accès ?"
 
-#: apps/mutual_aid/models.py:419
+#: apps/mutual_aid/models.py:917
 msgid "Stato della richiesta di accesso."
 msgstr "Statut de la demande d'accès."
 
-#: apps/mutual_aid/models.py:427
+#: apps/mutual_aid/models.py:925
 msgid "Reviewed by"
 msgstr "Examiné par"
 
-#: apps/mutual_aid/models.py:428
+#: apps/mutual_aid/models.py:926
 msgid "Amministratore che ha valutato la richiesta."
 msgstr "Administrateur ayant évalué la demande."
 
-#: apps/mutual_aid/models.py:433
+#: apps/mutual_aid/models.py:931
 msgid "Reviewed at"
 msgstr "Examiné le"
 
-#: apps/mutual_aid/models.py:434
+#: apps/mutual_aid/models.py:932
 msgid "Data e ora della valutazione."
 msgstr "Date et heure de l'évaluation."
 
-#: apps/mutual_aid/models.py:441
+#: apps/mutual_aid/models.py:939
 msgid "Federated Aid Access Request"
 msgstr "Demande d'Accès Aide Fédérée"
 
-#: apps/mutual_aid/models.py:442
+#: apps/mutual_aid/models.py:940
 msgid "Federated Aid Access Requests"
 msgstr "Demandes d'Accès Aide Fédérée"
 
-#: apps/mutual_aid/models.py:470
+#: apps/mutual_aid/models.py:968
 msgid "Accesso federato che ha sbloccato il contatto."
 msgstr "Accès fédéré ayant débloqué le contact."
 
-#: apps/mutual_aid/models.py:477
+#: apps/mutual_aid/models.py:975
 msgid "Soccorritore il cui contatto è stato sbloccato."
 msgstr "Secouriste dont le contact a été débloqué."
 
-#: apps/mutual_aid/models.py:480
+#: apps/mutual_aid/models.py:978
 msgid "Data e ora dello sblocco."
 msgstr "Date et heure du déblocage."
 
-#: apps/mutual_aid/models.py:484
+#: apps/mutual_aid/models.py:982
 msgid "Contact Unlock"
 msgstr "Déblocage de Contact"
 
-#: apps/mutual_aid/models.py:485
+#: apps/mutual_aid/models.py:983
 msgid "Contact Unlocks"
 msgstr "Déblocages de Contacts"
 
-#: apps/mutual_aid/models.py:535
+#: apps/mutual_aid/models.py:1033
 #, fuzzy
 #| msgid "External user ID"
 msgid "External ID"
 msgstr "ID utilisateur externe"
 
-#: apps/mutual_aid/models.py:536
+#: apps/mutual_aid/models.py:1034
 #, fuzzy
 #| msgid "View on partner site"
 msgid "Helper ID on the partner system."
 msgstr "Voir sur le site partenaire"
 
-#: apps/mutual_aid/models.py:538 apps/website/forms.py:18
+#: apps/mutual_aid/models.py:1036 apps/website/forms.py:18
 #: apps/website/models/verification.py:13
 msgid "Display name"
 msgstr "Nom d'affichage"
 
-#: apps/mutual_aid/models.py:540 apps/website/models/pages.py:751
+#: apps/mutual_aid/models.py:1038 apps/website/models/pages.py:755
 #: apps/website/models/partners.py:198
 msgid "Latitude"
 msgstr "Latitude"
 
-#: apps/mutual_aid/models.py:541 apps/website/models/pages.py:758
+#: apps/mutual_aid/models.py:1039 apps/website/models/pages.py:762
 #: apps/website/models/partners.py:204
 msgid "Longitude"
 msgstr "Longitude"
 
-#: apps/mutual_aid/models.py:544
+#: apps/mutual_aid/models.py:1042
 #, fuzzy
 #| msgid "Photo"
 msgid "Photo URL"
 msgstr "Photo"
 
-#: apps/mutual_aid/models.py:551
+#: apps/mutual_aid/models.py:1049
 #, fuzzy
 #| msgid "Federated Club"
 msgid "Federated Helper"
 msgstr "Club Fédéré"
 
-#: apps/mutual_aid/models.py:552
+#: apps/mutual_aid/models.py:1050
 #, fuzzy
 #| msgid "Federated Clubs"
 msgid "Federated Helpers"
 msgstr "Clubs Fédérés"
-
-#: apps/mutual_aid/urls.py:21
-msgid "helper/<int:pk>/"
-msgstr ""
-
-#: apps/mutual_aid/urls.py:22
-msgid "helper/<int:pk>/contact/"
-msgstr ""
-
-#: apps/mutual_aid/urls.py:23
-msgid "helper/<int:pk>/unlock/"
-msgstr ""
-
-#: apps/mutual_aid/urls.py:24
-#, fuzzy
-#| msgid "Request Access"
-msgid "request-access/"
-msgstr "Demander l'Accès"
-
-#: apps/mutual_aid/views.py:335
-msgid "Your help request has been sent."
-msgstr "Votre demande d'aide a été envoyée."
-
-#: apps/mutual_aid/views.py:447
-msgid "Your access request has been submitted."
-msgstr "Votre demande d'accès a été soumise."
 
 #: apps/mutual_aid/wagtail_hooks.py:47
 #, fuzzy
@@ -2751,315 +2685,333 @@ msgstr "Accès fédération"
 msgid "Access Requests"
 msgstr "Demandes d'Aide"
 
-#: apps/notifications/models.py:21
+#: apps/notifications/models.py:32
 msgid "News published"
 msgstr "Actualité publiée"
 
-#: apps/notifications/models.py:22
+#: apps/notifications/models.py:33
 msgid "Event published"
 msgstr "Événement publié"
 
-#: apps/notifications/models.py:23
+#: apps/notifications/models.py:34
 msgid "Event reminder"
 msgstr "Rappel d'événement"
 
-#: apps/notifications/models.py:24
+#: apps/notifications/models.py:35
 msgid "Weekend favorites"
 msgstr "Favoris du week-end"
 
-#: apps/notifications/models.py:25
+#: apps/notifications/models.py:36
 msgid "Registration opens"
 msgstr "Ouverture des inscriptions"
 
-#: apps/notifications/models.py:26
+#: apps/notifications/models.py:37
 msgid "Photo approved"
 msgstr "Photo approuvée"
 
-#: apps/notifications/models.py:27
+#: apps/notifications/models.py:38
 msgid "Membership expiring"
 msgstr "Adhésion bientôt expirée"
 
-#: apps/notifications/models.py:29
+#: apps/notifications/models.py:40
 msgid "Partner news"
 msgstr "Actualités partenaires"
 
-#: apps/notifications/models.py:31
+#: apps/notifications/models.py:42
 msgid "Partner event interest"
 msgstr "Intérêt pour événement partenaire"
 
-#: apps/notifications/models.py:32
+#: apps/notifications/models.py:43
 msgid "Partner event comment"
 msgstr "Commentaire sur événement partenaire"
 
-#: apps/notifications/models.py:33
+#: apps/notifications/models.py:44
 msgid "Partner event cancelled"
 msgstr "Événement partenaire annulé"
 
-#: apps/notifications/models.py:35
+#: apps/notifications/models.py:46
 msgid "Aid request"
 msgstr "Demande d'aide"
 
-#: apps/notifications/models.py:36
+#: apps/notifications/models.py:47
 msgid "Mutual aid request"
 msgstr "Demande d'entraide"
 
-#: apps/notifications/models.py:37
+#: apps/notifications/models.py:48
 msgid "Mutual aid access request"
 msgstr "Demande d'accès entraide"
 
-#: apps/notifications/models.py:39
+#: apps/notifications/models.py:50
 msgid "Event registration confirmed"
 msgstr "Inscription à l'événement confirmée"
 
-#: apps/notifications/models.py:40
+#: apps/notifications/models.py:51
 msgid "Payment instructions"
 msgstr "Instructions de paiement"
 
-#: apps/notifications/models.py:41
+#: apps/notifications/models.py:52
 msgid "Payment confirmed"
 msgstr "Paiement confirmé"
 
-#: apps/notifications/models.py:42
+#: apps/notifications/models.py:53
 msgid "Payment expired"
 msgstr "Paiement expiré"
 
-#: apps/notifications/models.py:43
+#: apps/notifications/models.py:54
 msgid "Registration cancelled"
 msgstr "Inscription annulée"
 
-#: apps/notifications/models.py:44
+#: apps/notifications/models.py:55
 msgid "Promoted from waitlist"
 msgstr "Promu de la liste d'attente"
 
-#: apps/notifications/models.py:49
+#: apps/notifications/models.py:60
 msgid "Push notification"
 msgstr "Notification push"
 
-#: apps/notifications/models.py:50
+#: apps/notifications/models.py:61
 msgid "In-app notification"
 msgstr "Notification dans l'application"
 
-#: apps/notifications/models.py:55 apps/website/admin_newsletter.py:96
+#: apps/notifications/models.py:66 apps/website/admin_newsletter.py:96
 #: apps/website/models/newsletter.py:120
 msgid "Sent"
 msgstr "Envoyé"
 
-#: apps/notifications/models.py:56 templates/website/admin/maintenance.html:114
+#: apps/notifications/models.py:67 templates/website/admin/maintenance.html:114
 msgid "Failed"
 msgstr "Échoué"
 
-#: apps/notifications/models.py:57
+#: apps/notifications/models.py:68
 msgid "Skipped"
 msgstr "Ignoré"
 
-#: apps/notifications/models.py:101 apps/notifications/models.py:250
+#: apps/notifications/models.py:112 apps/notifications/models.py:261
 msgid "notification type"
 msgstr "type de notification"
 
-#: apps/notifications/models.py:105
+#: apps/notifications/models.py:116
 msgid "Tipo di notifica da inviare."
 msgstr "Type de notification à envoyer."
 
-#: apps/notifications/models.py:114
+#: apps/notifications/models.py:125
 msgid "content type"
 msgstr "type de contenu"
 
-#: apps/notifications/models.py:115
+#: apps/notifications/models.py:126
 msgid "Tipo di contenuto che ha generato la notifica."
 msgstr "Type de contenu ayant généré la notification."
 
-#: apps/notifications/models.py:118
+#: apps/notifications/models.py:129
 msgid "object ID"
 msgstr "ID d'objet"
 
-#: apps/notifications/models.py:121
+#: apps/notifications/models.py:132
 msgid "ID dell'oggetto che ha generato la notifica."
 msgstr "ID de l'objet ayant généré la notification."
 
-#: apps/notifications/models.py:129
+#: apps/notifications/models.py:140
 msgid "recipient"
 msgstr "destinataire"
 
-#: apps/notifications/models.py:130
+#: apps/notifications/models.py:141
 msgid "Destinatario della notifica."
 msgstr "Destinataire de la notification."
 
-#: apps/notifications/models.py:134
+#: apps/notifications/models.py:145
 msgid "channel"
 msgstr "canal"
 
-#: apps/notifications/models.py:137
+#: apps/notifications/models.py:148
 msgid "Canale di invio: email, push o in-app."
 msgstr "Canal d'envoi : e-mail, push ou in-app."
 
-#: apps/notifications/models.py:141
+#: apps/notifications/models.py:152
 msgid "status"
 msgstr "statut"
 
-#: apps/notifications/models.py:146
+#: apps/notifications/models.py:157
 msgid "Stato di invio della notifica."
 msgstr "Statut d'envoi de la notification."
 
-#: apps/notifications/models.py:149
+#: apps/notifications/models.py:160
 msgid "title"
 msgstr "titre"
 
-#: apps/notifications/models.py:150
+#: apps/notifications/models.py:161
 msgid "Titolo della notifica."
 msgstr "Titre de la notification."
 
-#: apps/notifications/models.py:152
+#: apps/notifications/models.py:163
 msgid "body"
 msgstr "corps"
 
-#: apps/notifications/models.py:153
+#: apps/notifications/models.py:164
 msgid "Corpo del messaggio della notifica."
 msgstr "Corps du message de la notification."
 
-#: apps/notifications/models.py:155 apps/website/models/snippets.py:337
+#: apps/notifications/models.py:166 apps/website/models/snippets.py:337
 msgid "URL"
 msgstr "URL"
 
-#: apps/notifications/models.py:156
+#: apps/notifications/models.py:167
 msgid "URL di destinazione quando si clicca la notifica."
 msgstr "URL de destination lorsqu'on clique sur la notification."
 
-#: apps/notifications/models.py:160
+#: apps/notifications/models.py:171
 msgid "scheduled for"
 msgstr "programmé pour"
 
-#: apps/notifications/models.py:164
+#: apps/notifications/models.py:175
 msgid "If set, notification will not be sent before this time."
 msgstr "Si défini, la notification ne sera pas envoyée avant cette heure."
 
-#: apps/notifications/models.py:166
+#: apps/notifications/models.py:177
 msgid "sent at"
 msgstr "envoyé le"
 
-#: apps/notifications/models.py:167
+#: apps/notifications/models.py:178
 msgid "Data e ora di invio effettivo."
 msgstr "Date et heure d'envoi effectif."
 
-#: apps/notifications/models.py:169 apps/notifications/models.py:218
-#: apps/notifications/models.py:261
+#: apps/notifications/models.py:180 apps/notifications/models.py:229
+#: apps/notifications/models.py:272
 msgid "created at"
 msgstr "créé le"
 
-#: apps/notifications/models.py:170
+#: apps/notifications/models.py:181
 msgid "Data e ora di creazione nella coda."
 msgstr "Date et heure de création dans la file d'attente."
 
-#: apps/notifications/models.py:173
+#: apps/notifications/models.py:184
 msgid "error message"
 msgstr "message d'erreur"
 
-#: apps/notifications/models.py:174
+#: apps/notifications/models.py:185
 msgid "Messaggio di errore in caso di invio fallito."
 msgstr "Message d'erreur en cas d'envoi échoué."
 
-#: apps/notifications/models.py:184
+#: apps/notifications/models.py:195
 msgid "notification"
 msgstr "notification"
 
-#: apps/notifications/models.py:185
+#: apps/notifications/models.py:196
 msgid "notifications"
 msgstr "notifications"
 
-#: apps/notifications/models.py:200 apps/notifications/models.py:246
+#: apps/notifications/models.py:211 apps/notifications/models.py:257
 msgid "user"
 msgstr "utilisateur"
 
-#: apps/notifications/models.py:201
+#: apps/notifications/models.py:212
 msgid "Utente proprietario della sottoscrizione push."
 msgstr "Utilisateur propriétaire de l'abonnement push."
 
-#: apps/notifications/models.py:204
+#: apps/notifications/models.py:215
 msgid "endpoint"
 msgstr "point de terminaison"
 
-#: apps/notifications/models.py:205
+#: apps/notifications/models.py:216
 msgid "Push service URL"
 msgstr "URL du service push"
 
-#: apps/notifications/models.py:208
+#: apps/notifications/models.py:219
 msgid "p256dh key"
 msgstr "clé p256dh"
 
-#: apps/notifications/models.py:209
+#: apps/notifications/models.py:220
 msgid "Client public encryption key"
 msgstr "Clé publique de chiffrement du client"
 
-#: apps/notifications/models.py:212
+#: apps/notifications/models.py:223
 msgid "auth key"
 msgstr "clé d'authentification"
 
-#: apps/notifications/models.py:213
+#: apps/notifications/models.py:224
 msgid "Client auth secret"
 msgstr "Secret d'authentification du client"
 
-#: apps/notifications/models.py:215
+#: apps/notifications/models.py:226
 msgid "active"
 msgstr "actif"
 
-#: apps/notifications/models.py:216
+#: apps/notifications/models.py:227
 msgid "La sottoscrizione è attiva e valida."
 msgstr "L'abonnement est actif et valide."
 
-#: apps/notifications/models.py:219
+#: apps/notifications/models.py:230
 msgid "Data di registrazione della sottoscrizione."
 msgstr "Date d'enregistrement de l'abonnement."
 
-#: apps/notifications/models.py:221
+#: apps/notifications/models.py:232
 msgid "last used"
 msgstr "dernière utilisation"
 
-#: apps/notifications/models.py:222
+#: apps/notifications/models.py:233
 msgid "Ultima volta che la sottoscrizione è stata usata."
 msgstr "Dernière utilisation de l'abonnement."
 
-#: apps/notifications/models.py:224
+#: apps/notifications/models.py:235
 msgid "user agent"
 msgstr "agent utilisateur"
 
-#: apps/notifications/models.py:225
+#: apps/notifications/models.py:236
 msgid "Browser e dispositivo dell'utente."
 msgstr "Navigateur et appareil de l'utilisateur."
 
-#: apps/notifications/models.py:230
+#: apps/notifications/models.py:241
 msgid "push subscription"
 msgstr "abonnement push"
 
-#: apps/notifications/models.py:231
+#: apps/notifications/models.py:242
 msgid "push subscriptions"
 msgstr "abonnements push"
 
-#: apps/notifications/models.py:247
+#: apps/notifications/models.py:258
 msgid "Utente che può disiscriversi con questo token."
 msgstr "Utilisateur pouvant se désabonner avec ce jeton."
 
-#: apps/notifications/models.py:253
+#: apps/notifications/models.py:264
 msgid "Tipo di notifica da cui disiscriversi."
 msgstr "Type de notification dont se désabonner."
 
-#: apps/notifications/models.py:256
+#: apps/notifications/models.py:267
 msgid "token"
 msgstr "jeton"
 
-#: apps/notifications/models.py:259
+#: apps/notifications/models.py:270
 msgid "Token univoco HMAC per la disiscrizione."
 msgstr "Jeton unique HMAC pour le désabonnement."
 
-#: apps/notifications/models.py:262
+#: apps/notifications/models.py:273
 msgid "Data di generazione del token."
 msgstr "Date de génération du jeton."
 
-#: apps/notifications/models.py:267
+#: apps/notifications/models.py:278
 msgid "unsubscribe token"
 msgstr "jeton de désabonnement"
 
-#: apps/notifications/models.py:268
+#: apps/notifications/models.py:279
 msgid "unsubscribe tokens"
 msgstr "jetons de désabonnement"
+
+#: apps/notifications/models.py:296
+#, fuzzy
+#| msgid "CTA text"
+msgid "Intro text"
+msgstr "Texte CTA"
+
+#: apps/notifications/models.py:307
+#, fuzzy
+#| msgid "Notifications"
+msgid "Notifications page"
+msgstr "Notifications"
+
+#: apps/notifications/models.py:308
+#, fuzzy
+#| msgid "Notification digest"
+msgid "Notifications pages"
+msgstr "Résumé des notifications"
 
 #: apps/notifications/urls.py:15
 #, fuzzy
@@ -3072,12 +3024,6 @@ msgstr "jeton de désabonnement"
 #| msgid "unsubscribe tokens"
 msgid "unsubscribe/success/"
 msgstr "jetons de désabonnement"
-
-#: apps/notifications/urls.py:37
-#, fuzzy
-#| msgid "Story"
-msgid "history/"
-msgstr "Récit"
 
 #: apps/notifications/views.py:103 apps/notifications/views.py:159
 msgid "Invalid JSON body"
@@ -3095,7 +3041,7 @@ msgstr "Le point de terminaison doit utiliser HTTPS"
 msgid "Encryption keys are required"
 msgstr "Les clés de chiffrement sont requises"
 
-#: apps/places/apps.py:8 apps/places/models.py:288
+#: apps/places/apps.py:8 apps/places/models.py:294
 msgid "Luoghi"
 msgstr "Lieux"
 
@@ -3151,161 +3097,161 @@ msgstr "Index des Lieux"
 msgid "Indici Luoghi"
 msgstr "Index des Lieux"
 
-#: apps/places/models.py:153
+#: apps/places/models.py:159
 msgid "Tipo di luogo"
 msgstr "Type de lieu"
 
-#: apps/places/models.py:162
+#: apps/places/models.py:168
 msgid "Latitudine"
 msgstr "Latitude"
 
-#: apps/places/models.py:169
+#: apps/places/models.py:175
 msgid "Longitudine"
 msgstr "Longitude"
 
-#: apps/places/models.py:172 apps/places/templates/places/place_page.html:93
+#: apps/places/models.py:178 apps/places/templates/places/place_page.html:93
 msgid "Indirizzo"
 msgstr "Adresse"
 
-#: apps/places/models.py:175
+#: apps/places/models.py:181
 msgid "Città"
 msgstr "Ville"
 
-#: apps/places/models.py:178
+#: apps/places/models.py:184
 msgid "Provincia"
 msgstr "Province"
 
-#: apps/places/models.py:181
+#: apps/places/models.py:187
 msgid "CAP"
 msgstr "Code Postal"
 
-#: apps/places/models.py:184
+#: apps/places/models.py:190
 msgid "Paese (ISO 3166-1)"
 msgstr "Pays (ISO 3166-1)"
 
-#: apps/places/models.py:191 apps/places/models.py:355
+#: apps/places/models.py:197 apps/places/models.py:361
 msgid "Descrizione breve"
 msgstr "Description courte"
 
-#: apps/places/models.py:192
+#: apps/places/models.py:198
 msgid "Usata nelle card e nei risultati di ricerca."
 msgstr "Utilisée dans les cartes et les résultats de recherche."
 
-#: apps/places/models.py:194 apps/places/models.py:357
+#: apps/places/models.py:200 apps/places/models.py:363
 msgid "Descrizione"
 msgstr "Description"
 
-#: apps/places/models.py:201 apps/places/models.py:364
+#: apps/places/models.py:207 apps/places/models.py:370
 msgid "Immagine di copertina"
 msgstr "Image de couverture"
 
-#: apps/places/models.py:208
+#: apps/places/models.py:214
 msgid "Orari di apertura"
 msgstr "Horaires d'ouverture"
 
-#: apps/places/models.py:209
+#: apps/places/models.py:215
 msgid "Formato: Mo-Fr 09:00-18:00, Sa 10:00-14:00"
 msgstr "Format : Lun-Ven 09:00-18:00, Sam 10:00-14:00"
 
-#: apps/places/models.py:212 apps/places/templates/places/place_page.html:105
+#: apps/places/models.py:218 apps/places/templates/places/place_page.html:105
 msgid "Telefono"
 msgstr "Téléphone"
 
-#: apps/places/models.py:215 apps/places/templates/places/place_page.html:129
+#: apps/places/models.py:221 apps/places/templates/places/place_page.html:129
 msgid "Sito web"
 msgstr "Site web"
 
-#: apps/places/models.py:219 apps/places/templates/places/place_page.html:155
+#: apps/places/models.py:225 apps/places/templates/places/place_page.html:155
 #: apps/places/templates/places/place_page.html:156
 msgid "Tag"
 msgstr "Étiquettes"
 
-#: apps/places/models.py:240
+#: apps/places/models.py:246
 msgid "Geolocalizzazione"
 msgstr "Géolocalisation"
 
-#: apps/places/models.py:249
+#: apps/places/models.py:255
 msgid "Contatti e Orari"
 msgstr "Contact et Horaires"
 
-#: apps/places/models.py:252
+#: apps/places/models.py:258
 msgid "Galleria immagini"
 msgstr "Galerie d'images"
 
-#: apps/places/models.py:287 apps/places/models.py:454
+#: apps/places/models.py:293 apps/places/models.py:460
 msgid "Luogo"
 msgstr "Lieu"
 
-#: apps/places/models.py:331
+#: apps/places/models.py:337
 msgid "Immagine"
 msgstr "Image"
 
-#: apps/places/models.py:334
+#: apps/places/models.py:340
 msgid "Didascalia"
 msgstr "Légende"
 
-#: apps/places/models.py:343
+#: apps/places/models.py:349
 msgid "Immagine galleria"
 msgstr "Image de galerie"
 
-#: apps/places/models.py:344
+#: apps/places/models.py:350
 msgid "Immagini galleria"
 msgstr "Images de galerie"
 
-#: apps/places/models.py:371
+#: apps/places/models.py:377
 msgid "Distanza (km)"
 msgstr "Distance (km)"
 
-#: apps/places/models.py:374
+#: apps/places/models.py:380
 msgid "Durata stimata"
 msgstr "Durée estimée"
 
-#: apps/places/models.py:379
+#: apps/places/models.py:385
 msgid "Facile"
 msgstr "Facile"
 
-#: apps/places/models.py:380
+#: apps/places/models.py:386
 msgid "Media"
 msgstr "Moyen"
 
-#: apps/places/models.py:381
+#: apps/places/models.py:387
 msgid "Difficile"
 msgstr "Difficile"
 
-#: apps/places/models.py:384 apps/places/templates/places/route_page.html:51
+#: apps/places/models.py:390 apps/places/templates/places/route_page.html:51
 msgid "Difficoltà"
 msgstr "Difficulté"
 
-#: apps/places/models.py:389
+#: apps/places/models.py:395
 msgid "File GPX"
 msgstr "Fichier GPX"
 
-#: apps/places/models.py:390
+#: apps/places/models.py:396
 msgid "Traccia GPX del percorso"
 msgstr "Trace GPX de l'itinéraire"
 
-#: apps/places/models.py:404
+#: apps/places/models.py:410
 msgid "Dettagli Percorso"
 msgstr "Détails de l'Itinéraire"
 
-#: apps/places/models.py:406 apps/places/models.py:467
+#: apps/places/models.py:412 apps/places/models.py:473
 #: apps/places/templates/places/route_page.html:67
 msgid "Tappe"
 msgstr "Étapes"
 
-#: apps/places/models.py:420
+#: apps/places/models.py:426
 msgid "Percorso"
 msgstr "Itinéraire"
 
-#: apps/places/models.py:421
+#: apps/places/models.py:427
 msgid "Percorsi"
 msgstr "Itinéraires"
 
-#: apps/places/models.py:457
+#: apps/places/models.py:463
 msgid "Nota tappa"
 msgstr "Note d'étape"
 
-#: apps/places/models.py:466
+#: apps/places/models.py:472
 msgid "Tappa"
 msgstr "Étape"
 
@@ -3531,7 +3477,7 @@ msgstr "URL externe"
 
 #: apps/website/blocks/content.py:65 apps/website/blocks/content.py:153
 #: apps/website/blocks/hero.py:63 apps/website/blocks/hero.py:173
-#: apps/website/models/pages.py:119 apps/website/models/pages.py:139
+#: apps/website/models/pages.py:120 apps/website/models/pages.py:140
 msgid "Used only if no internal page is selected."
 msgstr "Utilisé uniquement si aucune page interne n'est sélectionnée."
 
@@ -4181,7 +4127,7 @@ msgstr "Titre principal."
 msgid "Supporting text below the title."
 msgstr "Texte d'accompagnement sous le titre."
 
-#: apps/website/blocks/hero.py:163 apps/website/models/pages.py:124
+#: apps/website/blocks/hero.py:163 apps/website/models/pages.py:125
 msgid "Secondary CTA text"
 msgstr "Texte CTA secondaire"
 
@@ -4193,7 +4139,7 @@ msgstr "Libellé du bouton secondaire facultatif."
 msgid "Secondary CTA page link"
 msgstr "Lien page CTA secondaire"
 
-#: apps/website/blocks/hero.py:172 apps/website/models/pages.py:138
+#: apps/website/blocks/hero.py:172 apps/website/models/pages.py:139
 msgid "Secondary CTA external URL"
 msgstr "URL externe CTA secondaire"
 
@@ -4667,11 +4613,11 @@ msgstr "Dénivelé (ex. '2500 m')."
 msgid "Estimated riding time (e.g. '5-6 hours')."
 msgstr "Temps de parcours estimé (ex. '5-6 heures')."
 
-#: apps/website/blocks/route.py:125 apps/website/models/pages.py:840
+#: apps/website/blocks/route.py:125 apps/website/models/pages.py:844
 msgid "Easy"
 msgstr "Facile"
 
-#: apps/website/blocks/route.py:126 apps/website/models/pages.py:841
+#: apps/website/blocks/route.py:126 apps/website/models/pages.py:845
 msgid "Moderate"
 msgstr "Modéré"
 
@@ -4679,7 +4625,7 @@ msgstr "Modéré"
 msgid "Challenging"
 msgstr "Exigeant"
 
-#: apps/website/blocks/route.py:128 apps/website/models/pages.py:843
+#: apps/website/blocks/route.py:128 apps/website/models/pages.py:847
 msgid "Expert"
 msgstr "Expert"
 
@@ -4744,10 +4690,10 @@ msgstr "Associez facultativement les photos à un événement."
 msgid "-- No event --"
 msgstr "-- Aucun événement --"
 
-#: apps/website/forms.py:122 apps/website/models/pages.py:521
-#: apps/website/models/pages.py:853 apps/website/models/uploads.py:46
-#: templates/website/pages/event_detail_page.html:171
-#: templates/website/pages/event_detail_page.html:172
+#: apps/website/forms.py:122 apps/website/models/pages.py:522
+#: apps/website/models/pages.py:857 apps/website/models/uploads.py:46
+#: templates/website/pages/event_detail_page.html:183
+#: templates/website/pages/event_detail_page.html:184
 #: templates/website/pages/news_page.html:65
 msgid "Tags"
 msgstr "Étiquettes"
@@ -4851,13 +4797,13 @@ msgstr ""
 msgid "Subject"
 msgstr "Objet"
 
-#: apps/website/models/newsletter.py:129 apps/website/models/pages.py:147
-#: apps/website/models/pages.py:319 apps/website/models/pages.py:365
-#: apps/website/models/pages.py:409 apps/website/models/pages.py:499
-#: apps/website/models/pages.py:604 apps/website/models/pages.py:712
-#: apps/website/models/pages.py:1140 apps/website/models/pages.py:1261
-#: apps/website/models/pages.py:1401 apps/website/models/pages.py:1450
-#: apps/website/models/pages.py:1511 apps/website/models/partners.py:48
+#: apps/website/models/newsletter.py:129 apps/website/models/pages.py:148
+#: apps/website/models/pages.py:320 apps/website/models/pages.py:366
+#: apps/website/models/pages.py:410 apps/website/models/pages.py:500
+#: apps/website/models/pages.py:605 apps/website/models/pages.py:716
+#: apps/website/models/pages.py:1823 apps/website/models/pages.py:2201
+#: apps/website/models/pages.py:2341 apps/website/models/pages.py:2390
+#: apps/website/models/pages.py:2451 apps/website/models/partners.py:48
 #: apps/website/models/partners.py:157 apps/website/models/snippets.py:624
 msgid "Body"
 msgstr "Corps"
@@ -4866,8 +4812,8 @@ msgstr "Corps"
 msgid "Compose the newsletter using the available blocks."
 msgstr ""
 
-#: apps/website/models/newsletter.py:140 apps/website/models/pages.py:530
-#: apps/website/models/pages.py:861 apps/website/models/partners.py:145
+#: apps/website/models/newsletter.py:140 apps/website/models/pages.py:531
+#: apps/website/models/pages.py:865 apps/website/models/partners.py:145
 #: apps/website/models/snippets.py:366 apps/website/models/snippets.py:680
 #: apps/website/models/snippets.py:761
 #: templates/website/admin/preview_newsletter.html:18
@@ -4929,722 +4875,809 @@ msgstr "Inscription à la newsletter"
 msgid "Newsletters"
 msgstr "Inscription à la newsletter"
 
-#: apps/website/models/pages.py:77 apps/website/models/pages.py:1236
+#: apps/website/models/pages.py:78 apps/website/models/pages.py:2176
 msgid "Hero badge"
 msgstr "Badge hero"
 
-#: apps/website/models/pages.py:78
+#: apps/website/models/pages.py:79
 msgid "Pre-title text displayed above hero title, e.g. 'Since 1985'."
 msgstr "Texte pré-titre affiché au-dessus du titre hero, ex. 'Depuis 1985'."
 
-#: apps/website/models/pages.py:83
+#: apps/website/models/pages.py:84
 msgid "Hero title"
 msgstr "Titre hero"
 
-#: apps/website/models/pages.py:84
+#: apps/website/models/pages.py:85
 msgid "Main headline displayed in the hero section."
 msgstr "Titre principal affiché dans la section hero."
 
-#: apps/website/models/pages.py:89
+#: apps/website/models/pages.py:90
 msgid "Hero subtitle"
 msgstr "Sous-titre hero"
 
-#: apps/website/models/pages.py:90
+#: apps/website/models/pages.py:91
 msgid "Testo secondario mostrato sotto il titolo hero."
 msgstr "Texte secondaire affiché sous le titre hero."
 
-#: apps/website/models/pages.py:98
+#: apps/website/models/pages.py:99
 msgid "Hero background image"
 msgstr "Image de fond hero"
 
-#: apps/website/models/pages.py:99
+#: apps/website/models/pages.py:100
 msgid "Immagine di sfondo della hero section."
 msgstr "Titre principal affiché dans la section hero."
 
-#: apps/website/models/pages.py:104
+#: apps/website/models/pages.py:105
 msgid "Primary CTA text"
 msgstr "Texte CTA primaire"
 
-#: apps/website/models/pages.py:105
+#: apps/website/models/pages.py:106
 msgid "Testo del pulsante principale (es. 'Scopri di più')."
 msgstr "Texte du bouton principal (ex. « En savoir plus »)."
 
-#: apps/website/models/pages.py:113
+#: apps/website/models/pages.py:114
 msgid "Primary CTA link"
 msgstr "Lien CTA primaire"
 
-#: apps/website/models/pages.py:114
+#: apps/website/models/pages.py:115
 msgid "Pagina interna per il pulsante principale."
 msgstr "Page interne pour le bouton principal."
 
-#: apps/website/models/pages.py:118
+#: apps/website/models/pages.py:119
 msgid "Primary CTA external URL"
 msgstr "URL externe CTA primaire"
 
-#: apps/website/models/pages.py:125
+#: apps/website/models/pages.py:126
 msgid "Testo del pulsante secondario (es. 'Contattaci')."
 msgstr "Texte du bouton secondaire (ex. « Contactez-nous »)."
 
-#: apps/website/models/pages.py:133
+#: apps/website/models/pages.py:134
 msgid "Secondary CTA link"
 msgstr "Lien CTA secondaire"
 
-#: apps/website/models/pages.py:134
+#: apps/website/models/pages.py:135
 msgid "Pagina interna per il pulsante secondario."
 msgstr "Page interne pour le bouton secondaire."
 
-#: apps/website/models/pages.py:148
+#: apps/website/models/pages.py:149
 msgid "Contenuto principale della homepage sotto la hero section."
 msgstr "Contenu principal de la page d'accueil sous la section hero."
 
-#: apps/website/models/pages.py:158
+#: apps/website/models/pages.py:159
 msgid "Featured event"
 msgstr "Événement en vedette"
 
-#: apps/website/models/pages.py:159
+#: apps/website/models/pages.py:160
 msgid "Select an EventDetailPage to highlight on the homepage."
 msgstr ""
 "Sélectionnez une page d'événement à mettre en avant sur la page d'accueil."
 
-#: apps/website/models/pages.py:176 apps/website/models/pages.py:1337
+#: apps/website/models/pages.py:177 apps/website/models/pages.py:2277
 msgid "Hero section"
 msgstr "Section Hero"
 
-#: apps/website/models/pages.py:187
+#: apps/website/models/pages.py:188
 msgid "Call-to-action buttons"
 msgstr "Boutons d'appel à l'action"
 
-#: apps/website/models/pages.py:194
+#: apps/website/models/pages.py:195
 msgid "Featured content"
 msgstr "Contenu en vedette"
 
-#: apps/website/models/pages.py:207
+#: apps/website/models/pages.py:208
 msgid "Home page"
 msgstr "Page d'accueil"
 
-#: apps/website/models/pages.py:208
+#: apps/website/models/pages.py:209
 msgid "Home pages"
 msgstr "Pages d'accueil"
 
-#: apps/website/models/pages.py:304 apps/website/models/pages.py:1572
+#: apps/website/models/pages.py:305 apps/website/models/pages.py:2512
 msgid "Displayed below the page title."
 msgstr "Affiché sous le titre de la page."
 
-#: apps/website/models/pages.py:312 apps/website/models/pages.py:487
-#: apps/website/models/pages.py:700 apps/website/models/partners.py:136
+#: apps/website/models/pages.py:313 apps/website/models/pages.py:488
+#: apps/website/models/pages.py:704 apps/website/models/partners.py:136
 msgid "Cover image"
 msgstr "Image de couverture"
 
-#: apps/website/models/pages.py:313
+#: apps/website/models/pages.py:314
 msgid "Immagine di copertina mostrata in alto nella pagina."
 msgstr "Image de couverture affichée en haut de la page."
 
-#: apps/website/models/pages.py:320
+#: apps/website/models/pages.py:321
 msgid "Contenuto principale della pagina Chi Siamo."
 msgstr "Contenu principal de la page À propos."
 
-#: apps/website/models/pages.py:342
+#: apps/website/models/pages.py:343
 msgid "About page"
 msgstr "Page à propos"
 
-#: apps/website/models/pages.py:343
+#: apps/website/models/pages.py:344
 msgid "About pages"
 msgstr "Pages à propos"
 
-#: apps/website/models/pages.py:359
+#: apps/website/models/pages.py:360
 msgid "Testo introduttivo per la pagina del direttivo."
 msgstr "Texte d'introduction pour la page du comité directeur."
 
-#: apps/website/models/pages.py:366
+#: apps/website/models/pages.py:367
 msgid "Use team-member blocks here."
 msgstr "Utilisez les blocs membre d'équipe ici."
 
-#: apps/website/models/pages.py:387
+#: apps/website/models/pages.py:388
 msgid "Board page"
 msgstr "Page du conseil d'administration"
 
-#: apps/website/models/pages.py:388
+#: apps/website/models/pages.py:389
 msgid "Board pages"
 msgstr "Pages du conseil d'administration"
 
-#: apps/website/models/pages.py:403
+#: apps/website/models/pages.py:404
 msgid "Testo introduttivo mostrato sopra l'elenco delle notizie."
 msgstr "Texte d'introduction affiché au-dessus de la liste des actualités."
 
-#: apps/website/models/pages.py:410
+#: apps/website/models/pages.py:411
 msgid "Optional content displayed above the article listing."
 msgstr "Contenu facultatif affiché au-dessus de la liste des articles."
 
-#: apps/website/models/pages.py:430
+#: apps/website/models/pages.py:431
 msgid "News index page"
 msgstr "Page d'index des actualités"
 
-#: apps/website/models/pages.py:431
+#: apps/website/models/pages.py:432
 msgid "News index pages"
 msgstr "Pages d'index des actualités"
 
-#: apps/website/models/pages.py:488
+#: apps/website/models/pages.py:489
 msgid "Immagine di copertina per l'articolo, usata anche nelle anteprime."
 msgstr "Image de couverture de l'article, utilisée aussi dans les aperçus."
 
-#: apps/website/models/pages.py:492 apps/website/models/pages.py:705
+#: apps/website/models/pages.py:493 apps/website/models/pages.py:709
 msgid "Introduction / excerpt"
 msgstr "Introduction / extrait"
 
-#: apps/website/models/pages.py:493
+#: apps/website/models/pages.py:494
 msgid "Short summary shown in listings."
 msgstr "Bref résumé affiché dans les listes."
 
-#: apps/website/models/pages.py:500
+#: apps/website/models/pages.py:501
 msgid "Contenuto completo dell'articolo."
 msgstr "Contenu complet de l'article."
 
-#: apps/website/models/pages.py:504
+#: apps/website/models/pages.py:505
 msgid "Display date"
 msgstr "Date d'affichage"
 
-#: apps/website/models/pages.py:505
+#: apps/website/models/pages.py:506
 msgid "Publication date shown to readers."
 msgstr "Date de publication affichée aux lecteurs."
 
-#: apps/website/models/pages.py:514
+#: apps/website/models/pages.py:515
 msgid "Autore dell'articolo, mostrato nella pagina e nei listing."
 msgstr "Auteur de l'article, affiché sur la page et dans les listes."
 
-#: apps/website/models/pages.py:522
+#: apps/website/models/pages.py:523
 msgid "Tag per classificare e filtrare l'articolo."
 msgstr "Tags pour classer et filtrer l'article."
 
-#: apps/website/models/pages.py:531
+#: apps/website/models/pages.py:532
 msgid "Categoria principale dell'articolo."
 msgstr "Catégorie principale de l'article."
 
-#: apps/website/models/pages.py:545
+#: apps/website/models/pages.py:546
 msgid "Article metadata"
 msgstr "Métadonnées de l'article"
 
-#: apps/website/models/pages.py:555 apps/website/models/pages.py:904
+#: apps/website/models/pages.py:556 apps/website/models/pages.py:908
 msgid "Categorisation"
 msgstr "Catégorisation"
 
-#: apps/website/models/pages.py:569
+#: apps/website/models/pages.py:570
 msgid "News page"
 msgstr "Page d'actualité"
 
-#: apps/website/models/pages.py:570
+#: apps/website/models/pages.py:571
 msgid "News pages"
 msgstr "Pages d'actualités"
 
-#: apps/website/models/pages.py:598
+#: apps/website/models/pages.py:599
 msgid "Testo introduttivo mostrato sopra l'elenco degli eventi."
 msgstr "Texte d'introduction affiché au-dessus de la liste des événements."
 
-#: apps/website/models/pages.py:605
+#: apps/website/models/pages.py:606
 msgid "Optional content above the event listing."
 msgstr "Contenu facultatif au-dessus de la liste des événements."
 
-#: apps/website/models/pages.py:625
+#: apps/website/models/pages.py:626
 msgid "Events page"
 msgstr "Page des événements"
 
-#: apps/website/models/pages.py:626
+#: apps/website/models/pages.py:627
 msgid "Events pages"
 msgstr "Pages des événements"
 
-#: apps/website/models/pages.py:701
+#: apps/website/models/pages.py:705
 msgid "Immagine di copertina per l'evento, usata anche nei listing."
 msgstr "Image de couverture de l'événement, utilisée aussi dans les listes."
 
-#: apps/website/models/pages.py:706 apps/website/models/partners.py:151
+#: apps/website/models/pages.py:710 apps/website/models/partners.py:151
 msgid "Short description shown in listings."
 msgstr "Brève description affichée dans les listes."
 
-#: apps/website/models/pages.py:713
+#: apps/website/models/pages.py:717
 msgid "Descrizione completa dell'evento con blocchi multimediali."
 msgstr "Description complète de l'événement avec blocs multimédias."
 
-#: apps/website/models/pages.py:718
+#: apps/website/models/pages.py:722
 msgid "Start date & time"
 msgstr "Date et heure de début"
 
-#: apps/website/models/pages.py:724
+#: apps/website/models/pages.py:728
 msgid "End date & time"
 msgstr "Date et heure de fin"
 
-#: apps/website/models/pages.py:725
+#: apps/website/models/pages.py:729
 msgid "Data e ora di fine. Lasciare vuoto per eventi di un giorno."
 msgstr "Date et heure de fin. Laisser vide pour les événements d'une journée."
 
-#: apps/website/models/pages.py:732
+#: apps/website/models/pages.py:736
 msgid "Venue name"
 msgstr "Nom du lieu"
 
-#: apps/website/models/pages.py:733
+#: apps/website/models/pages.py:737
 msgid "Nome del luogo o struttura che ospita l'evento."
 msgstr "Nom du lieu ou de la structure accueillant l'événement."
 
-#: apps/website/models/pages.py:739
+#: apps/website/models/pages.py:743
 msgid "Indirizzo completo del luogo dell'evento."
 msgstr "Adresse complète du lieu de l'événement."
 
-#: apps/website/models/pages.py:744
+#: apps/website/models/pages.py:748
 msgid "Coordinates"
 msgstr "Coordonnées"
 
-#: apps/website/models/pages.py:745
+#: apps/website/models/pages.py:749
 msgid "Latitude,Longitude (e.g. '45.4642,9.1900')"
 msgstr "Latitude,Longitude (ex. '45.4642,9.1900')"
 
-#: apps/website/models/pages.py:752 apps/website/models/pages.py:759
+#: apps/website/models/pages.py:756 apps/website/models/pages.py:763
 msgid "Auto-populated from coordinates."
 msgstr "Rempli automatiquement à partir des coordonnées."
 
-#: apps/website/models/pages.py:765
+#: apps/website/models/pages.py:769
 msgid "Registration open"
 msgstr "Inscription ouverte"
 
-#: apps/website/models/pages.py:766
+#: apps/website/models/pages.py:770
 msgid "Attiva per accettare le iscrizioni all'evento."
 msgstr "Activer pour accepter les inscriptions à l'événement."
 
-#: apps/website/models/pages.py:771
+#: apps/website/models/pages.py:775
 msgid "Registration deadline"
 msgstr "Date limite d'inscription"
 
-#: apps/website/models/pages.py:772
+#: apps/website/models/pages.py:776
 msgid "Termine ultimo per le iscrizioni."
 msgstr "Date limite d'inscription."
 
-#: apps/website/models/pages.py:776
+#: apps/website/models/pages.py:780
 msgid "Max attendees"
 msgstr "Nombre maximum de participants"
 
-#: apps/website/models/pages.py:777
+#: apps/website/models/pages.py:781
 msgid "0 = unlimited."
 msgstr "0 = illimité."
 
-#: apps/website/models/pages.py:785 templates/events/register.html:32
+#: apps/website/models/pages.py:789 templates/events/register.html:34
 msgid "Base fee"
 msgstr "Tarif de base"
 
-#: apps/website/models/pages.py:786
+#: apps/website/models/pages.py:790
 msgid "Event participation cost in EUR.  0 = free."
 msgstr "Coût de participation en EUR. 0 = gratuit."
 
-#: apps/website/models/pages.py:790
+#: apps/website/models/pages.py:794
 msgid "Early-bird discount (%)"
 msgstr "Réduction tarif précoce (%)"
 
-#: apps/website/models/pages.py:791
+#: apps/website/models/pages.py:795
 msgid "Sconto percentuale per le iscrizioni anticipate."
 msgstr "Réduction en pourcentage pour les inscriptions anticipées."
 
-#: apps/website/models/pages.py:796
+#: apps/website/models/pages.py:800
 msgid "Early-bird deadline"
 msgstr "Date limite tarif précoce"
 
-#: apps/website/models/pages.py:797
+#: apps/website/models/pages.py:801
 msgid "Termine per usufruire dello sconto early-bird."
 msgstr "Date limite pour bénéficier de la réduction early-bird."
 
-#: apps/website/models/pages.py:801
+#: apps/website/models/pages.py:805
 msgid "Member discount (%)"
 msgstr "Réduction membre (%)"
 
-#: apps/website/models/pages.py:802
+#: apps/website/models/pages.py:806
 msgid "Percentage discount for active members."
 msgstr "Réduction en pourcentage pour les membres actifs."
 
-#: apps/website/models/pages.py:808
+#: apps/website/models/pages.py:812
 msgid "Allow guest registration"
 msgstr "Autoriser l'inscription d'invités"
 
-#: apps/website/models/pages.py:809
+#: apps/website/models/pages.py:813
 msgid "If checked, non-logged-in users can register via the guest form."
 msgstr ""
 "Si coché, les utilisateurs non connectés peuvent s'inscrire via le "
 "formulaire invité."
 
-#: apps/website/models/pages.py:815
+#: apps/website/models/pages.py:819
 msgid "Passenger fee"
 msgstr "Tarif passager"
 
-#: apps/website/models/pages.py:816
+#: apps/website/models/pages.py:820
 msgid "Additional cost for a passenger/companion. 0 = same as base."
 msgstr ""
 "Coût supplémentaire pour un passager/accompagnant. 0 = identique au tarif de "
 "base."
 
-#: apps/website/models/pages.py:820
+#: apps/website/models/pages.py:824
 msgid "Passenger member discount (%)"
 msgstr "Réduction membre passager (%)"
 
-#: apps/website/models/pages.py:821
+#: apps/website/models/pages.py:825
 msgid "Percentage discount on passenger fee for active members."
 msgstr ""
 "Pourcentage de réduction sur le tarif passager pour les membres actifs."
 
-#: apps/website/models/pages.py:825
+#: apps/website/models/pages.py:829
 msgid "Passenger included in base fee"
 msgstr "Passager inclus dans le tarif de base"
 
-#: apps/website/models/pages.py:826
+#: apps/website/models/pages.py:830
 msgid "If checked, passenger rides for free with the main registrant."
 msgstr ""
 "Si coché, le passager voyage gratuitement avec le titulaire de l'inscription."
 
-#: apps/website/models/pages.py:833
+#: apps/website/models/pages.py:837
 msgid "Meeting point"
 msgstr "Point de rendez-vous"
 
-#: apps/website/models/pages.py:834
+#: apps/website/models/pages.py:838
 msgid "Where participants should gather before the event start."
 msgstr ""
 "Où les participants doivent se rassembler avant le début de l'événement."
 
-#: apps/website/models/pages.py:842
+#: apps/website/models/pages.py:846
 msgid "Hard"
 msgstr "Difficile"
 
-#: apps/website/models/pages.py:845
+#: apps/website/models/pages.py:849
 msgid "Difficulty level"
 msgstr "Niveau de difficulté"
 
-#: apps/website/models/pages.py:846
+#: apps/website/models/pages.py:850
 msgid "Livello di difficoltà del percorso."
 msgstr "Niveau de difficulté du parcours."
 
-#: apps/website/models/pages.py:862
+#: apps/website/models/pages.py:866
 msgid "Categoria principale dell'evento."
 msgstr "Catégorie principale de l'événement."
 
-#: apps/website/models/pages.py:869
+#: apps/website/models/pages.py:873
 #, fuzzy
 #| msgid "Partner name"
 msgid "Organizer name"
 msgstr "Nom du partenaire"
 
-#: apps/website/models/pages.py:870
+#: apps/website/models/pages.py:874
 #, fuzzy
 #| msgid "Nome del luogo dell'evento."
 msgid "Nome del Club o ente organizzatore dell'evento."
 msgstr "Nom du lieu de l'événement."
 
-#: apps/website/models/pages.py:874
+#: apps/website/models/pages.py:878
 #, fuzzy
 #| msgid "Target URL"
 msgid "Organizer URL"
 msgstr "URL cible"
 
-#: apps/website/models/pages.py:875
+#: apps/website/models/pages.py:879
 msgid "Sito web del Club federato dove l'evento è pubblicato."
 msgstr ""
 
-#: apps/website/models/pages.py:896
+#: apps/website/models/pages.py:900
 msgid "Schedule"
 msgstr "Programme"
 
-#: apps/website/models/pages.py:911
+#: apps/website/models/pages.py:915
 msgid "Organizer"
 msgstr ""
 
-#: apps/website/models/pages.py:923
+#: apps/website/models/pages.py:927
 msgid "Registration settings"
 msgstr "Paramètres d'inscription"
 
-#: apps/website/models/pages.py:932 templates/events/register.html:29
+#: apps/website/models/pages.py:936 templates/events/register.html:31
 msgid "Pricing"
 msgstr "Tarification"
 
-#: apps/website/models/pages.py:940
+#: apps/website/models/pages.py:944
 msgid "Passenger pricing"
 msgstr "Tarification passager"
 
-#: apps/website/models/pages.py:942
+#: apps/website/models/pages.py:946
 msgid "Pricing tiers"
 msgstr "Niveaux de tarification"
 
-#: apps/website/models/pages.py:965 apps/website/models/pages.py:1373
+#: apps/website/models/pages.py:969 apps/website/models/pages.py:2313
 #: apps/website/models/partners.py:363
 msgid "Promote"
 msgstr "Promouvoir"
 
-#: apps/website/models/pages.py:983
+#: apps/website/models/pages.py:987
 msgid "Event detail page"
 msgstr "Page de détail d'événement"
 
-#: apps/website/models/pages.py:984
+#: apps/website/models/pages.py:988
 msgid "Event detail pages"
 msgstr "Pages de détail d'événements"
 
-#: apps/website/models/pages.py:992
+#: apps/website/models/pages.py:996
 msgid "Registration deadline must be before the event start date."
 msgstr ""
 "La date limite d'inscription doit être antérieure à la date de début de "
 "l'événement."
 
-#: apps/website/models/pages.py:1125
+#: apps/website/models/pages.py:1176
+msgid "Registration is not open for this event."
+msgstr "Les inscriptions ne sont pas ouvertes pour cet événement."
+
+#: apps/website/models/pages.py:1182
+msgid "The registration deadline has passed."
+msgstr "La date limite d'inscription est dépassée."
+
+#: apps/website/models/pages.py:1191
+msgid ""
+"Your membership does not include event registration. Please upgrade your "
+"membership."
+msgstr ""
+"Votre adhésion n'inclut pas l'inscription aux événements. Veuillez mettre à "
+"jour votre adhésion."
+
+#: apps/website/models/pages.py:1207
+msgid "You are already registered for this event."
+msgstr "Vous êtes déjà inscrit(e) à cet événement."
+
+#: apps/website/models/pages.py:1301
+#, fuzzy
+#| msgid "Introductory text displayed above the helpers map."
+msgid "Introductory text for the events area landing page."
+msgstr "Texte d'introduction affiché au-dessus de la carte des aidants."
+
+#: apps/website/models/pages.py:1314
+#, fuzzy
+#| msgid "Events page"
+msgid "Events Area Page"
+msgstr "Page des événements"
+
+#: apps/website/models/pages.py:1315
+#, fuzzy
+#| msgid "Events pages"
+msgid "Events Area Pages"
+msgstr "Pages des événements"
+
+#: apps/website/models/pages.py:1599
+#, python-brace-format
+msgid "Payment instructions: {event}"
+msgstr "Instructions de paiement : {event}"
+
+#: apps/website/models/pages.py:1603
+#, python-brace-format
+msgid ""
+"Please complete the bank transfer of €{amount} with reference {ref} by "
+"{expires}."
+msgstr ""
+"Veuillez effectuer le virement bancaire de {amount} € avec la référence "
+"{ref} avant le {expires}."
+
+#: apps/website/models/pages.py:1642 apps/website/models/pages.py:1665
+msgid "Payment service temporarily unavailable. Please try again."
+msgstr "Service de paiement temporairement indisponible. Veuillez réessayer."
+
+#: apps/website/models/pages.py:1808
 msgid "Testo introduttivo mostrato sopra le gallerie."
 msgstr "Texte d'introduction affiché au-dessus des galeries."
 
-#: apps/website/models/pages.py:1133
+#: apps/website/models/pages.py:1816
 msgid "Root collection"
 msgstr "Collection racine"
 
-#: apps/website/models/pages.py:1134
+#: apps/website/models/pages.py:1817
 msgid ""
 "Starting collection for gallery display.  Sub-collections become albums."
 msgstr ""
 "Collection de départ pour l'affichage de la galerie. Les sous-collections "
 "deviennent des albums."
 
-#: apps/website/models/pages.py:1141
+#: apps/website/models/pages.py:1824
 msgid "Contenuto aggiuntivo sotto la galleria."
 msgstr "Contenu supplémentaire sous la galerie."
 
-#: apps/website/models/pages.py:1162
+#: apps/website/models/pages.py:1845
 msgid "Gallery page"
 msgstr "Page galerie"
 
-#: apps/website/models/pages.py:1163
+#: apps/website/models/pages.py:1846
 msgid "Gallery pages"
 msgstr "Pages galerie"
 
-#: apps/website/models/pages.py:1230
+#: apps/website/models/pages.py:1923
+#, fuzzy
+#| msgid "Active membership required."
+msgid "Access denied. Active membership is required."
+msgstr "Adhésion active requise."
+
+#: apps/website/models/pages.py:1928
+msgid ""
+"Access denied. Your membership does not include gallery upload privileges."
+msgstr ""
+"Accès refusé. Votre adhésion n'inclut pas les privilèges de téléversement "
+"galerie."
+
+#: apps/website/models/pages.py:2046
+#, fuzzy
+#| msgid "Access level"
+msgid "Access denied. Staff only."
+msgstr "Niveau d'accès"
+
+#: apps/website/models/pages.py:2088 apps/website/models/pages.py:2126
+#: apps/website/views_admin.py:30 apps/website/views_admin.py:137
+#: apps/website/views_admin.py:210
+#, fuzzy
+#| msgid "Access level"
+msgid "Access denied."
+msgstr "Niveau d'accès"
+
+#: apps/website/models/pages.py:2135
+msgid "Rejected by moderator."
+msgstr "Rejeté par le modérateur."
+
+#: apps/website/models/pages.py:2170
 msgid "Hero image"
 msgstr "Badge hero"
 
-#: apps/website/models/pages.py:1231
+#: apps/website/models/pages.py:2171
 msgid "Optional background image for the page header."
 msgstr ""
 "Image de fond facultative. En l'absence, utilise l'image de couverture de "
 "l'événement."
 
-#: apps/website/models/pages.py:1237
+#: apps/website/models/pages.py:2177
 msgid "Small text above the title (e.g. 'Let's Talk')."
 msgstr "Petit texte de badge au-dessus du titre (ex. 'Est. 2010')."
 
-#: apps/website/models/pages.py:1243
+#: apps/website/models/pages.py:2183
 msgid "Testo introduttivo mostrato sopra il form di contatto."
 msgstr "Texte d'introduction affiché au-dessus du formulaire de contact."
 
-#: apps/website/models/pages.py:1248
+#: apps/website/models/pages.py:2188
 msgid "Contact us"
 msgstr "Contactez-nous"
 
-#: apps/website/models/pages.py:1249
+#: apps/website/models/pages.py:2189
 msgid "Form title"
 msgstr "Titre du formulaire"
 
-#: apps/website/models/pages.py:1250
+#: apps/website/models/pages.py:2190
 msgid "Titolo mostrato sopra il form di contatto."
 msgstr "Titre affiché au-dessus du formulaire de contact."
 
-#: apps/website/models/pages.py:1254
+#: apps/website/models/pages.py:2194
 msgid "Success message"
 msgstr "Message de succès"
 
-#: apps/website/models/pages.py:1255
+#: apps/website/models/pages.py:2195
 msgid "Confirmation shown after form submission."
 msgstr "Confirmation affichée après l'envoi du formulaire."
 
-#: apps/website/models/pages.py:1262
+#: apps/website/models/pages.py:2202
 msgid "Contenuto aggiuntivo sotto il form."
 msgstr "Contenu supplémentaire sous le formulaire."
 
-#: apps/website/models/pages.py:1268
+#: apps/website/models/pages.py:2208
 msgid "Enable captcha"
 msgstr "Activer le captcha"
 
-#: apps/website/models/pages.py:1269
+#: apps/website/models/pages.py:2209
 msgid "Attiva la protezione anti-spam sul form."
 msgstr "Activer la protection anti-spam sur le formulaire."
 
-#: apps/website/models/pages.py:1276
+#: apps/website/models/pages.py:2216
 msgid "Honeypot + Time check"
 msgstr "Honeypot + Vérification temporelle"
 
-#: apps/website/models/pages.py:1277 apps/website/models/settings.py:33
+#: apps/website/models/pages.py:2217 apps/website/models/settings.py:33
 msgid "Cloudflare Turnstile"
 msgstr "Cloudflare Turnstile"
 
-#: apps/website/models/pages.py:1278 apps/website/models/settings.py:34
+#: apps/website/models/pages.py:2218 apps/website/models/settings.py:34
 msgid "hCaptcha"
 msgstr "hCaptcha"
 
-#: apps/website/models/pages.py:1280
+#: apps/website/models/pages.py:2220
 msgid "Captcha provider"
 msgstr "Fournisseur de captcha"
 
-#: apps/website/models/pages.py:1281
+#: apps/website/models/pages.py:2221
 msgid "Servizio anti-spam da utilizzare."
 msgstr "Service anti-spam à utiliser."
 
-#: apps/website/models/pages.py:1286
+#: apps/website/models/pages.py:2226
 msgid "Captcha site key"
 msgstr "Clé de site captcha"
 
-#: apps/website/models/pages.py:1287 apps/website/models/settings.py:235
+#: apps/website/models/pages.py:2227 apps/website/models/settings.py:235
 msgid "Chiave pubblica del servizio CAPTCHA."
 msgstr "Clé publique du service CAPTCHA."
 
-#: apps/website/models/pages.py:1292
+#: apps/website/models/pages.py:2232
 msgid "Captcha secret key"
 msgstr "Clé secrète captcha"
 
-#: apps/website/models/pages.py:1293 apps/website/models/settings.py:239
+#: apps/website/models/pages.py:2233 apps/website/models/settings.py:239
 msgid "Chiave segreta del servizio CAPTCHA."
 msgstr "Clé secrète du service CAPTCHA."
 
-#: apps/website/models/pages.py:1300
+#: apps/website/models/pages.py:2240
 msgid "Membership CTA title"
 msgstr "Alertes adhésion"
 
-#: apps/website/models/pages.py:1301
+#: apps/website/models/pages.py:2241
 msgid "E.g. 'Become a Member'"
 msgstr "Devenir membre"
 
-#: apps/website/models/pages.py:1305
+#: apps/website/models/pages.py:2245
 msgid "Membership CTA description"
 msgstr "Adhésion bientôt expirée"
 
-#: apps/website/models/pages.py:1306
+#: apps/website/models/pages.py:2246
 msgid "Brief description of membership benefits."
 msgstr "Description détaillée de cet événement."
 
-#: apps/website/models/pages.py:1311
+#: apps/website/models/pages.py:2251
 msgid "Membership price"
 msgstr "Adhésion bientôt expirée"
 
-#: apps/website/models/pages.py:1312
+#: apps/website/models/pages.py:2252
 msgid "E.g. 'Annual fee €80'"
 msgstr "Ex. « Cotisation annuelle 80 € »"
 
-#: apps/website/models/pages.py:1317
+#: apps/website/models/pages.py:2257
 msgid "Membership CTA button text"
 msgstr "Alertes adhésion"
 
-#: apps/website/models/pages.py:1318
+#: apps/website/models/pages.py:2258
 msgid "E.g. 'Request Form'"
 msgstr "Ex. « Formulaire de demande »"
 
-#: apps/website/models/pages.py:1322
+#: apps/website/models/pages.py:2262
 msgid "Membership CTA URL"
 msgstr "Carte de Membre"
 
-#: apps/website/models/pages.py:1323
+#: apps/website/models/pages.py:2263
 msgid "Link to membership form or page."
 msgstr "Lien vers le formulaire ou la page d'adhésion."
 
-#: apps/website/models/pages.py:1351
+#: apps/website/models/pages.py:2291
 msgid "Membership CTA"
 msgstr "Adhésion"
 
-#: apps/website/models/pages.py:1363
+#: apps/website/models/pages.py:2303
 msgid "Anti-spam settings"
 msgstr "Paramètres anti-spam"
 
-#: apps/website/models/pages.py:1372
+#: apps/website/models/pages.py:2312
 msgid "Anti-spam"
 msgstr "Anti-spam"
 
-#: apps/website/models/pages.py:1384
+#: apps/website/models/pages.py:2324
 msgid "Contact page"
 msgstr "Page de contact"
 
-#: apps/website/models/pages.py:1385
+#: apps/website/models/pages.py:2325
 msgid "Contact pages"
 msgstr "Pages de contact"
 
-#: apps/website/models/pages.py:1402
+#: apps/website/models/pages.py:2342
 msgid "Contenuto della pagina privacy/informativa."
 msgstr "Contenu de la page de confidentialité/mentions légales."
 
-#: apps/website/models/pages.py:1407
+#: apps/website/models/pages.py:2347
 msgid "Last updated"
 msgstr "Dernière mise à jour"
 
-#: apps/website/models/pages.py:1408
+#: apps/website/models/pages.py:2348
 msgid "Date the policy was last revised."
 msgstr "Date de la dernière révision de la politique."
 
-#: apps/website/models/pages.py:1428
+#: apps/website/models/pages.py:2368
 msgid "Privacy page"
 msgstr "Page de confidentialité"
 
-#: apps/website/models/pages.py:1429
+#: apps/website/models/pages.py:2369
 msgid "Privacy pages"
 msgstr "Pages de confidentialité"
 
-#: apps/website/models/pages.py:1444
+#: apps/website/models/pages.py:2384
 msgid "Testo introduttivo per la sezione trasparenza."
 msgstr "Texte d'introduction pour la section transparence."
 
-#: apps/website/models/pages.py:1451
+#: apps/website/models/pages.py:2391
 msgid "Use document-list and accordion blocks for organising documents."
 msgstr ""
 "Utilisez les blocs liste de documents et accordéon pour organiser les "
 "documents."
 
-#: apps/website/models/pages.py:1472
+#: apps/website/models/pages.py:2412
 msgid "Transparency page"
 msgstr "Page de transparence"
 
-#: apps/website/models/pages.py:1473
+#: apps/website/models/pages.py:2413
 msgid "Transparency pages"
 msgstr "Pages de transparence"
 
-#: apps/website/models/pages.py:1488
+#: apps/website/models/pages.py:2428
 msgid "Testo introduttivo per l'ufficio stampa."
 msgstr "Texte d'introduction pour le service de presse."
 
-#: apps/website/models/pages.py:1492
+#: apps/website/models/pages.py:2432
 msgid "Press email"
 msgstr "E-mail presse"
 
-#: apps/website/models/pages.py:1493
+#: apps/website/models/pages.py:2433
 msgid "Email dedicata per i contatti stampa."
 msgstr "E-mail dédiée pour les contacts presse."
 
-#: apps/website/models/pages.py:1498
+#: apps/website/models/pages.py:2438
 msgid "Press phone"
 msgstr "Téléphone presse"
 
-#: apps/website/models/pages.py:1499
+#: apps/website/models/pages.py:2439
 msgid "Telefono dedicato per i contatti stampa."
 msgstr "Téléphone dédié pour les contacts presse."
 
-#: apps/website/models/pages.py:1504
+#: apps/website/models/pages.py:2444
 msgid "Press contact person"
 msgstr "Personne de contact presse"
 
-#: apps/website/models/pages.py:1505
+#: apps/website/models/pages.py:2445
 msgid "Nome del referente stampa."
 msgstr "Nom du référent presse."
 
-#: apps/website/models/pages.py:1512
+#: apps/website/models/pages.py:2452
 msgid "Contenuto aggiuntivo per la pagina stampa."
 msgstr "Contenu supplémentaire pour la page presse."
 
-#: apps/website/models/pages.py:1528 templates/website/pages/press_page.html:23
+#: apps/website/models/pages.py:2468 templates/website/pages/press_page.html:23
 msgid "Press contact"
 msgstr "Contact presse"
 
-#: apps/website/models/pages.py:1541
+#: apps/website/models/pages.py:2481
 msgid "Press page"
 msgstr "Page presse"
 
-#: apps/website/models/pages.py:1542
+#: apps/website/models/pages.py:2482
 msgid "Press pages"
 msgstr "Pages presse"
 
-#: apps/website/models/pages.py:1591
+#: apps/website/models/pages.py:2531
 #, fuzzy
 #| msgid "View Membership Plans"
 msgid "Membership plans page"
 msgstr "Alertes adhésion"
 
-#: apps/website/models/pages.py:1592
+#: apps/website/models/pages.py:2532
 #, fuzzy
 #| msgid "Membership alerts"
 msgid "Membership plans pages"
@@ -5838,7 +5871,7 @@ msgid "Display settings"
 msgstr "Paramètres d'affichage"
 
 #: apps/website/models/partners.py:359 apps/website/models/settings.py:417
-#: apps/website/models/settings.py:420 templates/includes/footer.html:106
+#: apps/website/models/settings.py:420 templates/includes/footer.html:115
 #: templates/website/pages/partner_page.html:71
 msgid "Contact"
 msgstr "Contact"
@@ -5926,7 +5959,7 @@ msgid "Default meta description for SEO."
 msgstr "Description meta par défaut pour le SEO."
 
 #: apps/website/models/settings.py:73 apps/website/models/settings.py:387
-#: apps/website/models/settings.py:390 templates/includes/footer.html:158
+#: apps/website/models/settings.py:390 templates/includes/footer.html:167
 msgid "Theme"
 msgstr "Thème"
 
@@ -6407,7 +6440,7 @@ msgid "Abilita il pagamento tramite bonifico bancario."
 msgstr "Activer le paiement par virement bancaire."
 
 #: apps/website/models/settings.py:679
-#: templates/events/payment_bank_transfer.html:19
+#: templates/events/payment_bank_transfer.html:22
 msgid "Account holder"
 msgstr "Titulaire du compte"
 
@@ -6416,7 +6449,7 @@ msgid "Intestatario del conto corrente."
 msgstr "Titulaire du compte courant."
 
 #: apps/website/models/settings.py:683
-#: templates/events/payment_bank_transfer.html:22
+#: templates/events/payment_bank_transfer.html:25
 msgid "IBAN"
 msgstr "IBAN"
 
@@ -6425,7 +6458,7 @@ msgid "Codice IBAN del conto corrente."
 msgstr "Code IBAN du compte courant."
 
 #: apps/website/models/settings.py:687
-#: templates/events/payment_bank_transfer.html:26
+#: templates/events/payment_bank_transfer.html:29
 msgid "BIC / SWIFT"
 msgstr "BIC / SWIFT"
 
@@ -6786,8 +6819,8 @@ msgstr "Photo de l'auteur affichée à côté de la citation."
 #: apps/website/models/snippets.py:419 apps/website/models/snippets.py:621
 #: templates/events/emails/registration_confirmation.html:23
 #: templates/events/my_registrations.html:21
-#: templates/events/payment_choice.html:13
-#: templates/events/payment_success.html:17 templates/events/register.html:173
+#: templates/events/payment_choice.html:17
+#: templates/events/payment_success.html:24 templates/events/register.html:175
 #: templates/federation/external_event_detail.html:38
 #: templates/website/pages/event_detail_page.html:55
 msgid "Date"
@@ -7228,60 +7261,34 @@ msgstr ""
 msgid "partners/verify-member/"
 msgstr ""
 
-#: apps/website/urls.py:48
-#, fuzzy
-#| msgid "Uploaded at"
-msgid "upload-photo/"
-msgstr "Téléversé le"
-
-#: apps/website/urls.py:54
-#, fuzzy
-#| msgid "Upload"
-msgid "my-uploads/"
-msgstr "Téléversé par"
-
-#: apps/website/urls.py:60
-#, fuzzy
-#| msgid "Federation"
-msgid "moderation/"
-msgstr "Fédération"
-
-#: apps/website/urls.py:66
-msgid "moderation/approve/<int:pk>/"
-msgstr ""
-
-#: apps/website/urls.py:71
-msgid "moderation/reject/<int:pk>/"
-msgstr ""
-
-#: apps/website/views.py:98
+#: apps/website/views.py:90
 msgid "Thanks for subscribing!"
 msgstr ""
 
-#: apps/website/views.py:126
+#: apps/website/views.py:118
 #, fuzzy
 #| msgid "Confirm unsubscribe"
 msgid "You have been unsubscribed."
 msgstr "Confirmer le désabonnement"
 
-#: apps/website/views.py:128
+#: apps/website/views.py:120
 #, fuzzy
 #| msgid "Subscribe to newsletter"
 msgid "This email is not subscribed to our newsletter."
 msgstr "S'inscrire à la newsletter"
 
-#: apps/website/views.py:265
+#: apps/website/views.py:257
 msgid "Access denied. Only partner owners and staff can verify members."
 msgstr ""
 "Accès refusé. Seuls les propriétaires partenaires et le personnel peuvent "
 "vérifier les membres."
 
-#: apps/website/views.py:289
+#: apps/website/views.py:281
 msgid "Rate limit exceeded. Maximum 20 verification attempts per hour."
 msgstr ""
 "Limite de requêtes dépassée. Maximum 20 tentatives de vérification par heure."
 
-#: apps/website/views.py:305
+#: apps/website/views.py:297
 msgid ""
 "Account temporarily locked. Too many failed verification attempts. Please "
 "try again in 15 minutes."
@@ -7289,46 +7296,28 @@ msgstr ""
 "Compte temporairement verrouillé. Trop de tentatives de vérification "
 "échouées. Veuillez réessayer dans 15 minutes."
 
-#: apps/website/views.py:349
+#: apps/website/views.py:341
 msgid "No member found with this card number."
 msgstr "Aucun membre trouvé avec ce numéro de carte."
 
-#: apps/website/views.py:367
+#: apps/website/views.py:359
 msgid "This member's membership has expired."
 msgstr "L'adhésion de ce membre a expiré."
 
-#: apps/website/views.py:406
+#: apps/website/views.py:398
 msgid "Member verified successfully."
 msgstr "Membre vérifié avec succès."
 
-#: apps/website/views.py:407
+#: apps/website/views.py:399
 msgid "N/A"
 msgstr "N/D"
 
-#: apps/website/views.py:426
+#: apps/website/views.py:418
 msgid ""
 "Verification failed. The provided information does not match our records."
 msgstr ""
 "Vérification échouée. Les informations fournies ne correspondent pas à nos "
 "registres."
-
-#: apps/website/views.py:455
-msgid ""
-"Access denied. Your membership does not include gallery upload privileges."
-msgstr ""
-"Accès refusé. Votre adhésion n'inclut pas les privilèges de téléversement "
-"galerie."
-
-#: apps/website/views.py:594
-msgid "Rejected by moderator."
-msgstr "Rejeté par le modérateur."
-
-#: apps/website/views_admin.py:30 apps/website/views_admin.py:137
-#: apps/website/views_admin.py:210
-#, fuzzy
-#| msgid "Access level"
-msgid "Access denied."
-msgstr "Niveau d'accès"
 
 #: apps/website/views_admin.py:61
 #, fuzzy
@@ -7399,31 +7388,21 @@ msgstr "S'inscrire à la newsletter"
 msgid "Maintenance"
 msgstr "Titre principal."
 
-#: clubcms/urls.py:53
+#: clubcms/urls.py:50
 msgid "account/"
 msgstr ""
 
-#: clubcms/urls.py:56
-msgid "members/<str:username>/"
-msgstr ""
-
-#: clubcms/urls.py:61
+#: clubcms/urls.py:52
 #, fuzzy
 #| msgid "Events"
 msgid "events/"
 msgstr "Événements"
 
-#: clubcms/urls.py:63
+#: clubcms/urls.py:56
 #, fuzzy
-#| msgid "Mutual Aid"
-msgid "mutual-aid/"
-msgstr "Entraide"
-
-#: clubcms/urls.py:69
-#, fuzzy
-#| msgid "event category"
-msgid "events/partner/"
-msgstr "catégorie d'événement"
+#| msgid "notifications"
+msgid "notifications/"
+msgstr "notifications"
 
 #: templates/account/aid.html:4 templates/account/aid.html:13
 msgid "Mutual Aid Availability"
@@ -7532,7 +7511,7 @@ msgstr ""
 
 #: templates/account/card.html:77 templates/account/card.html:119
 #: templates/account/membership_request.html:19
-#: templates/website/pages/membership_plans_page.html:29
+#: templates/website/pages/membership_plans_page.html:30
 msgid "year"
 msgstr "an"
 
@@ -7555,7 +7534,7 @@ msgid "Available Membership Plans"
 msgstr "Aidants disponibles"
 
 #: templates/account/card.html:116
-#: templates/website/pages/membership_plans_page.html:24
+#: templates/website/pages/membership_plans_page.html:25
 msgid "Your plan"
 msgstr "Votre plan"
 
@@ -7564,28 +7543,28 @@ msgid "Plan features"
 msgstr "Caractéristiques de la formule"
 
 #: templates/account/card.html:125 templates/account/membership_request.html:26
-#: templates/website/pages/membership_plans_page.html:36
+#: templates/website/pages/membership_plans_page.html:37
 msgid "Event registration"
 msgstr "Inscription aux événements"
 
 #: templates/account/card.html:128 templates/account/membership_request.html:29
-#: templates/website/pages/membership_plans_page.html:39
+#: templates/website/pages/membership_plans_page.html:40
 msgid "Voting rights"
 msgstr "Droit de vote"
 
 #: templates/account/card.html:131 templates/account/membership_request.html:32
-#: templates/website/pages/membership_plans_page.html:42
+#: templates/website/pages/membership_plans_page.html:43
 msgid "Gallery upload"
 msgstr "Téléversement galerie"
 
 #: templates/account/card.html:134 templates/account/membership_request.html:35
-#: templates/website/pages/membership_plans_page.html:45
+#: templates/website/pages/membership_plans_page.html:46
 #, python-format
 msgid "%(percent)s%% discount on events"
 msgstr "%(percent)s%% de réduction sur les événements"
 
 #: templates/account/card.html:139
-#: templates/website/pages/membership_plans_page.html:54
+#: templates/website/pages/membership_plans_page.html:55
 msgid "Request this membership"
 msgstr "Demandeur (si membre)"
 
@@ -7671,7 +7650,7 @@ msgid "No members are currently visible in the directory."
 msgstr "Aucun membre n'est actuellement visible dans l'annuaire."
 
 #: templates/account/login.html:4 templates/account/login.html:32
-#: templates/account/signup.html:37 templates/includes/navbar.html:183
+#: templates/account/signup.html:37 templates/includes/navbar.html:186
 msgid "Log in"
 msgstr "Se connecter"
 
@@ -7695,12 +7674,12 @@ msgstr "Vous n'avez pas de compte ?"
 
 #: templates/account/login.html:41 templates/account/signup.html:4
 #: templates/account/signup.html:31
-#: templates/website/pages/membership_plans_page.html:50
+#: templates/website/pages/membership_plans_page.html:51
 msgid "Sign up"
 msgstr "S'inscrire"
 
 #: templates/account/logout.html:4 templates/account/logout.html:9
-#: templates/account/logout.html:17 templates/includes/navbar.html:173
+#: templates/account/logout.html:17 templates/includes/navbar.html:176
 msgid "Log out"
 msgstr "Se deconnecter"
 
@@ -7722,7 +7701,7 @@ msgid "Complete your membership application"
 msgstr "Complétez votre demande d'adhésion"
 
 #: templates/account/membership_request.html:41
-#: templates/website/pages/membership_plans_page.html:68
+#: templates/website/pages/membership_plans_page.html:69
 msgid ""
 "After submitting your request, the club administration will review it and "
 "contact you with payment instructions."
@@ -7775,11 +7754,11 @@ msgstr "Traité"
 msgid "You have not submitted any membership requests yet."
 msgstr "Vous ne vous êtes encore inscrit(e) à aucun événement."
 
-#: templates/account/membership_requests.html:65
+#: templates/account/membership_requests.html:67
 msgid "View Membership Plans"
 msgstr "Alertes adhésion"
 
-#: templates/account/membership_requests.html:72
+#: templates/account/membership_requests.html:75
 msgid "Back to My Card"
 msgstr "Retour à l'Entraide"
 
@@ -8299,9 +8278,9 @@ msgstr ""
 "Votre inscription pour <strong>%(event_title)s</strong> a été confirmée."
 
 #: templates/events/emails/registration_confirmation.html:50
-#: templates/events/payment_bank_transfer.html:35
-#: templates/events/payment_cancel.html:17
-#: templates/events/payment_choice.html:15
+#: templates/events/payment_bank_transfer.html:38
+#: templates/events/payment_cancel.html:24
+#: templates/events/payment_choice.html:19
 msgid "Amount"
 msgstr "Montant"
 
@@ -8323,11 +8302,6 @@ msgid "This is an automatic confirmation email. Please do not reply."
 msgstr ""
 "Ceci est un e-mail de confirmation automatique. Veuillez ne pas répondre."
 
-#: templates/events/my_events.html:4 templates/events/my_events.html:11
-#: templates/events/my_registrations.html:97
-msgid "My Favorite Events"
-msgstr "Mes Événements Favoris"
-
 #: templates/events/my_events.html:14
 #: templates/events/my_events_archive.html:14
 msgid "Events navigation"
@@ -8348,8 +8322,8 @@ msgstr "Archives"
 #: templates/events/my_events_archive.html:31
 #: templates/events/my_registrations.html:4
 #: templates/events/my_registrations.html:10
-#: templates/events/payment_cancel.html:24
-#: templates/events/payment_success.html:27
+#: templates/events/payment_cancel.html:35
+#: templates/events/payment_success.html:34
 msgid "My Registrations"
 msgstr "Mes Inscriptions"
 
@@ -8381,7 +8355,8 @@ msgid "ICS"
 msgstr "ICS"
 
 #: templates/events/my_events.html:86 templates/events/register.html:4
-#: templates/events/register.html:188
+#: templates/events/register.html:190
+#: templates/members/pages/members_area_page.html:27
 #: templates/website/pages/events_page.html:99
 msgid "Register"
 msgstr "S'inscrire"
@@ -8421,32 +8396,43 @@ msgid "You have not registered for any events yet."
 msgstr "Vous ne vous êtes encore inscrit(e) à aucun événement."
 
 #: templates/events/payment_bank_transfer.html:4
-#: templates/events/payment_bank_transfer.html:8
+#: templates/events/payment_bank_transfer.html:11
 msgid "Bank Transfer Instructions"
 msgstr "Instructions de Virement Bancaire"
 
-#: templates/events/payment_bank_transfer.html:16
+#: templates/events/payment_bank_transfer.html:20
 msgid "Transfer Details"
 msgstr "Détails du Virement"
 
-#: templates/events/payment_bank_transfer.html:31
+#: templates/events/payment_bank_transfer.html:34
 msgid "Bank"
 msgstr "Banque"
 
-#: templates/events/payment_bank_transfer.html:38
+#: templates/events/payment_bank_transfer.html:41
 msgid "Payment Reference"
 msgstr "Référence de Paiement"
 
-#: templates/events/payment_bank_transfer.html:44
+#: templates/events/payment_bank_transfer.html:46
+#, fuzzy
+#| msgid "Payment reference"
+msgid "Copy payment reference"
+msgstr "Référence de paiement"
+
+#: templates/events/payment_bank_transfer.html:47
+msgid "Copied!"
+msgstr ""
+
+#: templates/events/payment_bank_transfer.html:47
+#: templates/events/payment_bank_transfer.html:48
 msgid "Copy"
 msgstr "Copier"
 
-#: templates/events/payment_bank_transfer.html:48
+#: templates/events/payment_bank_transfer.html:52
 #: templates/website/pages/event_detail_page.html:127
 msgid "Deadline"
 msgstr "Date limite"
 
-#: templates/events/payment_bank_transfer.html:61
+#: templates/events/payment_bank_transfer.html:63
 msgid ""
 "Please include the payment reference in the transfer description. Your "
 "registration will be confirmed once the payment is verified by the organiser."
@@ -8454,53 +8440,53 @@ msgstr ""
 "Veuillez inclure la référence de paiement dans le motif du virement. Votre "
 "inscription sera confirmée une fois le paiement vérifié par l'organisateur."
 
-#: templates/events/payment_bank_transfer.html:66
-#: templates/events/payment_choice.html:48
+#: templates/events/payment_bank_transfer.html:72
+#: templates/events/payment_choice.html:64
 msgid "Back to my registrations"
 msgstr "Retour à mes inscriptions"
 
 #: templates/events/payment_cancel.html:4
-#: templates/events/payment_cancel.html:8
+#: templates/events/payment_cancel.html:11
 msgid "Payment Cancelled"
 msgstr "Paiement annulé"
 
-#: templates/events/payment_cancel.html:11
+#: templates/events/payment_cancel.html:18
 msgid "Your payment was not completed. You can try again using the link below."
 msgstr ""
 "Votre paiement n'a pas été effectué. Vous pouvez réessayer en utilisant le "
 "lien ci-dessous."
 
-#: templates/events/payment_cancel.html:23
+#: templates/events/payment_cancel.html:30
 msgid "Try again"
 msgstr "Réessayer"
 
 #: templates/events/payment_choice.html:4
-#: templates/events/payment_choice.html:8
+#: templates/events/payment_choice.html:11
 msgid "Choose Payment Method"
 msgstr "Choisir le Mode de Paiement"
 
-#: templates/events/payment_choice.html:26
+#: templates/events/payment_choice.html:32
 msgid "Credit / Debit Card"
 msgstr "Carte de Crédit / Débit"
 
-#: templates/events/payment_choice.html:27
+#: templates/events/payment_choice.html:33
 msgid "Pay securely with Stripe"
 msgstr "Payez en toute sécurité avec Stripe"
 
-#: templates/events/payment_choice.html:34
+#: templates/events/payment_choice.html:43
 msgid "Pay with your PayPal account"
 msgstr "Payez avec votre compte PayPal"
 
-#: templates/events/payment_choice.html:41
+#: templates/events/payment_choice.html:53
 msgid "Pay via SEPA bank transfer"
 msgstr "Payez par virement bancaire SEPA"
 
 #: templates/events/payment_success.html:4
-#: templates/events/payment_success.html:8
+#: templates/events/payment_success.html:11
 msgid "Payment Confirmed"
 msgstr "Paiement Confirmé"
 
-#: templates/events/payment_success.html:11
+#: templates/events/payment_success.html:18
 msgid "Your payment has been received. You are registered for this event."
 msgstr "Votre paiement a été reçu. Vous êtes inscrit(e) à cet événement."
 
@@ -8508,58 +8494,70 @@ msgstr "Votre paiement a été reçu. Vous êtes inscrit(e) à cet événement."
 msgid "Register for Event"
 msgstr "S'inscrire à l'Événement"
 
-#: templates/events/register.html:43
+#: templates/events/register.html:16
+#, fuzzy
+#| msgid "Date"
+msgid "Date:"
+msgstr "Date"
+
+#: templates/events/register.html:22
+#, fuzzy
+#| msgid "Location"
+msgid "Location:"
+msgstr "Lieu"
+
+#: templates/events/register.html:45
 msgid "Member discount"
 msgstr "Réduction membre"
 
-#: templates/events/register.html:48 templates/events/register.html:176
+#: templates/events/register.html:50 templates/events/register.html:178
 #, fuzzy
 #| msgid "Press contact person"
 msgid "Price per person"
 msgstr "Personne de contact presse"
 
-#: templates/events/register.html:53
+#: templates/events/register.html:55
 #, fuzzy
 #| msgid "Passenger fee"
 msgid "Passenger supplement"
 msgstr "Tarif passager"
 
-#: templates/events/register.html:58 templates/events/register.html:178
+#: templates/events/register.html:60 templates/events/register.html:180
 #, fuzzy
 #| msgid "Guest"
 msgid "Guests"
 msgstr "Invité"
 
-#: templates/events/register.html:62 templates/events/register.html:182
+#: templates/events/register.html:64 templates/events/register.html:184
 #: templates/website/admin/maintenance.html:89
 msgid "Total"
 msgstr ""
 
-#: templates/events/register.html:79
+#: templates/events/register.html:81
 msgid "Please correct the highlighted errors below."
 msgstr "Veuillez corriger les erreurs mises en évidence ci-dessous."
 
-#: templates/events/register.html:97
+#: templates/events/register.html:99
 msgid "Your Information"
 msgstr "Vos Informations"
 
-#: templates/events/register.html:108
+#: templates/events/register.html:110
 msgid "Registration Details"
 msgstr "Détails de l'Inscription"
 
-#: templates/events/register.html:118
+#: templates/events/register.html:120
 msgid "Passenger / Companion"
 msgstr "Passager / Accompagnant"
 
-#: templates/events/register.html:159
+#: templates/events/register.html:161
 msgid "Terms"
 msgstr "Conditions"
 
-#: templates/events/register.html:169
+#: templates/events/register.html:171
 msgid "Registration Summary"
 msgstr "Résumé de l'Inscription"
 
-#: templates/events/register.html:180
+#: templates/events/register.html:182
 msgid "Passenger"
 msgstr "Passager"
 
@@ -8786,27 +8784,27 @@ msgstr ""
 msgid "Services"
 msgstr ""
 
-#: templates/includes/footer.html:88
+#: templates/includes/footer.html:90
 msgid "Roadside Assistance"
 msgstr ""
 
-#: templates/includes/footer.html:95
+#: templates/includes/footer.html:98
 #, fuzzy
 #| msgid "Become a member"
 msgid "Become a Member"
 msgstr "Devenir membre"
 
-#: templates/includes/footer.html:97
+#: templates/includes/footer.html:102
 #, fuzzy
 #| msgid "contributions"
 msgid "Contributions"
 msgstr "Introduction"
 
-#: templates/includes/footer.html:146
+#: templates/includes/footer.html:155
 msgid "All rights reserved."
 msgstr "Tous droits reserves."
 
-#: templates/includes/footer.html:161
+#: templates/includes/footer.html:170
 msgid "Select theme"
 msgstr "Sélectionner un membre"
 
@@ -8826,39 +8824,39 @@ msgstr "Rechercher"
 msgid "Confirm search"
 msgstr "Confirmé"
 
-#: templates/includes/navbar.html:123
+#: templates/includes/navbar.html:125
 msgid "My profile"
 msgstr "Mon profil"
 
-#: templates/includes/navbar.html:128
+#: templates/includes/navbar.html:130
 msgid "Membership card"
 msgstr "Carte de membre"
 
-#: templates/includes/navbar.html:133
+#: templates/includes/navbar.html:135
 msgid "My events"
 msgstr "Mes événements"
 
-#: templates/includes/navbar.html:138
+#: templates/includes/navbar.html:140
 #, fuzzy
 #| msgid "My Membership Requests"
 msgid "My membership requests"
 msgstr "Alertes adhésion"
 
-#: templates/includes/navbar.html:143
+#: templates/includes/navbar.html:146
 #, fuzzy
 #| msgid "My Contributions"
 msgid "My contributions"
 msgstr "Mes Inscriptions"
 
-#: templates/includes/navbar.html:149
+#: templates/includes/navbar.html:152
 msgid "Member directory"
 msgstr "Annuaire des membres"
 
-#: templates/includes/navbar.html:156
+#: templates/includes/navbar.html:159
 msgid "Roadside assistance"
 msgstr ""
 
-#: templates/includes/navbar.html:193
+#: templates/includes/navbar.html:196
 msgid "Language"
 msgstr "Langue"
 
@@ -8866,6 +8864,12 @@ msgstr "Langue"
 #: templates/search/search_results.html:194
 msgid "Page navigation"
 msgstr "Basculer la navigation"
+
+#: templates/members/pages/members_area_page.html:24
+#, fuzzy
+#| msgid "Sign up"
+msgid "Sign In"
+msgstr "S'inscrire"
 
 #: templates/mutual_aid/access_request.html:4
 msgid "Request Access"
@@ -9272,7 +9276,8 @@ msgid "If you change your mind, you can re-enable notifications from your"
 msgstr ""
 "Si vous changez d'avis, vous pouvez réactiver les notifications depuis vos"
 
-#: templates/notifications/unsubscribe_success.html:16
+#: templates/notifications/unsubscribe_success.html:18
+#: templates/notifications/unsubscribe_success.html:20
 msgid "account settings"
 msgstr "paramètres du compte"
 
@@ -9809,7 +9814,12 @@ msgstr "Inscrit"
 msgid "My registrations"
 msgstr "Mes Inscriptions"
 
-#: templates/website/pages/event_detail_page.html:214
+#: templates/website/pages/event_detail_page.html:170
+#: templates/website/pages/event_detail_page.html:174
+msgid "Add to calendar"
+msgstr ""
+
+#: templates/website/pages/event_detail_page.html:226
 #: templates/website/pages/partner_page.html:193
 #, fuzzy
 #| msgid "reactions"
@@ -9889,7 +9899,7 @@ msgstr "Notre réseau"
 msgid "All Partners"
 msgstr "Partenaires"
 
-#: templates/website/pages/membership_plans_page.html:60
+#: templates/website/pages/membership_plans_page.html:61
 msgid "No membership plans available at this time."
 msgstr "Aucun plan d'adhésion disponible pour le moment."
 
@@ -10189,6 +10199,101 @@ msgstr ""
 msgid "Verify Another Member"
 msgstr ""
 
+#, fuzzy
+#~| msgid "Search"
+#~ msgid "search/"
+#~ msgstr "Rechercher"
+
+#, fuzzy
+#~| msgid "My Registrations"
+#~ msgid "my-registrations/"
+#~ msgstr "Mes Inscriptions"
+
+#, fuzzy
+#~| msgid "Events"
+#~ msgid "my-events/"
+#~ msgstr "Événements"
+
+#, fuzzy
+#~| msgid "Events Archive"
+#~ msgid "my-events/archive/"
+#~ msgstr "Archives des Événements"
+
+#, fuzzy
+#~| msgid "CTA page link"
+#~ msgid "CTA link"
+#~ msgstr "Lien page CTA"
+
+#, fuzzy
+#~| msgid "Call to action"
+#~ msgid "Call to Action"
+#~ msgstr "Appel à l'action"
+
+#, fuzzy
+#~| msgid "My profile"
+#~ msgid "profile/"
+#~ msgstr "Mon profil"
+
+#, fuzzy
+#~| msgid "Privacy"
+#~ msgid "privacy/"
+#~ msgstr "Confidentialité"
+
+#, fuzzy
+#~| msgid "My Membership Requests"
+#~ msgid "membership-requests/"
+#~ msgstr "Alertes adhésion"
+
+#, fuzzy
+#~| msgid "Member directory"
+#~ msgid "directory/"
+#~ msgstr "Annuaire des membres"
+
+#, fuzzy
+#~| msgid "contributions"
+#~ msgid "contributions/"
+#~ msgstr "Introduction"
+
+#, fuzzy
+#~| msgid "contributions"
+#~ msgid "contributions/submit/"
+#~ msgstr "Introduction"
+
+#, fuzzy
+#~| msgid "Request Access"
+#~ msgid "request-access/"
+#~ msgstr "Demander l'Accès"
+
+#, fuzzy
+#~| msgid "Story"
+#~ msgid "history/"
+#~ msgstr "Récit"
+
+#, fuzzy
+#~| msgid "Uploaded at"
+#~ msgid "upload-photo/"
+#~ msgstr "Téléversé le"
+
+#, fuzzy
+#~| msgid "Upload"
+#~ msgid "my-uploads/"
+#~ msgstr "Téléversé par"
+
+#, fuzzy
+#~| msgid "Federation"
+#~ msgid "moderation/"
+#~ msgstr "Fédération"
+
+#, fuzzy
+#~| msgid "Mutual Aid"
+#~ msgid "mutual-aid/"
+#~ msgstr "Entraide"
+
+#, fuzzy
+#~| msgid "event category"
+#~ msgid "events/partner/"
+#~ msgstr "catégorie d'événement"
+
 #~ msgid "Show"
 #~ msgstr "Afficher la biographie"
 
@@ -10245,9 +10350,6 @@ msgstr ""
 #~| msgid "Address"
 #~ msgid "Address:"
 #~ msgstr "Adresse"
-
-#~ msgid "Active membership required."
-#~ msgstr "Adhésion active requise."
 
 #~ msgid ""
 #~ "Choose the membership plan that best fits your needs. Combine multiple "

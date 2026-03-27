@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Privacy Settings" %} | {{ block.super }}{% endblock %}
 
@@ -38,7 +38,7 @@
 
             <div class="page-privacy__actions">
                 <button type="submit" class="btn btn--primary">{% trans "Save Settings" %}</button>
-                <a href="{% url 'account:profile' %}" class="btn btn--secondary">{% trans "Back to Profile" %}</a>
+                <a href="{% routablepageurl page 'profile' %}" class="btn btn--secondary">{% trans "Back to Profile" %}</a>
             </div>
         </form>
     </div>

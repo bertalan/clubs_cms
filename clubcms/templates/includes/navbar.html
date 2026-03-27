@@ -107,6 +107,8 @@
             {% url 'account_signup' as signup_url %}
             <div class="site-nav__user">
                 {% if request.user.is_authenticated %}
+                    {# Resolve members area page URL for routable links #}
+                    {% localized_slugurl 'members' as members_url %}
                     {# Authenticated user dropdown #}
                     <div class="site-nav__dropdown">
                         <button class="site-nav__dropdown-toggle site-nav__user-toggle"
@@ -119,22 +121,22 @@
                         </button>
                         <ul class="site-nav__dropdown-menu site-nav__user-menu" role="menu">
                             <li role="none">
-                                <a href="{% url 'account:profile' %}" role="menuitem">
+                                <a href="{{ members_url }}profile/" role="menuitem">
                                     {% trans "My profile" %}
                                 </a>
                             </li>
                             <li role="none">
-                                <a href="{% url 'account:card' %}" role="menuitem">
+                                <a href="{{ members_url }}card/" role="menuitem">
                                     {% trans "Membership card" %}
                                 </a>
                             </li>
                             <li role="none">
-                                <a href="{% url 'events:my_registrations' %}" role="menuitem">
+                                <a href="{% events_area_url 'my_registrations' %}" role="menuitem">
                                     {% trans "My events" %}
                                 </a>
                             </li>
                             <li role="none">
-                                <a href="{% url 'account:membership_requests' %}" role="menuitem">
+                                <a href="{{ members_url }}membership-requests/" role="menuitem">
                                     {% trans "My membership requests" %}
                                 </a>
                             </li>
@@ -146,24 +148,24 @@
                             </li>
                             {% if request.user.is_active_member %}
                             <li role="none">
-                                <a href="{% url 'account:directory' %}" role="menuitem">
+                                <a href="{{ members_url }}directory/" role="menuitem">
                                     {% trans "Member directory" %}
                                 </a>
                             </li>
                             {% endif %}
                             <li class="site-nav__dropdown-divider" role="separator" aria-hidden="true"></li>
                             <li role="none">
-                                <a href="{% url 'account:aid' %}" role="menuitem">
+                                <a href="{{ members_url }}aid/" role="menuitem">
                                     {% trans "Roadside assistance" %}
                                 </a>
                             </li>
                             <li role="none">
-                                <a href="{% url 'account:notifications' %}" role="menuitem">
+                                <a href="{{ members_url }}notifications/" role="menuitem">
                                     {% trans "Notifications" %}
                                 </a>
                             </li>
                             <li role="none">
-                                <a href="{% url 'account:privacy' %}" role="menuitem">
+                                <a href="{{ members_url }}privacy/" role="menuitem">
                                     {% trans "Settings" %}
                                 </a>
                             </li>

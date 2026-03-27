@@ -686,9 +686,12 @@ class EventsPage(Page):
 # 7. EventDetailPage
 # ═══════════════════════════════════════════════════════════════════════════
 
-class EventDetailPage(Page):
+class EventDetailPage(RoutablePageMixin, Page):
     """
     Individual event with details, location, registration, and pricing.
+
+    Uses RoutablePageMixin so that sub-routes like ``register/`` are
+    served by the same Wagtail page, keeping URLs human-friendly.
     """
 
     # --- Core Fields ---
@@ -1109,6 +1112,683 @@ class EventDetailPage(Page):
                 ).first()
             )
         return context
+
+    # ------------------------------------------------------------------
+    # Routable sub-pages
+    # ------------------------------------------------------------------
+
+    @route(r"^$")
+    def detail_view(self, request):
+        """Serve the normal event detail page."""
+        return self.render(request)
+
+    @route(r"^register/$", name="register")
+    def register_view(self, request):
+        """
+        Handle event registration for both authenticated and guest users.
+
+        GET:  display the registration form with pricing info.
+        POST: validate and create the EventRegistration record.
+        """
+        from django.db import transaction
+        from django.shortcuts import redirect
+        from django.urls import reverse
+
+        from apps.events.forms import EventRegistrationForm, GuestRegistrationForm
+        from apps.events.models import EventRegistration
+        from apps.events.utils import calculate_price
+
+        user = request.user if request.user.is_authenticated else None
+        form_class = EventRegistrationForm if user else GuestRegistrationForm
+
+        if request.method == "POST":
+            form = form_class(
+                request.POST, event_page=self, user=user,
+            )
+            if form.is_valid():
+                return self._process_registration(request, form, user)
+        else:
+            form = form_class(event_page=self, user=user)
+
+        pricing = calculate_price(self, user=user)
+        return self.render(
+            request,
+            template="events/register.html",
+            context_overrides={
+                "form": form,
+                "event": self,
+                "pricing": pricing,
+                "page": self,
+            },
+        )
+
+    def _process_registration(self, request, form, user):
+        """Validate business rules and create the EventRegistration."""
+        from django.db import transaction
+        from django.shortcuts import redirect
+        from django.utils import timezone as tz
+
+        from apps.events.models import EventRegistration
+        from apps.events.utils import calculate_price, events_area_url
+
+        # Validate registration is open
+        if not self.is_registration_open:
+            form.add_error(None, _("Registration is not open for this event."))
+            return self._render_register_form(request, form, user)
+
+        # Check deadline
+        deadline = self.computed_deadline or self.registration_deadline
+        if deadline and tz.now() > deadline:
+            form.add_error(None, _("The registration deadline has passed."))
+            return self._render_register_form(request, form, user)
+
+        # Check member permissions
+        if user and hasattr(user, "can_register_events"):
+            if not user.can_register_events:
+                form.add_error(
+                    None,
+                    _(
+                        "Your membership does not include event registration. "
+                        "Please upgrade your membership."
+                    ),
+                )
+                return self._render_register_form(request, form, user)
+
+        # Check for duplicate registration
+        if user:
+            existing = EventRegistration.objects.filter(
+                event=self,
+                user=user,
+                status__in=["registered", "confirmed", "waitlist"],
+            ).exists()
+            if existing:
+                form.add_error(
+                    None,
+                    _("You are already registered for this event."),
+                )
+                return self._render_register_form(request, form, user)
+
+        # Calculate payment amount
+        pricing = calculate_price(self, user=user)
+        guests = form.cleaned_data.get("guests", 0) or 0
+        has_passenger = form.cleaned_data.get("has_passenger", False)
+        per_person = pricing["final_price"]
+        total_heads = 1 + guests
+        payment_amount = per_person * total_heads
+        if has_passenger:
+            payment_amount += pricing["passenger_price"]
+
+        # Build registration
+        max_attendees = self.max_attendees or 0
+        registration = form.save(commit=False)
+        registration.event = self
+        registration.payment_amount = payment_amount
+
+        if user:
+            registration.user = user
+
+        if payment_amount <= 0:
+            registration.payment_status = "paid"
+            registration.payment_provider = "free"
+
+        with transaction.atomic():
+            if max_attendees > 0:
+                confirmed_count = (
+                    EventRegistration.objects.select_for_update()
+                    .filter(
+                        event=self,
+                        status__in=["registered", "confirmed"],
+                    )
+                    .count()
+                )
+                if confirmed_count >= max_attendees:
+                    registration.status = "waitlist"
+                else:
+                    registration.status = "registered"
+            else:
+                registration.status = "registered"
+
+            registration.save()
+
+        # Redirect to payment choice for paid events
+        if payment_amount > 0 and user:
+            return redirect(events_area_url("payment_choice", args=[registration.pk]))
+
+        if user:
+            return redirect(events_area_url("my_registrations"))
+        return redirect(self.url)
+
+    def _render_register_form(self, request, form, user):
+        """Re-render the register form with errors."""
+        from apps.events.utils import calculate_price
+
+        pricing = calculate_price(self, user=user)
+        return self.render(
+            request,
+            template="events/register.html",
+            context_overrides={
+                "form": form,
+                "event": self,
+                "pricing": pricing,
+                "page": self,
+            },
+        )
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 7b. EventsAreaPage
+# ═══════════════════════════════════════════════════════════════════════════
+
+class EventsAreaPage(RoutablePageMixin, Page):
+    """
+    Container page for authenticated event-management views.
+
+    Routes:
+        /                              — landing (redirect to my-registrations)
+        /my-registrations/             — list user's registrations
+        /my-events/                    — favorite events (upcoming)
+        /my-events/archive/            — past favorites
+        /cancel/<pk>/                  — cancel registration (POST)
+        /payment/<pk>/                 — choose payment provider
+        /payment/<pk>/bank-transfer/   — bank transfer instructions
+        /payment/<pk>/success/         — payment success
+        /payment/<pk>/cancel/          — payment cancelled
+    """
+
+    intro = RichTextField(
+        blank=True,
+        verbose_name=_("Introduction"),
+        help_text=_("Introductory text for the events area landing page."),
+    )
+
+    max_count = 1
+    parent_page_types = ["wagtailcore.Page", "website.HomePage"]
+    subpage_types = []
+    template = "events/my_registrations.html"
+
+    content_panels = Page.content_panels + [
+        FieldPanel("intro"),
+    ]
+
+    class Meta:
+        verbose_name = _("Events Area Page")
+        verbose_name_plural = _("Events Area Pages")
+
+    # ------------------------------------------------------------------
+    # Helpers
+    # ------------------------------------------------------------------
+
+    def _login_required(self, request):
+        """Return a redirect to login if user is not authenticated, else None."""
+        if not request.user.is_authenticated:
+            from django.conf import settings as django_settings
+            from django.shortcuts import redirect
+
+            login_url = getattr(django_settings, "LOGIN_URL", "/account/login/")
+            return redirect(f"{login_url}?next={request.path}")
+        return None
+
+    # ------------------------------------------------------------------
+    # Landing → my-registrations
+    # ------------------------------------------------------------------
+
+    @route(r"^$")
+    def landing_view(self, request):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+        from django.shortcuts import redirect
+
+        return redirect(self.url + self.reverse_subpage("my_registrations"))
+
+    # ------------------------------------------------------------------
+    # My Registrations
+    # ------------------------------------------------------------------
+
+    @route(r"^my-registrations/$", name="my_registrations")
+    def my_registrations_view(self, request):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        from apps.events.models import EventRegistration
+
+        qs = (
+            EventRegistration.objects.filter(user=request.user)
+            .select_related("event")
+            .order_by("-registered_at")
+        )
+
+        paginator = Paginator(qs, 20)
+        page_number = request.GET.get("page")
+        try:
+            page_obj = paginator.page(page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj = paginator.page(paginator.num_pages)
+
+        return self.render(
+            request,
+            template="events/my_registrations.html",
+            context_overrides={
+                "registrations": page_obj,
+                "page_obj": page_obj,
+                "is_paginated": page_obj.has_other_pages(),
+                "page": self,
+            },
+        )
+
+    # ------------------------------------------------------------------
+    # My Events (upcoming favorites)
+    # ------------------------------------------------------------------
+
+    @route(r"^my-events/$", name="my_events")
+    def my_events_view(self, request):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        from apps.events.models import EventFavorite
+
+        now = timezone.now()
+        qs = (
+            EventFavorite.objects.filter(
+                user=request.user,
+                event__start_date__gte=now,
+            )
+            .select_related("event")
+            .order_by("event__start_date")
+        )
+
+        paginator = Paginator(qs, 20)
+        page_number = request.GET.get("page")
+        try:
+            page_obj = paginator.page(page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj = paginator.page(paginator.num_pages)
+
+        return self.render(
+            request,
+            template="events/my_events.html",
+            context_overrides={
+                "favorites": page_obj,
+                "page_obj": page_obj,
+                "is_paginated": page_obj.has_other_pages(),
+                "page": self,
+            },
+        )
+
+    # ------------------------------------------------------------------
+    # My Events Archive (past favorites)
+    # ------------------------------------------------------------------
+
+    @route(r"^my-events/archive/$", name="my_events_archive")
+    def my_events_archive_view(self, request):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        from apps.events.models import EventFavorite
+
+        now = timezone.now()
+        qs = (
+            EventFavorite.objects.filter(
+                user=request.user,
+                event__start_date__lt=now,
+            )
+            .select_related("event")
+            .order_by("-event__start_date")
+        )
+
+        paginator = Paginator(qs, 30)
+        page_number = request.GET.get("page")
+        try:
+            page_obj = paginator.page(page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj = paginator.page(paginator.num_pages)
+
+        # Group by year
+        grouped = {}
+        for fav in page_obj:
+            year = fav.event.start_date.year
+            grouped.setdefault(year, []).append(fav)
+        favorites_by_year = dict(sorted(grouped.items(), reverse=True))
+
+        return self.render(
+            request,
+            template="events/my_events_archive.html",
+            context_overrides={
+                "favorites": page_obj,
+                "favorites_by_year": favorites_by_year,
+                "page_obj": page_obj,
+                "is_paginated": page_obj.has_other_pages(),
+                "page": self,
+            },
+        )
+
+    # ------------------------------------------------------------------
+    # Cancel Registration
+    # ------------------------------------------------------------------
+
+    @route(r"^cancel/(\d+)/$", name="cancel")
+    def cancel_view(self, request, pk):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        if request.method != "POST":
+            from django.http import HttpResponseNotAllowed
+
+            return HttpResponseNotAllowed(["POST"])
+
+        from django.shortcuts import get_object_or_404, redirect
+
+        from apps.events.models import EventRegistration
+        from apps.events.utils import promote_from_waitlist
+
+        registration = get_object_or_404(
+            EventRegistration, pk=pk, user=request.user,
+        )
+
+        if registration.status == "cancelled":
+            return redirect(self.url + self.reverse_subpage("my_registrations"))
+
+        if (
+            registration.event.start_date
+            and registration.event.start_date < timezone.now()
+        ):
+            return redirect(self.url + self.reverse_subpage("my_registrations"))
+
+        was_active = registration.status in ("registered", "confirmed")
+        registration.status = "cancelled"
+        registration.save(update_fields=["status"])
+
+        if was_active:
+            promote_from_waitlist(registration.event)
+
+        return redirect(self.url + self.reverse_subpage("my_registrations"))
+
+    # ------------------------------------------------------------------
+    # Payment Choice
+    # ------------------------------------------------------------------
+
+    @route(r"^payment/(\d+)/$", name="payment_choice")
+    def payment_choice_view(self, request, pk):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        from django.shortcuts import get_object_or_404, redirect
+
+        from apps.events.models import EventRegistration
+        from apps.website.models.settings import PaymentSettings
+
+        registration = get_object_or_404(
+            EventRegistration, pk=pk, user=request.user,
+        )
+        if registration.payment_status == "paid":
+            return redirect(self.url + self.reverse_subpage("my_registrations"))
+
+        payment_settings = PaymentSettings.for_request(request)
+
+        if request.method == "POST":
+            provider = request.POST.get("provider", "")
+
+            if provider == "bank_transfer" and payment_settings.bank_transfer_enabled:
+                return self._setup_bank_transfer(request, registration, payment_settings)
+
+            if provider == "stripe" and payment_settings.stripe_enabled:
+                return self._setup_stripe(request, registration, payment_settings)
+
+            if provider == "paypal" and payment_settings.paypal_enabled:
+                return self._setup_paypal(request, registration, payment_settings)
+
+        return self._render_payment_choice(request, registration, payment_settings)
+
+    def _render_payment_choice(self, request, registration, payment_settings, error=None):
+        ctx = {
+            "registration": registration,
+            "event": registration.event,
+            "available_providers": payment_settings.available_providers,
+            "payment_settings": payment_settings,
+            "page": self,
+        }
+        if error:
+            ctx["error"] = error
+        return self.render(
+            request,
+            template="events/payment_choice.html",
+            context_overrides=ctx,
+        )
+
+    def _setup_bank_transfer(self, request, registration, payment_settings):
+        import logging
+        from datetime import timedelta
+
+        from django.shortcuts import redirect
+
+        from apps.events.payment import generate_payment_reference
+
+        now = timezone.now()
+        expiry_days = payment_settings.bank_transfer_expiry_days or 5
+        expires_at = now + timedelta(days=expiry_days)
+
+        if registration.event.start_date:
+            max_expires = registration.event.start_date - timedelta(days=1)
+            if expires_at > max_expires:
+                expires_at = max_expires
+
+        registration.payment_provider = "bank_transfer"
+        registration.payment_reference = generate_payment_reference(registration)
+        registration.payment_expires_at = expires_at
+        registration.save(
+            update_fields=["payment_provider", "payment_reference", "payment_expires_at"]
+        )
+
+        if registration.user:
+            try:
+                from apps.notifications.services import create_notification
+
+                create_notification(
+                    notification_type="payment_instructions",
+                    title=str(_("Payment instructions: {event}")).format(
+                        event=registration.event.title,
+                    ),
+                    body=str(
+                        _("Please complete the bank transfer of \u20ac{amount} "
+                          "with reference {ref} by {expires}.")
+                    ).format(
+                        amount=registration.payment_amount,
+                        ref=registration.payment_reference,
+                        expires=registration.payment_expires_at.strftime("%d/%m/%Y"),
+                    ),
+                    url=self.url + self.reverse_subpage("bank_transfer_instructions", args=[str(registration.pk)]),
+                    recipients=[registration.user],
+                    channels=["email"],
+                    content_object=registration,
+                )
+            except Exception:
+                pass
+
+        return redirect(
+            self.url + self.reverse_subpage("bank_transfer_instructions", args=[str(registration.pk)])
+        )
+
+    def _setup_stripe(self, request, registration, payment_settings):
+        import logging
+
+        from django.shortcuts import redirect
+
+        logger = logging.getLogger(__name__)
+        try:
+            from apps.events.payment import create_stripe_checkout_session
+
+            session_url = create_stripe_checkout_session(
+                registration, payment_settings, request
+            )
+            return redirect(session_url)
+        except Exception:
+            logger.exception(
+                "Stripe session creation failed for registration %s",
+                registration.pk,
+            )
+            return self._render_payment_choice(
+                request, registration, payment_settings,
+                error=_("Payment service temporarily unavailable. Please try again."),
+            )
+
+    def _setup_paypal(self, request, registration, payment_settings):
+        import logging
+
+        from django.shortcuts import redirect
+
+        logger = logging.getLogger(__name__)
+        try:
+            from apps.events.payment import create_paypal_order
+
+            order_id, approval_url = create_paypal_order(
+                registration, payment_settings, request
+            )
+            return redirect(approval_url)
+        except Exception:
+            logger.exception(
+                "PayPal order creation failed for registration %s",
+                registration.pk,
+            )
+            return self._render_payment_choice(
+                request, registration, payment_settings,
+                error=_("Payment service temporarily unavailable. Please try again."),
+            )
+
+    # ------------------------------------------------------------------
+    # Bank Transfer Instructions
+    # ------------------------------------------------------------------
+
+    @route(r"^payment/(\d+)/bank-transfer/$", name="bank_transfer_instructions")
+    def bank_transfer_view(self, request, pk):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        from django.shortcuts import get_object_or_404, redirect
+
+        from apps.events.models import EventRegistration
+        from apps.website.models.settings import PaymentSettings
+
+        registration = get_object_or_404(
+            EventRegistration, pk=pk, user=request.user,
+        )
+        if registration.payment_provider != "bank_transfer":
+            return redirect(self.url + self.reverse_subpage("my_registrations"))
+
+        payment_settings = PaymentSettings.for_request(request)
+
+        return self.render(
+            request,
+            template="events/payment_bank_transfer.html",
+            context_overrides={
+                "registration": registration,
+                "event": registration.event,
+                "payment_settings": payment_settings,
+                "page": self,
+            },
+        )
+
+    # ------------------------------------------------------------------
+    # Payment Success
+    # ------------------------------------------------------------------
+
+    @route(r"^payment/(\d+)/success/$", name="payment_success")
+    def payment_success_view(self, request, pk):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        import logging
+
+        from django.shortcuts import get_object_or_404
+
+        from apps.events.models import EventRegistration
+
+        logger = logging.getLogger(__name__)
+        registration = get_object_or_404(
+            EventRegistration, pk=pk, user=request.user,
+        )
+
+        # Verify Stripe payment if webhook hasn't arrived yet
+        if (
+            registration.payment_provider == "stripe"
+            and registration.payment_status != "paid"
+            and registration.payment_session_id
+        ):
+            try:
+                import stripe as stripe_lib
+
+                from apps.website.models.settings import PaymentSettings
+                from wagtail.models import Site
+
+                site = Site.objects.get(is_default_site=True)
+                payment_settings = PaymentSettings.for_site(site)
+                stripe_lib.api_key = payment_settings.stripe_secret_key
+
+                session = stripe_lib.checkout.Session.retrieve(
+                    registration.payment_session_id
+                )
+                if session.payment_status == "paid":
+                    registration.payment_status = "paid"
+                    registration.payment_id = session.payment_intent or ""
+                    registration.save(
+                        update_fields=["payment_status", "payment_id"]
+                    )
+            except Exception:
+                logger.exception(
+                    "Stripe payment verification failed for registration %s",
+                    registration.pk,
+                )
+
+        return self.render(
+            request,
+            template="events/payment_success.html",
+            context_overrides={
+                "registration": registration,
+                "event": registration.event,
+                "payment_verified": registration.payment_status == "paid",
+                "page": self,
+            },
+        )
+
+    # ------------------------------------------------------------------
+    # Payment Cancel
+    # ------------------------------------------------------------------
+
+    @route(r"^payment/(\d+)/cancel/$", name="payment_cancel")
+    def payment_cancel_view(self, request, pk):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        from django.shortcuts import get_object_or_404
+
+        from apps.events.models import EventRegistration
+
+        registration = get_object_or_404(
+            EventRegistration, pk=pk, user=request.user,
+        )
+
+        return self.render(
+            request,
+            template="events/payment_cancel.html",
+            context_overrides={
+                "registration": registration,
+                "event": registration.event,
+                "page": self,
+            },
+        )
 
 
 # ═══════════════════════════════════════════════════════════════════════════
