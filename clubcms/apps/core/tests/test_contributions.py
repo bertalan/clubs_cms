@@ -7,34 +7,72 @@ import json
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from django.urls import reverse
 
-from apps.core.models import Contribution
+from wagtail.models import Page, Site
+
+from apps.core.models import Contribution, ContributionsPage
 
 User = get_user_model()
+
+
+def _setup_contributions_page():
+    """Create a ContributionsPage under the root with a working Site."""
+    root = Page.objects.filter(depth=1).first()
+    home = root.get_children().first()
+    if home is None:
+        home = root.add_child(instance=Page(title="Home", slug="home"))
+    contrib_page = home.add_child(
+        instance=ContributionsPage(
+            title="Contributions",
+            slug="contributions",
+        )
+    )
+    contrib_page.save_revision().publish()
+    Site.objects.update_or_create(
+        hostname="localhost",
+        defaults={
+            "root_page": home,
+            "is_default_site": True,
+            "site_name": "Test",
+        },
+    )
+    return contrib_page
 
 
 class TestContributionAuth(TestCase):
     """Contribution pages require login."""
 
+    @classmethod
+    def setUpTestData(cls):
+        cls.contrib_page = _setup_contributions_page()
+
     def test_submit_requires_login(self):
-        resp = self.client.get(reverse("account:submit_contribution"))
+        url = self.contrib_page.url + self.contrib_page.reverse_subpage(
+            "submit_contribution"
+        )
+        resp = self.client.get(url)
         self.assertIn(resp.status_code, (302, 403))
 
     def test_my_contributions_requires_login(self):
-        resp = self.client.get(reverse("account:my_contributions"))
+        resp = self.client.get(self.contrib_page.url)
         self.assertIn(resp.status_code, (302, 403))
 
 
 class TestSubmitContribution(TestCase):
-    """POST /account/contributions/submit/ creates a pending Contribution."""
+    """POST contributions/submit/ creates a pending Contribution."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.contrib_page = _setup_contributions_page()
 
     def setUp(self):
         self.user = User.objects.create_user(
             username="contrib_user", password="testpass123"
         )
         self.client.login(username="contrib_user", password="testpass123")
-        self.url = reverse("account:submit_contribution")
+        self.url = self.contrib_page.url + self.contrib_page.reverse_subpage(
+            "submit_contribution"
+        )
 
     def test_get_shows_form(self):
         resp = self.client.get(self.url)
@@ -112,7 +150,11 @@ class TestSubmitContribution(TestCase):
 
 
 class TestMyContributions(TestCase):
-    """GET /account/contributions/ shows user's own contributions."""
+    """GET contributions/ shows user's own contributions."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.contrib_page = _setup_contributions_page()
 
     def setUp(self):
         self.user = User.objects.create_user(
@@ -122,7 +164,7 @@ class TestMyContributions(TestCase):
             username="othercontrib", password="testpass123"
         )
         self.client.login(username="mycontrib", password="testpass123")
-        self.url = reverse("account:my_contributions")
+        self.url = self.contrib_page.url
 
         # Own contribution
         Contribution.objects.create(

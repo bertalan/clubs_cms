@@ -2,7 +2,9 @@
 
 import pytest
 
-from apps.mutual_aid.views import _parse_float_locale
+from apps.mutual_aid.models import MutualAidPage
+
+_parse_float_locale = MutualAidPage._parse_float_locale
 
 
 class TestParseFloatLocale:

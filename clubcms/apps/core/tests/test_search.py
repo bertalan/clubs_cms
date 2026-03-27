@@ -4,7 +4,7 @@ Tests for the site-wide search functionality.
 
 from django.test import RequestFactory, TestCase
 
-from apps.core.views import SearchView, haversine_km
+from apps.core.models import SearchPage, haversine_km
 
 
 class HaversineTests(TestCase):
@@ -34,7 +34,7 @@ class SearchViewContextTests(TestCase):
 
     def setUp(self):
         self.factory = RequestFactory()
-        self.view = SearchView()
+        self.view = SearchPage()
 
     def test_empty_params(self):
         request = self.factory.get("/search/")
@@ -86,7 +86,7 @@ class GeoFilterTests(TestCase):
         ev_near = self._make_mock_event(45.47, 9.20, "Near")  # ~1 km
         ev_far = self._make_mock_event(41.90, 12.50, "Far")  # ~477 km
 
-        result = SearchView._apply_geo_filter(
+        result = SearchPage._apply_geo_filter(
             [ev_near, ev_far], user_lat, user_lng, 50
         )
         self.assertEqual(len(result), 1)
@@ -98,11 +98,11 @@ class GeoFilterTests(TestCase):
         user_lat, user_lng = 45.4642, 9.1900
         ev = self._make_mock_event(None, None, "No coords")
 
-        result = SearchView._apply_geo_filter([ev], user_lat, user_lng, 100)
+        result = SearchPage._apply_geo_filter([ev], user_lat, user_lng, 100)
         self.assertEqual(len(result), 0)
 
     def test_no_geo_returns_all(self):
         """When lat/lng are None, all events are returned unfiltered."""
         ev = self._make_mock_event(45.0, 9.0)
-        result = SearchView._apply_geo_filter([ev], None, None, 50)
+        result = SearchPage._apply_geo_filter([ev], None, None, 50)
         self.assertEqual(len(result), 1)

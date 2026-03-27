@@ -3,18 +3,30 @@ Federation models: FederatedClub, ExternalEvent, ExternalEventInterest,
 ExternalEventComment, FederationInfoPage.
 """
 
+import json
+import logging
 import uuid
 
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator
 from django.db import models
+from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Page
 
 from apps.website.blocks import BODY_BLOCKS, FAQBlock, TimelineBlock
+
+logger = logging.getLogger(__name__)
 
 
 class FederatedClub(models.Model):
@@ -267,16 +279,75 @@ class ExternalEventComment(models.Model):
 
 
 # ---------------------------------------------------------------------------
-# FederationInfoPage (Wagtail Page)
+# ---------------------------------------------------------------------------
+# FederationInfoPage (Wagtail RoutablePageMixin)
 # ---------------------------------------------------------------------------
 
 
-class FederationInfoPage(Page):
-    """
-    Public landing page explaining the federation network.
+def _is_active_member(user):
+    """Check if user is an active club member."""
+    return getattr(user, "is_active_member", False)
 
-    Shows how federation works, lists approved partner clubs,
-    and provides a CTA to the external events listing.
+
+def _build_event_json_ld(event):
+    """Build a schema.org/Event dict for JSON-LD structured data."""
+    from django.template.defaultfilters import truncatewords
+    from django.utils.html import strip_tags
+
+    data = {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": event.event_name,
+        "startDate": event.start_date.isoformat(),
+        "eventStatus": f"https://schema.org/{event.event_status}",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "organizer": {
+            "@type": "Organization",
+            "name": event.source_club.name,
+        },
+    }
+
+    if event.end_date:
+        data["endDate"] = event.end_date.isoformat()
+    if event.source_club.base_url:
+        data["organizer"]["url"] = event.source_club.base_url
+    if event.detail_url:
+        data["url"] = event.detail_url
+
+    if event.location_name or event.location_address:
+        location = {"@type": "Place"}
+        if event.location_name:
+            location["name"] = event.location_name
+        if event.location_address:
+            location["address"] = event.location_address
+        if event.location_lat and event.location_lon:
+            location["geo"] = {
+                "@type": "GeoCoordinates",
+                "latitude": event.location_lat,
+                "longitude": event.location_lon,
+            }
+        data["location"] = location
+
+    if event.description:
+        data["description"] = truncatewords(strip_tags(event.description), 50)
+    if event.image_url:
+        data["image"] = event.image_url
+
+    return data
+
+
+class FederationInfoPage(RoutablePageMixin, Page):
+    """
+    Federation landing page with routable sub-views for
+    partner events listing, detail, interest, and comments.
+
+    Routes:
+        /                                       — info landing
+        /events/                                — partner events list
+        /events/<club_code>/<event_id>/         — event detail
+        /events/<club_code>/<event_id>/interest/  — set interest (POST)
+        /events/<club_code>/<event_id>/comment/   — add comment (POST)
+        /events/<club_code>/<event_id>/comment/delete/ — delete comment (POST)
     """
 
     intro = RichTextField(
@@ -309,20 +380,27 @@ class FederationInfoPage(Page):
         verbose_name=_("CTA button text"),
         help_text=_("Label for the call-to-action button."),
     )
-    cta_url = models.CharField(
-        max_length=200,
+    events_intro = RichTextField(
         blank=True,
-        default="/eventi/partner/",
-        verbose_name=_("CTA link"),
-        help_text=_("URL the CTA button links to."),
+        verbose_name=_("Events page introduction"),
+        help_text=_("Introductory text for the partner events listing page."),
+    )
+    events_per_page = models.PositiveIntegerField(
+        default=12,
+        verbose_name=_("Events per page"),
+        help_text=_("Number of events to display per page."),
     )
 
     content_panels = Page.content_panels + [
         FieldPanel("intro"),
         FieldPanel("how_it_works"),
         MultiFieldPanel(
-            [FieldPanel("cta_text"), FieldPanel("cta_url")],
-            heading=_("Call to Action"),
+            [
+                FieldPanel("cta_text"),
+                FieldPanel("events_intro"),
+                FieldPanel("events_per_page"),
+            ],
+            heading=_("Events Section"),
         ),
         FieldPanel("faq"),
         FieldPanel("body"),
@@ -337,11 +415,22 @@ class FederationInfoPage(Page):
         verbose_name = _("Federation Info Page")
         verbose_name_plural = _("Federation Info Pages")
 
-    def get_context(self, request, *args, **kwargs):
+    # ------------------------------------------------------------------
+    # Route: landing page (info, stats, partners, FAQ)
+    # ------------------------------------------------------------------
+
+    @route(r"^$")
+    def info_view(self, request):
+        return self.render(
+            request,
+            template="federation/federation_info_page.html",
+            context_overrides=self._info_context(request),
+        )
+
+    def _info_context(self, request):
         from django.db.models import Count, Q
 
-        context = super().get_context(request, *args, **kwargs)
-        context["partner_clubs"] = (
+        partner_clubs = (
             FederatedClub.objects.filter(is_active=True, is_approved=True)
             .annotate(
                 event_count=Count(
@@ -354,8 +443,253 @@ class FederationInfoPage(Page):
             )
             .order_by("name")
         )
-        context["partner_count"] = context["partner_clubs"].count()
-        context["event_count"] = ExternalEvent.objects.filter(
-            is_approved=True, is_hidden=False
-        ).count()
-        return context
+        return {
+            "partner_clubs": partner_clubs,
+            "partner_count": partner_clubs.count(),
+            "event_count": ExternalEvent.objects.filter(
+                is_approved=True, is_hidden=False
+            ).count(),
+        }
+
+    # ------------------------------------------------------------------
+    # Route: events list
+    # ------------------------------------------------------------------
+
+    @route(r"^events/$", name="events_list")
+    @method_decorator(login_required)
+    def events_list_view(self, request):
+        qs = (
+            ExternalEvent.objects.filter(
+                is_approved=True,
+                is_hidden=False,
+                start_date__gte=timezone.now(),
+            )
+            .select_related("source_club")
+            .order_by("start_date")
+        )
+
+        # Optional filtering by club
+        club_code = request.GET.get("club")
+        if club_code:
+            qs = qs.filter(source_club__short_code=club_code)
+
+        # Optional search
+        search = request.GET.get("q")
+        if search:
+            qs = qs.filter(event_name__icontains=search)
+
+        paginator = Paginator(qs, self.events_per_page)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+        partner_clubs = FederatedClub.objects.filter(
+            is_active=True, is_approved=True
+        ).order_by("name")
+
+        return self.render(
+            request,
+            template="federation/external_events_list.html",
+            context_overrides={
+                "events": page_obj,
+                "page_obj": page_obj,
+                "paginator": paginator,
+                "is_paginated": page_obj.has_other_pages(),
+                "partner_clubs": partner_clubs,
+                "selected_club": club_code or "",
+                "search_query": search or "",
+            },
+        )
+
+    # ------------------------------------------------------------------
+    # Route: event detail
+    # ------------------------------------------------------------------
+
+    @route(r"^events/(?P<club_code>[\w-]+)/(?P<event_id>[0-9a-f-]+)/$", name="event_detail")
+    @method_decorator(login_required)
+    def event_detail_view(self, request, club_code, event_id):
+        event = get_object_or_404(
+            ExternalEvent.objects.select_related("source_club"),
+            source_club__short_code=club_code,
+            pk=event_id,
+            is_approved=True,
+            is_hidden=False,
+        )
+
+        user = request.user
+        user_interest = None
+        if user.is_authenticated:
+            try:
+                user_interest = ExternalEventInterest.objects.get(
+                    user=user, external_event=event
+                )
+            except ExternalEventInterest.DoesNotExist:
+                pass
+
+        comments = (
+            event.comments.filter(is_deleted=False)
+            .select_related("user")
+            .order_by("created_at")
+        )
+
+        interest_counts = {
+            "interested": event.interests.filter(interest_level="interested").count(),
+            "maybe": event.interests.filter(interest_level="maybe").count(),
+            "going": event.interests.filter(interest_level="going").count(),
+        }
+
+        json_ld = mark_safe(
+            json.dumps(_build_event_json_ld(event), ensure_ascii=False)
+        )
+
+        return self.render(
+            request,
+            template="federation/external_event_detail.html",
+            context_overrides={
+                "event": event,
+                "user_interest": user_interest,
+                "comments": comments,
+                "interest_counts": interest_counts,
+                "is_active_member": _is_active_member(user),
+                "json_ld": json_ld,
+            },
+        )
+
+    # ------------------------------------------------------------------
+    # Route: set interest (POST)
+    # ------------------------------------------------------------------
+
+    @route(r"^events/(?P<club_code>[\w-]+)/(?P<event_id>[0-9a-f-]+)/interest/$", name="set_interest")
+    @method_decorator(login_required)
+    def set_interest_view(self, request, club_code, event_id):
+        if request.method != "POST":
+            return HttpResponseRedirect(self.reverse_subpage(
+                "event_detail", args=[club_code, event_id]
+            ))
+
+        if not _is_active_member(request.user):
+            return HttpResponseForbidden("Active membership required")
+
+        event = get_object_or_404(
+            ExternalEvent,
+            source_club__short_code=club_code,
+            pk=event_id,
+            is_approved=True,
+        )
+
+        interest_level = request.POST.get("interest_level", "")
+
+        if interest_level == "remove":
+            ExternalEventInterest.objects.filter(
+                user=request.user, external_event=event
+            ).delete()
+        elif interest_level in ("interested", "maybe", "going"):
+            ExternalEventInterest.objects.update_or_create(
+                user=request.user,
+                external_event=event,
+                defaults={"interest_level": interest_level},
+            )
+        else:
+            return HttpResponseForbidden("Invalid interest level")
+
+        return HttpResponseRedirect(
+            self.url + self.reverse_subpage("event_detail", args=[club_code, event_id])
+        )
+
+    # ------------------------------------------------------------------
+    # Route: add comment (POST)
+    # ------------------------------------------------------------------
+
+    @route(r"^events/(?P<club_code>[\w-]+)/(?P<event_id>[0-9a-f-]+)/comment/$", name="add_comment")
+    @method_decorator(login_required)
+    def add_comment_view(self, request, club_code, event_id):
+        detail_url = self.url + self.reverse_subpage(
+            "event_detail", args=[club_code, event_id]
+        )
+
+        if request.method != "POST":
+            return HttpResponseRedirect(detail_url)
+
+        if not _is_active_member(request.user):
+            return HttpResponseForbidden("Active membership required")
+
+        event = get_object_or_404(
+            ExternalEvent,
+            source_club__short_code=club_code,
+            pk=event_id,
+            is_approved=True,
+        )
+
+        content = request.POST.get("content", "").strip()
+        if not content:
+            return HttpResponseRedirect(detail_url)
+
+        # Limit comment length
+        content = content[:2000]
+
+        ExternalEventComment.objects.create(
+            user=request.user,
+            external_event=event,
+            content=content,
+        )
+
+        # Send notification to other commenters
+        try:
+            from apps.notifications.services import create_notification
+
+            other_commenters = (
+                ExternalEventComment.objects.filter(
+                    external_event=event, is_deleted=False
+                )
+                .exclude(user=request.user)
+                .values_list("user", flat=True)
+                .distinct()
+            )
+
+            from django.contrib.auth import get_user_model
+
+            User = get_user_model()
+            recipients = User.objects.filter(pk__in=other_commenters)
+
+            if recipients.exists():
+                display_name = request.user.get_visible_name()
+                create_notification(
+                    notification_type="partner_event_comment",
+                    title=f"New comment on {event.event_name}",
+                    body=f"{display_name} commented on the partner event '{event.event_name}'",
+                    url=detail_url,
+                    recipients=recipients,
+                    content_object=event,
+                )
+        except Exception:
+            logger.exception("Failed to send comment notification")
+
+        return HttpResponseRedirect(detail_url)
+
+    # ------------------------------------------------------------------
+    # Route: delete comment (POST)
+    # ------------------------------------------------------------------
+
+    @route(r"^events/(?P<club_code>[\w-]+)/(?P<event_id>[0-9a-f-]+)/comment/delete/$", name="delete_comment")
+    @method_decorator(login_required)
+    def delete_comment_view(self, request, club_code, event_id):
+        detail_url = self.url + self.reverse_subpage(
+            "event_detail", args=[club_code, event_id]
+        )
+
+        if request.method != "POST":
+            return HttpResponseRedirect(detail_url)
+
+        comment_id = request.POST.get("comment_id", "")
+
+        comment = get_object_or_404(
+            ExternalEventComment,
+            pk=comment_id,
+            user=request.user,
+            external_event__source_club__short_code=club_code,
+            external_event__pk=event_id,
+        )
+
+        comment.is_deleted = True
+        comment.save(update_fields=["is_deleted"])
+
+        return HttpResponseRedirect(detail_url)

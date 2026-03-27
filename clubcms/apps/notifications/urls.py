@@ -32,16 +32,4 @@ urlpatterns = [
         views.PushUnsubscribeView.as_view(),
         name="push_unsubscribe",
     ),
-    # Notification history (login required)
-    path(
-        _("history/"),
-        views.NotificationHistoryView.as_view(),
-        name="history",
-    ),
-    # Mark notification as read (AJAX, login required)
-    path(
-        "mark-read/<int:pk>/",
-        views.MarkReadView.as_view(),
-        name="mark_read",
-    ),
 ]

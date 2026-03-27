@@ -2,14 +2,25 @@
 Notification system models.
 
 Provides a notification queue for email, push, and in-app delivery,
-push subscription management, and token-based unsubscribe.
+push subscription management, token-based unsubscribe, and a
+NotificationsPage (RoutablePageMixin) for history and mark-read.
 """
+
+import json
 
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
+from wagtail.admin.panels import FieldPanel
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from wagtail.fields import RichTextField
+from wagtail.models import Page
 
 
 # ---------------------------------------------------------------------------
@@ -269,3 +280,83 @@ class UnsubscribeToken(models.Model):
 
     def __str__(self):
         return f"Unsub {self.notification_type} for {self.user}"
+
+
+# ---------------------------------------------------------------------------
+# Wagtail page – Notification history + mark-read
+# ---------------------------------------------------------------------------
+
+
+class NotificationsPage(RoutablePageMixin, Page):
+    """
+    Lists the authenticated user's sent notifications with pagination,
+    and provides a mark-read AJAX sub-route.
+    """
+
+    intro = RichTextField(blank=True, verbose_name=_("Intro text"))
+
+    content_panels = Page.content_panels + [
+        FieldPanel("intro"),
+    ]
+
+    max_count = 1
+    parent_page_types = ["website.HomePage"]
+    template = "notifications/history.html"
+
+    class Meta:
+        verbose_name = _("Notifications page")
+        verbose_name_plural = _("Notifications pages")
+
+    # -- main view (history list) ------------------------------------------
+
+    def serve(self, request, *args, **kwargs):
+        from django.contrib.auth.decorators import login_required
+
+        @login_required
+        def _inner(request):
+            return super(NotificationsPage, self).serve(request, *args, **kwargs)
+        return _inner(request)
+
+    def get_context(self, request, *args, **kwargs):
+        from django.core.paginator import Paginator
+
+        ctx = super().get_context(request, *args, **kwargs)
+
+        qs = (
+            NotificationQueue.objects.filter(
+                recipient=request.user,
+                status="sent",
+            )
+            .order_by("-sent_at")
+        )
+
+        paginator = Paginator(qs, 25)
+        page_number = request.GET.get("page", 1)
+        page_obj = paginator.get_page(page_number)
+
+        ctx["notifications"] = page_obj
+        ctx["paginator"] = paginator
+        ctx["page_obj"] = page_obj
+        ctx["is_paginated"] = page_obj.has_other_pages()
+        return ctx
+
+    # -- mark-read sub-route -----------------------------------------------
+
+    @route(r"^mark-read/(?P<pk>\d+)/$", name="mark_read")
+    def mark_read(self, request, pk):
+        if not request.user.is_authenticated:
+            return JsonResponse({"error": "login required"}, status=403)
+        if request.method != "POST":
+            return JsonResponse({"error": "POST required"}, status=405)
+
+        notification = get_object_or_404(
+            NotificationQueue,
+            pk=pk,
+            recipient=request.user,
+        )
+
+        if not notification.sent_at:
+            notification.sent_at = timezone.now()
+            notification.save(update_fields=["sent_at"])
+
+        return JsonResponse({"ok": True, "pk": notification.pk})

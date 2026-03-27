@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags i18n %}
+{% load wagtailcore_tags wagtailroutablepage_tags i18n %}
 
 {% block body_class %}page-federation{% endblock %}
 
@@ -47,7 +47,7 @@
         {# CTA #}
         {% if page.cta_text %}
         <div class="page-federation__cta">
-            <a href="{% url 'federation_frontend:list' %}" class="btn btn-primary btn-lg">
+            <a href="{% routablepageurl page 'events_list' %}" class="btn btn-primary btn-lg">
                 {{ page.cta_text }}
             </a>
         </div>
@@ -88,7 +88,7 @@
                             {% endif %}
                         </div>
                         <div class="federation-club-card__actions">
-                            <a href="{% url 'federation_frontend:list' %}?club={{ club.short_code }}"
+                            <a href="{% routablepageurl page 'events_list' %}?club={{ club.short_code }}"
                                class="federation-club-card__link">
                                 {% trans "View events" %} &rarr;
                             </a>

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailroutablepage_tags %}
 
 {% block body_class %}page-upload{% endblock %}
 
@@ -17,13 +17,13 @@
         <div class="page-upload__success" role="alert">
             <h2>{% trans "Upload Successful" %}</h2>
             <p>{% blocktrans count uploads_count=uploads_count %}{{ uploads_count }} photo uploaded successfully and sent for moderation.{% plural %}{{ uploads_count }} photos uploaded successfully and sent for moderation.{% endblocktrans %}</p>
-            <p><a href="{% url 'website:my_uploads' %}">{% trans "View your uploads" %}</a></p>
+            <p><a href="{% routablepageurl page 'my_uploads' %}">{% trans "View your uploads" %}</a></p>
         </div>
         {% endif %}
 
         <div class="page-upload__form-wrapper">
             <form method="post"
-                  action="{% url 'website:upload_photo' %}"
+                  action="{% routablepageurl page 'upload_photo' %}"
                   enctype="multipart/form-data"
                   class="page-upload__form">
                 {% csrf_token %}

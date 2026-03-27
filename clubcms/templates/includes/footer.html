@@ -85,7 +85,10 @@
             <nav class="site-footer__col" aria-label="{% trans 'Services' %}">
                 <h3 class="site-footer__heading">{% trans "Services" %}</h3>
                 <ul class="site-footer__list">
-                    <li><a href="{% url 'mutual_aid:map' %}">{% trans "Roadside Assistance" %}</a></li>
+                    {% localized_slugurl 'mutual-aid' as mutual_aid_url %}
+                    {% if mutual_aid_url %}
+                    <li><a href="{{ mutual_aid_url }}">{% trans "Roadside Assistance" %}</a></li>
+                    {% endif %}
                     {% localized_slugurl 'federazione' as federation_url %}
                     {% if federation_url %}
                     <li><a href="{{ federation_url }}">{% trans "Federation" %}</a></li>
@@ -94,7 +97,10 @@
                     {% if membership_url %}
                     <li><a href="{{ membership_url }}">{% trans "Become a Member" %}</a></li>
                     {% endif %}
-                    <li><a href="{% url 'account:my_contributions' %}">{% trans "Contributions" %}</a></li>
+                    {% localized_slugurl 'contributions' as contributions_url %}
+                    {% if contributions_url %}
+                    <li><a href="{{ contributions_url }}">{% trans "Contributions" %}</a></li>
+                    {% endif %}
                     <li><a href="{% url 'account:notifications' %}">{% trans "Notifications" %}</a></li>
                     <li><a href="{% url 'account:card' %}">{% trans "Membership Card" %}</a></li>
                 </ul>

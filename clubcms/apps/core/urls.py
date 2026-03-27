@@ -1,5 +1,8 @@
 """
-URL patterns for the core app: feeds, robots.txt, and site search.
+URL patterns for the core app: feeds for RSS/Atom syndication.
+
+Search is handled by SearchPage (RoutablePageMixin) in the Wagtail
+page tree. Contributions are handled by ContributionsPage.
 
 Include these in the project ``urls.py`` **before** the Wagtail catch-all::
 
@@ -11,14 +14,10 @@ Include these in the project ``urls.py`` **before** the Wagtail catch-all::
 """
 
 from django.urls import path
-from django.utils.translation import gettext_lazy as _
 
 from apps.core.feeds import LatestNewsAtomFeed, LatestNewsFeed, UpcomingEventsFeed
-from apps.core.views import SearchView
 
 urlpatterns = [
-    # Site-wide search
-    path(_("search/"), SearchView.as_view(), name="site-search"),
     # News feeds (technical paths — not translated)
     path("feed/rss/", LatestNewsFeed(), name="feed-news-rss"),
     path("feed/atom/", LatestNewsAtomFeed(), name="feed-news-atom"),

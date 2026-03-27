@@ -39,6 +39,10 @@ TRANSLATION_KEYS = {
     "press": _tk("press"),
     "membership_plans": _tk("membership_plans"),
     "federation": _tk("federation"),
+    "mutual_aid": _tk("mutual_aid"),
+    "search": _tk("search"),
+    "contributions": _tk("contributions"),
+    "notifications": _tk("notifications"),
     "partner_index": _tk("partner_index"),
     "place_index": _tk("place_index"),
     # Partners

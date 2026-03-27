@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n wagtailroutablepage_tags %}
 {# Comments section for external event detail page #}
 <div class="comments-section">
     <h3>{% trans "Club Discussion" %}</h3>
@@ -22,7 +22,7 @@
                     {# Delete button (own comments only) #}
                     {% if comment.user == request.user %}
                         <form method="post"
-                              action="{% url 'federation_frontend:delete_comment' club_code=event.source_club.short_code event_id=event.pk %}"
+                              action="{% routablepageurl page 'delete_comment' event.source_club.short_code event.pk %}"
                               class="comments-section__delete-form">
                             {% csrf_token %}
                             <input type="hidden" name="comment_id" value="{{ comment.pk }}">
@@ -45,7 +45,7 @@
     {# Add comment form #}
     {% if is_active_member %}
         <form method="post"
-              action="{% url 'federation_frontend:add_comment' club_code=event.source_club.short_code event_id=event.pk %}"
+              action="{% routablepageurl page 'add_comment' event.source_club.short_code event.pk %}"
               class="comments-section__form">
             {% csrf_token %}
             <div class="form-group">

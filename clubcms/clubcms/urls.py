@@ -59,14 +59,10 @@ _i18n_urls = [
     ),
     # Events (registration, favorites, ICS)
     path(_("events/"), include("apps.events.urls")),
-    # Mutual Aid network
-    path(_("mutual-aid/"), include("apps.mutual_aid.urls")),
     # Website views (verification, uploads, moderation)
     path("", include("apps.website.urls")),
     # Notifications (unsubscribe, push, history)
     path(_("notifications/"), include("apps.notifications.urls")),
-    # Federation frontend (external events list, detail, interest, comments)
-    path(_("events/partner/"), include("apps.federation.urls_frontend")),
     # Core feeds, robots.txt
     path("", include("apps.core.urls")),
     # Sitemap (also available at root /sitemap.xml above)

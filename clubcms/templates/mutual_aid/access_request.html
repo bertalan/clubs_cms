@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Request Access" %} | {% trans "Mutual Aid" %}{% endblock %}
 
@@ -31,7 +31,7 @@
 
         <div class="form-actions" style="display: flex; gap: 1rem; margin-top: 1.5rem;">
             <button type="submit" class="btn btn-primary">{% trans "Submit Request" %}</button>
-            <a href="{% url 'mutual_aid:map' %}" class="btn btn-outline">{% trans "Cancel" %}</a>
+            <a href="{% routablepageurl page 'map_view' %}" class="btn btn-outline">{% trans "Cancel" %}</a>
         </div>
     </form>
 </div>

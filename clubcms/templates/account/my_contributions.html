@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailroutablepage_tags %}
 
 {% block title %}{% trans "My Contributions" %} | {{ block.super }}{% endblock %}
 
@@ -11,7 +11,7 @@
                 <h1 id="contributions-heading" class="page-contributions__title">{% trans "My Contributions" %}</h1>
                 <p class="page-contributions__subtitle">{% trans "Stories, proposals, and announcements you have submitted." %}</p>
             </div>
-            <a href="{% url 'account:submit_contribution' %}" class="btn btn--primary">
+            <a href="{% routablepageurl page 'submit_contribution' %}" class="btn btn--primary">
                 <svg class="btn__icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -72,7 +72,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
             <p class="empty-state__text">{% trans "You have not submitted any contributions yet." %}</p>
-            <a href="{% url 'account:submit_contribution' %}" class="btn btn--primary">{% trans "Submit your first contribution" %}</a>
+            <a href="{% routablepageurl page 'submit_contribution' %}" class="btn btn--primary">{% trans "Submit your first contribution" %}</a>
         </div>
         {% endif %}
     </div>

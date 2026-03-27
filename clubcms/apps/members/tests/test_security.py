@@ -45,6 +45,34 @@ class TestFavoritesRateLimiting:
 class TestHelperDetailAccess:
     """SEC-3: HelperDetailView requires active membership."""
 
+    @pytest.fixture(autouse=True)
+    def _setup_aid_page(self, db):
+        """Create a MutualAidPage in the Wagtail page tree with a Site."""
+        from wagtail.models import Page, Site
+
+        from apps.mutual_aid.models import MutualAidPage
+
+        root = Page.objects.filter(depth=1).first()
+        if not root:
+            root = Page.add_root(title="Root")
+        # Use an existing depth-2 page or create one
+        home = Page.objects.filter(depth=2).first()
+        if not home:
+            home = Page(title="Test Home", slug="test-home")
+            root.add_child(instance=home)
+        Site.objects.update_or_create(
+            hostname="localhost",
+            defaults={"root_page": home, "is_default_site": True},
+        )
+        self.aid_page = MutualAidPage(title="Mutual Aid", slug="mutual-aid")
+        home.add_child(instance=self.aid_page)
+        self.aid_page.save_revision().publish()
+
+    def _helper_url(self, helper):
+        return self.aid_page.url + self.aid_page.reverse_subpage(
+            "helper_detail", kwargs={"pk": helper.pk}
+        )
+
     def _create_helper(self):
         """Create a user who is available as a helper."""
         return User.objects.create_user(
@@ -58,7 +86,7 @@ class TestHelperDetailAccess:
     def test_anonymous_redirected_to_login(self, client):
         """Anonymous user is redirected to login."""
         helper = self._create_helper()
-        response = client.get(reverse("mutual_aid:helper_detail", kwargs={"pk": helper.pk}))
+        response = client.get(self._helper_url(helper))
         assert response.status_code == 302
         assert "login" in response.url or "account" in response.url
 
@@ -70,7 +98,7 @@ class TestHelperDetailAccess:
             membership_expiry=None,
         )
         client.force_login(viewer)
-        response = client.get(reverse("mutual_aid:helper_detail", kwargs={"pk": helper.pk}))
+        response = client.get(self._helper_url(helper))
         assert response.status_code == 200
         content = response.content.decode()
         assert "helper-detail__restricted" in content
@@ -84,7 +112,7 @@ class TestHelperDetailAccess:
             membership_expiry=date.today() - timedelta(days=1),
         )
         client.force_login(viewer)
-        response = client.get(reverse("mutual_aid:helper_detail", kwargs={"pk": helper.pk}))
+        response = client.get(self._helper_url(helper))
         assert response.status_code == 200
         content = response.content.decode()
         assert "helper-detail__restricted" in content
@@ -97,5 +125,5 @@ class TestHelperDetailAccess:
             membership_expiry=date.today() + timedelta(days=30),
         )
         client.force_login(viewer)
-        response = client.get(reverse("mutual_aid:helper_detail", kwargs={"pk": helper.pk}))
+        response = client.get(self._helper_url(helper))
         assert response.status_code == 200

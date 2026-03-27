@@ -18,11 +18,6 @@ _INTERNAL_ROUTE_MAP = {
     "account/card/": "account:card",
     "account/notifications/": "account:notifications",
     "account/aid/": "account:aid",
-    "account/contributions/": "account:my_contributions",
-    "account/contributi/": "account:my_contributions",
-    "mutual-aid/": "mutual_aid:map",
-    "events/partner/": "federation_frontend:list",
-    "eventi/partner/": "federation_frontend:list",
 }
 
 

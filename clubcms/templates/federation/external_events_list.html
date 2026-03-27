@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Partner Events" %} | {{ block.super }}{% endblock %}
 
@@ -60,7 +60,7 @@
             <div class="page-events__empty">
                 <p>{% trans "No partner events found." %}</p>
                 {% if selected_club or search_query %}
-                    <p><a href="{% url 'federation_frontend:list' %}">{% trans "Clear filters" %}</a></p>
+                    <p><a href="{% routablepageurl page 'events_list' %}">{% trans "Clear filters" %}</a></p>
                 {% endif %}
             </div>
         {% endif %}

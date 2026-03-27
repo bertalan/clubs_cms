@@ -229,12 +229,24 @@ def build_digest_html(user, notifications):
     """
     # Use a single unsubscribe token for digest (generic type "digest")
     unsubscribe_token = generate_unsubscribe_token(user, "news_published")
+
+    # Resolve NotificationsPage URL (Wagtail page)
+    from apps.notifications.models import NotificationsPage
+
+    base_url = getattr(settings, "WAGTAILADMIN_BASE_URL", "")
+    try:
+        page = NotificationsPage.objects.live().first()
+        history_url = base_url + page.url if page else base_url + "/notifications/history/"
+    except Exception:
+        history_url = base_url + "/notifications/history/"
+
     context = {
         "user": user,
         "notifications": notifications,
         "unsubscribe_token": unsubscribe_token,
         "site_name": getattr(settings, "WAGTAIL_SITE_NAME", "Club CMS"),
-        "base_url": getattr(settings, "WAGTAILADMIN_BASE_URL", ""),
+        "base_url": base_url,
+        "history_url": history_url,
     }
     return render_to_string("notifications/emails/digest.html", context)
 

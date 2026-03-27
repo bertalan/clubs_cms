@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n static l10n %}
+{% load i18n static l10n wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Mutual Aid" %} | {{ block.super }}{% endblock %}
 
@@ -78,7 +78,7 @@
                 within {{ radius }} km of {{ loc }}
             {% endblocktrans %}
         {% endif %}
-        <a href="{% url 'mutual_aid:map' %}" class="aid-search__clear">{% trans "Clear search" %}</a>
+        <a href="{% routablepageurl page 'map_view' %}" class="aid-search__clear">{% trans "Clear search" %}</a>
     </div>
     {% endif %}
 
@@ -86,7 +86,7 @@
     <div class="aid-map" id="aid-map"
          role="application"
          aria-label="{% trans 'Map of available helpers' %}"
-         data-api-url="{% url 'mutual_aid:helpers_api' %}"
+         data-api-url="{% routablepageurl page 'helpers_api' %}"
          data-search-lat="{% if search_lat != None %}{% localize off %}{{ search_lat }}{% endlocalize %}{% endif %}"
          data-search-lng="{% if search_lng != None %}{% localize off %}{{ search_lng }}{% endlocalize %}{% endif %}"
          data-search-radius="{{ search_radius|default:'50' }}">
@@ -101,7 +101,7 @@
             {% if h.type == "local" %}
             <article class="aid-card aid-card--link" role="listitem">
                 <h3 class="aid-card__name">
-                    <a href="{% url 'mutual_aid:helper_detail' pk=h.pk %}" class="aid-card__title-link">
+                    <a href="{% routablepageurl page 'helper_detail' h.pk %}" class="aid-card__title-link">
                         {{ h.display_name }}
                     </a>
                 </h3>
@@ -127,7 +127,7 @@
                 <div class="aid-card__actions">
                     <span class="aid-card__detail-label btn btn-secondary btn--sm" aria-hidden="true">{% trans "Details" %}</span>
                     {% if is_active_member %}
-                        <a href="{% url 'mutual_aid:contact_form' pk=h.pk %}" class="btn btn-primary btn--sm aid-card__action-link">
+                        <a href="{% routablepageurl page 'contact_form' h.pk %}" class="btn btn-primary btn--sm aid-card__action-link">
                             {% trans "Request Help" %}
                         </a>
                     {% endif %}

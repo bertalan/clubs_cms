@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n wagtailimages_tags %}
+{% load i18n wagtailimages_tags wagtailroutablepage_tags %}
 
 {% block body_class %}page-moderation{% endblock %}
 
@@ -53,7 +53,7 @@
 
                 <div class="moderation-card__actions">
                     <form method="post"
-                          action="{% url 'website:approve_photo' pk=upload.pk %}"
+                          action="{% routablepageurl page 'approve_photo' pk=upload.pk %}"
                           class="moderation-card__form moderation-card__form--approve">
                         {% csrf_token %}
                         <button type="submit" class="moderation-card__btn moderation-card__btn--approve">
@@ -62,7 +62,7 @@
                     </form>
 
                     <form method="post"
-                          action="{% url 'website:reject_photo' pk=upload.pk %}"
+                          action="{% routablepageurl page 'reject_photo' pk=upload.pk %}"
                           class="moderation-card__form moderation-card__form--reject">
                         {% csrf_token %}
                         <div class="moderation-card__reject-reason">

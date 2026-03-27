@@ -1,8 +1,9 @@
 """
 Notification views.
 
-Handles unsubscribe flow (token-based, no login), push subscription
-management, notification history, and mark-read AJAX.
+Handles unsubscribe flow (token-based, no login) and push subscription
+management. Notification history and mark-read are served by
+NotificationsPage (RoutablePageMixin) in models.py.
 """
 
 import json
@@ -11,15 +12,14 @@ from urllib.parse import urlparse
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect
-from django.utils import timezone
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.decorators.csrf import csrf_protect
-from django.views.generic import ListView, TemplateView
+from django.views.generic import TemplateView
 
-from .models import NOTIFICATION_PREFERENCE_MAP, NotificationQueue, PushSubscription
+from .models import NOTIFICATION_PREFERENCE_MAP, PushSubscription
 from .services import mask_email, verify_unsubscribe_token
 
 logger = logging.getLogger(__name__)
@@ -171,54 +171,3 @@ class PushUnsubscribeView(LoginRequiredMixin, View):
         ).delete()
 
         return JsonResponse({"ok": True, "deleted": deleted_count})
-
-
-# ---------------------------------------------------------------------------
-# Notification history (login required)
-# ---------------------------------------------------------------------------
-
-
-class NotificationHistoryView(LoginRequiredMixin, ListView):
-    """
-    Display the authenticated user's notification history.
-    """
-
-    template_name = "notifications/history.html"
-    context_object_name = "notifications"
-    paginate_by = 25
-
-    def get_queryset(self):
-        return (
-            NotificationQueue.objects.filter(
-                recipient=self.request.user,
-                status="sent",
-            )
-            .order_by("-sent_at")
-        )
-
-
-# ---------------------------------------------------------------------------
-# Mark-read (login required, AJAX)
-# ---------------------------------------------------------------------------
-
-
-class MarkReadView(LoginRequiredMixin, View):
-    """
-    POST: Mark a notification as read (sets status to 'sent' if in_app).
-    Returns JSON response for AJAX usage.
-    """
-
-    def post(self, request, *args, **kwargs):
-        pk = self.kwargs.get("pk")
-        notification = get_object_or_404(
-            NotificationQueue,
-            pk=pk,
-            recipient=request.user,
-        )
-
-        # We use sent_at as an indicator of "read" for in_app
-        if not notification.sent_at:
-            notification.sent_at = timezone.now()
-            notification.save(update_fields=["sent_at"])
-
-        return JsonResponse({"ok": True, "pk": notification.pk})

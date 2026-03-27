@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Submit Contribution" %} | {{ block.super }}{% endblock %}
 
@@ -47,7 +47,7 @@
                     </svg>
                     {% trans "Submit" %}
                 </button>
-                <a href="{% url 'account:my_contributions' %}" class="btn btn--outline">{% trans "Cancel" %}</a>
+                <a href="{% pageurl page %}" class="btn btn--outline">{% trans "Cancel" %}</a>
             </div>
         </form>
     </div>

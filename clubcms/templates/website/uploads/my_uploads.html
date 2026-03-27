@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n wagtailimages_tags %}
+{% load i18n wagtailimages_tags wagtailroutablepage_tags %}
 
 {% block body_class %}page-my-uploads{% endblock %}
 
@@ -11,7 +11,7 @@
             <p class="page-my-uploads__description">
                 {% trans "View the status of your photo uploads." %}
             </p>
-            <a href="{% url 'website:upload_photo' %}" class="page-my-uploads__upload-link">
+            <a href="{% routablepageurl page 'upload_photo' %}" class="page-my-uploads__upload-link">
                 {% trans "Upload More Photos" %}
             </a>
         </header>
@@ -81,7 +81,7 @@
         {% else %}
         <div class="page-my-uploads__empty">
             <p>{% trans "You haven't uploaded any photos yet." %}</p>
-            <a href="{% url 'website:upload_photo' %}">{% trans "Upload your first photo" %}</a>
+            <a href="{% routablepageurl page 'upload_photo' %}">{% trans "Upload your first photo" %}</a>
         </div>
         {% endif %}
     </div>

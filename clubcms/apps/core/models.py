@@ -1,15 +1,26 @@
 """
 Transactional models: Activity log, Reactions, Comments.
+Wagtail page models: SearchPage, ContributionsPage.
 
 These models use GenericForeignKey to work with any content type
 (pages, events, photos, etc.).
 """
 
+import math
+
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
+from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
+
+from wagtail.admin.panels import FieldPanel
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from wagtail.fields import RichTextField
+from wagtail.models import Page
 
 
 # ---------------------------------------------------------------------------
@@ -351,3 +362,307 @@ class Contribution(models.Model):
 
     def __str__(self):
         return f"[{self.get_status_display()}] {self.title}"
+
+
+# ---------------------------------------------------------------------------
+# Haversine distance utility
+# ---------------------------------------------------------------------------
+
+_EARTH_RADIUS_KM = 6371.0
+
+
+def haversine_km(lat1, lon1, lat2, lon2):
+    """
+    Return approximate distance in km between two lat/lon points.
+
+    Uses the Haversine formula — accurate enough for event proximity
+    searches up to a few hundred km.
+    """
+    lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    a = (
+        math.sin(dlat / 2) ** 2
+        + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+    )
+    return _EARTH_RADIUS_KM * 2 * math.asin(math.sqrt(a))
+
+
+# ---------------------------------------------------------------------------
+# SearchPage
+# ---------------------------------------------------------------------------
+
+RADIUS_CHOICES = [10, 25, 50, 100, 200]
+DEFAULT_RADIUS_KM = 50
+PER_PAGE_CHOICES = [25, 50, 100]
+DEFAULT_PER_PAGE = 25
+
+
+class SearchPage(RoutablePageMixin, Page):
+    """
+    Site-wide search page with full-text and geo-proximity filtering.
+
+    Query params: q, lat, lng, radius, type, per_page, page.
+    """
+
+    intro = RichTextField(blank=True, verbose_name=_("Introduction"))
+
+    content_panels = Page.content_panels + [
+        FieldPanel("intro"),
+    ]
+
+    max_count = 1
+    template = "search/search_results.html"
+
+    class Meta:
+        verbose_name = _("Search page")
+        verbose_name_plural = _("Search pages")
+
+    # ── helpers ────────────────────────────────────────────────────────
+
+    @staticmethod
+    def _safe_float(value):
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return None
+
+    @staticmethod
+    def _safe_int(value):
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return None
+
+    def _get_params(self, request):
+        """Extract and validate query parameters."""
+        query = request.GET.get("q", "").strip()
+        lat = self._safe_float(request.GET.get("lat"))
+        lng = self._safe_float(request.GET.get("lng"))
+        radius = self._safe_float(request.GET.get("radius")) or DEFAULT_RADIUS_KM
+        result_type = request.GET.get("type", "all")
+        if result_type not in ("all", "events", "news", "pages"):
+            result_type = "all"
+        per_page = self._safe_int(request.GET.get("per_page")) or DEFAULT_PER_PAGE
+        if per_page not in PER_PAGE_CHOICES:
+            per_page = DEFAULT_PER_PAGE
+        return query, lat, lng, radius, result_type, per_page
+
+    # ── full-text search ──────────────────────────────────────────────
+
+    MIN_FULLTEXT_LENGTH = 4
+
+    @staticmethod
+    def _search_pages(query, result_type):
+        from django.db.models import Q
+        from apps.website.models.pages import EventDetailPage
+
+        events = []
+        pages = []
+        use_fulltext = len(query) >= SearchPage.MIN_FULLTEXT_LENGTH if query else False
+
+        if result_type in ("all", "events"):
+            qs = EventDetailPage.objects.live()
+            if query:
+                if use_fulltext:
+                    qs = qs.search(query)
+                else:
+                    qs = qs.filter(
+                        Q(title__icontains=query)
+                        | Q(intro__icontains=query)
+                        | Q(location_name__icontains=query)
+                    )
+            events = list(qs)
+
+        if result_type in ("all", "pages", "news"):
+            qs = Page.objects.live().not_type(EventDetailPage)
+            if query:
+                if use_fulltext:
+                    qs = qs.search(query)
+                else:
+                    qs = qs.filter(title__icontains=query)
+            pages = list(qs)
+
+        return events, pages
+
+    @staticmethod
+    def _search_external_events(query):
+        if not getattr(settings, "FEDERATION_ENABLED", False):
+            return []
+        try:
+            from apps.federation.models import ExternalEvent
+
+            qs = ExternalEvent.objects.filter(is_approved=True, is_hidden=False)
+            if query:
+                from django.db.models import Q
+
+                qs = qs.filter(
+                    Q(event_name__icontains=query)
+                    | Q(description__icontains=query)
+                    | Q(location_name__icontains=query)
+                    | Q(location_address__icontains=query)
+                )
+            return list(qs)
+        except Exception:
+            return []
+
+    # ── geo filtering ─────────────────────────────────────────────────
+
+    @staticmethod
+    def _apply_geo_filter(events, lat, lng, radius_km):
+        if lat is None or lng is None:
+            return events
+
+        filtered = []
+        for ev in events:
+            ev_lat = getattr(ev, "latitude", None) or getattr(ev, "location_lat", None)
+            ev_lng = getattr(ev, "longitude", None) or getattr(ev, "location_lon", None)
+            if ev_lat is None or ev_lng is None:
+                continue
+            try:
+                dist = haversine_km(lat, lng, float(ev_lat), float(ev_lng))
+            except (TypeError, ValueError):
+                continue
+            if dist <= radius_km:
+                ev.distance_km = round(dist, 1)
+                filtered.append(ev)
+
+        filtered.sort(key=lambda e: e.distance_km)
+        return filtered
+
+    # ── main context ──────────────────────────────────────────────────
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        query, lat, lng, radius, result_type, per_page = self._get_params(request)
+
+        events, pages = self._search_pages(query, result_type)
+        external_events = (
+            self._search_external_events(query)
+            if result_type in ("all", "events")
+            else []
+        )
+
+        geo_active = lat is not None and lng is not None
+        if geo_active:
+            events = self._apply_geo_filter(events, lat, lng, radius)
+            external_events = self._apply_geo_filter(external_events, lat, lng, radius)
+
+        all_events = list(events) + list(external_events)
+        if geo_active:
+            all_events.sort(key=lambda e: getattr(e, "distance_km", 9999))
+
+        paginator = Paginator(all_events + list(pages), per_page)
+        page_number = request.GET.get("page")
+        try:
+            page_obj = paginator.page(page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj = paginator.page(paginator.num_pages)
+
+        context.update(
+            {
+                "search_query": query,
+                "results": page_obj,
+                "page_obj": page_obj,
+                "paginator": paginator,
+                "result_count": paginator.count,
+                "events_count": len(all_events),
+                "pages_count": len(pages),
+                "geo_active": geo_active,
+                "user_lat": lat,
+                "user_lng": lng,
+                "radius": radius,
+                "radius_choices": RADIUS_CHOICES,
+                "result_type": result_type,
+                "per_page": per_page,
+                "per_page_choices": PER_PAGE_CHOICES,
+            }
+        )
+        return context
+
+
+# ---------------------------------------------------------------------------
+# ContributionsPage
+# ---------------------------------------------------------------------------
+
+
+class ContributionsPage(RoutablePageMixin, Page):
+    """
+    Member contributions hub: list own contributions & submit new ones.
+
+    Routes:
+    - index: my contributions list (login required)
+    - submit/: submit new contribution form (login required)
+    """
+
+    intro = RichTextField(blank=True, verbose_name=_("Introduction"))
+
+    content_panels = Page.content_panels + [
+        FieldPanel("intro"),
+    ]
+
+    max_count = 1
+    template = "account/my_contributions.html"
+
+    class Meta:
+        verbose_name = _("Contributions page")
+        verbose_name_plural = _("Contributions pages")
+
+    # ── index: my contributions ───────────────────────────────────────
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        if request.user.is_authenticated:
+            qs = Contribution.objects.filter(user=request.user).order_by(
+                "-created_at"
+            )
+            paginator = Paginator(qs, 20)
+            page_number = request.GET.get("page")
+            try:
+                page_obj = paginator.page(page_number)
+            except PageNotAnInteger:
+                page_obj = paginator.page(1)
+            except EmptyPage:
+                page_obj = paginator.page(paginator.num_pages)
+            context["contributions"] = page_obj
+            context["page_obj"] = page_obj
+            context["paginator"] = paginator
+            context["is_paginated"] = paginator.num_pages > 1
+        return context
+
+    def serve(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            from django.contrib.auth.views import redirect_to_login
+            return redirect_to_login(request.get_full_path())
+        return super().serve(request, *args, **kwargs)
+
+    # ── submit contribution ───────────────────────────────────────────
+
+    @route(r"^submit/$", name="submit_contribution")
+    def submit_contribution_view(self, request):
+        from apps.core.forms import ContributionForm
+
+        if not request.user.is_authenticated:
+            from django.contrib.auth.views import redirect_to_login
+            return redirect_to_login(request.get_full_path())
+
+        if request.method == "POST":
+            form = ContributionForm(request.POST, user=request.user)
+            if form.is_valid():
+                form.instance.user = request.user
+                form.save()
+                messages.success(
+                    request,
+                    _("Your contribution has been submitted and is awaiting moderation."),
+                )
+                return redirect(self.url)
+        else:
+            form = ContributionForm(user=request.user)
+
+        return render(
+            request,
+            "account/submit_contribution.html",
+            {"page": self, "form": form},
+        )

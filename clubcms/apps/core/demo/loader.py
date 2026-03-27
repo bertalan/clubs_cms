@@ -27,6 +27,8 @@ from wagtail.models import Locale, Page, Site
 
 from apps.core.models import Activity, Comment, Contribution, Reaction
 from apps.events.models import EventFavorite, EventRegistration
+from apps.core.models import ContributionsPage, SearchPage
+from apps.notifications.models import NotificationsPage
 from apps.federation.models import (
     ExternalEvent,
     ExternalEventComment,
@@ -101,6 +103,10 @@ PAGE_TYPE_MAP: dict[str, type] = {
     "press": PressPage,
     "membership_plans": MembershipPlansPage,
     "federation": FederationInfoPage,
+    "mutual_aid": MutualAidPage,
+    "search": SearchPage,
+    "contributions": ContributionsPage,
+    "notifications": NotificationsPage,
     "partner_index": PartnerIndexPage,
     "partner": PartnerPage,
     "place_index": PlaceIndexPage,

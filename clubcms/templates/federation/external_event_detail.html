@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n l10n %}
+{% load i18n l10n wagtailroutablepage_tags %}
 
 {% block title %}{{ event.event_name }} | {% trans "Partner Events" %}{% endblock %}
 
@@ -17,9 +17,9 @@
 <div class="event-detail">
     {# Breadcrumb #}
     <nav class="event-detail__breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
-        <a href="{% url 'federation_frontend:list' %}">{% trans "Partner Events" %}</a>
+        <a href="{% routablepageurl page 'events_list' %}">{% trans "Partner Events" %}</a>
         &rsaquo;
-        <a href="{% url 'federation_frontend:list' %}?club={{ event.source_club.short_code }}">{{ event.source_club.name }}</a>
+        <a href="{% routablepageurl page 'events_list' %}?club={{ event.source_club.short_code }}">{{ event.source_club.name }}</a>
         &rsaquo;
         <span>{{ event.event_name }}</span>
     </nav>

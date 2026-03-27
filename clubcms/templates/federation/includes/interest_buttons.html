@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n wagtailroutablepage_tags %}
 {# Interest buttons for external event detail page #}
 <div class="interest-section">
     <h3>{% trans "Are you interested?" %}</h3>
@@ -12,7 +12,7 @@
 
     {% if is_active_member %}
         <form method="post"
-              action="{% url 'federation_frontend:set_interest' club_code=event.source_club.short_code event_id=event.pk %}"
+              action="{% routablepageurl page 'set_interest' event.source_club.short_code event.pk %}"
               class="interest-section__form">
             {% csrf_token %}
 

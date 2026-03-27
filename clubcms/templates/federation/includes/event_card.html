@@ -1,8 +1,8 @@
-{% load i18n %}
+{% load i18n wagtailroutablepage_tags %}
 {# Event card for the external events grid listing #}
 <article class="event-card federation-event-card">
     {% if event.image_url %}
-        <a href="{% url 'federation_frontend:detail' club_code=event.source_club.short_code event_id=event.pk %}" class="event-card__image">
+        <a href="{% routablepageurl page 'event_detail' event.source_club.short_code event.pk %}" class="event-card__image">
             <img src="{{ event.image_url }}" alt="{{ event.event_name }}" loading="lazy">
         </a>
     {% endif %}
@@ -16,7 +16,7 @@
             {% endif %}
         </div>
         <h3 class="event-card__title">
-            <a href="{% url 'federation_frontend:detail' club_code=event.source_club.short_code event_id=event.pk %}">
+            <a href="{% routablepageurl page 'event_detail' event.source_club.short_code event.pk %}">
                 {{ event.event_name }}
             </a>
         </h3>

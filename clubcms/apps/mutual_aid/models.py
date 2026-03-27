@@ -1,19 +1,31 @@
 """
 Mutual Aid models.
 
-Includes the Wagtail page model (MutualAidPage), privacy settings,
-aid requests, federated access management, and contact unlock tracking.
+Includes the Wagtail page model (MutualAidPage) with RoutablePageMixin,
+privacy settings, aid requests, federated access management, and
+contact unlock tracking.
 """
 
+import logging
 import uuid
 
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.db import models
+from django.http import HttpResponseForbidden, HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404, render
+from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Page
+
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -39,12 +51,13 @@ class EmergencyContactBlock(StructBlock):
 # ---------------------------------------------------------------------------
 
 
-class MutualAidPage(Page):
+class MutualAidPage(RoutablePageMixin, Page):
     """
     Wagtail page for the mutual aid section.
 
     Displays a map of available helpers, a list of helpers,
-    and emergency contacts.
+    and emergency contacts. Sub-routes handle helper detail,
+    contact form, unlock, access requests, and JSON API.
     """
 
     intro = RichTextField(
@@ -92,6 +105,491 @@ class MutualAidPage(Page):
     class Meta:
         verbose_name = _("Mutual Aid Page")
         verbose_name_plural = _("Mutual Aid Pages")
+
+    # ------------------------------------------------------------------
+    # Helpers (private)
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _parse_float_locale(value):
+        if not value:
+            raise ValueError("empty")
+        v = value.strip()
+        if "," in v and "." not in v:
+            v = v.replace(",", ".")
+        return float(v)
+
+    @staticmethod
+    def _is_active_member(user):
+        if getattr(user, "is_staff", False) or getattr(user, "is_superuser", False):
+            return True
+        return getattr(user, "is_active_member", False)
+
+    @staticmethod
+    def _get_privacy(user):
+        privacy, _ = AidPrivacySettings.objects.get_or_create(user=user)
+        return privacy
+
+    def _parse_geo_params(self, request):
+        try:
+            lat = self._parse_float_locale(request.GET.get("lat", ""))
+            lng = self._parse_float_locale(request.GET.get("lng", ""))
+        except (ValueError, TypeError):
+            return None, None, self.default_radius_km
+        try:
+            radius = int(request.GET.get("radius", str(self.default_radius_km)))
+            radius = max(5, min(500, radius))
+        except (ValueError, TypeError):
+            radius = self.default_radius_km
+        return lat, lng, radius
+
+    def _has_geo_search(self, request):
+        try:
+            self._parse_float_locale(request.GET.get("lat", ""))
+            self._parse_float_locale(request.GET.get("lng", ""))
+            return True
+        except (ValueError, TypeError):
+            return False
+
+    # ------------------------------------------------------------------
+    # Route: landing / map  (^$)
+    # ------------------------------------------------------------------
+
+    @route(r"^$")
+    @method_decorator(login_required)
+    def map_view(self, request):
+        from apps.mutual_aid.forms import GeoSearchForm
+        from apps.mutual_aid.geo import haversine_km, parse_coordinates
+
+        User = get_user_model()
+        is_geo = self._has_geo_search(request)
+        user_lat, user_lng, radius = self._parse_geo_params(request)
+
+        # Base queryset
+        qs = (
+            User.objects.filter(aid_available=True, is_active=True)
+            .exclude(aid_location_city="")
+            .order_by("aid_location_city")
+        )
+
+        helpers_list = list(qs)
+        if is_geo and user_lat is not None:
+            filtered = []
+            for helper in helpers_list:
+                coords = parse_coordinates(getattr(helper, "aid_coordinates", ""))
+                if coords:
+                    dist = haversine_km(user_lat, user_lng, coords[0], coords[1])
+                    if dist <= radius:
+                        helper.distance_km = round(dist, 1)
+                        filtered.append(helper)
+                else:
+                    helper.distance_km = None
+                    filtered.append(helper)
+            filtered.sort(key=lambda h: (h.distance_km is None, h.distance_km or 0))
+            helpers_list = filtered
+
+        # Federated helpers
+        federated_helpers = []
+        if self.enable_federation:
+            fed_qs = FederatedHelper.objects.filter(
+                is_approved=True,
+                is_hidden=False,
+                source_club__is_active=True,
+                source_club__is_approved=True,
+            ).select_related("source_club")
+
+            for fh in fed_qs:
+                entry = {
+                    "display_name": fh.display_name,
+                    "city": fh.city,
+                    "radius_km": fh.radius_km,
+                    "notes": fh.notes,
+                    "photo_url": fh.photo_url,
+                    "source_club_name": fh.source_club.name,
+                    "source_club_code": fh.source_club.short_code,
+                    "source_club_url": fh.source_club.base_url,
+                    "lat": fh.latitude,
+                    "lng": fh.longitude,
+                    "is_federated": True,
+                }
+                if is_geo and user_lat is not None:
+                    if fh.latitude and fh.longitude:
+                        dist = haversine_km(user_lat, user_lng, fh.latitude, fh.longitude)
+                        if dist <= radius:
+                            entry["distance_km"] = round(dist, 1)
+                            federated_helpers.append(entry)
+                    else:
+                        entry["distance_km"] = None
+                        federated_helpers.append(entry)
+                else:
+                    entry["distance_km"] = None
+                    federated_helpers.append(entry)
+
+            federated_helpers.sort(
+                key=lambda h: (h["distance_km"] is None, h["distance_km"] or 0)
+            )
+
+        # Build unified list
+        all_helpers = []
+        for h in helpers_list:
+            all_helpers.append({
+                "type": "local",
+                "pk": h.pk,
+                "display_name": h.get_visible_name(),
+                "city": h.aid_location_city,
+                "radius_km": h.aid_radius_km,
+                "notes": h.aid_notes,
+                "distance_km": getattr(h, "distance_km", None),
+            })
+        for fh in federated_helpers:
+            all_helpers.append({
+                "type": "federated",
+                "display_name": fh["display_name"],
+                "city": fh["city"],
+                "radius_km": fh["radius_km"],
+                "notes": fh.get("notes", ""),
+                "distance_km": fh.get("distance_km"),
+                "source_club_name": fh.get("source_club_name", ""),
+                "source_club_url": fh.get("source_club_url", ""),
+            })
+        all_helpers.sort(
+            key=lambda h: (h["distance_km"] is None, h["distance_km"] or 0)
+        )
+
+        context = {
+            "helpers": helpers_list,
+            "all_helpers": all_helpers,
+            "federated_helpers": federated_helpers,
+            "is_active_member": self._is_active_member(request.user),
+            "geo_form": GeoSearchForm(request.GET or None),
+            "search_active": is_geo,
+            "search_lat": user_lat,
+            "search_lng": user_lng,
+            "search_radius": radius,
+            "search_location": request.GET.get("location", ""),
+            "aid_page": self,
+            "local_count": len(helpers_list),
+            "federated_count": len(federated_helpers),
+            "total_count": len(helpers_list) + len(federated_helpers),
+        }
+
+        return self.render(
+            request,
+            template="mutual_aid/mutual_aid_page.html",
+            context_overrides=context,
+        )
+
+    # ------------------------------------------------------------------
+    # Route: helper detail
+    # ------------------------------------------------------------------
+
+    @route(r"^helper/(?P<pk>\d+)/$", name="helper_detail")
+    @method_decorator(login_required)
+    def helper_detail_view(self, request, pk):
+        User = get_user_model()
+        helper = get_object_or_404(User, pk=pk, aid_available=True, is_active=True)
+        privacy = self._get_privacy(helper)
+
+        context = {
+            "helper": helper,
+            "privacy": privacy,
+            "is_active_member": self._is_active_member(request.user),
+            "aid_page": self,
+            "page": self,
+        }
+        return render(request, "mutual_aid/helper_card.html", context)
+
+    # ------------------------------------------------------------------
+    # Route: contact form
+    # ------------------------------------------------------------------
+
+    @route(r"^helper/(?P<pk>\d+)/contact/$", name="contact_form")
+    @method_decorator(login_required)
+    def contact_form_view(self, request, pk):
+        from apps.mutual_aid.forms import AidRequestForm
+
+        User = get_user_model()
+
+        if not self._is_active_member(request.user):
+            return HttpResponseForbidden("Active membership required")
+
+        helper = get_object_or_404(User, pk=pk, aid_available=True, is_active=True)
+
+        if request.method == "POST":
+            form = AidRequestForm(request.POST)
+            if form.is_valid():
+                aid_request = form.save(commit=False)
+                aid_request.helper = helper
+                aid_request.requester_user = request.user
+                aid_request.save()
+
+                try:
+                    from apps.notifications.services import create_notification
+
+                    create_notification(
+                        notification_type="mutual_aid_request",
+                        title=f"New aid request from {aid_request.requester_name}",
+                        body=(
+                            f"{aid_request.requester_name} needs help: "
+                            f"{aid_request.get_issue_type_display()}"
+                        ),
+                        url=self.url + self.reverse_subpage(
+                            "helper_detail", kwargs={"pk": helper.pk}
+                        ),
+                        recipients=User.objects.filter(pk=helper.pk),
+                        content_object=aid_request,
+                    )
+                except Exception:
+                    logger.exception("Failed to send aid request notification")
+
+                messages.success(request, _("Your help request has been sent."))
+                return HttpResponseRedirect(
+                    self.url + self.reverse_subpage(
+                        "helper_detail", kwargs={"pk": helper.pk}
+                    )
+                )
+        else:
+            form = AidRequestForm(initial={
+                "requester_name": request.user.get_visible_name(),
+                "requester_email": request.user.email,
+                "requester_phone": request.user.mobile or request.user.phone,
+            })
+
+        return render(request, "mutual_aid/contact_form.html", {
+            "form": form,
+            "helper": helper,
+            "page": self,
+        })
+
+    # ------------------------------------------------------------------
+    # Route: contact unlock (federated users)
+    # ------------------------------------------------------------------
+
+    @route(r"^helper/(?P<pk>\d+)/unlock/$", name="unlock_contact")
+    @method_decorator(login_required)
+    def unlock_contact_view(self, request, pk):
+        User = get_user_model()
+
+        if request.method != "POST":
+            return HttpResponseRedirect(
+                self.url + self.reverse_subpage("helper_detail", kwargs={"pk": pk})
+            )
+
+        if self._is_active_member(request.user):
+            return HttpResponseRedirect(
+                self.url + self.reverse_subpage("contact_form", kwargs={"pk": pk})
+            )
+
+        federated_access_id = request.session.get("federated_access_id")
+        if not federated_access_id:
+            return HttpResponseForbidden("Federation access required")
+
+        try:
+            access = FederatedAidAccess.objects.get(
+                pk=federated_access_id,
+                is_active=True,
+                access_level="contact",
+            )
+        except FederatedAidAccess.DoesNotExist:
+            return HttpResponseForbidden("Invalid federation access")
+
+        if access.expires_at and access.expires_at < timezone.now():
+            return HttpResponseForbidden("Federation access has expired")
+
+        helper = get_object_or_404(User, pk=pk, aid_available=True, is_active=True)
+
+        if not ContactUnlock.can_unlock(access):
+            return render(request, "mutual_aid/limit_reached.html", {
+                "helper": helper,
+                "unlock_limit": ContactUnlock.UNLOCK_LIMIT,
+                "window_days": ContactUnlock.UNLOCK_WINDOW_DAYS,
+                "page": self,
+            })
+
+        ContactUnlock.objects.get_or_create(
+            federated_access=access,
+            helper=helper,
+        )
+        access.contacts_unlocked = ContactUnlock.objects.filter(
+            federated_access=access
+        ).count()
+        access.save(update_fields=["contacts_unlocked"])
+
+        return HttpResponseRedirect(
+            self.url + self.reverse_subpage("helper_detail", kwargs={"pk": pk})
+        )
+
+    # ------------------------------------------------------------------
+    # Route: access request (federated users)
+    # ------------------------------------------------------------------
+
+    @route(r"^request-access/$", name="request_access")
+    @method_decorator(login_required)
+    def access_request_view(self, request):
+        User = get_user_model()
+
+        if request.method == "POST":
+            federated_access_id = request.session.get("federated_access_id")
+            if not federated_access_id:
+                return HttpResponseForbidden("Federation access required")
+
+            try:
+                access = FederatedAidAccess.objects.get(pk=federated_access_id)
+            except FederatedAidAccess.DoesNotExist:
+                return HttpResponseForbidden("Invalid federation access")
+
+            if access.expires_at and access.expires_at < timezone.now():
+                return HttpResponseForbidden("Federation access has expired")
+
+            message_text = request.POST.get("message", "").strip()[:1000]
+
+            existing = FederatedAidAccessRequest.objects.filter(
+                federated_access=access,
+                status="pending",
+            ).exists()
+
+            if not existing:
+                FederatedAidAccessRequest.objects.create(
+                    federated_access=access,
+                    message=message_text,
+                )
+
+                try:
+                    from apps.notifications.services import create_notification
+
+                    admins = User.objects.filter(is_staff=True, is_active=True)
+                    create_notification(
+                        notification_type="aid_request",
+                        title="New federation access request",
+                        body=(
+                            f"{access.external_display_name} from "
+                            f"{access.source_club.name} is requesting "
+                            f"access to the mutual aid directory."
+                        ),
+                        url="/admin/",
+                        recipients=admins,
+                    )
+                except Exception:
+                    logger.exception("Failed to send access request notification")
+
+            messages.success(request, _("Your access request has been submitted."))
+            return HttpResponseRedirect(self.url)
+
+        return render(request, "mutual_aid/access_request.html", {
+            "page": self,
+        })
+
+    # ------------------------------------------------------------------
+    # Route: JSON API for map JS
+    # ------------------------------------------------------------------
+
+    @route(r"^api/helpers/$", name="helpers_api")
+    @method_decorator(login_required)
+    def helpers_api_view(self, request):
+        from apps.mutual_aid.geo import haversine_km, parse_coordinates
+
+        User = get_user_model()
+
+        if not self._is_active_member(request.user):
+            return JsonResponse({"error": "Active membership required"}, status=403)
+
+        try:
+            user_lat = self._parse_float_locale(request.GET.get("lat", ""))
+            user_lng = self._parse_float_locale(request.GET.get("lng", ""))
+        except (ValueError, TypeError):
+            user_lat = user_lng = None
+        try:
+            radius = int(request.GET.get("radius", str(self.default_radius_km)))
+            radius = max(5, min(500, radius))
+        except (ValueError, TypeError):
+            radius = self.default_radius_km
+
+        has_geo = user_lat is not None and user_lng is not None
+
+        helpers = User.objects.filter(
+            aid_available=True,
+            is_active=True,
+        ).exclude(aid_location_city="")
+
+        data = []
+        for helper in helpers:
+            privacy = self._get_privacy(helper)
+
+            helper_data = {
+                "id": helper.pk,
+                "type": "local",
+                "display_name": helper.get_visible_name(viewer=request.user),
+                "city": helper.aid_location_city,
+                "radius_km": helper.aid_radius_km,
+                "notes": helper.aid_notes if privacy.show_bio_on_aid else "",
+            }
+
+            if privacy.show_exact_location and helper.aid_coordinates:
+                coords = parse_coordinates(helper.aid_coordinates)
+                if coords:
+                    helper_data["lat"] = coords[0]
+                    helper_data["lon"] = coords[1]
+
+                    if has_geo:
+                        dist = haversine_km(user_lat, user_lng, coords[0], coords[1])
+                        helper_data["distance_km"] = round(dist, 1)
+                        if dist > radius:
+                            continue
+
+            if privacy.show_photo_on_aid and helper.photo:
+                try:
+                    rendition = helper.photo.get_rendition("fill-80x80")
+                    helper_data["photo_url"] = request.build_absolute_uri(rendition.url)
+                except Exception:
+                    pass
+
+            data.append(helper_data)
+
+        federated_data = []
+        if self.enable_federation:
+            fed_qs = FederatedHelper.objects.filter(
+                is_approved=True,
+                is_hidden=False,
+                source_club__is_active=True,
+                source_club__is_approved=True,
+            ).select_related("source_club")
+
+            for fh in fed_qs:
+                fh_data = {
+                    "id": str(fh.pk),
+                    "type": "federated",
+                    "display_name": fh.display_name,
+                    "city": fh.city,
+                    "radius_km": fh.radius_km,
+                    "notes": fh.notes,
+                    "source_club": fh.source_club.name,
+                    "source_club_code": fh.source_club.short_code,
+                }
+
+                if fh.latitude and fh.longitude:
+                    fh_data["lat"] = fh.latitude
+                    fh_data["lon"] = fh.longitude
+
+                    if has_geo:
+                        dist = haversine_km(user_lat, user_lng, fh.latitude, fh.longitude)
+                        fh_data["distance_km"] = round(dist, 1)
+                        if dist > radius:
+                            continue
+
+                if fh.photo_url:
+                    fh_data["photo_url"] = fh.photo_url
+
+                federated_data.append(fh_data)
+
+        if has_geo:
+            data.sort(key=lambda h: h.get("distance_km", 99999))
+            federated_data.sort(key=lambda h: h.get("distance_km", 99999))
+
+        return JsonResponse({
+            "helpers": data,
+            "federated_helpers": federated_data,
+            "total": len(data) + len(federated_data),
+        })
 
 
 # ---------------------------------------------------------------------------

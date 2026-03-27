@@ -1,14 +1,14 @@
 {% extends "base.html" %}
-{% load i18n wagtailimages_tags %}
+{% load i18n wagtailimages_tags wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Request Help" %} — {{ helper.get_visible_name }} | {% trans "Mutual Aid" %}{% endblock %}
 
 {% block content %}
 <div class="helper-detail">
     <nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
-        <a href="{% url 'mutual_aid:map' %}">{% trans "Mutual Aid" %}</a>
+        <a href="{% routablepageurl page 'map_view' %}">{% trans "Mutual Aid" %}</a>
         &rsaquo;
-        <a href="{% url 'mutual_aid:helper_detail' pk=helper.pk %}">{{ helper.get_visible_name }}</a>
+        <a href="{% routablepageurl page 'helper_detail' helper.pk %}">{{ helper.get_visible_name }}</a>
         &rsaquo;
         <span>{% trans "Request Help" %}</span>
     </nav>
@@ -80,7 +80,7 @@
                 <button type="submit" class="btn btn-primary">
                     {% trans "Send Request" %}
                 </button>
-                <a href="{% url 'mutual_aid:helper_detail' pk=helper.pk %}" class="btn btn-outline">
+                <a href="{% routablepageurl page 'helper_detail' helper.pk %}" class="btn btn-outline">
                     {% trans "Cancel" %}
                 </a>
             </div>

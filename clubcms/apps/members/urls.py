@@ -9,7 +9,6 @@ root URL conf.  The public profile pattern is included separately at
 from django.urls import path
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.views import MyContributionsView, SubmitContributionView
 from apps.members import views
 
 app_name = "account"
@@ -43,17 +42,6 @@ urlpatterns = [
     ),
     # Directory
     path(_("directory/"), views.MemberDirectoryView.as_view(), name="directory"),
-    # Contributions
-    path(
-        _("contributions/"),
-        MyContributionsView.as_view(),
-        name="my_contributions",
-    ),
-    path(
-        _("contributions/submit/"),
-        SubmitContributionView.as_view(),
-        name="submit_contribution",
-    ),
 ]
 
 # Public profile pattern — included separately in root urlconf at

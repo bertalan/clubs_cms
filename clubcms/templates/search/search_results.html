@@ -20,7 +20,7 @@
         </header>
 
         {# ── Main search form ─────────────────────────────────────────── #}
-        <form method="get" action="{% url 'site-search' %}" class="search-form" id="search-form">
+        <form method="get" action="{% pageurl page %}" class="search-form" id="search-form">
             <div class="search-form__row">
                 <div class="search-form__input-wrap">
                     <label for="search-q" class="sr-only">{% trans "Search" %}</label>

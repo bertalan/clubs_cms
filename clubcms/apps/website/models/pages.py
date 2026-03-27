@@ -29,6 +29,7 @@ from wagtail.admin.panels import (
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Collection, Page
 from wagtail.search import index
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 
 # ---------------------------------------------------------------------------
 # StreamField block imports from apps.website.blocks (created by AG-3)
@@ -1114,9 +1115,11 @@ class EventDetailPage(Page):
 # 8. GalleryPage
 # ═══════════════════════════════════════════════════════════════════════════
 
-class GalleryPage(Page):
+class GalleryPage(RoutablePageMixin, Page):
     """
     Main gallery hub.  Displays albums from Wagtail collections.
+
+    Sub-routes handle photo upload, user uploads list, and staff moderation.
     """
 
     intro = RichTextField(
@@ -1179,36 +1182,293 @@ class GalleryPage(Page):
                 if images.exists():
                     albums.append(
                         {
+                            "id": child.pk,
+                            "name": child.name,
                             "collection": child,
-                            "cover": images.first(),
-                            "count": images.count(),
+                            "cover_image": images.first(),
+                            "image_count": images.count(),
                         }
                     )
 
         # If a specific album was requested via GET param, show its images
         album_id = request.GET.get("album")
-        album_images = None
-        current_album = None
+        album = None
+        photos = None
         if album_id:
             try:
-                current_album = Collection.objects.get(pk=album_id)
-                all_images = ImageModel.objects.filter(collection=current_album)
+                album = Collection.objects.get(pk=album_id)
+                all_images = ImageModel.objects.filter(collection=album)
                 paginator = Paginator(all_images, 24)
                 page_number = request.GET.get("page")
                 try:
-                    album_images = paginator.page(page_number)
+                    photos = paginator.page(page_number)
                 except PageNotAnInteger:
-                    album_images = paginator.page(1)
+                    photos = paginator.page(1)
                 except EmptyPage:
-                    album_images = paginator.page(paginator.num_pages)
-                context["album_paginator"] = paginator
+                    photos = paginator.page(paginator.num_pages)
+                context["paginator"] = paginator
             except Collection.DoesNotExist:
                 pass
 
         context["albums"] = albums
-        context["album_images"] = album_images
-        context["current_album"] = current_album
+        context["album"] = album
+        context["photos"] = photos
         return context
+
+    # ------------------------------------------------------------------
+    # Route: photo upload (active member + can_upload)
+    # ------------------------------------------------------------------
+
+    @route(r"^upload/$", name="upload_photo")
+    def upload_photo_view(self, request):
+        import logging
+
+        from django.contrib.auth.decorators import login_required
+        from django.http import HttpResponseForbidden
+
+        from apps.members.decorators import active_member_required
+        from apps.website.forms import PhotoUploadForm
+        from apps.website.models.uploads import PhotoUpload
+        from wagtail.images import get_image_model
+
+        if not request.user.is_authenticated:
+            from django.conf import settings as django_settings
+            from django.shortcuts import redirect
+
+            login_url = getattr(django_settings, "LOGIN_URL", "/accounts/login/")
+            return redirect(f"{login_url}?next={request.path}")
+
+        if not getattr(request.user, "is_active_member", False):
+            return HttpResponseForbidden(
+                _("Access denied. Active membership is required.")
+            )
+
+        if not request.user.can_upload:
+            return HttpResponseForbidden(
+                _("Access denied. Your membership does not include "
+                  "gallery upload privileges.")
+            )
+
+        ImageModel = get_image_model()
+
+        if request.method == "POST":
+            form = PhotoUploadForm(request.POST, request.FILES)
+            if form.is_valid():
+                files = form.cleaned_data["photos"]
+                title_prefix = form.cleaned_data.get("title_prefix", "")
+                event = form.cleaned_data.get("event")
+                tags = form.cleaned_data.get("tags", [])
+
+                uploads_created = 0
+                for i, f in enumerate(files):
+                    if title_prefix:
+                        title = f"{title_prefix} - {i + 1}"
+                    else:
+                        name_part = f.name.rsplit(".", 1)[0] if "." in f.name else f.name
+                        title = name_part
+
+                    image = ImageModel(
+                        title=title,
+                        file=f,
+                        uploaded_by_user=request.user,
+                    )
+                    image.save()
+
+                    upload = PhotoUpload.objects.create(
+                        image=image,
+                        uploaded_by=request.user,
+                        event=event,
+                    )
+                    if tags:
+                        upload.tags.set(tags)
+                    uploads_created += 1
+
+                from django.shortcuts import render
+                return render(
+                    request,
+                    "website/uploads/upload_photo.html",
+                    {
+                        "form": PhotoUploadForm(),
+                        "success": True,
+                        "uploads_count": uploads_created,
+                        "page": self,
+                    },
+                )
+        else:
+            form = PhotoUploadForm()
+
+        from django.shortcuts import render
+        return render(
+            request,
+            "website/uploads/upload_photo.html",
+            {"form": form, "page": self},
+        )
+
+    # ------------------------------------------------------------------
+    # Route: my uploads (login required)
+    # ------------------------------------------------------------------
+
+    @route(r"^my-uploads/$", name="my_uploads")
+    def my_uploads_view(self, request):
+        from django.shortcuts import redirect, render
+
+        from apps.website.models.uploads import PhotoUpload
+
+        if not request.user.is_authenticated:
+            from django.conf import settings as django_settings
+
+            login_url = getattr(django_settings, "LOGIN_URL", "/accounts/login/")
+            return redirect(f"{login_url}?next={request.path}")
+
+        uploads_qs = PhotoUpload.objects.filter(
+            uploaded_by=request.user
+        ).select_related("image", "event").order_by("-uploaded_at")
+
+        paginator = Paginator(uploads_qs, 20)
+        page_number = request.GET.get("page")
+        try:
+            page_obj = paginator.page(page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj = paginator.page(paginator.num_pages)
+
+        return render(
+            request,
+            "website/uploads/my_uploads.html",
+            {
+                "uploads": page_obj,
+                "page_obj": page_obj,
+                "is_paginated": paginator.num_pages > 1,
+                "page": self,
+            },
+        )
+
+    # ------------------------------------------------------------------
+    # Route: moderation queue (staff only)
+    # ------------------------------------------------------------------
+
+    @route(r"^moderation/$", name="moderation_queue")
+    def moderation_queue_view(self, request):
+        from django.http import HttpResponseForbidden
+        from django.shortcuts import redirect, render
+
+        from apps.website.models.uploads import PhotoUpload
+
+        if not request.user.is_authenticated:
+            from django.conf import settings as django_settings
+
+            login_url = getattr(django_settings, "LOGIN_URL", "/accounts/login/")
+            return redirect(f"{login_url}?next={request.path}")
+
+        if not request.user.is_staff:
+            return HttpResponseForbidden(
+                _("Access denied. Staff only.")
+            )
+
+        uploads_qs = PhotoUpload.objects.filter(
+            is_approved=False,
+            rejection_reason="",
+        ).select_related(
+            "image", "uploaded_by", "event"
+        ).order_by("-uploaded_at")
+
+        paginator = Paginator(uploads_qs, 30)
+        page_number = request.GET.get("page")
+        try:
+            page_obj = paginator.page(page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj = paginator.page(paginator.num_pages)
+
+        return render(
+            request,
+            "website/uploads/moderation_queue.html",
+            {
+                "uploads": page_obj,
+                "page_obj": page_obj,
+                "is_paginated": paginator.num_pages > 1,
+                "page": self,
+            },
+        )
+
+    # ------------------------------------------------------------------
+    # Route: approve photo (staff only, POST)
+    # ------------------------------------------------------------------
+
+    @route(r"^moderation/approve/(?P<pk>\d+)/$", name="approve_photo")
+    def approve_photo_view(self, request, pk):
+        from django.http import HttpResponseForbidden, HttpResponseNotAllowed, JsonResponse
+        from django.shortcuts import get_object_or_404, redirect
+
+        from apps.website.models.uploads import PhotoUpload
+
+        if not request.user.is_authenticated or not request.user.is_staff:
+            return HttpResponseForbidden(_("Access denied."))
+
+        if request.method != "POST":
+            return HttpResponseNotAllowed(["POST"])
+
+        upload = get_object_or_404(PhotoUpload, pk=pk)
+
+        upload.is_approved = True
+        upload.approved_by = request.user
+        upload.approved_at = timezone.now()
+        upload.rejection_reason = ""
+        upload.save(update_fields=[
+            "is_approved",
+            "approved_by",
+            "approved_at",
+            "rejection_reason",
+        ])
+
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return JsonResponse({"status": "approved", "pk": pk})
+
+        from django.http import HttpResponseRedirect
+        return HttpResponseRedirect(
+            self.url + self.reverse_subpage("moderation_queue")
+        )
+
+    # ------------------------------------------------------------------
+    # Route: reject photo (staff only, POST)
+    # ------------------------------------------------------------------
+
+    @route(r"^moderation/reject/(?P<pk>\d+)/$", name="reject_photo")
+    def reject_photo_view(self, request, pk):
+        from django.http import HttpResponseForbidden, HttpResponseNotAllowed, JsonResponse
+        from django.shortcuts import get_object_or_404
+
+        from apps.website.models.uploads import PhotoUpload
+
+        if not request.user.is_authenticated or not request.user.is_staff:
+            return HttpResponseForbidden(_("Access denied."))
+
+        if request.method != "POST":
+            return HttpResponseNotAllowed(["POST"])
+
+        upload = get_object_or_404(PhotoUpload, pk=pk)
+        reason = request.POST.get("reason", "").strip()
+
+        if not reason:
+            reason = _("Rejected by moderator.")
+
+        upload.is_approved = False
+        upload.rejection_reason = reason
+        upload.save(update_fields=["is_approved", "rejection_reason"])
+
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return JsonResponse({
+                "status": "rejected",
+                "pk": pk,
+                "reason": str(reason),
+            })
+
+        from django.http import HttpResponseRedirect
+        return HttpResponseRedirect(
+            self.url + self.reverse_subpage("moderation_queue")
+        )
 
 
 # ═══════════════════════════════════════════════════════════════════════════

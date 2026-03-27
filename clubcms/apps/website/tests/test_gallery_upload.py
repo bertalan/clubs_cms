@@ -9,7 +9,6 @@ import io
 import pytest
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
-from django.urls import reverse
 
 from apps.members.models import ClubUser
 from apps.website.models.uploads import PhotoUpload
@@ -23,6 +22,29 @@ def _tiny_gif():
         b"\x00\x00\x00\x2c\x00\x00\x00\x00\x01\x00\x01\x00"
         b"\x00\x02\x02\x44\x01\x00\x3b"
     )
+
+
+def _setup_gallery_page():
+    """Create a GalleryPage in the Wagtail page tree with a Site."""
+    from wagtail.models import Page, Site
+
+    from apps.website.models import GalleryPage
+
+    root = Page.objects.filter(depth=1).first()
+    if not root:
+        root = Page.add_root(title="Root")
+    home = Page.objects.filter(depth=2).first()
+    if not home:
+        home = Page(title="Test Home", slug="test-home")
+        root.add_child(instance=home)
+    Site.objects.update_or_create(
+        hostname="localhost",
+        defaults={"root_page": home, "is_default_site": True},
+    )
+    gallery = GalleryPage(title="Gallery", slug="gallery")
+    home.add_child(instance=gallery)
+    gallery.save_revision().publish()
+    return gallery
 
 
 @pytest.mark.django_db
@@ -58,12 +80,18 @@ class TestGalleryUploadModel(TestCase):
 class TestUploadViewAccess(TestCase):
     """Upload view requires login + active membership."""
 
+    @classmethod
+    def setUpTestData(cls):
+        cls.gallery = _setup_gallery_page()
+
     def test_anonymous_redirected(self):
-        resp = self.client.get(reverse("website:upload_photo"))
+        url = self.gallery.url + self.gallery.reverse_subpage("upload_photo")
+        resp = self.client.get(url)
         self.assertIn(resp.status_code, [302, 301])
 
     def test_my_uploads_anonymous_redirected(self):
-        resp = self.client.get(reverse("website:my_uploads"))
+        url = self.gallery.url + self.gallery.reverse_subpage("my_uploads")
+        resp = self.client.get(url)
         self.assertIn(resp.status_code, [302, 301])
 
 
@@ -73,13 +101,15 @@ class TestMyUploadsView(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        cls.gallery = _setup_gallery_page()
         cls.user = ClubUser.objects.create_user(
             username="viewer", email="viewer@test.com", password="testpass123"
         )
 
     def test_logged_in_user_can_access(self):
         self.client.login(username="viewer", password="testpass123")
-        resp = self.client.get(reverse("website:my_uploads"))
+        url = self.gallery.url + self.gallery.reverse_subpage("my_uploads")
+        resp = self.client.get(url)
         self.assertEqual(resp.status_code, 200)
 
 
@@ -89,6 +119,7 @@ class TestModerationAccess(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        cls.gallery = _setup_gallery_page()
         cls.user = ClubUser.objects.create_user(
             username="regular", email="reg@test.com", password="testpass123"
         )
@@ -99,12 +130,14 @@ class TestModerationAccess(TestCase):
 
     def test_non_staff_cannot_access_moderation(self):
         self.client.login(username="regular", password="testpass123")
-        resp = self.client.get(reverse("website:moderation_queue"))
+        url = self.gallery.url + self.gallery.reverse_subpage("moderation_queue")
+        resp = self.client.get(url)
         self.assertIn(resp.status_code, [302, 403])
 
     def test_staff_can_access_moderation(self):
         self.client.login(username="staffuser", password="testpass123")
-        resp = self.client.get(reverse("website:moderation_queue"))
+        url = self.gallery.url + self.gallery.reverse_subpage("moderation_queue")
+        resp = self.client.get(url)
         self.assertEqual(resp.status_code, 200)
 
 
@@ -114,6 +147,7 @@ class TestApproveRejectAccess(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        cls.gallery = _setup_gallery_page()
         cls.staff = ClubUser.objects.create_user(
             username="mod", email="mod@test.com", password="testpass123",
             is_staff=True,
@@ -121,10 +155,16 @@ class TestApproveRejectAccess(TestCase):
 
     def test_approve_requires_post(self):
         self.client.login(username="mod", password="testpass123")
-        resp = self.client.get(reverse("website:approve_photo", kwargs={"pk": 9999}))
+        url = self.gallery.url + self.gallery.reverse_subpage(
+            "approve_photo", kwargs={"pk": 9999}
+        )
+        resp = self.client.get(url)
         self.assertIn(resp.status_code, [405, 404, 302])
 
     def test_reject_requires_post(self):
         self.client.login(username="mod", password="testpass123")
-        resp = self.client.get(reverse("website:reject_photo", kwargs={"pk": 9999}))
+        url = self.gallery.url + self.gallery.reverse_subpage(
+            "reject_photo", kwargs={"pk": 9999}
+        )
+        resp = self.client.get(url)
         self.assertIn(resp.status_code, [405, 404, 302])

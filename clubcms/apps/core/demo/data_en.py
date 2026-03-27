@@ -669,7 +669,56 @@ DATA = {
                 ],
                 "body": [_rt("<h2>Benefits</h2><ul><li><strong>More events</strong> \u2014 Shared calendar with dozens of appointments.</li><li><strong>New friendships</strong> \u2014 Meet enthusiasts from partner clubs.</li><li><strong>Privacy guaranteed</strong> \u2014 Your data stays within our club.</li></ul>")],
                 "cta_text": "Explore partner events",
-                "cta_url": "/en/federation/",
+            },
+        },
+
+        # ---- Mutual Aid ----
+        {
+            "slug": "mutual-aid",
+            "page_type": "mutual_aid",
+            "parent_slug": "home",
+            "translation_key": TK["mutual_aid"],
+            "title": "Mutual Aid",
+            "fields": {
+                "intro": "<p>Our mutual aid network connects club members who can help each other in case of breakdowns, accidents or roadside emergencies. Browse the map to find helpers near you.</p>",
+                "default_radius_km": 50,
+                "enable_federation": True,
+            },
+        },
+
+        # ---- Search ----
+        {
+            "slug": "search",
+            "page_type": "search",
+            "parent_slug": "home",
+            "translation_key": TK["search"],
+            "title": "Search",
+            "fields": {
+                "intro": "<p>Search events, news, pages and more across our site.</p>",
+            },
+        },
+
+        # ---- Contributions ----
+        {
+            "slug": "contributions",
+            "page_type": "contributions",
+            "parent_slug": "home",
+            "translation_key": TK["contributions"],
+            "title": "Contributions",
+            "fields": {
+                "intro": "<p>Share your stories, propose events, or post announcements for the community.</p>",
+            },
+        },
+
+        # ---- Notifications ----
+        {
+            "slug": "notifications",
+            "page_type": "notifications",
+            "parent_slug": "home",
+            "translation_key": TK["notifications"],
+            "title": "Notifications",
+            "fields": {
+                "intro": "<p>Your notification history — stay up to date with events, news and community updates.</p>",
             },
         },
 
@@ -907,9 +956,9 @@ DATA = {
         {"label": "Member Card",        "link_page_slug": "",                   "link_url": "reverse:account:card", "sort_order": 5, "parent_label": "About Us", "is_cta": False, "open_new_tab": False},
         {"label": "Partners",           "link_page_slug": "partners",           "link_url": "", "sort_order": 6, "parent_label": "About Us", "is_cta": False, "open_new_tab": False},
         # Sub: Services
-        {"label": "Roadside Assistance", "link_page_slug": "",          "link_url": "reverse:mutual_aid:map",          "sort_order": 0, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
+        {"label": "Roadside Assistance", "link_page_slug": "mutual-aid","link_url": "",                                 "sort_order": 0, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
         {"label": "Federation Events",   "link_page_slug": "federation","link_url": "",                                 "sort_order": 1, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
-        {"label": "Contributions",       "link_page_slug": "",          "link_url": "reverse:account:my_contributions", "sort_order": 2, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
+        {"label": "Contributions",       "link_page_slug": "contributions", "link_url": "",                              "sort_order": 2, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
         {"label": "Notifications",       "link_page_slug": "",          "link_url": "reverse:account:notifications",    "sort_order": 3, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
         {"label": "Press Room",          "link_page_slug": "press",     "link_url": "",                                 "sort_order": 4, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
         {"label": "Newsletter",           "link_page_slug": "",          "link_url": "reverse:website:newsletter-subscribe", "sort_order": 5, "parent_label": "Services", "is_cta": False, "open_new_tab": False},
@@ -1098,9 +1147,9 @@ DATA = {
         {"notification_type": "event_reminder", "recipient_username": "demo_giulia", "channel": "in_app", "title": "Reminder: Orobie Tour in 3 days", "body": "The Orobie Tour is scheduled for Saturday. Meeting at 8:30 at the clubhouse.", "url_type": "page", "url_ref": "orobie-tour-2026", "status": "sent", "sent_hours_ago": 2},
         {"notification_type": "event_reminder", "recipient_username": "demo_marco",  "channel": "in_app", "title": "Giulia replied to your comment", "body": "Giulia F. replied to your comment on \u20182026 Season Kick-off\u2019.", "url_type": "page", "url_ref": "2026-season-kickoff", "status": "sent", "sent_hours_ago": 12},
         {"notification_type": "membership_expiring", "recipient_username": "demo_giulia", "channel": "email", "title": "Your membership request has been approved!", "body": "Your Standard Membership Card request has been approved. The digital card is available in your profile.", "url_type": "reverse", "url_ref": "account:card", "status": "sent", "sent_hours_ago": 120},
-        {"notification_type": "aid_request", "recipient_username": "demo_alessandro", "channel": "in_app", "title": "New roadside assistance request near you", "body": "Roberto C. needs motorcycle transport from Mandello del Lario. Distance: ~25 km.", "url_type": "reverse", "url_ref": "mutual_aid:map", "status": "sent", "sent_hours_ago": 36},
+        {"notification_type": "aid_request", "recipient_username": "demo_alessandro", "channel": "in_app", "title": "New roadside assistance request near you", "body": "Roberto C. needs motorcycle transport from Mandello del Lario. Distance: ~25 km.", "url_type": "page", "url_ref": "mutual-aid", "status": "sent", "sent_hours_ago": 36},
         {"notification_type": "event_published", "recipient_username": "demo_chiara", "channel": "in_app", "title": "New event: Franciacorta Track Day", "body": "A new event has been published: Track Day at Franciacorta Circuit. Registrations are open!", "url_type": "page", "url_ref": "franciacorta-track-day-2026", "status": "pending", "sent_hours_ago": 0},
-        {"notification_type": "event_published", "recipient_username": "demo_roberto", "channel": "in_app", "title": "Your proposal has been approved", "body": "Your proposal \u20185-day Sardinia Tour\u2019 has been approved and published.", "url_type": "reverse", "url_ref": "account:my_contributions", "status": "sent", "sent_hours_ago": 24},
+        {"notification_type": "event_published", "recipient_username": "demo_roberto", "channel": "in_app", "title": "Your proposal has been approved", "body": "Your proposal \u20185-day Sardinia Tour\u2019 has been approved and published.", "url_type": "page", "url_ref": "contributions", "status": "sent", "sent_hours_ago": 24},
     ],
 
     # ==================================================================
