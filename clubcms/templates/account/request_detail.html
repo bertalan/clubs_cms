@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load i18n wagtailroutablepage_tags %}
+
+{% block title %}{% trans "Request Detail" %} | {{ block.super }}{% endblock %}
+
+{% block content %}
+<section class="page-request-detail" aria-labelledby="request-detail-heading">
+    <div class="page-request-detail__container">
+        <header class="page-request-detail__header">
+            <h1 id="request-detail-heading" class="page-request-detail__title">{% trans "Request Detail" %}</h1>
+            <p class="page-request-detail__subtitle">
+                {% blocktrans with product=membership_req.product.name %}Membership request for {{ product }}{% endblocktrans %}
+            </p>
+        </header>
+
+        {# ---- Progress Stepper ---- #}
+        <nav class="request-stepper" aria-label="{% trans 'Request progress' %}">
+            <ol class="request-stepper__list">
+                {% for step in steps %}
+                <li class="request-stepper__step {% if step.done %}request-stepper__step--done{% endif %} {% if forloop.last and not step.done %}request-stepper__step--current{% endif %} {% if membership_req.status == 'rejected' and forloop.last %}request-stepper__step--rejected{% endif %} {% if membership_req.status == 'cancelled' and forloop.last %}request-stepper__step--cancelled{% endif %}"
+                    {% if forloop.last and not step.done %}aria-current="step"{% endif %}>
+                    <span class="request-stepper__indicator" aria-hidden="true">
+                        {% if step.done %}
+                            {% if membership_req.status == 'rejected' and forloop.last %}
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                            {% elif membership_req.status == 'cancelled' and forloop.last %}
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                            {% else %}
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                            {% endif %}
+                        {% else %}
+                        <span class="request-stepper__dot"></span>
+                        {% endif %}
+                    </span>
+                    <span class="request-stepper__label">{{ step.label }}</span>
+                    {% if step.date %}
+                    <time class="request-stepper__date" datetime="{{ step.date|date:'Y-m-d' }}">{{ step.date|date:"d/m/Y" }}</time>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </nav>
+
+        {# ---- Product Summary ---- #}
+        <article class="request-detail-card" aria-labelledby="product-summary-heading">
+            <h2 id="product-summary-heading" class="sr-only">{% trans "Product details" %}</h2>
+            <div class="request-detail-card__product">
+                <h3 class="request-detail-card__product-name">{{ membership_req.product.name }}</h3>
+                <div class="request-detail-card__product-price">
+                    &euro;{{ membership_req.product.price }}<small>/ {% trans "year" %}</small>
+                </div>
+                {% if membership_req.product.description %}
+                <p class="request-detail-card__product-desc">{{ membership_req.product.description }}</p>
+                {% endif %}
+            </div>
+        </article>
+
+        {# ---- Request Info ---- #}
+        <dl class="request-detail-info">
+            <div class="request-detail-info__row">
+                <dt>{% trans "Status" %}</dt>
+                <dd>
+                    {% if membership_req.status == 'pending' %}
+                    <span class="badge badge--warning">{% trans "Pending" %}</span>
+                    {% elif membership_req.status == 'approved' %}
+                    <span class="badge badge--success">{% trans "Approved" %}</span>
+                    {% elif membership_req.status == 'rejected' %}
+                    <span class="badge badge--danger">{% trans "Rejected" %}</span>
+                    {% else %}
+                    <span class="badge badge--muted">{% trans "Cancelled" %}</span>
+                    {% endif %}
+                </dd>
+            </div>
+            <div class="request-detail-info__row">
+                <dt>{% trans "Submitted" %}</dt>
+                <dd><time datetime="{{ membership_req.created_at|date:'Y-m-d' }}">{{ membership_req.created_at|date:"d/m/Y H:i" }}</time></dd>
+            </div>
+            {% if membership_req.processed_at %}
+            <div class="request-detail-info__row">
+                <dt>{% trans "Processed" %}</dt>
+                <dd><time datetime="{{ membership_req.processed_at|date:'Y-m-d' }}">{{ membership_req.processed_at|date:"d/m/Y H:i" }}</time></dd>
+            </div>
+            {% endif %}
+            {% if membership_req.notes %}
+            <div class="request-detail-info__row request-detail-info__row--full">
+                <dt>{% trans "Your Notes" %}</dt>
+                <dd>{{ membership_req.notes }}</dd>
+            </div>
+            {% endif %}
+            {% if membership_req.admin_notes %}
+            <div class="request-detail-info__row request-detail-info__row--full">
+                <dt>{% trans "Response" %}</dt>
+                <dd class="request-detail-info__admin-notes">{{ membership_req.admin_notes }}</dd>
+            </div>
+            {% endif %}
+        </dl>
+
+        {# ---- Actions ---- #}
+        <div class="request-detail-actions">
+            {% if membership_req.status == 'pending' %}
+            <form method="post" action="{% routablepageurl page 'cancel_request' membership_req.pk %}"
+                  onsubmit="return confirm('{% trans "Are you sure you want to cancel this request?" %}');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn--danger">
+                    {% trans "Cancel Request" %}
+                </button>
+            </form>
+            {% endif %}
+            <a href="{% routablepageurl page 'membership_requests' %}" class="btn btn--outline">
+                {% trans "Back to My Requests" %}
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -4,74 +4,96 @@
 {% block title %}{% trans "My Membership Requests" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
-<section class="page-card">
-    <div class="page-card__container">
-        <header class="page-card__header">
-            <h1 class="page-card__title">{% trans "My Membership Requests" %}</h1>
-            <p class="page-card__subtitle">{% trans "Track the status of your membership requests." %}</p>
+<section class="page-requests" aria-labelledby="requests-heading">
+    <div class="page-requests__container">
+        <header class="page-requests__header">
+            <h1 id="requests-heading" class="page-requests__title">{% trans "My Membership Requests" %}</h1>
+            <p class="page-requests__subtitle">{% trans "Track the status of your membership requests." %}</p>
         </header>
 
-        {% if requests %}
-        <div class="table-responsive">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>{% trans "Product" %}</th>
-                        <th>{% trans "Price" %}</th>
-                        <th>{% trans "Status" %}</th>
-                        <th>{% trans "Submitted" %}</th>
-                        <th>{% trans "Processed" %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for req in requests %}
-                    <tr>
-                        <td>
-                            <strong>{{ req.product.name }}</strong>
-                            {% if req.notes %}
-                            <br><small class="text-muted">{{ req.notes|truncatewords:10 }}</small>
-                            {% endif %}
-                        </td>
-                        <td>&euro;{{ req.product.price }}</td>
-                        <td>
-                            {% if req.status == 'pending' %}
-                            <span class="badge badge--warning">{% trans "Pending" %}</span>
-                            {% elif req.status == 'approved' %}
-                            <span class="badge badge--success">{% trans "Approved" %}</span>
-                            {% elif req.status == 'rejected' %}
-                            <span class="badge badge--danger">{% trans "Rejected" %}</span>
-                            {% else %}
-                            <span class="badge badge--muted">{% trans "Cancelled" %}</span>
-                            {% endif %}
-                        </td>
-                        <td>{{ req.created_at|date:"d/m/Y H:i" }}</td>
-                        <td>
+        {# ---- Active / Pending Requests ---- #}
+        {% if active_requests %}
+        <section class="page-requests__section" aria-labelledby="active-heading">
+            <h2 id="active-heading" class="page-requests__section-title">{% trans "Active Requests" %}</h2>
+            <div class="request-cards" role="list">
+                {% for req in active_requests %}
+                <a href="{% routablepageurl page 'request_detail' req.pk %}" class="request-card request-card--pending" role="listitem">
+                    <div class="request-card__header">
+                        <h3 class="request-card__product">{{ req.product.name }}</h3>
+                        <span class="badge badge--warning">{% trans "Pending" %}</span>
+                    </div>
+                    <div class="request-card__body">
+                        <span class="request-card__price">&euro;{{ req.product.price }}<small>/ {% trans "year" %}</small></span>
+                        <span class="request-card__date">
+                            <time datetime="{{ req.created_at|date:'Y-m-d' }}">{{ req.created_at|date:"d/m/Y" }}</time>
+                        </span>
+                    </div>
+                    {% if req.notes %}
+                    <p class="request-card__notes">{{ req.notes|truncatewords:15 }}</p>
+                    {% endif %}
+                    <span class="request-card__arrow" aria-hidden="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                    </span>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {# ---- Archived Requests ---- #}
+        {% if archived_requests %}
+        <section class="page-requests__section" aria-labelledby="archive-heading">
+            <h2 id="archive-heading" class="page-requests__section-title">{% trans "Request History" %}</h2>
+            <div class="request-cards" role="list">
+                {% for req in archived_requests %}
+                <a href="{% routablepageurl page 'request_detail' req.pk %}" class="request-card request-card--{{ req.status }}" role="listitem">
+                    <div class="request-card__header">
+                        <h3 class="request-card__product">{{ req.product.name }}</h3>
+                        {% if req.status == 'approved' %}
+                        <span class="badge badge--success">{% trans "Approved" %}</span>
+                        {% elif req.status == 'rejected' %}
+                        <span class="badge badge--danger">{% trans "Rejected" %}</span>
+                        {% else %}
+                        <span class="badge badge--muted">{% trans "Cancelled" %}</span>
+                        {% endif %}
+                    </div>
+                    <div class="request-card__body">
+                        <span class="request-card__price">&euro;{{ req.product.price }}<small>/ {% trans "year" %}</small></span>
+                        <span class="request-card__date">
                             {% if req.processed_at %}
-                            {{ req.processed_at|date:"d/m/Y H:i" }}
+                            <time datetime="{{ req.processed_at|date:'Y-m-d' }}">{{ req.processed_at|date:"d/m/Y" }}</time>
                             {% else %}
-                            <span class="text-muted">—</span>
+                            <time datetime="{{ req.created_at|date:'Y-m-d' }}">{{ req.created_at|date:"d/m/Y" }}</time>
                             {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <div class="page-card__no-card">
-            <div class="page-card__no-card-icon">📋</div>
-            <p class="page-card__no-card-text">{% trans "You have not submitted any membership requests yet." %}</p>
-            {% localized_slugurl 'diventa-socio' as membership_plans_url %}
-            {% if membership_plans_url %}
-            <a href="{{ membership_plans_url }}" class="btn btn-primary">
+                        </span>
+                    </div>
+                    {% if req.admin_notes %}
+                    <p class="request-card__notes">{{ req.admin_notes|truncatewords:15 }}</p>
+                    {% endif %}
+                    <span class="request-card__arrow" aria-hidden="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                    </span>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {# ---- Empty State ---- #}
+        {% if not requests %}
+        <div class="page-requests__empty" role="status">
+            <svg class="page-requests__empty-icon" width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+            <p class="page-requests__empty-text">{% trans "You have not submitted any membership requests yet." %}</p>
+            <a href="{% routablepageurl page 'card' %}" class="btn btn--primary">
                 {% trans "View Membership Plans" %}
             </a>
-            {% endif %}
         </div>
         {% endif %}
 
-        <div class="membership-card__actions">
-            <a href="{% routablepageurl page 'card' %}" class="btn btn-outline">
+        <div class="page-requests__actions">
+            <a href="{% routablepageurl page 'card' %}" class="btn btn--outline">
                 {% trans "Back to My Card" %}
             </a>
         </div>

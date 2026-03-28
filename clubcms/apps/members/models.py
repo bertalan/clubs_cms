@@ -720,6 +720,25 @@ class MembersAreaPage(RoutablePageMixin, Page):
             if os.path.exists(barcode_full):
                 ctx["barcode_url"] = settings.MEDIA_URL + barcode_path
 
+        # Membership request status for banner
+        from datetime import timedelta
+
+        from django.utils import timezone
+
+        ctx["pending_requests"] = MembershipRequest.objects.filter(
+            user=user, status="pending"
+        ).select_related("product")
+        thirty_days_ago = timezone.now() - timedelta(days=30)
+        ctx["recent_resolved"] = (
+            MembershipRequest.objects.filter(
+                user=user,
+                status__in=["approved", "rejected"],
+                processed_at__gte=thirty_days_ago,
+            )
+            .select_related("product")
+            .order_by("-processed_at")[:3]
+        )
+
         return self.render(
             request,
             template="account/card.html",
@@ -954,13 +973,126 @@ class MembersAreaPage(RoutablePageMixin, Page):
             user=request.user
         ).order_by("-created_at")
 
+        active = [r for r in requests_qs if r.status == "pending"]
+        archived = [r for r in requests_qs if r.status != "pending"]
+
         return self.render(
             request,
             template="account/membership_requests.html",
             context_overrides={
                 "requests": requests_qs,
+                "active_requests": active,
+                "archived_requests": archived,
                 "page": self,
             },
+        )
+
+    # ------------------------------------------------------------------
+    # Membership request detail (single)
+    # ------------------------------------------------------------------
+
+    @route(r"^request/(?P<pk>\d+)/$", name="request_detail")
+    def request_detail_view(self, request, pk):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        from django.http import Http404
+
+        try:
+            membership_req = MembershipRequest.objects.select_related(
+                "product"
+            ).get(pk=pk, user=request.user)
+        except MembershipRequest.DoesNotExist:
+            raise Http404
+
+        # Build stepper steps
+        steps = [
+            {
+                "label": _("Submitted"),
+                "date": membership_req.created_at,
+                "done": True,
+            },
+            {
+                "label": _("Under Review"),
+                "date": None,
+                "done": membership_req.status != "pending",
+            },
+        ]
+        if membership_req.status == "approved":
+            steps.append(
+                {
+                    "label": _("Approved"),
+                    "date": membership_req.processed_at,
+                    "done": True,
+                }
+            )
+        elif membership_req.status == "rejected":
+            steps.append(
+                {
+                    "label": _("Rejected"),
+                    "date": membership_req.processed_at,
+                    "done": True,
+                }
+            )
+        elif membership_req.status == "cancelled":
+            steps.append(
+                {
+                    "label": _("Cancelled"),
+                    "date": membership_req.updated_at,
+                    "done": True,
+                }
+            )
+        else:
+            steps.append(
+                {
+                    "label": _("Decision"),
+                    "date": None,
+                    "done": False,
+                }
+            )
+
+        return self.render(
+            request,
+            template="account/request_detail.html",
+            context_overrides={
+                "membership_req": membership_req,
+                "steps": steps,
+                "page": self,
+            },
+        )
+
+    # ------------------------------------------------------------------
+    # Cancel membership request
+    # ------------------------------------------------------------------
+
+    @route(r"^request/(?P<pk>\d+)/cancel/$", name="cancel_request")
+    def cancel_request_view(self, request, pk):
+        redir = self._login_required(request)
+        if redir:
+            return redir
+
+        from django.http import Http404
+        from django.shortcuts import redirect
+        from django.views.decorators.http import require_POST
+
+        if request.method != "POST":
+            raise Http404
+
+        try:
+            membership_req = MembershipRequest.objects.get(
+                pk=pk, user=request.user, status="pending"
+            )
+        except MembershipRequest.DoesNotExist:
+            raise Http404
+
+        from django.contrib import messages
+
+        membership_req.status = "cancelled"
+        membership_req.save(update_fields=["status", "updated_at"])
+        messages.success(request, _("Your membership request has been cancelled."))
+        return redirect(
+            self.url + self.reverse_subpage("membership_requests")
         )
 
     # ------------------------------------------------------------------

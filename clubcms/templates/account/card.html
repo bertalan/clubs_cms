@@ -11,6 +11,54 @@
             <p class="page-card__subtitle">{% trans "Your digital membership credentials" %}</p>
         </header>
 
+        {# ---- Status Banners ---- #}
+        {% for req in pending_requests %}
+        <div class="request-banner request-banner--pending" role="status">
+            <div class="request-banner__icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <div class="request-banner__body">
+                <p class="request-banner__text">
+                    {% blocktrans with product=req.product.name %}You have a pending request for <strong>{{ product }}</strong>.{% endblocktrans %}
+                </p>
+                <p class="request-banner__meta">
+                    {% blocktrans with date=req.created_at|date:"d/m/Y" %}Submitted on {{ date }}{% endblocktrans %}
+                </p>
+            </div>
+            <a href="{% routablepageurl page 'request_detail' req.pk %}" class="request-banner__link">{% trans "View" %}</a>
+        </div>
+        {% endfor %}
+
+        {% for req in recent_resolved %}
+        <div class="request-banner request-banner--{{ req.status }}" role="status">
+            <div class="request-banner__icon" aria-hidden="true">
+                {% if req.status == 'approved' %}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+                {% elif req.status == 'rejected' %}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+                {% endif %}
+            </div>
+            <div class="request-banner__body">
+                {% if req.status == 'approved' %}
+                <p class="request-banner__text">
+                    {% blocktrans with product=req.product.name %}Your request for <strong>{{ product }}</strong> has been approved!{% endblocktrans %}
+                </p>
+                {% elif req.status == 'rejected' %}
+                <p class="request-banner__text">
+                    {% blocktrans with product=req.product.name %}Your request for <strong>{{ product }}</strong> was not approved.{% endblocktrans %}
+                </p>
+                {% if req.admin_notes %}
+                <p class="request-banner__reason">{{ req.admin_notes }}</p>
+                {% endif %}
+                {% endif %}
+                <p class="request-banner__meta">
+                    {{ req.processed_at|date:"d/m/Y" }}
+                </p>
+            </div>
+            <a href="{% routablepageurl page 'request_detail' req.pk %}" class="request-banner__link">{% trans "Details" %}</a>
+        </div>
+        {% endfor %}
+
         {% if user.card_number %}
         {# ---- Digital Card Display ---- #}
         <article class="membership-card" aria-label="{% trans 'Digital membership card' %}">
