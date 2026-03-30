@@ -29,6 +29,7 @@ from apps.core.models import Activity, Comment, Contribution, Reaction
 from apps.events.models import EventFavorite, EventRegistration
 from apps.core.models import ContributionsPage, SearchPage
 from apps.notifications.models import NotificationsPage
+from apps.website.models.newsletter import NewsletterPage
 from apps.federation.models import (
     ExternalEvent,
     ExternalEventComment,
@@ -109,6 +110,7 @@ PAGE_TYPE_MAP: dict[str, type] = {
     "search": SearchPage,
     "contributions": ContributionsPage,
     "notifications": NotificationsPage,
+    "newsletter": NewsletterPage,
     "members_area": MembersAreaPage,
     "partner_index": PartnerIndexPage,
     "partner": PartnerPage,

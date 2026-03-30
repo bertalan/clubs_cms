@@ -1,10 +1,11 @@
 {% extends "base.html" %}
-{% load i18n wagtailroutablepage_tags %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Events Archive" %} | {{ block.super }}{% endblock %}
 {% block body_class %}page-my-events page-my-events--archive{% endblock %}
 
 {% block content %}
+{% include "includes/breadcrumbs.html" %}
 <section class="page-my-events page-my-events--archive" aria-labelledby="archive-title">
     <div class="container">
         <header class="page-my-events__header">

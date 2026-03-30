@@ -1,9 +1,12 @@
 {% extends "base.html" %}
-{% load i18n wagtailroutablepage_tags %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags %}
+
+{% block body_class %}page-account-profile{% endblock %}
 
 {% block title %}{% trans "My Profile" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
+{% include "includes/breadcrumbs.html" %}
 <section class="page-account-profile" aria-labelledby="profile-heading">
     <div class="container container--narrow">
         <header class="page-account-profile__header">

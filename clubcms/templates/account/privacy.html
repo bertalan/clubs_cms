@@ -1,9 +1,12 @@
 {% extends "base.html" %}
-{% load i18n wagtailroutablepage_tags %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags %}
+
+{% block body_class %}page-account-privacy{% endblock %}
 
 {% block title %}{% trans "Privacy Settings" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
+{% include "includes/breadcrumbs.html" %}
 <section class="page-privacy" aria-labelledby="privacy-heading">
     <div class="container container--narrow">
         <header class="page-privacy__header">

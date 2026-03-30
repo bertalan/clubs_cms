@@ -1,16 +1,18 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags %}
 
 {% block title %}{{ newsletter.subject }}{% endblock %}
+
+{% block body_class %}page-newsletter{% endblock %}
 
 {% block content %}
 {% include "includes/breadcrumbs.html" %}
 
-<div class="page-contact">
+<section class="page-newsletter">
     <div class="container">
-        <header class="page-contact__header">
-            <h1 class="page-contact__title">{{ newsletter.subject }}</h1>
-            <p style="color: var(--color-text-muted, #6b7280); font-size: 0.875rem;">
+        <header class="page-newsletter__header">
+            <h1 class="page-newsletter__title">{{ newsletter.subject }}</h1>
+            <p class="page-newsletter__meta">
                 {{ newsletter.sent_at|date:"d M Y, H:i" }}
                 {% if newsletter.category %}
                     &middot; {{ newsletter.category.name }}
@@ -18,13 +20,13 @@
             </p>
         </header>
 
-        <article class="newsletter-detail__body" style="max-width: 640px; margin: 0 auto; padding: 2rem 0;">
+        <article class="newsletter-detail__body">
             {{ body_html }}
         </article>
 
-        <div style="text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-surface-alt, #e5e7eb);">
-            <a href="{% url 'website:newsletter-archive' %}" class="btn btn-outline">&larr; {% trans "Back to archive" %}</a>
+        <div class="newsletter-detail__back">
+            <a href="{% pageurl page %}" class="btn btn-outline">&larr; {% trans "Back to archive" %}</a>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}

@@ -1,11 +1,14 @@
 {% extends "base.html" %}
-{% load i18n wagtailroutablepage_tags %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags %}
+
+{% block body_class %}page-request-detail{% endblock %}
 
 {% block title %}{% trans "Request Detail" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
+{% include "includes/breadcrumbs.html" %}
 <section class="page-request-detail" aria-labelledby="request-detail-heading">
-    <div class="page-request-detail__container">
+    <div class="container container--narrow">
         <header class="page-request-detail__header">
             <h1 id="request-detail-heading" class="page-request-detail__title">{% trans "Request Detail" %}</h1>
             <p class="page-request-detail__subtitle">

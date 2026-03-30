@@ -1,11 +1,14 @@
 {% extends "base.html" %}
-{% load i18n wagtailroutablepage_tags %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags %}
+
+{% block body_class %}page-membership-request{% endblock %}
 
 {% block title %}{% trans "Request Membership" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
-<section class="page-card">
-    <div class="page-card__container">
+{% include "includes/breadcrumbs.html" %}
+<section class="page-membership-request">
+    <div class="container container--narrow">
         <header class="page-card__header">
             <h1 class="page-card__title">{% trans "Request Membership" %}</h1>
             <p class="page-card__subtitle">{% trans "Complete your membership application" %}</p>

@@ -1,11 +1,14 @@
 {% extends "base.html" %}
-{% load i18n wagtailroutablepage_tags %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags %}
+
+{% block body_class %}page-access-request{% endblock %}
 
 {% block title %}{% trans "Request Access" %} | {% trans "Mutual Aid" %}{% endblock %}
 
 {% block extra_css %}{% endblock %}
 
 {% block content %}
+{% include "includes/breadcrumbs.html" %}
 <div class="container container--narrow">
     <h1>{% trans "Request Access to Mutual Aid" %}</h1>
 

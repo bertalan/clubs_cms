@@ -2250,7 +2250,9 @@ a:hover {
 .page-about__header,
 .page-events__header,
 .page-news-index__header,
-.page-gallery__header {
+.page-gallery__header,
+.page-notification-history__header,
+.page-notification-prefs__header {
   justify-items: center;
   text-align: center;
 }
@@ -2258,7 +2260,9 @@ a:hover {
 .page-about__title,
 .page-events__title,
 .page-news-index__title,
-.page-gallery__title {
+.page-gallery__title,
+.page-notification-history__title,
+.page-notification-prefs__title {
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.03em;
@@ -3891,23 +3895,16 @@ a:hover {
   .membership-card { transition: none; }
 }
 
-/* --------------------------------------------------------------------------
-   29h-bis. Notification Preferences Page (zen override)
-   -------------------------------------------------------------------------- */
+/* ── Notification Preferences ── */
 .page-notification-prefs {
   padding: 5rem 0;
   background: var(--color-surface-alt);
 }
 
-.page-notification-prefs__title {
-  font-weight: 900;
-  color: var(--color-primary);
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-}
-
-.page-notification-prefs__title-icon {
-  color: var(--color-primary);
+.page-notification-prefs__subtitle {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  margin: 0;
 }
 
 .page-notification-prefs__form {
@@ -4003,17 +4000,6 @@ a:hover {
 .page-notification-history {
   padding: 5rem 0;
   background: var(--color-surface-alt);
-}
-
-.page-notification-history__title {
-  font-weight: 900;
-  color: var(--color-primary);
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-}
-
-.page-notification-history__icon {
-  color: var(--color-primary);
 }
 
 .page-notification-history__list {

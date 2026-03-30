@@ -1,37 +1,39 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Unsubscribe from Newsletter" %}{% endblock %}
+
+{% block body_class %}page-newsletter{% endblock %}
 
 {% block content %}
 {% include "includes/breadcrumbs.html" %}
 
-<div class="page-contact">
+<section class="page-newsletter">
     <div class="container">
-        <header class="page-contact__header">
-            <h1 class="page-contact__title">{% trans "Unsubscribe from Newsletter" %}</h1>
-            <div class="page-contact__intro">
+        <header class="page-newsletter__header">
+            <h1 class="page-newsletter__title">{% trans "Unsubscribe from Newsletter" %}</h1>
+            <div class="page-newsletter__intro">
                 <p>{% trans "Enter your email address to unsubscribe from our newsletter." %}</p>
             </div>
         </header>
 
-        <section class="page-contact__form-section" aria-labelledby="unsubscribe-heading">
+        <section class="page-newsletter__form-section" aria-labelledby="unsubscribe-heading">
             <h2 id="unsubscribe-heading" class="sr-only">{% trans "Newsletter unsubscribe form" %}</h2>
-            <form method="post" action="{% url 'website:newsletter-unsubscribe' %}" class="page-contact__form" novalidate>
+            <form method="post" action="{% routablepageurl page "unsubscribe" %}" class="page-newsletter__form" novalidate>
                 {% csrf_token %}
 
                 {% if form.errors %}
-                <div class="page-contact__form-errors" role="alert" aria-live="assertive">
+                <div class="page-newsletter__form-errors" role="alert" aria-live="assertive">
                     <p>{% trans "Please correct the errors below:" %}</p>
                     {{ form.non_field_errors }}
                 </div>
                 {% endif %}
 
-                <div class="page-contact__field">
-                    <label for="id_email" class="page-contact__label">{% trans "Email address" %} <span aria-hidden="true">*</span></label>
-                    <input type="email" id="id_email" name="email" required class="page-contact__input" {% if form.email.errors %}aria-invalid="true" aria-describedby="id_email_error"{% endif %} value="{{ form.email.value|default:'' }}" placeholder="{% trans 'Enter your email' %}" aria-required="true" autocomplete="email">
+                <div class="page-newsletter__field">
+                    <label for="id_email" class="page-newsletter__label">{% trans "Email address" %} <span aria-hidden="true">*</span></label>
+                    <input type="email" id="id_email" name="email" required class="page-newsletter__input" {% if form.email.errors %}aria-invalid="true" aria-describedby="id_email_error"{% endif %} value="{{ form.email.value|default:'' }}" placeholder="{% trans 'Enter your email' %}" aria-required="true" autocomplete="email">
                     {% if form.email.errors %}
-                    <span id="id_email_error" class="page-contact__error" role="alert">{{ form.email.errors.0 }}</span>
+                    <span id="id_email_error" class="page-newsletter__error" role="alert">{{ form.email.errors.0 }}</span>
                     {% endif %}
                 </div>
 
@@ -43,29 +45,29 @@
 
                 {# CAPTCHA — Turnstile #}
                 {% if captcha_provider == 'turnstile' and captcha_site_key %}
-                <div class="page-contact__captcha">
+                <div class="page-newsletter__captcha">
                     <div class="cf-turnstile" data-sitekey="{{ captcha_site_key }}"></div>
                 </div>
                 {% endif %}
 
                 {# CAPTCHA — hCaptcha #}
                 {% if captcha_provider == 'hcaptcha' and captcha_site_key %}
-                <div class="page-contact__captcha">
+                <div class="page-newsletter__captcha">
                     <div class="h-captcha" data-sitekey="{{ captcha_site_key }}"></div>
                 </div>
                 {% endif %}
 
-                <div class="page-contact__submit">
+                <div class="page-newsletter__submit">
                     <button type="submit" class="btn btn-primary">{% trans "Unsubscribe" %}</button>
                 </div>
             </form>
 
-            <p style="margin-top:1rem;">
-                <a href="{% url 'website:newsletter-subscribe' %}">{% trans "Want to subscribe instead?" %}</a>
+            <p class="page-newsletter__links">
+                <a href="{% routablepageurl page "subscribe" %}">{% trans "Want to subscribe instead?" %}</a>
             </p>
         </section>
     </div>
-</div>
+</section>
 {% endblock %}
 
 {% block extra_js %}

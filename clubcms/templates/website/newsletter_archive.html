@@ -1,16 +1,18 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Newsletter Archive" %}{% endblock %}
+
+{% block body_class %}page-newsletter{% endblock %}
 
 {% block content %}
 {% include "includes/breadcrumbs.html" %}
 
-<div class="page-contact">
+<section class="page-newsletter">
     <div class="container">
-        <header class="page-contact__header">
-            <h1 class="page-contact__title">{% trans "Newsletter Archive" %}</h1>
-            <div class="page-contact__intro">
+        <header class="page-newsletter__header">
+            <h1 class="page-newsletter__title">{% trans "Newsletter Archive" %}</h1>
+            <div class="page-newsletter__intro">
                 <p>{% trans "Browse past newsletters by category." %}</p>
             </div>
         </header>
@@ -18,15 +20,13 @@
         {# ── Category filter tabs ── #}
         {% if categories %}
         <nav class="newsletter-archive__categories" aria-label="{% trans 'Newsletter categories' %}">
-            <a href="{% url 'website:newsletter-archive' %}"
-               class="btn btn-sm {% if not active_category %}btn-primary{% else %}btn-outline{% endif %}"
-               style="margin: 0.25rem;">
+            <a href="{% pageurl page %}"
+               class="btn btn-sm {% if not active_category %}btn-primary{% else %}btn-outline{% endif %}">
                 {% trans "All" %}
             </a>
             {% for cat in categories %}
-            <a href="{% url 'website:newsletter-archive' %}?category={{ cat.slug }}"
-               class="btn btn-sm {% if active_category.pk == cat.pk %}btn-primary{% else %}btn-outline{% endif %}"
-               style="margin: 0.25rem;">
+            <a href="{% pageurl page %}?category={{ cat.slug }}"
+               class="btn btn-sm {% if active_category.pk == cat.pk %}btn-primary{% else %}btn-outline{% endif %}">
                 {{ cat.name }}
             </a>
             {% endfor %}
@@ -34,16 +34,16 @@
         {% endif %}
 
         {# ── Newsletter list ── #}
-        <section class="newsletter-archive__list" style="margin-top: 2rem;">
+        <section class="newsletter-archive__list">
             {% if newsletters %}
                 {% for nl in newsletters %}
-                <article class="newsletter-archive__item" style="border-bottom: 1px solid var(--color-surface-alt, #e5e7eb); padding: 1.25rem 0;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;">
+                <article class="newsletter-archive__item">
+                    <div class="newsletter-archive__item-inner">
                         <div>
-                            <h3 style="margin: 0 0 0.25rem 0;">
-                                <a href="{% url 'website:newsletter-detail' nl.pk %}">{{ nl.subject }}</a>
+                            <h3 class="newsletter-archive__item-title">
+                                <a href="{% routablepageurl page "detail" nl.pk %}">{{ nl.subject }}</a>
                             </h3>
-                            <p style="margin: 0; color: var(--color-text-muted, #6b7280); font-size: 0.875rem;">
+                            <p class="newsletter-archive__item-meta">
                                 {{ nl.sent_at|date:"d M Y" }}
                                 {% if nl.category %}
                                     &middot; <span class="badge badge--subtle">{{ nl.category.name }}</span>
@@ -53,22 +53,22 @@
                                 {% endif %}
                             </p>
                         </div>
-                        <a href="{% url 'website:newsletter-detail' nl.pk %}" class="btn btn-sm btn-outline">{% trans "Read" %} &rarr;</a>
+                        <a href="{% routablepageurl page "detail" nl.pk %}" class="btn btn-sm btn-outline">{% trans "Read" %} &rarr;</a>
                     </div>
                 </article>
                 {% endfor %}
             {% else %}
-                <p style="color: var(--color-text-muted, #6b7280); padding: 2rem 0;">{% trans "No newsletters found." %}</p>
+                <p class="newsletter-archive__empty">{% trans "No newsletters found." %}</p>
             {% endif %}
         </section>
 
         {# ── Subscribe CTA ── #}
         {% if not is_subscriber %}
-        <div style="margin-top: 2rem; padding: 1.5rem; background: var(--color-surface-alt, #f3f4f6); border-radius: 8px; text-align: center;">
-            <p style="margin: 0 0 1rem 0;">{% trans "Don't miss our updates! Subscribe to the newsletter." %}</p>
-            <a href="{% url 'website:newsletter-subscribe' %}" class="btn btn-primary">{% trans "Subscribe" %}</a>
+        <div class="newsletter-archive__cta">
+            <p>{% trans "Don't miss our updates! Subscribe to the newsletter." %}</p>
+            <a href="{% routablepageurl page "subscribe" %}" class="btn btn-primary">{% trans "Subscribe" %}</a>
         </div>
         {% endif %}
     </div>
-</div>
+</section>
 {% endblock %}

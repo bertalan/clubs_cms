@@ -430,6 +430,19 @@ class NewsletterSignupBlock(StructBlock):
     )
     settings = BlockSettings(required=False)
 
+    def get_context(self, value, parent_context=None):
+        ctx = super().get_context(value, parent_context=parent_context)
+        from apps.website.models.newsletter import NewsletterPage
+
+        page = NewsletterPage.objects.live().first()
+        if page:
+            ctx["newsletter_subscribe_url"] = page.url + page.reverse_subpage(
+                "subscribe"
+            )
+        else:
+            ctx["newsletter_subscribe_url"] = "#"
+        return ctx
+
     class Meta:
         template = "website/blocks/newsletter_signup_block.html"
         icon = "mail"

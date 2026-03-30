@@ -1620,12 +1620,19 @@ h4, .h4 {
 .page-transparency,
 .page-press,
 .page-contact,
+.page-newsletter,
 .page-partners,
 .page-partner,
 .page-membership-plans,
 .page-verification,
 .page-unsubscribe,
-.page-federation {
+.page-federation,
+.page-search,
+.page-notification-history,
+.page-notification-prefs,
+.page-upload,
+.page-my-uploads,
+.page-moderation {
   padding: 4rem 0;
 }
 
@@ -1638,12 +1645,20 @@ h4, .h4 {
 .page-transparency__header,
 .page-press__header,
 .page-contact__header,
+.page-newsletter__header,
 .page-partners__header,
 .page-partner__header,
 .page-membership-plans__header,
 .page-verification__header,
 .page-unsubscribe__header,
-.page-federation__header {
+.page-federation__header,
+.page-mutual-aid__header,
+.page-search__header,
+.page-notification-history__header,
+.page-notification-prefs__header,
+.page-upload__header,
+.page-my-uploads__header,
+.page-moderation__header {
   text-align: center;
   margin-bottom: 3rem;
 }
@@ -1657,12 +1672,20 @@ h4, .h4 {
 .page-transparency__title,
 .page-press__title,
 .page-contact__title,
+.page-newsletter__title,
 .page-partners__title,
 .page-partner__title,
 .page-membership-plans__title,
 .page-verification__title,
 .page-unsubscribe__title,
-.page-federation__title {
+.page-federation__title,
+.page-mutual-aid__title,
+.page-search__title,
+.page-notification-history__title,
+.page-notification-prefs__title,
+.page-upload__title,
+.page-my-uploads__title,
+.page-moderation__title {
   margin-bottom: 0.5rem;
 }
 
@@ -1674,10 +1697,12 @@ h4, .h4 {
 .page-transparency__intro,
 .page-press__intro,
 .page-contact__intro,
+.page-newsletter__intro,
 .page-partners__intro,
 .page-partner__intro,
 .page-membership-plans__intro,
-.page-federation__intro {
+.page-federation__intro,
+.page-mutual-aid__intro {
   max-width: 700px;
   margin: 1rem auto 2.5rem;
   color: var(--color-text-muted);
@@ -2115,7 +2140,7 @@ h4, .h4 {
   font-weight: 700;
   border-radius: 999px;
   background: var(--color-secondary);
-  color: #fff;
+  color: var(--color-button-text);
   text-decoration: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   white-space: nowrap;
@@ -2134,7 +2159,7 @@ h4, .h4 {
 
 .event-card__cta--secondary:hover {
   background: var(--color-secondary);
-  color: #fff;
+  color: var(--color-button-text, #fff);
 }
 
 .event-card__title,
@@ -2648,23 +2673,26 @@ h4, .h4 {
   margin-bottom: 2rem;
 }
 
-/* --- Contact Page layout (structural only — aesthetics in each theme) --- */
-.page-contact__field-row {
+/* --- Contact / Newsletter Page layout (structural only — aesthetics in each theme) --- */
+.page-contact__field-row,
+.page-newsletter__field-row {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
 }
 
 @media (min-width: 640px) {
-  .page-contact__field-row {
+  .page-contact__field-row,
+  .page-newsletter__field-row {
     grid-template-columns: 1fr 1fr;
   }
-  .page-contact__field-row .page-contact__field {
+  .page-contact__field-row .page-contact__field,
+  .page-newsletter__field-row .page-newsletter__field {
     margin-bottom: 0;
   }
 }
 
-/* Safety-net: bare inputs inside .page-contact__field inherit themed styling */
+/* Safety-net: bare inputs inside form fields inherit themed styling */
 .page-contact__field input[type="text"],
 .page-contact__field input[type="email"],
 .page-contact__field input[type="password"],
@@ -2674,7 +2702,17 @@ h4, .h4 {
 .page-contact__field input[type="search"],
 .page-contact__field input[type="date"],
 .page-contact__field select,
-.page-contact__field textarea {
+.page-contact__field textarea,
+.page-newsletter__field input[type="text"],
+.page-newsletter__field input[type="email"],
+.page-newsletter__field input[type="password"],
+.page-newsletter__field input[type="number"],
+.page-newsletter__field input[type="tel"],
+.page-newsletter__field input[type="url"],
+.page-newsletter__field input[type="search"],
+.page-newsletter__field input[type="date"],
+.page-newsletter__field select,
+.page-newsletter__field textarea {
   width: 100%;
   padding: 0.875rem 1rem;
   background: var(--color-surface-alt, #fff);
@@ -2688,37 +2726,45 @@ h4, .h4 {
 
 .page-contact__field input:focus,
 .page-contact__field select:focus,
-.page-contact__field textarea:focus {
+.page-contact__field textarea:focus,
+.page-newsletter__field input:focus,
+.page-newsletter__field select:focus,
+.page-newsletter__field textarea:focus {
   outline: none;
   border-color: var(--color-primary, #1d4ed8);
   box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
 }
 
-/* Fieldset reset for .page-contact context */
-.page-contact__fieldset {
+/* Fieldset reset for form contexts */
+.page-contact__fieldset,
+.page-newsletter__fieldset {
   border: none !important;
   padding: 0;
   margin: 1rem 0;
 }
 
 /* Checkbox group inside forms (Django CheckboxSelectMultiple structure) */
-.page-contact__checkbox-group {
+.page-contact__checkbox-group,
+.page-newsletter__checkbox-group {
   margin-top: 0.5rem;
 }
 
-.page-contact__checkbox-group > div {
+.page-contact__checkbox-group > div,
+.page-newsletter__checkbox-group > div {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.page-contact__checkbox-group > div > div {
+.page-contact__checkbox-group > div > div,
+.page-newsletter__checkbox-group > div > div {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.page-contact__checkbox-group > div > div label {
+.page-contact__checkbox-group > div > div label,
+.page-newsletter__checkbox-group > div > div label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -2728,7 +2774,8 @@ h4, .h4 {
   cursor: pointer;
 }
 
-.page-contact__checkbox-group input[type="checkbox"] {
+.page-contact__checkbox-group input[type="checkbox"],
+.page-newsletter__checkbox-group input[type="checkbox"] {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
@@ -2736,13 +2783,32 @@ h4, .h4 {
   cursor: pointer;
 }
 
-/* Help text in .page-contact forms */
-.page-contact__help-text {
+/* Help text in forms */
+.page-contact__help-text,
+.page-newsletter__help-text {
   display: block;
   font-size: 0.8rem;
   color: var(--color-text-muted, #6b7280);
   margin-top: 0.25rem;
   line-height: 1.4;
+}
+
+/* --- Newsletter Archive / Detail (structural only — aesthetics in each theme) --- */
+.newsletter-archive__categories {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.newsletter-archive__item-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.newsletter-detail__body {
+  max-width: 640px;
+  margin: 0 auto;
 }
 
 /* --- Press Page sections --- */
@@ -5478,34 +5544,8 @@ h4, .h4 {
 }
 
 /* --------------------------------------------------------------------------
-   Notification Preferences Page
+   Notification Preferences Page (structural only — aesthetics in each theme)
    -------------------------------------------------------------------------- */
-.page-notification-prefs {
-  padding: 4rem 0;
-}
-
-.page-notification-prefs__header {
-  margin-bottom: 2.5rem;
-}
-
-.page-notification-prefs__title {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1.75rem;
-  margin-bottom: 0.5rem;
-}
-
-.page-notification-prefs__title-icon {
-  flex-shrink: 0;
-}
-
-.page-notification-prefs__subtitle {
-  color: var(--color-text-muted, #666);
-  font-size: 1rem;
-  margin: 0;
-}
-
 .page-notification-prefs__form {
   display: flex;
   flex-direction: column;
@@ -5513,7 +5553,6 @@ h4, .h4 {
 
 .page-notification-prefs__fieldset {
   border: none;
-  padding: 2rem;
   margin: 0;
 }
 
@@ -5521,10 +5560,6 @@ h4, .h4 {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1.125rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
   width: 100%;
 }
 
@@ -5532,42 +5567,22 @@ h4, .h4 {
   width: 1.25rem;
   height: 1.25rem;
   flex-shrink: 0;
-  opacity: 0.6;
 }
 
 .page-notification-prefs__fields {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-}
-
-.page-notification-prefs__field {
-  padding: 1rem 1.25rem;
-  background: var(--color-surface-alt, #f9f9f9);
-  border-radius: 6px;
 }
 
 .page-notification-prefs__actions {
   display: flex;
-  gap: 1rem;
-  padding: 1.5rem 2rem;
 }
 
 .page-notification-prefs__submit {
   display: inline-flex;
   align-items: center;
-  padding: 0.875rem 2rem;
-  font-weight: 700;
-  font-size: 0.9375rem;
   cursor: pointer;
   border: none;
-  background: var(--color-primary, #333);
-  color: #fff;
-  transition: background 0.3s ease;
-}
-
-.page-notification-prefs__submit:hover {
-  background: var(--color-secondary, #555);
 }
 
 .page-notification-prefs__submit:focus-visible {
@@ -5576,40 +5591,18 @@ h4, .h4 {
 }
 
 @media (max-width: 640px) {
-  .page-notification-prefs { padding: 3rem 0; }
-  .page-notification-prefs__fieldset { padding: 1.5rem; }
-  .page-notification-prefs__actions { flex-direction: column; padding: 1rem 1.5rem; }
+  .page-notification-prefs__actions { flex-direction: column; }
 }
 
 /* --------------------------------------------------------------------------
-   Notification History Page
+   Notification History Page (structural only — aesthetics in each theme)
    -------------------------------------------------------------------------- */
-.page-notification-history {
-  padding: 4rem 0;
-}
-
-.page-notification-history__header {
-  margin-bottom: 2rem;
-}
-
-.page-notification-history__title {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1.75rem;
-}
-
-.page-notification-history__icon {
-  flex-shrink: 0;
-}
-
 .page-notification-history__list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
 }
 
 .page-notification-history__item {
@@ -5619,63 +5612,18 @@ h4, .h4 {
 .page-notification-history__panel {
   display: grid;
   grid-template-columns: auto 1fr auto;
-  gap: 1rem;
   align-items: start;
-  padding: 1.25rem;
-  background: var(--color-surface, #fff);
-  border: 1px solid rgba(128, 128, 128, 0.15);
-  border-radius: 8px;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.page-notification-history__panel:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .page-notification-history__channel-badge {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  background: var(--color-surface-alt, #f5f5f5);
   flex-shrink: 0;
-}
-
-.page-notification-history__channel-badge svg {
-  width: 1rem;
-  height: 1rem;
-  color: var(--color-text-muted, #666);
 }
 
 .page-notification-history__content {
   min-width: 0;
-}
-
-.page-notification-history__item-title {
-  font-size: 1rem;
-  font-weight: 700;
-  margin: 0 0 0.25rem;
-  line-height: 1.3;
-}
-
-.page-notification-history__body {
-  font-size: 0.9rem;
-  color: var(--color-text-muted, #555);
-  margin: 0 0 0.5rem;
-  line-height: 1.5;
-}
-
-.page-notification-history__link {
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-decoration: none;
-  color: var(--color-secondary, #0066cc);
-}
-
-.page-notification-history__link:hover {
-  text-decoration: underline;
 }
 
 .page-notification-history__link:focus-visible {
@@ -5684,8 +5632,6 @@ h4, .h4 {
 }
 
 .page-notification-history__time {
-  font-size: 0.8rem;
-  color: var(--color-text-muted, #888);
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -5694,34 +5640,12 @@ h4, .h4 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  padding: 4rem 1rem;
   text-align: center;
-}
-
-.page-notification-history__empty-icon {
-  color: var(--color-text-muted, #999);
-  opacity: 0.5;
-}
-
-.page-notification-history__empty-text {
-  color: var(--color-text-muted, #888);
-  font-size: 1rem;
 }
 
 @media (max-width: 600px) {
   .page-notification-history__panel {
     grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-
-  .page-notification-history__channel-badge {
-    width: 2rem;
-    height: 2rem;
-  }
-
-  .page-notification-history__time {
-    font-size: 0.75rem;
   }
 }
 

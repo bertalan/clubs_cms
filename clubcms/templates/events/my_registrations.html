@@ -1,9 +1,12 @@
 {% extends "base.html" %}
-{% load i18n wagtailroutablepage_tags %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags %}
+
+{% block body_class %}page-registrations{% endblock %}
 
 {% block title %}{% trans "My Registrations" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
+{% include "includes/breadcrumbs.html" %}
 <section class="page-registrations" aria-labelledby="registrations-heading">
     <div class="container">
         <header class="page-registrations__header">

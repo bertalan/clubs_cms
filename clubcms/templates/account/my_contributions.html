@@ -1,9 +1,12 @@
 {% extends "base.html" %}
-{% load i18n wagtailroutablepage_tags %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags %}
+
+{% block body_class %}page-contributions{% endblock %}
 
 {% block title %}{% trans "My Contributions" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
+{% include "includes/breadcrumbs.html" %}
 <section class="page-contributions" aria-labelledby="contributions-heading">
     <div class="container container--narrow">
         <header class="page-contributions__header">

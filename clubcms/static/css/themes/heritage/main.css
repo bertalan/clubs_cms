@@ -2226,7 +2226,9 @@ a:hover {
 .page-about__header,
 .page-events__header,
 .page-news-index__header,
-.page-gallery__header {
+.page-gallery__header,
+.page-notification-history__header,
+.page-notification-prefs__header {
   justify-items: center;
   text-align: center;
 }
@@ -2234,7 +2236,9 @@ a:hover {
 .page-about__title,
 .page-events__title,
 .page-news-index__title,
-.page-gallery__title {
+.page-gallery__title,
+.page-notification-history__title,
+.page-notification-prefs__title {
   font-family: 'Playfair Display', serif;
   font-weight: 700;
   color: var(--color-primary);
@@ -3939,6 +3943,229 @@ a:hover {
   border-color: rgba(255, 255, 255, 0.08);
 }
 
+/* ── Notification Preferences ── */
+.page-notification-prefs {
+  padding: 5rem 0;
+}
+
+.page-notification-prefs__subtitle {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  font-style: italic;
+  margin: 0;
+}
+
+.page-notification-prefs__form {
+  background: var(--color-surface);
+  border: var(--heritage-gold-border);
+  border-radius: var(--heritage-radius);
+  box-shadow: var(--heritage-shadow);
+  overflow: hidden;
+}
+
+.page-notification-prefs__fieldset {
+  padding: 2rem;
+}
+
+.page-notification-prefs__fieldset + .page-notification-prefs__fieldset {
+  border-top: var(--heritage-gold-border);
+}
+
+.page-notification-prefs__legend {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: var(--heritage-gold-border);
+}
+
+.page-notification-prefs__legend-icon {
+  opacity: 0.6;
+  color: var(--color-secondary);
+}
+
+.page-notification-prefs__fields {
+  gap: 1rem;
+}
+
+.page-notification-prefs__field {
+  padding: 1rem 1.25rem;
+  background: var(--color-surface-alt);
+  border-radius: var(--heritage-radius-sm);
+  transition: background var(--heritage-transition);
+}
+
+.page-notification-prefs__field:hover,
+.page-notification-prefs__field:focus-within {
+  background: color-mix(in srgb, var(--color-surface-alt) 85%, var(--color-secondary));
+}
+
+.page-notification-prefs__actions {
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-top: var(--heritage-gold-border);
+}
+
+.page-notification-prefs__submit {
+  padding: 0.875rem 2rem;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: var(--heritage-radius);
+  transition: background var(--heritage-transition), box-shadow var(--heritage-transition);
+}
+
+.page-notification-prefs__submit:hover {
+  background: var(--color-secondary);
+  box-shadow: var(--heritage-shadow-lg);
+}
+
+/* Dark mode */
+.dark-mode .page-notification-prefs__form {
+  background: var(--color-surface-alt);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.dark-mode .page-notification-prefs__field {
+  background: var(--color-surface);
+}
+
+@media (max-width: 640px) {
+  .page-notification-prefs { padding: 3rem 0; }
+  .page-notification-prefs__fieldset { padding: 1.5rem; }
+  .page-notification-prefs__actions { flex-direction: column; padding: 1rem 1.5rem; }
+}
+
+/* ── Notification History ── */
+.page-notification-history {
+  padding: 5rem 0;
+}
+
+.page-notification-history__list {
+  gap: 1rem;
+}
+
+.page-notification-history__panel {
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--color-surface);
+  border: var(--heritage-gold-border);
+  border-radius: var(--heritage-radius);
+  box-shadow: var(--heritage-shadow);
+  transition: box-shadow var(--heritage-transition), border-color var(--heritage-transition);
+}
+
+.page-notification-history__panel:hover {
+  box-shadow: var(--heritage-shadow-lg);
+  border-color: var(--color-primary);
+}
+
+.page-notification-history__channel-badge {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-surface-alt), var(--color-surface));
+  border: var(--heritage-gold-border);
+}
+
+.page-notification-history__channel-badge svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-secondary);
+}
+
+.page-notification-history__item-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+  line-height: 1.3;
+}
+
+.page-notification-history__body {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin: 0 0 0.5rem;
+  line-height: 1.5;
+}
+
+.page-notification-history__link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--color-secondary);
+  transition: color var(--heritage-transition);
+}
+
+.page-notification-history__link:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.page-notification-history__link:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+.page-notification-history__time {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.page-notification-history__empty {
+  gap: 1rem;
+  padding: 4rem 1rem;
+  background: var(--color-surface);
+  border: var(--heritage-gold-border);
+  border-radius: var(--heritage-radius);
+}
+
+.page-notification-history__empty-icon {
+  color: var(--color-secondary);
+  opacity: 0.4;
+}
+
+.page-notification-history__empty-text {
+  font-family: 'Playfair Display', serif;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  font-style: italic;
+}
+
+/* Dark mode */
+.dark-mode .page-notification-history__panel {
+  background: var(--color-surface-alt);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.dark-mode .page-notification-history__channel-badge {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.dark-mode .page-notification-history__empty {
+  background: var(--color-surface-alt);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 600px) {
+  .page-notification-history {
+    padding: 3rem 0;
+  }
+  .page-notification-history__panel {
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+  .page-notification-history__channel-badge {
+    width: 2rem;
+    height: 2rem;
+  }
+  .page-notification-history__time {
+    font-size: 0.75rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page-event-detail__favorite-icon,
   .page-verification__submit-btn,
@@ -3955,4 +4182,7 @@ a:hover {
 
   .request-card,
   .request-banner__link { transition: none; }
+
+  .page-notification-history__panel,
+  .page-notification-history__link { transition: none; }
 }

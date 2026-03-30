@@ -1,48 +1,50 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Newsletter" %}{% endblock %}
+
+{% block body_class %}page-newsletter{% endblock %}
 
 {% block content %}
 {% include "includes/breadcrumbs.html" %}
 
-<div class="page-contact">
+<section class="page-newsletter">
     <div class="container">
-        <header class="page-contact__header">
-            <h1 class="page-contact__title">{% trans "Stay Updated" %}</h1>
-            <div class="page-contact__intro">
+        <header class="page-newsletter__header">
+            <h1 class="page-newsletter__title">{% trans "Stay Updated" %}</h1>
+            <div class="page-newsletter__intro">
                 <p>{% trans "Subscribe to our newsletter to receive the latest news, upcoming events, and club updates directly in your inbox." %}</p>
             </div>
         </header>
 
-        <section class="page-contact__form-section" aria-labelledby="newsletter-heading">
+        <section class="page-newsletter__form-section" aria-labelledby="newsletter-heading">
             <h2 id="newsletter-heading" class="sr-only">{% trans "Newsletter signup form" %}</h2>
-            <form method="post" action="{% url 'website:newsletter-subscribe' %}" class="page-contact__form" novalidate>
+            <form method="post" action="{% routablepageurl page "subscribe" %}" class="page-newsletter__form" novalidate>
                 {% csrf_token %}
 
                 {% if form.errors %}
-                <div class="page-contact__form-errors" role="alert" aria-live="assertive">
+                <div class="page-newsletter__form-errors" role="alert" aria-live="assertive">
                     <p>{% trans "Please correct the errors below:" %}</p>
                     {{ form.non_field_errors }}
                 </div>
                 {% endif %}
 
-                <div class="page-contact__field">
-                    <label for="id_email" class="page-contact__label">{% trans "Email address" %} <span aria-hidden="true">*</span></label>
-                    <input type="email" id="id_email" name="email" required class="page-contact__input" {% if form.email.errors %}aria-invalid="true" aria-describedby="id_email_error"{% endif %} value="{{ form.email.value|default:'' }}" placeholder="{% trans 'Enter your email' %}" aria-required="true" autocomplete="email">
+                <div class="page-newsletter__field">
+                    <label for="id_email" class="page-newsletter__label">{% trans "Email address" %} <span aria-hidden="true">*</span></label>
+                    <input type="email" id="id_email" name="email" required class="page-newsletter__input" {% if form.email.errors %}aria-invalid="true" aria-describedby="id_email_error"{% endif %} value="{{ form.email.value|default:'' }}" placeholder="{% trans 'Enter your email' %}" aria-required="true" autocomplete="email">
                     {% if form.email.errors %}
-                    <span id="id_email_error" class="page-contact__error" role="alert">{{ form.email.errors.0 }}</span>
+                    <span id="id_email_error" class="page-newsletter__error" role="alert">{{ form.email.errors.0 }}</span>
                     {% endif %}
                 </div>
 
                 {% if form.categories.field.queryset.exists %}
-                <fieldset class="page-contact__field page-contact__fieldset">
-                    <legend class="page-contact__label">{% trans "Topics of interest" %}</legend>
-                    <div class="page-contact__checkbox-group">
+                <fieldset class="page-newsletter__field page-newsletter__fieldset">
+                    <legend class="page-newsletter__label">{% trans "Topics of interest" %}</legend>
+                    <div class="page-newsletter__checkbox-group">
                         {{ form.categories }}
                     </div>
                     {% if form.categories.help_text %}
-                    <small class="page-contact__help-text">{{ form.categories.help_text }}</small>
+                    <small class="page-newsletter__help-text">{{ form.categories.help_text }}</small>
                     {% endif %}
                 </fieldset>
                 {% endif %}
@@ -55,31 +57,31 @@
 
                 {# CAPTCHA — Turnstile #}
                 {% if captcha_provider == 'turnstile' and captcha_site_key %}
-                <div class="page-contact__captcha">
+                <div class="page-newsletter__captcha">
                     <div class="cf-turnstile" data-sitekey="{{ captcha_site_key }}"></div>
                 </div>
                 {% endif %}
 
                 {# CAPTCHA — hCaptcha #}
                 {% if captcha_provider == 'hcaptcha' and captcha_site_key %}
-                <div class="page-contact__captcha">
+                <div class="page-newsletter__captcha">
                     <div class="h-captcha" data-sitekey="{{ captcha_site_key }}"></div>
                 </div>
                 {% endif %}
 
-                <div class="page-contact__submit">
+                <div class="page-newsletter__submit">
                     <button type="submit" class="btn btn-primary">{% trans "Subscribe" %}</button>
                 </div>
             </form>
 
-            <p style="margin-top:1rem;">
-                <a href="{% url 'website:newsletter-unsubscribe' %}">{% trans "Want to unsubscribe?" %}</a>
+            <p class="page-newsletter__links">
+                <a href="{% routablepageurl page "unsubscribe" %}">{% trans "Want to unsubscribe?" %}</a>
                 &nbsp;&middot;&nbsp;
-                <a href="{% url 'website:newsletter-archive' %}">{% trans "Newsletter archive" %}</a>
+                <a href="{% pageurl page %}">{% trans "Newsletter archive" %}</a>
             </p>
         </section>
     </div>
-</div>
+</section>
 {% endblock %}
 
 {% block extra_js %}

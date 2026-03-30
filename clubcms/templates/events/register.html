@@ -1,9 +1,13 @@
 {% extends "base.html" %}
-{% load i18n l10n %}
+{% load i18n l10n wagtailcore_tags %}
+
+{% block body_class %}page-register{% endblock %}
 
 {% block title %}{% trans "Register" %} — {{ event.title }} | {{ block.super }}{% endblock %}
 
 {% block content %}
+{% include "includes/breadcrumbs.html" %}
+<section class="page-register">
 <div class="container container--narrow">
     <h1 class="register-title">{% trans "Register for Event" %}</h1>
 
@@ -190,6 +194,7 @@
         <button type="submit" class="btn btn-primary btn--block">{% trans "Register" %}</button>
     </form>
 </div>
+</section>
 
 {# ── Help modal ── #}
 {% include "includes/_field_help_modal.html" %}

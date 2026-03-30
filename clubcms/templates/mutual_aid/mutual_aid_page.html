@@ -1,7 +1,9 @@
 {% extends "base.html" %}
-{% load i18n static l10n wagtailroutablepage_tags %}
+{% load i18n static l10n wagtailcore_tags wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Mutual Aid" %} | {{ block.super }}{% endblock %}
+
+{% block body_class %}page-mutual-aid{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -9,12 +11,17 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1 class="aid-page__title">{% trans "Mutual Aid" %}</h1>
+{% include "includes/breadcrumbs.html" %}
 
-    {% if aid_page and aid_page.intro %}
-        <div class="aid-page__intro">{{ aid_page.intro|safe }}</div>
-    {% endif %}
+<div class="page-mutual-aid">
+    <div class="container">
+        {# Header #}
+        <header class="page-mutual-aid__header">
+            <h1 class="page-mutual-aid__title">{% trans "Mutual Aid" %}</h1>
+            {% if aid_page and aid_page.intro %}
+                <div class="page-mutual-aid__intro">{{ aid_page.intro|safe }}</div>
+            {% endif %}
+        </header>
 
     {# ── Geo Search Bar ─────────────────────────────────────── #}
     <form class="aid-search" method="get" id="aid-search-form" role="search" aria-label="{% trans 'Search helpers by location' %}">
@@ -224,6 +231,7 @@
         {% endfor %}
     </section>
     {% endif %}
+    </div>
 </div>
 {% endblock %}
 

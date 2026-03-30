@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 {% load i18n wagtailcore_tags wagtailroutablepage_tags seo_tags %}
 
+{% block body_class %}page-requests{% endblock %}
+
 {% block title %}{% trans "My Membership Requests" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
+{% include "includes/breadcrumbs.html" %}
 <section class="page-requests" aria-labelledby="requests-heading">
-    <div class="page-requests__container">
+    <div class="container">
         <header class="page-requests__header">
             <h1 id="requests-heading" class="page-requests__title">{% trans "My Membership Requests" %}</h1>
             <p class="page-requests__subtitle">{% trans "Track the status of your membership requests." %}</p>

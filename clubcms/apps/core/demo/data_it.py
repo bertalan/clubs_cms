@@ -986,6 +986,18 @@ DATA = {
             },
         },
 
+        # ---- Newsletter ----
+        {
+            "slug": "newsletter",
+            "page_type": "newsletter",
+            "parent_slug": "home",
+            "translation_key": TK["newsletter"],
+            "title": "Newsletter",
+            "fields": {
+                "intro": "<p>Iscriviti alla nostra newsletter per ricevere le ultime novità, eventi in programma e aggiornamenti dal club.</p>",
+            },
+        },
+
         # ---- Members Area ----
         {
             "slug": "area-soci",
@@ -1253,7 +1265,7 @@ DATA = {
         {"label": "Contributi",           "link_page_slug": "contributi",  "link_url": "",                                "sort_order": 2, "parent_label": "Servizi", "is_cta": False, "open_new_tab": False},
         {"label": "Notifiche",            "link_page_slug": "notifiche",    "link_url": "",                                 "sort_order": 3, "parent_label": "Servizi", "is_cta": False, "open_new_tab": False},
         {"label": "Area Stampa",          "link_page_slug": "stampa",      "link_url": "",                                "sort_order": 4, "parent_label": "Servizi", "is_cta": False, "open_new_tab": False},
-        {"label": "Newsletter",            "link_page_slug": "",            "link_url": "reverse:website:newsletter-subscribe", "sort_order": 5, "parent_label": "Servizi", "is_cta": False, "open_new_tab": False},
+        {"label": "Newsletter",            "link_page_slug": "newsletter", "link_url": "",                                "sort_order": 5, "parent_label": "Servizi", "is_cta": False, "open_new_tab": False},
     ],
 
     # ==================================================================

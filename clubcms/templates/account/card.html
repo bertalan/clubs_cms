@@ -1,11 +1,14 @@
 {% extends "base.html" %}
-{% load i18n wagtailroutablepage_tags %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags %}
+
+{% block body_class %}page-card{% endblock %}
 
 {% block title %}{% trans "Membership Card" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
+{% include "includes/breadcrumbs.html" %}
 <section class="page-card" aria-labelledby="card-heading">
-    <div class="page-card__container">
+    <div class="container">
         <header class="page-card__header">
             <h1 id="card-heading" class="page-card__title">{% trans "Membership Card" %}</h1>
             <p class="page-card__subtitle">{% trans "Your digital membership credentials" %}</p>

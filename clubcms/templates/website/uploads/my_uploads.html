@@ -1,9 +1,11 @@
 {% extends "base.html" %}
-{% load i18n wagtailimages_tags wagtailroutablepage_tags %}
+{% load i18n wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags %}
 
 {% block body_class %}page-my-uploads{% endblock %}
 
 {% block content %}
+{% include "includes/breadcrumbs.html" %}
+
 <div class="page-my-uploads">
     <div class="page-my-uploads__container">
         <header class="page-my-uploads__header">

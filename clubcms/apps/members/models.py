@@ -781,7 +781,7 @@ class MembersAreaPage(RoutablePageMixin, Page):
     # Notification preferences
     # ------------------------------------------------------------------
 
-    @route(r"^notifications/$", name="notification_prefs")
+    @route(r"^notifications/preferences/$", name="notification_prefs")
     def notification_prefs_view(self, request):
         redir = self._login_required(request)
         if redir:

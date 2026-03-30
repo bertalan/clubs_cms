@@ -119,6 +119,14 @@ def _send_single(newsletter, email, site_name, base_url):
     )
 
     unsubscribe_url = f"{base_url}/newsletter/unsubscribe/"
+    try:
+        from apps.website.models.newsletter import NewsletterPage
+
+        nl_page = NewsletterPage.objects.live().first()
+        if nl_page:
+            unsubscribe_url = f"{base_url}{nl_page.url}{nl_page.reverse_subpage('unsubscribe')}"
+    except Exception:
+        pass
 
     body_html = render_newsletter_body_html(newsletter, base_url=base_url)
 

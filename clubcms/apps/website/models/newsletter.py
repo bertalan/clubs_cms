@@ -5,6 +5,8 @@ Newsletter models.
 - NewsletterSubscription: email-based subscriptions with category preferences.
 - SentNewsletter: campaigns composed with StreamField, with scheduling and
   visibility options.
+- NewsletterPage: Wagtail page (RoutablePageMixin) for subscribe, unsubscribe,
+  archive, and detail views.
 """
 
 import hashlib
@@ -12,10 +14,14 @@ import hmac
 
 from django.conf import settings
 from django.db import models
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.fields import StreamField
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from wagtail.fields import RichTextField, StreamField
+from wagtail.admin.panels import FieldPanel
+from wagtail.models import Page
 
 from apps.website.blocks.email import NEWSLETTER_BLOCKS
 
@@ -184,3 +190,219 @@ class SentNewsletter(models.Model):
 
     def __str__(self):
         return f"{self.subject} ({self.get_status_display()})"
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Wagtail page – Newsletter area (subscribe, unsubscribe, archive, detail)
+# ═══════════════════════════════════════════════════════════════════════════
+
+
+class NewsletterPage(RoutablePageMixin, Page):
+    """
+    Newsletter area served as a Wagtail page.
+
+    Index (serve) → archive listing.
+    Sub-routes: subscribe, unsubscribe, detail/<pk>.
+    """
+
+    intro = RichTextField(
+        blank=True,
+        verbose_name=_("Intro text"),
+        help_text=_("Introductory text shown on the subscribe page."),
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel("intro"),
+    ]
+
+    max_count = 1
+    parent_page_types = ["website.HomePage"]
+    subpage_types = []
+    template = "website/newsletter_archive.html"
+
+    class Meta:
+        verbose_name = _("Newsletter page")
+        verbose_name_plural = _("Newsletter pages")
+
+    # ------------------------------------------------------------------
+    # Helpers
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _get_captcha_context():
+        """Return captcha provider/key from SiteSettings for templates."""
+        from apps.website.models.settings import SiteSettings
+        from wagtail.models import Site
+
+        site = Site.objects.filter(is_default_site=True).first()
+        if not site:
+            return {}
+        try:
+            ss = SiteSettings.for_site(site)
+        except Exception:
+            return {}
+        return {
+            "captcha_provider": ss.captcha_provider,
+            "captcha_site_key": ss.captcha_site_key,
+        }
+
+    @staticmethod
+    def _get_client_ip(request):
+        """Extract the client IP address from the request."""
+        x_forwarded = request.META.get("HTTP_X_FORWARDED_FOR")
+        if x_forwarded:
+            return x_forwarded.split(",")[0].strip()
+        return request.META.get("REMOTE_ADDR", "0.0.0.0")
+
+    # ------------------------------------------------------------------
+    # Route: archive (index)  — default serve
+    # ------------------------------------------------------------------
+
+    def get_context(self, request, *args, **kwargs):
+        ctx = super().get_context(request, *args, **kwargs)
+
+        category_slug = request.GET.get("category")
+        categories = NewsletterCategory.objects.all()
+        active_category = None
+        if category_slug:
+            active_category = NewsletterCategory.objects.filter(
+                slug=category_slug
+            ).first()
+
+        newsletters = SentNewsletter.objects.filter(status="sent")
+
+        is_subscriber = False
+        if request.user.is_authenticated:
+            is_subscriber = NewsletterSubscription.objects.filter(
+                email=request.user.email, is_active=True
+            ).exists()
+
+        if not is_subscriber:
+            newsletters = newsletters.filter(is_public=True)
+
+        if active_category:
+            newsletters = newsletters.filter(category=active_category)
+
+        newsletters = newsletters.select_related("category").order_by("-sent_at")[:50]
+
+        ctx.update({
+            "categories": categories,
+            "active_category": active_category,
+            "newsletters": newsletters,
+            "is_subscriber": is_subscriber,
+        })
+        return ctx
+
+    # ------------------------------------------------------------------
+    # Route: subscribe
+    # ------------------------------------------------------------------
+
+    @route(r"^subscribe/$", name="subscribe")
+    def subscribe_view(self, request):
+        from django.contrib import messages as msg_framework
+        from apps.website.forms import NewsletterSubscribeForm
+
+        if request.method == "POST":
+            form = NewsletterSubscribeForm(request.POST)
+            if form.is_valid():
+                email = form.cleaned_data["email"]
+                categories = form.cleaned_data.get("categories", [])
+                sub, created = NewsletterSubscription.objects.get_or_create(
+                    email=email,
+                    defaults={"ip_address": self._get_client_ip(request)},
+                )
+                if not created and not sub.is_active:
+                    sub.is_active = True
+                    sub.unsubscribed_at = None
+                    sub.ip_address = self._get_client_ip(request)
+                    sub.save(
+                        update_fields=["is_active", "unsubscribed_at", "ip_address"]
+                    )
+
+                if categories:
+                    sub.categories.set(categories)
+                elif created:
+                    defaults = NewsletterCategory.objects.filter(is_default=True)
+                    if defaults.exists():
+                        sub.categories.set(defaults)
+
+                msg_framework.success(request, _("Thanks for subscribing!"))
+                return redirect(self.url + self.reverse_subpage("subscribe"))
+
+            ctx = {"form": form, "page": self}
+            ctx.update(self._get_captcha_context())
+            return render(request, "website/newsletter_subscribe.html", ctx)
+
+        form = NewsletterSubscribeForm()
+        ctx = {"form": form, "page": self}
+        ctx.update(self._get_captcha_context())
+        return render(request, "website/newsletter_subscribe.html", ctx)
+
+    # ------------------------------------------------------------------
+    # Route: unsubscribe
+    # ------------------------------------------------------------------
+
+    @route(r"^unsubscribe/$", name="unsubscribe")
+    def unsubscribe_view(self, request):
+        from django.contrib import messages as msg_framework
+        from apps.website.forms import NewsletterUnsubscribeForm
+
+        if request.method == "POST":
+            form = NewsletterUnsubscribeForm(request.POST)
+            if form.is_valid():
+                email = form.cleaned_data["email"]
+                try:
+                    sub = NewsletterSubscription.objects.get(
+                        email=email, is_active=True
+                    )
+                    sub.is_active = False
+                    sub.unsubscribed_at = timezone.now()
+                    sub.save(update_fields=["is_active", "unsubscribed_at"])
+                    msg_framework.success(
+                        request, _("You have been unsubscribed.")
+                    )
+                except NewsletterSubscription.DoesNotExist:
+                    msg_framework.info(
+                        request,
+                        _("This email is not subscribed to our newsletter."),
+                    )
+                return redirect(self.url + self.reverse_subpage("unsubscribe"))
+
+            ctx = {"form": form, "page": self}
+            ctx.update(self._get_captcha_context())
+            return render(request, "website/newsletter_unsubscribe.html", ctx)
+
+        form = NewsletterUnsubscribeForm()
+        ctx = {"form": form, "page": self}
+        ctx.update(self._get_captcha_context())
+        return render(request, "website/newsletter_unsubscribe.html", ctx)
+
+    # ------------------------------------------------------------------
+    # Route: detail
+    # ------------------------------------------------------------------
+
+    @route(r"^(?P<pk>\d+)/$", name="detail")
+    def detail_view(self, request, pk):
+        from django.http import Http404
+        from apps.website.render_email import render_newsletter_body_html
+
+        newsletter = get_object_or_404(SentNewsletter, pk=pk, status="sent")
+
+        if not newsletter.is_public:
+            is_subscriber = False
+            if request.user.is_authenticated:
+                is_subscriber = NewsletterSubscription.objects.filter(
+                    email=request.user.email, is_active=True
+                ).exists()
+            if not is_subscriber:
+                raise Http404
+
+        base_url = getattr(settings, "WAGTAILADMIN_BASE_URL", "").rstrip("/")
+        body_html = render_newsletter_body_html(newsletter, base_url=base_url)
+
+        ctx = {
+            "newsletter": newsletter,
+            "body_html": body_html,
+            "page": self,
+        }
+        return render(request, "website/newsletter_detail.html", ctx)

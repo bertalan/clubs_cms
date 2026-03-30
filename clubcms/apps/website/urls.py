@@ -13,30 +13,6 @@ from apps.website import views
 app_name = "website"
 
 urlpatterns = [
-    # Newsletter subscribe
-    path(
-        "newsletter/subscribe/",
-        views.NewsletterSubscribeView.as_view(),
-        name="newsletter-subscribe",
-    ),
-    # Newsletter unsubscribe
-    path(
-        "newsletter/unsubscribe/",
-        views.NewsletterUnsubscribeView.as_view(),
-        name="newsletter-unsubscribe",
-    ),
-    # Newsletter archive
-    path(
-        "newsletter/",
-        views.NewsletterArchiveView.as_view(),
-        name="newsletter-archive",
-    ),
-    # Newsletter detail
-    path(
-        "newsletter/<int:pk>/",
-        views.NewsletterDetailView.as_view(),
-        name="newsletter-detail",
-    ),
     # Partner member verification
     path(
         _("partners/verify-member/"),

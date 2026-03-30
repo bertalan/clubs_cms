@@ -1,10 +1,11 @@
 {% extends "base.html" %}
-{% load i18n wagtailroutablepage_tags %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags %}
 
 {% block title %}{% trans "Choose Payment Method" %} — {{ event.title }} | {{ block.super }}{% endblock %}
 {% block body_class %}page-payment{% endblock %}
 
 {% block content %}
+{% include "includes/breadcrumbs.html" %}
 <section class="page-payment" aria-labelledby="payment-title">
     <div class="container">
         <header class="page-payment__header">

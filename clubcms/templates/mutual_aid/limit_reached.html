@@ -1,9 +1,12 @@
 {% extends "base.html" %}
-{% load i18n wagtailroutablepage_tags %}
+{% load i18n wagtailcore_tags wagtailroutablepage_tags %}
+
+{% block body_class %}page-limit-reached{% endblock %}
 
 {% block title %}{% trans "Unlock Limit Reached" %} | {% trans "Mutual Aid" %}{% endblock %}
 
 {% block content %}
+{% include "includes/breadcrumbs.html" %}
 <div style="max-width: 600px; margin: 0 auto; padding: 3rem 1rem; text-align: center;">
     <h1>{% trans "Contact Unlock Limit Reached" %}</h1>
 

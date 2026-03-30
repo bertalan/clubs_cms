@@ -1,9 +1,12 @@
 {% extends "base.html" %}
-{% load i18n wagtailimages_tags wagtailroutablepage_tags %}
+{% load i18n wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags %}
+
+{% block body_class %}page-helper-contact{% endblock %}
 
 {% block title %}{% trans "Request Help" %} — {{ helper.get_visible_name }} | {% trans "Mutual Aid" %}{% endblock %}
 
 {% block content %}
+{% include "includes/breadcrumbs.html" %}
 <div class="helper-detail">
     <nav class="breadcrumb" aria-label="{% trans 'Breadcrumb' %}">
         <a href="{% routablepageurl page 'map_view' %}">{% trans "Mutual Aid" %}</a>

@@ -1,9 +1,12 @@
 {% extends "base.html" %}
-{% load i18n wagtailimages_tags wagtailroutablepage_tags %}
+{% load i18n wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags %}
+
+{% block body_class %}page-directory{% endblock %}
 
 {% block title %}{% trans "Member Directory" %} | {{ block.super }}{% endblock %}
 
 {% block content %}
+{% include "includes/breadcrumbs.html" %}
 <section class="page-directory">
     <div class="container">
         {# Header #}
