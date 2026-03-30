@@ -3775,13 +3775,23 @@ a:hover {
 }
 
 .page-account-profile__header {
-  margin-bottom: 2.5rem;
+  text-align: center;
+  margin-bottom: 3rem;
 }
 
 .page-account-profile__title {
+  font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 900;
   color: var(--color-primary);
   text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.page-account-profile__subtitle {
+  color: var(--color-text-muted);
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .page-account-profile__form {
