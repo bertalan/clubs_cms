@@ -21,6 +21,10 @@
   --color-text-muted: #555555;
   --color-border: rgba(45, 59, 45, 0.4);
 
+  /* ── Font stacks ── */
+  --font-body: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
   /* Theme-specific tokens */
   --terra-radius: 8px;
   --terra-radius-sm: 4px;
@@ -32,14 +36,14 @@
    3. Typography
    -------------------------------------------------------------------------- */
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-body);
   background-color: var(--color-surface);
   color: var(--color-text-primary);
   line-height: 1.6;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-heading);
   color: var(--color-primary);
 }
 
@@ -3200,7 +3204,6 @@ a:hover {
    -------------------------------------------------------------------------- */
 .page-account-profile {
   padding: 5rem 0;
-  background: var(--terra-bg);
 }
 
 .page-account-profile__header {
@@ -3208,14 +3211,14 @@ a:hover {
 }
 
 .page-account-profile__title {
-  color: var(--terra-primary);
+  color: var(--color-primary);
   font-weight: 700;
 }
 
 .page-account-profile__form {
-  background: #faf7f2;
-  border: 1px solid var(--terra-border);
-  border-radius: var(--terra-radius-lg);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--terra-radius);
   padding: 2rem;
 }
 
@@ -3233,19 +3236,19 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--terra-primary);
+  color: var(--color-primary);
   font-weight: 600;
   font-size: 1.125rem;
   padding-bottom: 1rem;
   margin-bottom: 1.5rem;
-  border-bottom: 1px solid var(--terra-border);
+  border-bottom: 1px solid var(--color-border);
   width: 100%;
 }
 
 .page-account-profile__legend-icon {
   width: 1.25rem;
   height: 1.25rem;
-  color: var(--terra-terracotta);
+  color: var(--color-accent);
 }
 
 .page-account-profile__fields {
@@ -3272,26 +3275,26 @@ a:hover {
   gap: 1rem;
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid var(--terra-border);
+  border-top: 1px solid var(--color-border);
 }
 
 .page-account-profile__submit {
-  background: var(--terra-terracotta);
+  background: var(--color-secondary);
   color: #fff;
   border: none;
   padding: 0.875rem 2rem;
   font-weight: 600;
   border-radius: var(--terra-radius);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background var(--terra-transition);
 }
 
 .page-account-profile__submit:hover {
-  background: var(--terra-primary);
+  background: var(--color-primary);
 }
 
 .page-account-profile__submit:focus-visible {
-  outline: 2px solid var(--terra-terracotta);
+  outline: 2px solid var(--color-secondary);
   outline-offset: 2px;
 }
 
@@ -3299,14 +3302,14 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--terra-text-muted);
+  color: var(--color-text-muted);
   text-decoration: none;
   font-size: 0.875rem;
-  transition: color 0.3s ease;
+  transition: color var(--terra-transition);
 }
 
 .page-account-profile__privacy-link:hover {
-  color: var(--terra-terracotta);
+  color: var(--color-secondary);
 }
 
 .page-account-profile__privacy-icon {

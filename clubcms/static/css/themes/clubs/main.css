@@ -22,6 +22,10 @@
   --color-border: rgba(255, 255, 255, 0.1);
   --color-focus-ring: #C41E3A;
 
+  /* ── Font stacks ── */
+  --font-body: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
   /* Theme-specific tokens */
   --clubs-radius: 0;
   --clubs-radius-sm: 0;
@@ -35,14 +39,14 @@
    3. Typography
    -------------------------------------------------------------------------- */
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-body);
   background-color: var(--color-surface);
   color: var(--color-text-primary);
   line-height: 1.7;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-heading);
   color: var(--color-text-primary);
 }
 

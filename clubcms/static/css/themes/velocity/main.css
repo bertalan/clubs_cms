@@ -56,6 +56,10 @@
   --color-accent-bg: #EDE9FE;
   --color-accent-text: #5B21B6;
 
+  /* ── Font stacks ── */
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Rajdhani', 'Inter', system-ui, sans-serif;
+
   /* ── Theme design tokens ── */
   --velocity-radius: 16px;
   --velocity-radius-sm: 8px;
@@ -85,13 +89,13 @@
    3. Typography
    -------------------------------------------------------------------------- */
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   background-color: var(--color-surface);
   color: var(--color-text-primary);
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Rajdhani', 'Inter', system-ui, sans-serif;
+  font-family: var(--font-heading);
   color: var(--color-text-primary);
   text-transform: uppercase;
   letter-spacing: 0.04em;

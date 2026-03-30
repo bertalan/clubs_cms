@@ -22,6 +22,10 @@
   --color-text-muted: #555555;
   --color-border: rgba(30, 58, 95, 0.35);
 
+  /* ── Font stacks ── */
+  --font-body: 'Lato', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+
   /* Theme-specific tokens */
   --heritage-radius: 4px;
   --heritage-radius-sm: 2px;
@@ -36,14 +40,14 @@
    3. Typography
    -------------------------------------------------------------------------- */
 body {
-  font-family: 'Lato', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   background-color: var(--color-surface);
   color: var(--color-text-primary);
   line-height: 1.7;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-family: var(--font-heading);
   color: var(--color-primary);
 }
 
@@ -3339,7 +3343,6 @@ a:hover {
    -------------------------------------------------------------------------- */
 .page-account-profile {
   padding: 5rem 0;
-  background: var(--heritage-bg);
 }
 
 .page-account-profile__header {
@@ -3347,17 +3350,17 @@ a:hover {
 }
 
 .page-account-profile__title {
-  font-family: var(--heritage-font-heading);
-  color: var(--heritage-primary);
+  font-family: var(--font-heading);
+  color: var(--color-primary);
   font-weight: 700;
 }
 
 .page-account-profile__form {
-  background: #faf8f5;
-  border: 1px solid var(--heritage-border);
-  border-radius: 0.5rem;
+  background: var(--color-surface-alt);
+  border: var(--heritage-gold-border);
+  border-radius: var(--heritage-radius);
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--heritage-shadow);
 }
 
 .page-account-profile__fieldset {
@@ -3374,20 +3377,20 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--heritage-font-heading);
-  color: var(--heritage-primary);
+  font-family: var(--font-heading);
+  color: var(--color-primary);
   font-weight: 600;
   font-size: 1.125rem;
   padding-bottom: 1rem;
   margin-bottom: 1.5rem;
-  border-bottom: 1px solid var(--heritage-border);
+  border-bottom: 1px solid var(--color-border);
   width: 100%;
 }
 
 .page-account-profile__legend-icon {
   width: 1.25rem;
   height: 1.25rem;
-  color: var(--heritage-gold);
+  color: var(--color-secondary);
 }
 
 .page-account-profile__fields {
@@ -3414,27 +3417,27 @@ a:hover {
   gap: 1rem;
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid var(--heritage-border);
+  border-top: 1px solid var(--color-border);
 }
 
 .page-account-profile__submit {
-  background: var(--heritage-gold);
+  background: var(--color-secondary);
   color: #fff;
   border: none;
   padding: 0.875rem 2rem;
-  font-family: var(--heritage-font-heading);
+  font-family: var(--font-heading);
   font-weight: 600;
-  border-radius: 0.25rem;
+  border-radius: var(--heritage-radius-sm);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background var(--heritage-transition);
 }
 
 .page-account-profile__submit:hover {
-  background: var(--heritage-primary);
+  background: var(--color-primary);
 }
 
 .page-account-profile__submit:focus-visible {
-  outline: 2px solid var(--heritage-gold);
+  outline: 2px solid var(--color-secondary);
   outline-offset: 2px;
 }
 
@@ -3442,15 +3445,14 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--heritage-font-body);
-  color: var(--heritage-text-muted);
+  color: var(--color-text-muted);
   text-decoration: none;
   font-size: 0.875rem;
-  transition: color 0.3s ease;
+  transition: color var(--heritage-transition);
 }
 
 .page-account-profile__privacy-link:hover {
-  color: var(--heritage-gold);
+  color: var(--color-secondary);
 }
 
 .page-account-profile__privacy-icon {

@@ -22,6 +22,10 @@
   --color-text-muted: #666666;
   --color-border: #0a0a0a;
 
+  /* ── Font stacks ── */
+  --font-body: 'Segoe UI', system-ui, sans-serif;
+  --font-heading: 'Segoe UI', system-ui, sans-serif;
+
   /* Theme-specific tokens */
   --zen-max-width: 900px;
   --zen-border: 3px solid #0a0a0a;
@@ -37,7 +41,7 @@
    3. Typography (minimal, content-first)
    -------------------------------------------------------------------------- */
 body {
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--font-body);
   background-color: var(--color-surface-alt);
   color: var(--color-text-primary);
   line-height: 1.6;
@@ -45,7 +49,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--font-heading);
   color: var(--color-text-primary);
   font-weight: 900;
 }

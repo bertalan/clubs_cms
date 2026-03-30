@@ -22,6 +22,10 @@
   --color-text-muted: #666666;
   --color-border: rgba(0, 0, 0, 0.3);
 
+  /* ── Font stacks ── */
+  --font-body: 'Montserrat', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Montserrat', system-ui, -apple-system, sans-serif;
+
   /* Theme-specific tokens */
   --tricolore-verde: #009246;
   --tricolore-verde-dark: #007B3D;
@@ -40,14 +44,14 @@
    3. Typography
    -------------------------------------------------------------------------- */
 body {
-  font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   background-color: var(--color-surface);
   color: var(--color-text-primary);
   line-height: 1.6;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-heading);
   color: var(--color-text-primary);
 }
 
@@ -3569,7 +3573,6 @@ a:hover {
    -------------------------------------------------------------------------- */
 .page-account-profile {
   padding: 5rem 0;
-  background: var(--tricolore-bg);
 }
 
 .page-account-profile__header {
@@ -3577,15 +3580,15 @@ a:hover {
 }
 
 .page-account-profile__title {
-  color: var(--tricolore-green);
+  color: var(--tricolore-verde);
   font-weight: 700;
 }
 
 .page-account-profile__form {
-  background: #fafafa;
-  border: 1px solid var(--tricolore-border);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--tricolore-shadow);
   position: relative;
 }
 
@@ -3596,7 +3599,7 @@ a:hover {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--tricolore-green) 33.33%, #fff 33.33%, #fff 66.66%, var(--tricolore-red) 66.66%);
+  background: linear-gradient(90deg, var(--tricolore-verde) 33.33%, #fff 33.33%, #fff 66.66%, var(--tricolore-rosso) 66.66%);
 }
 
 .page-account-profile__fieldset {
@@ -3613,19 +3616,19 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--tricolore-green);
+  color: var(--tricolore-verde);
   font-weight: 600;
   font-size: 1.125rem;
   padding-bottom: 1rem;
   margin-bottom: 1.5rem;
-  border-bottom: 1px solid var(--tricolore-border);
+  border-bottom: 1px solid var(--color-border);
   width: 100%;
 }
 
 .page-account-profile__legend-icon {
   width: 1.25rem;
   height: 1.25rem;
-  color: var(--tricolore-red);
+  color: var(--tricolore-rosso);
 }
 
 .page-account-profile__fields {
@@ -3652,25 +3655,26 @@ a:hover {
   gap: 1rem;
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid var(--tricolore-border);
+  border-top: 1px solid var(--color-border);
 }
 
 .page-account-profile__submit {
-  background: var(--tricolore-green);
+  background: var(--tricolore-verde);
   color: #fff;
   border: none;
   padding: 0.875rem 2rem;
   font-weight: 600;
+  border-radius: var(--tricolore-radius-sm);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background var(--tricolore-transition);
 }
 
 .page-account-profile__submit:hover {
-  background: var(--tricolore-red);
+  background: var(--tricolore-rosso);
 }
 
 .page-account-profile__submit:focus-visible {
-  outline: 2px solid var(--tricolore-green);
+  outline: 2px solid var(--tricolore-verde);
   outline-offset: 2px;
 }
 
@@ -3678,14 +3682,14 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--tricolore-text-muted);
+  color: var(--color-text-muted);
   text-decoration: none;
   font-size: 0.875rem;
-  transition: color 0.3s ease;
+  transition: color var(--tricolore-transition);
 }
 
 .page-account-profile__privacy-link:hover {
-  color: var(--tricolore-green);
+  color: var(--tricolore-verde);
 }
 
 .page-account-profile__privacy-icon {
