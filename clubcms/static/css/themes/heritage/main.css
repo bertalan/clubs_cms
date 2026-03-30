@@ -3474,6 +3474,14 @@ a:hover {
   .membership-card { transition: none; }
 }
 
+.dark-mode .page-account-profile__title {
+  color: var(--color-text-primary);
+}
+
+.dark-mode .page-account-profile__subtitle {
+  color: var(--color-text-muted);
+}
+
 /* --------------------------------------------------------------------------
    29i. My Events Page (heritage override)
    -------------------------------------------------------------------------- */

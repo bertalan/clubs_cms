@@ -5476,7 +5476,7 @@ html.dark-mode {
 
 .page-account-profile__title {
   font-size: clamp(2rem, 5vw, 3rem);
-  color: var(--color-primary);
+  color: var(--color-text-primary);
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.02em;

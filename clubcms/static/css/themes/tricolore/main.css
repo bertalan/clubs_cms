@@ -3582,7 +3582,7 @@ a:hover {
 
 .page-account-profile__title {
   font-size: clamp(2rem, 5vw, 3rem);
-  color: var(--tricolore-verde);
+  color: var(--tricolore-verde-dark);
   font-weight: 700;
   margin-bottom: 0.75rem;
 }
@@ -3709,6 +3709,14 @@ a:hover {
   .page-account-profile__submit,
   .page-account-profile__privacy-link,
   .membership-card { transition: none; }
+}
+
+.dark-mode .page-account-profile__title {
+  color: var(--color-text-primary);
+}
+
+.dark-mode .page-account-profile__subtitle {
+  color: var(--color-text-muted);
 }
 
 /* --------------------------------------------------------------------------

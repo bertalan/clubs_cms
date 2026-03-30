@@ -3219,7 +3219,7 @@ a:hover {
 }
 
 .page-account-profile__subtitle {
-  color: var(--color-text-muted);
+  color: color-mix(in srgb, var(--color-text-primary) 65%, transparent);
   font-size: 1.125rem;
 }
 
@@ -3329,6 +3329,14 @@ a:hover {
   .page-account-profile__submit,
   .page-account-profile__privacy-link,
   .membership-card { transition: none; }
+}
+
+.dark-mode .page-account-profile__title {
+  color: var(--color-text-primary);
+}
+
+.dark-mode .page-account-profile__subtitle {
+  color: var(--color-text-muted);
 }
 
 /* --------------------------------------------------------------------------
