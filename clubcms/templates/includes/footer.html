@@ -101,9 +101,12 @@
                     {% if contributions_url %}
                     <li><a href="{{ contributions_url }}">{% trans "Contributions" %}</a></li>
                     {% endif %}
+                    {% localized_slugurl 'notifications' as notifications_url %}
+                    {% if notifications_url %}
+                    <li><a href="{{ notifications_url }}">{% trans "Notifications" %}</a></li>
+                    {% endif %}
                     {% localized_slugurl 'members' as members_url %}
                     {% if members_url %}
-                    <li><a href="{{ members_url }}notifications/preferences/">{% trans "Notification Preferences" %}</a></li>
                     <li><a href="{{ members_url }}card/">{% trans "Membership Card" %}</a></li>
                     {% endif %}
                 </ul>
