@@ -587,17 +587,52 @@ class SearchPage(RoutablePageMixin, Page):
 
 
 # ---------------------------------------------------------------------------
-# ContributionsPage
+# ContributionsPage — submittable page types registry
 # ---------------------------------------------------------------------------
+
+# Maps URL slug → (label, icon, description, form_class_path, page_model_path)
+SUBMITTABLE_PAGE_TYPES = {
+    "news": {
+        "label": _("News article"),
+        "icon": "newspaper",
+        "desc": _("Write and publish a news article."),
+        "form": "apps.core.forms.NewsSubmissionForm",
+        "model": "apps.website.models.pages.NewsPage",
+        "parent_model": "apps.website.models.pages.NewsIndexPage",
+    },
+    "event": {
+        "label": _("Event proposal"),
+        "icon": "calendar",
+        "desc": _("Propose a new event for the club."),
+        "form": "apps.core.forms.EventSubmissionForm",
+        "model": "apps.website.models.pages.EventDetailPage",
+        "parent_model": "apps.website.models.pages.EventsPage",
+    },
+    "story": {
+        "label": _("Story / announcement"),
+        "icon": "pencil",
+        "desc": _("Share a story, announce something, or write freely."),
+        "form": "apps.core.forms.ContributionForm",
+        "model": "apps.core.models.ContributionPage",
+        "parent_model": "apps.core.models.ContributionsPage",
+    },
+}
+
+# Content types used to identify user-submitted pages in the listing
+_SUBMITTABLE_CT_MODELS = ["newspage", "eventdetailpage", "contributionpage"]
 
 
 class ContributionsPage(RoutablePageMixin, Page):
     """
-    Member contributions hub: list own contributions & submit new ones.
+    Member contributions hub: list own submissions & submit new content.
+
+    Supports creating real Wagtail page types (NewsPage, EventDetailPage)
+    as well as generic ContributionPage, all as drafts pending moderation.
 
     Routes:
-    - index: my contributions list (login required)
-    - submit/: submit new contribution form (login required)
+    - index: my submissions list (login required)
+    - submit/: choose page type
+    - submit/<type>/: type-specific form
     """
 
     intro = RichTextField(blank=True, verbose_name=_("Introduction"))
@@ -614,16 +649,54 @@ class ContributionsPage(RoutablePageMixin, Page):
         verbose_name = _("Contributions page")
         verbose_name_plural = _("Contributions pages")
 
-    # ── index: my contributions ───────────────────────────────────────
+    # ── helpers ───────────────────────────────────────────────────────
+
+    @staticmethod
+    def _text_to_streamfield(text):
+        """Convert plain text (double-newline separated) to StreamField data."""
+        paragraphs = text.strip().split("\n\n")
+        html = "".join(
+            f"<p>{p.strip()}</p>" for p in paragraphs if p.strip()
+        )
+        return [{"type": "rich_text", "value": html}]
+
+    @staticmethod
+    def _unique_slug(title, parent):
+        """Generate a unique slug under *parent*."""
+        slug_base = slugify(title)[:50] or "submission"
+        slug = slug_base
+        counter = 1
+        while Page.objects.filter(
+            slug=slug, path__startswith=parent.path
+        ).exists():
+            slug = f"{slug_base}-{counter}"
+            counter += 1
+        return slug
+
+    @staticmethod
+    def _handle_image_upload(image_file, user):
+        """Create a Wagtail Image from an uploaded file."""
+        if not image_file:
+            return None
+        from wagtail.images.models import Image
+        return Image.objects.create(
+            title=image_file.name,
+            file=image_file,
+            uploaded_by_user=user,
+        )
+
+    # ── index: my submissions ─────────────────────────────────────────
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         if request.user.is_authenticated:
             qs = (
-                ContributionPage.objects
-                .child_of(self)
-                .filter(author=request.user)
-                .order_by("-first_published_at", "-latest_revision_created_at")
+                Page.objects.filter(
+                    owner=request.user,
+                    content_type__model__in=_SUBMITTABLE_CT_MODELS,
+                )
+                .specific()
+                .order_by("-latest_revision_created_at")
             )
             paginator = Paginator(qs, 20)
             page_number = request.GET.get("page")
@@ -645,60 +718,147 @@ class ContributionsPage(RoutablePageMixin, Page):
             return redirect_to_login(request.get_full_path())
         return super().serve(request, *args, **kwargs)
 
-    # ── submit contribution ───────────────────────────────────────────
+    # ── submit: type selection ────────────────────────────────────────
 
     @route(r"^submit/$", name="submit_contribution")
-    def submit_contribution_view(self, request):
-        from apps.core.forms import ContributionForm
-
+    def submit_type_selector(self, request):
         if not request.user.is_authenticated:
             from django.contrib.auth.views import redirect_to_login
             return redirect_to_login(request.get_full_path())
 
-        if request.method == "POST":
-            form = ContributionForm(request.POST, user=request.user)
-            if form.is_valid():
-                body_text = form.cleaned_data["body"]
-                paragraphs = body_text.strip().split("\n\n")
-                body_html = "".join(
-                    f"<p>{p.strip()}</p>"
-                    for p in paragraphs if p.strip()
-                )
-                slug_base = slugify(form.cleaned_data["title"])[:50] or "contribution"
-                slug = slug_base
-                counter = 1
-                while Page.objects.filter(
-                    slug=slug, path__startswith=self.path
-                ).exists():
-                    slug = f"{slug_base}-{counter}"
-                    counter += 1
+        return render(
+            request,
+            "account/submit_select_type.html",
+            {
+                "page": self,
+                "page_types": SUBMITTABLE_PAGE_TYPES,
+            },
+        )
 
-                child = self.add_child(
-                    instance=ContributionPage(
-                        title=form.cleaned_data["title"],
-                        slug=slug,
-                        contribution_type=form.cleaned_data["contribution_type"],
-                        body=[{"type": "rich_text", "value": body_html}],
-                        author=request.user,
-                        owner=request.user,
-                        live=False,
-                        has_unpublished_changes=True,
-                    )
+    # ── submit: type-specific form ────────────────────────────────────
+
+    @route(r"^submit/(?P<page_type>[\w-]+)/$", name="submit_page_type")
+    def submit_page_type_view(self, request, page_type):
+        if not request.user.is_authenticated:
+            from django.contrib.auth.views import redirect_to_login
+            return redirect_to_login(request.get_full_path())
+
+        type_info = SUBMITTABLE_PAGE_TYPES.get(page_type)
+        if not type_info:
+            from django.http import Http404
+            raise Http404
+
+        # Lazy-import form and model classes
+        from importlib import import_module
+
+        def _import(dotted):
+            mod_path, cls_name = dotted.rsplit(".", 1)
+            return getattr(import_module(mod_path), cls_name)
+
+        FormClass = _import(type_info["form"])
+        PageModel = _import(type_info["model"])
+        ParentModel = _import(type_info["parent_model"])
+
+        if request.method == "POST":
+            form = FormClass(
+                request.POST, request.FILES, user=request.user,
+            )
+            if form.is_valid():
+                return self._create_submitted_page(
+                    request, form, page_type, type_info,
+                    PageModel, ParentModel,
                 )
-                child.save_revision()
-                messages.success(
-                    request,
-                    _("Your contribution has been submitted and is awaiting moderation."),
-                )
-                return redirect(self.url)
         else:
-            form = ContributionForm(user=request.user)
+            form = FormClass(user=request.user)
 
         return render(
             request,
-            "account/submit_contribution.html",
-            {"page": self, "form": form},
+            f"account/submit_{page_type}.html",
+            {
+                "page": self,
+                "form": form,
+                "type_info": type_info,
+                "page_type_slug": page_type,
+            },
         )
+
+    def _create_submitted_page(
+        self, request, form, page_type, type_info, PageModel, ParentModel,
+    ):
+        """Build the correct page model instance and save as draft."""
+        data = form.cleaned_data
+        cover_image = self._handle_image_upload(
+            data.get("cover_image"), request.user,
+        )
+
+        if page_type == "story":
+            # ContributionPage: child of self
+            parent = self
+            instance = PageModel(
+                title=data["title"],
+                slug=self._unique_slug(data["title"], parent),
+                locale=self.locale,
+                contribution_type=data["contribution_type"],
+                body=self._text_to_streamfield(data["body"]),
+                author=request.user,
+                owner=request.user,
+                live=False,
+                has_unpublished_changes=True,
+            )
+        elif page_type == "news":
+            parent = ParentModel.objects.filter(
+                locale=self.locale,
+            ).first()
+            if not parent:
+                messages.error(request, _("News section not configured."))
+                return redirect(self.url)
+            instance = PageModel(
+                title=data["title"],
+                slug=self._unique_slug(data["title"], parent),
+                locale=self.locale,
+                intro=data.get("intro", ""),
+                body=self._text_to_streamfield(data["body"]),
+                author=request.user,
+                owner=request.user,
+                category=data.get("category"),
+                cover_image=cover_image,
+                live=False,
+                has_unpublished_changes=True,
+            )
+        elif page_type == "event":
+            parent = ParentModel.objects.filter(
+                locale=self.locale,
+            ).first()
+            if not parent:
+                messages.error(request, _("Events section not configured."))
+                return redirect(self.url)
+            instance = PageModel(
+                title=data["title"],
+                slug=self._unique_slug(data["title"], parent),
+                locale=self.locale,
+                intro=data.get("intro", ""),
+                body=self._text_to_streamfield(data["body"]),
+                start_date=data["start_date"],
+                end_date=data.get("end_date"),
+                location_name=data.get("location_name", ""),
+                location_address=data.get("location_address", ""),
+                category=data.get("category"),
+                cover_image=cover_image,
+                owner=request.user,
+                live=False,
+                has_unpublished_changes=True,
+            )
+        else:
+            from django.http import Http404
+            raise Http404
+
+        parent.add_child(instance=instance)
+        instance.save_revision()
+        messages.success(
+            request,
+            _("Your submission has been received and is awaiting moderation."),
+        )
+        return redirect(self.url)
 
 
 # ---------------------------------------------------------------------------

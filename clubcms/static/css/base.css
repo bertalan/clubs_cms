@@ -5508,6 +5508,73 @@ h4, .h4 {
   color: var(--color-text-muted, #555);
 }
 
+/* Submit type selector grid */
+.submit-type-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin: 2rem 0;
+}
+
+.submit-type-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border: 2px solid var(--color-surface-alt, #e5e7eb);
+  border-radius: 12px;
+  background: var(--color-surface, #fff);
+  color: var(--color-text-primary, #1a1a2e);
+  text-decoration: none;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+
+.submit-type-card:hover,
+.submit-type-card:focus-visible {
+  border-color: var(--color-primary, #c0392b);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.submit-type-card:focus-visible {
+  outline: 3px solid var(--color-primary, #c0392b);
+  outline-offset: 2px;
+}
+
+.submit-type-card__icon {
+  margin-bottom: 1rem;
+  color: var(--color-primary, #c0392b);
+}
+
+.submit-type-card__title {
+  font-family: var(--font-heading, inherit);
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.submit-type-card__desc {
+  font-size: 0.875rem;
+  color: var(--color-text-muted, #666);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.form-actions--centered {
+  justify-content: center;
+}
+
+.dark-mode .submit-type-card {
+  background: var(--color-surface, #1e1e2e);
+  border-color: var(--color-surface-alt, #333);
+}
+
+.dark-mode .submit-type-card:hover,
+.dark-mode .submit-type-card:focus-visible {
+  border-color: var(--color-primary, #e74c3c);
+}
+
 /* Contribution form */
 .contribution-form {
   padding: 2rem;

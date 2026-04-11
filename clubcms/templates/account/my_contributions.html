@@ -20,23 +20,23 @@
                 <svg class="btn__icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
-                {% trans "New Contribution" %}
+                {% trans "New Submission" %}
             </a>
         </header>
 
         {% if contributions %}
         <div class="contributions-list" role="list">
             {% for c in contributions %}
-            <article class="contribution-card contribution-card--{{ c.moderation_status }}" role="listitem"
-                     aria-label="{{ c.title }} — {{ c.get_moderation_status_display }}">
+            <article class="contribution-card contribution-card--{% if c.live %}approved{% else %}pending{% endif %}" role="listitem"
+                     aria-label="{{ c.title }} — {% if c.live %}{% trans 'Published' %}{% else %}{% trans 'Pending' %}{% endif %}">
                 <a href="{% if c.live %}{% pageurl c %}{% else %}#{% endif %}" class="contribution-card__link"
                    {% if not c.live %}aria-disabled="true"{% endif %}>
                     <div class="contribution-card__header">
-                        <span class="contribution-card__type badge badge--{{ c.contribution_type }}">
-                            {{ c.get_contribution_type_display }}
+                        <span class="contribution-card__type badge badge--{{ c.content_type.model }}">
+                            {{ c.content_type.name|title }}
                         </span>
-                        <span class="contribution-card__status badge badge--{{ c.moderation_status }}">
-                            {{ c.get_moderation_status_display }}
+                        <span class="contribution-card__status badge badge--{% if c.live %}approved{% else %}pending{% endif %}">
+                            {% if c.live %}{% trans "Published" %}{% else %}{% trans "Pending" %}{% endif %}
                         </span>
                     </div>
                     <h2 class="contribution-card__title">{{ c.title }}</h2>
@@ -46,11 +46,6 @@
                         </time>
                     </footer>
                 </a>
-                {% if c.moderation_note %}
-                <div class="contribution-card__note" role="note">
-                    <strong>{% trans "Moderator note" %}:</strong> {{ c.moderation_note }}
-                </div>
-                {% endif %}
             </article>
             {% endfor %}
         </div>
@@ -78,7 +73,7 @@
             <svg class="empty-state__icon" width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
-            <p class="empty-state__text">{% trans "You have not submitted any contributions yet." %}</p>
+            <p class="empty-state__text">{% trans "You have not submitted any content yet." %}</p>
             <a href="{% routablepageurl page 'submit_contribution' %}" class="btn btn--primary">{% trans "Submit your first contribution" %}</a>
         </div>
         {% endif %}

@@ -1,8 +1,9 @@
 """
 T18 — Test member contributions: submit story/proposal/announcement,
-my contributions list, moderation status.
+submit real page types (news, event), my submissions list.
 
-Contributions are Wagtail Pages (ContributionPage) under ContributionsPage.
+Contributions are Wagtail Pages under their respective parent pages,
+all managed through ContributionsPage routes.
 """
 
 import json
@@ -12,7 +13,11 @@ from django.test import TestCase
 
 from wagtail.models import Page, Site
 
-from apps.core.models import ContributionPage, ContributionsPage
+from apps.core.models import (
+    ContributionPage,
+    ContributionsPage,
+    SUBMITTABLE_PAGE_TYPES,
+)
 
 User = get_user_model()
 
@@ -78,8 +83,36 @@ class TestContributionAuth(TestCase):
         self.assertIn(resp.status_code, (302, 403))
 
 
+class TestSubmitTypeSelector(TestCase):
+    """GET contributions/submit/ shows type selection page."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.contrib_page = _setup_contributions_page()
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="selector_user", password="testpass123"
+        )
+        self.client.login(username="selector_user", password="testpass123")
+        self.url = self.contrib_page.url + self.contrib_page.reverse_subpage(
+            "submit_contribution"
+        )
+
+    def test_get_shows_type_cards(self):
+        resp = self.client.get(self.url)
+        self.assertEqual(resp.status_code, 200)
+        for slug, info in SUBMITTABLE_PAGE_TYPES.items():
+            self.assertContains(resp, slug)
+
+    def test_invalid_type_returns_404(self):
+        url = self.contrib_page.url + "submit/nonexistent/"
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, 404)
+
+
 class TestSubmitContribution(TestCase):
-    """POST contributions/submit/ creates a draft ContributionPage."""
+    """POST contributions/submit/story/ creates a draft ContributionPage."""
 
     @classmethod
     def setUpTestData(cls):
@@ -90,9 +123,7 @@ class TestSubmitContribution(TestCase):
             username="contrib_user", password="testpass123"
         )
         self.client.login(username="contrib_user", password="testpass123")
-        self.url = self.contrib_page.url + self.contrib_page.reverse_subpage(
-            "submit_contribution"
-        )
+        self.url = self.contrib_page.url + "submit/story/"
 
     def test_get_shows_form(self):
         resp = self.client.get(self.url)
@@ -152,7 +183,7 @@ class TestSubmitContribution(TestCase):
         self.assertEqual(ContributionPage.objects.count(), 0)
 
     def test_rate_limit_max_pending(self):
-        """A user cannot have more than 5 pending contributions."""
+        """A user cannot have more than 5 pending draft pages."""
         for i in range(5):
             _create_contribution_page(
                 self.contrib_page, self.user,
@@ -167,8 +198,91 @@ class TestSubmitContribution(TestCase):
         self.assertEqual(ContributionPage.objects.count(), 5)
 
 
+class TestSubmitNews(TestCase):
+    """POST contributions/submit/news/ creates a draft NewsPage."""
+
+    @classmethod
+    def setUpTestData(cls):
+        from apps.website.models.pages import NewsIndexPage
+
+        cls.contrib_page = _setup_contributions_page()
+        home = cls.contrib_page.get_parent()
+        cls.news_index = home.add_child(
+            instance=NewsIndexPage(title="News", slug="news")
+        )
+        cls.news_index.save_revision().publish()
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="news_user", password="testpass123"
+        )
+        self.client.login(username="news_user", password="testpass123")
+        self.url = self.contrib_page.url + "submit/news/"
+
+    def test_get_shows_form(self):
+        resp = self.client.get(self.url)
+        self.assertEqual(resp.status_code, 200)
+
+    def test_submit_news(self):
+        from apps.website.models.pages import NewsPage
+
+        resp = self.client.post(self.url, {
+            "title": "Big News for the Club",
+            "intro": "Something exciting happened.",
+            "body": "The full story of what happened.\n\nMore details here.",
+        })
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(NewsPage.objects.count(), 1)
+        n = NewsPage.objects.first()
+        self.assertEqual(n.owner, self.user)
+        self.assertFalse(n.live)
+        self.assertTrue(n.get_parent().specific, self.news_index)
+
+
+class TestSubmitEvent(TestCase):
+    """POST contributions/submit/event/ creates a draft EventDetailPage."""
+
+    @classmethod
+    def setUpTestData(cls):
+        from apps.website.models.pages import EventsPage
+
+        cls.contrib_page = _setup_contributions_page()
+        home = cls.contrib_page.get_parent()
+        cls.events_page = home.add_child(
+            instance=EventsPage(title="Events", slug="events")
+        )
+        cls.events_page.save_revision().publish()
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="event_user", password="testpass123"
+        )
+        self.client.login(username="event_user", password="testpass123")
+        self.url = self.contrib_page.url + "submit/event/"
+
+    def test_get_shows_form(self):
+        resp = self.client.get(self.url)
+        self.assertEqual(resp.status_code, 200)
+
+    def test_submit_event(self):
+        from apps.website.models.pages import EventDetailPage
+
+        resp = self.client.post(self.url, {
+            "title": "Spring Rally 2026",
+            "intro": "Annual spring rally.",
+            "body": "Join us for a scenic ride through the Alps.",
+            "start_date": "2026-06-15T10:00",
+            "location_name": "Passo dello Stelvio",
+        })
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(EventDetailPage.objects.count(), 1)
+        e = EventDetailPage.objects.first()
+        self.assertEqual(e.owner, self.user)
+        self.assertFalse(e.live)
+
+
 class TestMyContributions(TestCase):
-    """GET contributions/ shows user's own contributions."""
+    """GET contributions/ shows user's own submissions across all types."""
 
     @classmethod
     def setUpTestData(cls):
