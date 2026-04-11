@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load i18n wagtailcore_tags %}
+
+{% block body_class %}page-contribution-detail{% endblock %}
+
+{% block title %}{{ page.title }} | {{ block.super }}{% endblock %}
+
+{% block content %}
+{% include "includes/breadcrumbs.html" %}
+
+<article class="page-contribution-detail" itemscope itemtype="https://schema.org/Article">
+    <div class="container container--narrow">
+        <header class="page-contribution-detail__header">
+            <span class="page-contribution-detail__type badge badge--{{ page.contribution_type }}">
+                {{ page.get_contribution_type_display }}
+            </span>
+            <h1 class="page-contribution-detail__title" itemprop="headline">{{ page.title }}</h1>
+            <div class="page-contribution-detail__meta">
+                {% if page.author %}
+                <span class="page-contribution-detail__author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <span itemprop="name">{{ page.author.get_full_name|default:page.author.username }}</span>
+                </span>
+                {% endif %}
+                {% if page.first_published_at %}
+                <time datetime="{{ page.first_published_at|date:'c' }}" class="page-contribution-detail__date" itemprop="datePublished">
+                    {{ page.first_published_at|date:"F j, Y" }}
+                </time>
+                {% endif %}
+            </div>
+        </header>
+
+        {% if page.body %}
+        <div class="page-contribution-detail__body" itemprop="articleBody">
+            {% for block in page.body %}
+                {% include_block block %}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <footer class="page-contribution-detail__footer">
+            <a href="{% pageurl page.get_parent %}" class="btn btn--outline">
+                <svg class="btn__icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                {% trans "Back to Contributions" %}
+            </a>
+        </footer>
+    </div>
+</article>
+{% endblock %}

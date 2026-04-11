@@ -3,7 +3,7 @@
 
 {% block body_class %}page-contributions{% endblock %}
 
-{% block title %}{% trans "Submit Contribution" %} | {{ block.super }}{% endblock %}
+{% block title %}{% trans "Submit Contribution" %} | {{ page.title }} | {{ block.super }}{% endblock %}
 
 {% block content %}
 {% include "includes/breadcrumbs.html" %}

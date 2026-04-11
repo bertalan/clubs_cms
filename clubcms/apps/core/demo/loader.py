@@ -20,12 +20,13 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.files.images import ImageFile
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.text import slugify
 from django.utils.translation import override
 
 from wagtail.images.models import Image
 from wagtail.models import Locale, Page, Site
 
-from apps.core.models import Activity, Comment, Contribution, Reaction
+from apps.core.models import Activity, Comment, Contribution, ContributionPage, Reaction
 from apps.events.models import EventFavorite, EventRegistration
 from apps.core.models import ContributionsPage, SearchPage
 from apps.notifications.models import NotificationsPage
@@ -264,6 +265,7 @@ class DemoLoader:
         Reaction.objects.all().delete()
         Comment.objects.all().delete()
         Contribution.objects.all().delete()
+        ContributionPage.objects.all().delete()
         EventRegistration.objects.all().delete()
         EventFavorite.objects.all().delete()
         Image.objects.filter(file__startswith="original_images/demo_").delete()
@@ -965,6 +967,12 @@ class DemoLoader:
             if image_key and image_key in self.images:
                 member.photo = self.images[image_key]
             member.save()
+            # Verify email so allauth doesn't block login
+            from allauth.account.models import EmailAddress
+            EmailAddress.objects.get_or_create(
+                user=member, email=member.email,
+                defaults={"verified": True, "primary": True},
+            )
             members.append(member)
             self.stdout.write(
                 f"  Created member: {data['first_name']} {data['last_name']}"
@@ -1048,21 +1056,79 @@ class DemoLoader:
 
     def _load_contributions(self, members: list[ClubUser]):
         self.stdout.write("\nCreating contributions...")
-        if Contribution.objects.exists():
+        if ContributionPage.objects.filter(locale=self.locale).exists():
             return
 
-        member_map = {m.username: m for m in members}
-        for row in self._rows("contributions"):
-            user = member_map.get(row["username"])
-            if not user:
-                continue
-            Contribution.objects.create(
-                user=user,
-                contribution_type=row["contribution_type"],
-                title=row["title"],
-                body=row["body"],
-                status=row["status"],
+        contributions_page = ContributionsPage.objects.filter(
+            locale=self.locale
+        ).first()
+        if not contributions_page:
+            self.stdout.write("  ContributionsPage not found, skipping.")
+            return
+
+        if self.primary:
+            # Primary locale: create new contribution pages
+            member_map = {m.username: m for m in members}
+            for row in self._rows("contributions"):
+                user = member_map.get(row["username"])
+                if not user:
+                    continue
+                slug_base = slugify(row["title"])[:50] or "contribution"
+                slug = slug_base
+                counter = 1
+                while Page.objects.filter(
+                    slug=slug, path__startswith=contributions_page.path
+                ).exists():
+                    slug = f"{slug_base}-{counter}"
+                    counter += 1
+
+                is_approved = row["status"] == "approved"
+                body_html = "<p>" + row["body"].replace("\n\n", "</p><p>") + "</p>"
+
+                child = contributions_page.add_child(
+                    instance=ContributionPage(
+                        title=row["title"],
+                        slug=slug,
+                        locale=self.locale,
+                        contribution_type=row["contribution_type"],
+                        body=[{"type": "rich_text", "value": body_html}],
+                        author=user,
+                        owner=user,
+                        moderation_status=row["status"],
+                        live=is_approved,
+                        has_unpublished_changes=not is_approved,
+                    )
+                )
+                if is_approved:
+                    child.save_revision().publish()
+                else:
+                    child.save_revision()
+        else:
+            # Secondary locale: translate existing contribution pages
+            source_pages = list(
+                ContributionPage.objects.exclude(locale=self.locale)
             )
+            rows = list(self._rows("contributions"))
+            for i, source in enumerate(source_pages):
+                try:
+                    translated = source.copy_for_translation(self.locale)
+                except Exception:
+                    continue
+                if i < len(rows):
+                    row = rows[i]
+                    translated.title = row["title"]
+                    body_html = (
+                        "<p>" + row["body"].replace("\n\n", "</p><p>") + "</p>"
+                    )
+                    translated.body = [
+                        {"type": "rich_text", "value": body_html}
+                    ]
+                # Match the source page's publication state
+                translated.save()
+                if source.live:
+                    translated.save_revision().publish()
+                else:
+                    translated.save_revision()
         self.stdout.write("  Created contributions")
 
     def _load_comments_and_reactions(self, members: list[ClubUser]):

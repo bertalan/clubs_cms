@@ -15,12 +15,15 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
 from django.shortcuts import redirect, render
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.panels import FieldPanel
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-from wagtail.fields import RichTextField
+from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Page
+
+from apps.website.blocks import BODY_BLOCKS
 
 
 # ---------------------------------------------------------------------------
@@ -603,6 +606,7 @@ class ContributionsPage(RoutablePageMixin, Page):
         FieldPanel("intro"),
     ]
 
+    subpage_types = ["core.ContributionPage"]
     max_count = 1
     template = "account/my_contributions.html"
 
@@ -615,8 +619,11 @@ class ContributionsPage(RoutablePageMixin, Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         if request.user.is_authenticated:
-            qs = Contribution.objects.filter(user=request.user).order_by(
-                "-created_at"
+            qs = (
+                ContributionPage.objects
+                .child_of(self)
+                .filter(author=request.user)
+                .order_by("-first_published_at", "-latest_revision_created_at")
             )
             paginator = Paginator(qs, 20)
             page_number = request.GET.get("page")
@@ -651,8 +658,34 @@ class ContributionsPage(RoutablePageMixin, Page):
         if request.method == "POST":
             form = ContributionForm(request.POST, user=request.user)
             if form.is_valid():
-                form.instance.user = request.user
-                form.save()
+                body_text = form.cleaned_data["body"]
+                paragraphs = body_text.strip().split("\n\n")
+                body_html = "".join(
+                    f"<p>{p.strip()}</p>"
+                    for p in paragraphs if p.strip()
+                )
+                slug_base = slugify(form.cleaned_data["title"])[:50] or "contribution"
+                slug = slug_base
+                counter = 1
+                while Page.objects.filter(
+                    slug=slug, path__startswith=self.path
+                ).exists():
+                    slug = f"{slug_base}-{counter}"
+                    counter += 1
+
+                child = self.add_child(
+                    instance=ContributionPage(
+                        title=form.cleaned_data["title"],
+                        slug=slug,
+                        contribution_type=form.cleaned_data["contribution_type"],
+                        body=[{"type": "rich_text", "value": body_html}],
+                        author=request.user,
+                        owner=request.user,
+                        live=False,
+                        has_unpublished_changes=True,
+                    )
+                )
+                child.save_revision()
                 messages.success(
                     request,
                     _("Your contribution has been submitted and is awaiting moderation."),
@@ -666,3 +699,93 @@ class ContributionsPage(RoutablePageMixin, Page):
             "account/submit_contribution.html",
             {"page": self, "form": form},
         )
+
+
+# ---------------------------------------------------------------------------
+# ContributionPage
+# ---------------------------------------------------------------------------
+
+
+class ContributionPage(Page):
+    """
+    Individual member contribution: story, event proposal, or announcement.
+
+    Created from the frontend form and moderated via Wagtail admin.
+    Approved contributions are published as real pages with their own URL.
+    """
+
+    TYPE_CHOICES = [
+        ("story", _("Story")),
+        ("proposal", _("Event proposal")),
+        ("announcement", _("Announcement")),
+    ]
+    STATUS_CHOICES = [
+        ("pending", _("Pending")),
+        ("approved", _("Approved")),
+        ("rejected", _("Rejected")),
+    ]
+
+    contribution_type = models.CharField(
+        max_length=20,
+        choices=TYPE_CHOICES,
+        verbose_name=_("Type"),
+    )
+    body = StreamField(
+        BODY_BLOCKS, blank=True, use_json_field=True,
+        verbose_name=_("Content"),
+    )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="contribution_pages",
+        verbose_name=_("Author"),
+    )
+    moderation_status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default="pending",
+        db_index=True,
+        verbose_name=_("Moderation status"),
+    )
+    moderated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="moderated_contribution_pages",
+        verbose_name=_("Moderated by"),
+    )
+    moderation_note = models.TextField(
+        blank=True,
+        verbose_name=_("Moderation note"),
+    )
+
+    parent_page_types = ["core.ContributionsPage"]
+    subpage_types = []
+    template = "website/pages/contribution_page.html"
+
+    content_panels = Page.content_panels + [
+        FieldPanel("contribution_type"),
+        FieldPanel("body"),
+    ]
+
+    settings_panels = Page.settings_panels + [
+        MultiFieldPanel(
+            [
+                FieldPanel("author"),
+                FieldPanel("moderation_status"),
+                FieldPanel("moderated_by"),
+                FieldPanel("moderation_note"),
+            ],
+            heading=_("Moderation"),
+        ),
+    ]
+
+    class Meta:
+        verbose_name = _("Contribution")
+        verbose_name_plural = _("Contributions")
+
+    def __str__(self):
+        return f"[{self.get_moderation_status_display()}] {self.title}"

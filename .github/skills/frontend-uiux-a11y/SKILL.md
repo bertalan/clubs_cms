@@ -12,7 +12,7 @@ This skill guides front-end work in ClubCMS to deliver usable, coherent, and acc
 ## Scope
 
 - Django templates and partials.
-- Theme CSS and shared styles.
+- Theme CSS and shared styles with color variables defined in siteconfigs
 - StreamField block rendering.
 - Forms, navigation, and interactive UI patterns.
 

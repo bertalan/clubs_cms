@@ -702,12 +702,6 @@ class MembersAreaPage(RoutablePageMixin, Page):
             is_active=True, locale=locale
         ).order_by("order")
 
-        # Contact page URL
-        from apps.website.models.pages import ContactPage
-
-        contact_page = ContactPage.objects.live().first()
-        ctx["contact_page_url"] = contact_page.url if contact_page else "/"
-
         # QR code and barcode images
         if user.card_number:
             safe_name = user.card_number.replace("/", "-").replace("\\", "-")

@@ -105,13 +105,15 @@ a:hover {
   box-shadow: 6px 6px 0 var(--color-primary);
 }
 
-.btn-primary {
+.btn-primary,
+.btn--primary {
   background: var(--color-primary);
   color: var(--color-surface);
   border-color: var(--color-primary);
 }
 
-.btn-primary:hover {
+.btn-primary:hover,
+.btn--primary:hover {
   background: var(--color-secondary);
   border-color: var(--color-secondary);
   box-shadow: 6px 6px 0 var(--color-primary);
@@ -3728,9 +3730,22 @@ a:hover {
   color: var(--color-text-muted);
 }
 
+/* Card Content Wrapper */
+.page-card__content {
+  background: var(--color-surface);
+  border: 3px solid var(--color-primary);
+  box-shadow: 6px 6px 0 var(--color-primary);
+  border-radius: 0;
+}
+
+.page-card__content .membership-card__actions {
+  border-color: var(--color-primary);
+}
+
 /* Membership Card - Comic Panel Zen Style */
 .membership-card {
   background: var(--color-surface);
+  color: var(--color-text-primary);
   border: 3px solid var(--color-primary);
   box-shadow: 6px 6px 0 var(--color-primary);
 }
@@ -3754,10 +3769,15 @@ a:hover {
   background: var(--color-surface);
   border: 3px solid var(--color-primary);
   box-shadow: 4px 4px 0 var(--color-primary);
+  border-radius: 0;
 }
 
 .page-card__no-card-text {
   color: var(--color-text-muted);
+}
+
+.page-card__plans {
+  border-color: var(--color-primary);
 }
 
 .page-card__plans-title {
@@ -4750,14 +4770,14 @@ a:hover {
 .request-banner {
   border-radius: 0;
   border: 3px solid var(--color-primary);
-  background: #fff;
+  background: var(--color-surface);
 }
 .request-banner--pending { border-color: var(--color-primary); }
 .request-banner--pending .request-banner__icon { color: var(--color-primary); }
-.request-banner--approved { border-color: #000; background: #f0fdf4; }
-.request-banner--approved .request-banner__icon { color: #000; }
-.request-banner--rejected { border-color: #000; background: #fef2f2; }
-.request-banner--rejected .request-banner__icon { color: #000; }
+.request-banner--approved { border-color: var(--color-primary); background: var(--color-success-bg); }
+.request-banner--approved .request-banner__icon { color: var(--color-primary); }
+.request-banner--rejected { border-color: var(--color-primary); background: var(--color-error-bg); }
+.request-banner--rejected .request-banner__icon { color: var(--color-primary); }
 .request-banner__link {
   color: var(--color-primary);
   text-transform: uppercase;
@@ -4772,6 +4792,12 @@ a:hover {
 .dark-mode .request-banner--rejected { background: #2e1a1a; }
 
 /* ── Request Cards (list) ── */
+.page-requests__title {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-primary);
+}
 .request-card {
   background: #fff;
   border: 3px solid var(--color-primary);
@@ -4806,8 +4832,10 @@ a:hover {
 
 /* ── Request Detail ── */
 .page-request-detail__title {
+  font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  color: var(--color-primary);
 }
 .request-stepper__indicator {
   border-radius: 0;
@@ -4844,6 +4872,51 @@ a:hover {
   background: var(--color-surface);
 }
 .dark-mode .request-detail-card {
+  background: var(--color-surface);
+}
+
+/* ── Contributions Page ── */
+.page-contributions__title {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-primary);
+}
+.contribution-card {
+  background: #fff;
+  border: 3px solid var(--color-primary);
+  border-radius: 0;
+  box-shadow: 5px 5px 0 var(--color-primary);
+  transition: all 0.2s ease;
+}
+.contribution-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0 var(--color-primary);
+}
+.contribution-card__note {
+  background: #f8f8f8;
+  border: 1px solid var(--color-primary);
+  border-radius: 0;
+}
+.contribution-form {
+  background: #fff;
+  border: 3px solid var(--color-primary);
+  border-radius: 0;
+  box-shadow: 5px 5px 0 var(--color-primary);
+}
+.empty-state {
+  background: #fff;
+  border: 3px solid var(--color-primary);
+  border-radius: 0;
+}
+.dark-mode .contribution-card {
+  background: var(--color-surface);
+  border-color: var(--color-primary);
+}
+.dark-mode .contribution-form {
+  background: var(--color-surface);
+}
+.dark-mode .empty-state {
   background: var(--color-surface);
 }
 

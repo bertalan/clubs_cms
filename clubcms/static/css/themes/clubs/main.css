@@ -96,13 +96,15 @@ a:hover {
   transform: scale(1.05);
 }
 
-.btn-primary {
+.btn-primary,
+.btn--primary {
   background: var(--color-secondary);
   color: #fff;
   border-color: var(--color-secondary);
 }
 
-.btn-primary:hover {
+.btn-primary:hover,
+.btn--primary:hover {
   background: var(--color-accent);
   border-color: var(--color-accent);
 }
@@ -3501,6 +3503,18 @@ html.dark-mode {
   color: var(--color-text-muted);
 }
 
+/* Card Content Wrapper */
+.page-card__content {
+  background: var(--color-surface-alt);
+  border: var(--clubs-border);
+  border-radius: 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.page-card__content .membership-card__actions {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
 /* Membership Card - Dark Premium Style */
 .membership-card {
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
@@ -3528,13 +3542,19 @@ html.dark-mode {
 .page-card__no-card {
   background: var(--color-surface-alt);
   border: var(--clubs-border);
+  border-radius: 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .page-card__no-card-text {
   color: var(--color-text-muted);
 }
 
-/* Plans Title */
+/* Plans */
+.page-card__plans {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
 .page-card__plans-title {
   color: var(--color-primary);
   font-weight: 900;
@@ -3783,22 +3803,26 @@ html.dark-mode {
   border-radius: 0;
 }
 /* Pricing card buttons — visible on dark background */
-.pricing-card .btn-primary {
+.pricing-card .btn-primary,
+.pricing-card .btn--primary {
   background: var(--color-secondary, #E53E3E);
   border-color: var(--color-secondary, #E53E3E);
   color: #fff;
 }
-.pricing-card .btn-primary:hover {
+.pricing-card .btn-primary:hover,
+.pricing-card .btn--primary:hover {
   background: var(--color-accent, #FFD700);
   border-color: var(--color-accent, #FFD700);
   color: var(--color-primary, #0A0A0A);
 }
-.pricing-card .btn-outline {
+.pricing-card .btn-outline,
+.pricing-card .btn--outline {
   background: transparent;
   color: #fff;
   border: 2px solid rgba(255, 255, 255, 0.5);
 }
-.pricing-card .btn-outline:hover {
+.pricing-card .btn-outline:hover,
+.pricing-card .btn--outline:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: var(--color-secondary, #E53E3E);
   color: var(--color-secondary, #E53E3E);
@@ -5982,27 +6006,27 @@ html.dark-mode {
 .request-banner {
   border-radius: 0;
   border: 1px solid var(--clubs-border, rgba(255, 255, 255, 0.1));
-  background: var(--color-surface, #0A0A0A);
+  background: var(--color-surface);
 }
-.request-banner--pending { border-left: 3px solid #F59E0B; }
-.request-banner--pending .request-banner__icon { color: #F59E0B; }
-.request-banner--approved { border-left: 3px solid #10B981; }
-.request-banner--approved .request-banner__icon { color: #10B981; }
-.request-banner--rejected { border-left: 3px solid #EF4444; }
-.request-banner--rejected .request-banner__icon { color: #EF4444; }
-.request-banner__text { color: #f3f4f6; }
-.request-banner__meta { color: #9ca3af; }
+.request-banner--pending { border-left: 3px solid var(--color-warning-border); }
+.request-banner--pending .request-banner__icon { color: var(--color-warning-border); }
+.request-banner--approved { border-left: 3px solid var(--color-success-border); }
+.request-banner--approved .request-banner__icon { color: var(--color-success-border); }
+.request-banner--rejected { border-left: 3px solid var(--color-secondary); }
+.request-banner--rejected .request-banner__icon { color: var(--color-secondary); }
+.request-banner__text { color: var(--color-text-primary); }
+.request-banner__meta { color: var(--color-text-muted); }
 .request-banner__link {
   color: var(--color-primary);
   transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.request-banner__link:hover { color: #fff; }
+.request-banner__link:hover { color: var(--color-text-primary); }
 
 /* ── Request Cards (list) ── */
-.page-requests__title { color: #f3f4f6; }
-.page-requests__section-title { color: #e5e7eb; }
+.page-requests__title { color: var(--color-text-primary); }
+.page-requests__section-title { color: var(--color-text-primary); }
 .request-card {
-  background: var(--color-surface, #0A0A0A);
+  background: var(--color-surface);
   border: 1px solid var(--clubs-border, rgba(255, 255, 255, 0.1));
   border-radius: 0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -6019,6 +6043,7 @@ html.dark-mode {
 .request-card:hover .request-card__arrow { color: var(--color-primary); }
 .page-requests__empty {
   background: var(--color-surface, #0A0A0A);
+  border: 1px solid var(--clubs-border, rgba(255, 255, 255, 0.1));
   border-radius: 0;
 }
 .page-requests__empty-icon { color: #6b7280; }
@@ -6060,6 +6085,40 @@ html.dark-mode {
 .request-detail-card__product-price { color: var(--color-primary); }
 .request-detail-info__row dt { color: #9ca3af; }
 .request-detail-info__row dd { color: #e5e7eb; }
+
+/* ── Contributions Page ── */
+.page-contributions__title { color: var(--color-text-primary); }
+.contribution-card {
+  background: var(--color-surface);
+  border: 1px solid var(--clubs-border, rgba(255, 255, 255, 0.1));
+  border-radius: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.contribution-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  transform: scale(1.02);
+}
+.contribution-card__title { color: #f3f4f6; }
+.contribution-card__excerpt { color: #9ca3af; }
+.contribution-card__date { color: #6b7280; }
+.contribution-card__note {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 0;
+  color: #9ca3af;
+}
+.contribution-form {
+  background: var(--color-surface);
+  border: 1px solid var(--clubs-border, rgba(255, 255, 255, 0.1));
+  border-radius: 0;
+}
+.empty-state {
+  background: var(--color-surface, #0A0A0A);
+  border: 1px solid var(--clubs-border, rgba(255, 255, 255, 0.1));
+  border-radius: 0;
+}
+.empty-state__icon { color: #6b7280; }
+.empty-state__text { color: #9ca3af; }
 
 /* ── Notification Preferences ── */
 .page-notification-prefs {

@@ -1,6 +1,8 @@
 """
 T18 — Test member contributions: submit story/proposal/announcement,
 my contributions list, moderation status.
+
+Contributions are Wagtail Pages (ContributionPage) under ContributionsPage.
 """
 
 import json
@@ -10,7 +12,7 @@ from django.test import TestCase
 
 from wagtail.models import Page, Site
 
-from apps.core.models import Contribution, ContributionsPage
+from apps.core.models import ContributionPage, ContributionsPage
 
 User = get_user_model()
 
@@ -39,6 +41,24 @@ def _setup_contributions_page():
     return contrib_page
 
 
+def _create_contribution_page(parent, user, **kwargs):
+    """Create a ContributionPage child under parent."""
+    defaults = {
+        "contribution_type": "story",
+        "title": "Test Contribution",
+        "slug": "test-contribution",
+        "body": [{"type": "rich_text", "value": "<p>Test content</p>"}],
+        "author": user,
+        "owner": user,
+        "live": False,
+        "has_unpublished_changes": True,
+    }
+    defaults.update(kwargs)
+    child = parent.add_child(instance=ContributionPage(**defaults))
+    child.save_revision()
+    return child
+
+
 class TestContributionAuth(TestCase):
     """Contribution pages require login."""
 
@@ -59,7 +79,7 @@ class TestContributionAuth(TestCase):
 
 
 class TestSubmitContribution(TestCase):
-    """POST contributions/submit/ creates a pending Contribution."""
+    """POST contributions/submit/ creates a draft ContributionPage."""
 
     @classmethod
     def setUpTestData(cls):
@@ -86,11 +106,12 @@ class TestSubmitContribution(TestCase):
             "body": "Era una bella giornata di primavera..." + " parola" * 50,
         })
         self.assertEqual(resp.status_code, 302)
-        self.assertEqual(Contribution.objects.count(), 1)
-        c = Contribution.objects.first()
-        self.assertEqual(c.user, self.user)
+        self.assertEqual(ContributionPage.objects.count(), 1)
+        c = ContributionPage.objects.first()
+        self.assertEqual(c.author, self.user)
         self.assertEqual(c.contribution_type, "story")
-        self.assertEqual(c.status, "pending")
+        self.assertEqual(c.moderation_status, "pending")
+        self.assertFalse(c.live)
 
     def test_submit_proposal(self):
         resp = self.client.post(self.url, {
@@ -99,7 +120,7 @@ class TestSubmitContribution(TestCase):
             "body": "Propongo una gita al lago di Garda...",
         })
         self.assertEqual(resp.status_code, 302)
-        c = Contribution.objects.first()
+        c = ContributionPage.objects.first()
         self.assertEqual(c.contribution_type, "proposal")
 
     def test_submit_announcement(self):
@@ -109,7 +130,7 @@ class TestSubmitContribution(TestCase):
             "body": "Vendo casco Shoei usato poche volte.",
         })
         self.assertEqual(resp.status_code, 302)
-        c = Contribution.objects.first()
+        c = ContributionPage.objects.first()
         self.assertEqual(c.contribution_type, "announcement")
 
     def test_missing_title_fails(self):
@@ -119,7 +140,7 @@ class TestSubmitContribution(TestCase):
             "body": "Some content here.",
         })
         self.assertEqual(resp.status_code, 200)  # re-renders form
-        self.assertEqual(Contribution.objects.count(), 0)
+        self.assertEqual(ContributionPage.objects.count(), 0)
 
     def test_missing_body_fails(self):
         resp = self.client.post(self.url, {
@@ -128,17 +149,14 @@ class TestSubmitContribution(TestCase):
             "body": "",
         })
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(Contribution.objects.count(), 0)
+        self.assertEqual(ContributionPage.objects.count(), 0)
 
     def test_rate_limit_max_pending(self):
         """A user cannot have more than 5 pending contributions."""
         for i in range(5):
-            Contribution.objects.create(
-                user=self.user,
-                contribution_type="story",
-                title=f"Story {i}",
-                body="Content",
-                status="pending",
+            _create_contribution_page(
+                self.contrib_page, self.user,
+                title=f"Story {i}", slug=f"story-{i}",
             )
         resp = self.client.post(self.url, {
             "contribution_type": "story",
@@ -146,7 +164,7 @@ class TestSubmitContribution(TestCase):
             "body": "Content here.",
         })
         self.assertEqual(resp.status_code, 200)  # re-renders with error
-        self.assertEqual(Contribution.objects.count(), 5)
+        self.assertEqual(ContributionPage.objects.count(), 5)
 
 
 class TestMyContributions(TestCase):
@@ -167,18 +185,14 @@ class TestMyContributions(TestCase):
         self.url = self.contrib_page.url
 
         # Own contribution
-        Contribution.objects.create(
-            user=self.user,
-            contribution_type="story",
-            title="My Story",
-            body="Content",
+        _create_contribution_page(
+            self.contrib_page, self.user,
+            title="My Story", slug="my-story",
         )
         # Other user's contribution
-        Contribution.objects.create(
-            user=self.other,
-            contribution_type="story",
-            title="Other Story",
-            body="Content",
+        _create_contribution_page(
+            self.contrib_page, self.other,
+            title="Other Story", slug="other-story",
         )
 
     def test_shows_own_contributions(self):
@@ -191,28 +205,44 @@ class TestMyContributions(TestCase):
         self.assertNotContains(resp, "Other Story")
 
 
-class TestContributionModel(TestCase):
-    """Contribution model fields and defaults."""
+class TestContributionPageModel(TestCase):
+    """ContributionPage model fields and defaults."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.contrib_page = _setup_contributions_page()
 
     def test_default_status_is_pending(self):
         user = User.objects.create_user(username="modeltest", password="pass")
-        c = Contribution.objects.create(
-            user=user,
-            contribution_type="story",
-            title="Test",
-            body="Content",
+        c = _create_contribution_page(
+            self.contrib_page, user,
+            title="Test", slug="test",
         )
-        self.assertEqual(c.status, "pending")
+        self.assertEqual(c.moderation_status, "pending")
         self.assertIsNone(c.moderated_by)
-        self.assertIsNone(c.moderation_note)
+        self.assertEqual(c.moderation_note, "")
+        self.assertFalse(c.live)
 
     def test_str_representation(self):
         user = User.objects.create_user(username="strtest", password="pass")
-        c = Contribution.objects.create(
-            user=user,
+        c = _create_contribution_page(
+            self.contrib_page, user,
             contribution_type="proposal",
-            title="My Proposal",
-            body="Content",
+            title="My Proposal", slug="my-proposal",
         )
         s = str(c)
         self.assertIn("My Proposal", s)
+
+    def test_approved_contribution_is_live(self):
+        user = User.objects.create_user(username="approvetest", password="pass")
+        c = _create_contribution_page(
+            self.contrib_page, user,
+            title="Approved Story", slug="approved-story",
+            moderation_status="approved",
+            live=True,
+            has_unpublished_changes=False,
+        )
+        c.save_revision().publish()
+        c.refresh_from_db()
+        self.assertTrue(c.live)
+        self.assertEqual(c.moderation_status, "approved")

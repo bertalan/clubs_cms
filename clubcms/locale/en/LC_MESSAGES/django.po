@@ -5564,10 +5564,10 @@ msgid "Choose a membership plan below to request your membership card."
 msgstr "Choose a membership plan below to request your membership card."
 
 msgid "View My Requests"
-msgstr "Aid Requests"
+msgstr "View My Requests"
 
 msgid "Available Membership Plans"
-msgstr "Available Helpers"
+msgstr "Available Membership Plans"
 
 msgid "Your plan"
 msgstr "Your plan"

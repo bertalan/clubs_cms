@@ -143,13 +143,15 @@ a:hover {
   transform: scale(1.03);
 }
 
-.btn-primary {
+.btn-primary,
+.btn--primary {
   background: var(--color-secondary);
   color: var(--color-primary);
   border-color: var(--color-secondary);
 }
 
-.btn-primary:hover {
+.btn-primary:hover,
+.btn--primary:hover {
   background: var(--color-accent-hover);
   border-color: var(--color-accent-hover);
   color: var(--color-text-inverse);
@@ -3702,62 +3704,80 @@ a:hover {
    -------------------------------------------------------------------------- */
 .page-card {
   padding: 5rem 0;
-  background: linear-gradient(180deg, var(--velocity-bg) 0%, var(--velocity-surface) 100%);
+  background: var(--color-surface);
 }
 
 .page-card__title {
-  background: linear-gradient(135deg, var(--velocity-primary) 0%, var(--velocity-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-primary);
   font-weight: 800;
 }
 
 .page-card__subtitle {
-  color: var(--velocity-text-muted);
+  color: var(--color-text-muted);
+}
+
+/* Card Content Wrapper */
+.page-card__content {
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--velocity-radius-lg);
+  box-shadow: var(--velocity-shadow);
+}
+
+.page-card__content .membership-card__actions {
+  border-color: var(--color-border);
 }
 
 /* Membership Card - Gradient Premium Style */
 .membership-card {
-  background: linear-gradient(135deg, var(--velocity-surface) 0%, color-mix(in srgb, var(--velocity-surface) 80%, black) 50%, var(--velocity-surface) 100%);
-  border: 1px solid color-mix(in srgb, var(--velocity-primary) 30%, transparent);
+  background: linear-gradient(135deg, var(--color-primary) 0%, color-mix(in srgb, var(--color-primary) 80%, var(--color-accent)) 100%);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
   border-radius: var(--velocity-radius-lg);
-  box-shadow: 
-    0 20px 60px color-mix(in srgb, black 40%, transparent),
-    0 0 40px color-mix(in srgb, var(--velocity-primary) 10%, transparent),
-    inset 0 1px 0 color-mix(in srgb, white 5%, transparent);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .membership-card::before {
-  background: radial-gradient(circle at top right, color-mix(in srgb, var(--velocity-primary) 15%, transparent) 0%, transparent 50%);
+  background: radial-gradient(circle at top right, color-mix(in srgb, var(--color-accent) 15%, transparent) 0%, transparent 50%);
 }
 
 .membership-card__logo {
-  color: var(--velocity-primary);
+  color: var(--color-secondary);
 }
 
 .membership-card__type {
-  background: linear-gradient(135deg, var(--velocity-primary) 0%, var(--velocity-secondary) 100%);
-  color: var(--color-text-inverse);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%);
+  color: #fff;
   border-radius: var(--velocity-radius);
 }
 
 .page-card__no-card {
-  background: var(--velocity-surface);
-  border: 1px solid var(--velocity-border);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
   border-radius: var(--velocity-radius-lg);
+  box-shadow: var(--velocity-shadow);
 }
 
 .page-card__no-card-text {
-  color: var(--velocity-text-muted);
+  color: var(--color-text-muted);
+}
+
+.page-card__plans {
+  border-color: var(--color-border);
 }
 
 .page-card__plans-title {
-  background: linear-gradient(135deg, var(--velocity-primary) 0%, var(--velocity-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-primary);
   font-weight: 800;
+}
+
+@media (forced-colors: active) {
+  .page-card__title,
+  .page-card__plans-title {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -3907,125 +3927,120 @@ a:hover {
    -------------------------------------------------------------------------- */
 .page-my-events {
   padding: 5rem 0;
-  background: linear-gradient(180deg, var(--velocity-bg) 0%, var(--velocity-surface) 100%);
+  background: var(--color-surface);
 }
 
 .page-my-events__title {
-  background: linear-gradient(135deg, var(--velocity-primary) 0%, var(--velocity-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 800;
+  color: var(--color-primary);
 }
 
 .page-my-events__nav-link {
-  background: var(--velocity-surface);
-  border: 1px solid var(--velocity-border);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
   border-radius: var(--velocity-radius);
-  color: var(--velocity-text-secondary);
+  color: var(--color-text-muted);
   transition: all 0.3s ease;
 }
 
 .page-my-events__nav-link:hover {
-  background: color-mix(in srgb, var(--velocity-primary) 10%, transparent);
-  border-color: var(--velocity-primary);
-  color: var(--color-text-inverse);
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  border-color: var(--color-accent);
+  color: var(--color-text-primary);
 }
 
 .page-my-events__nav-link--active {
-  background: linear-gradient(135deg, var(--velocity-primary) 0%, var(--velocity-secondary) 100%);
+  background: var(--color-accent);
   border-color: transparent;
-  color: var(--color-text-inverse);
+  color: #fff;
 }
 
 .page-my-events__map {
-  background: var(--velocity-surface);
-  border: 1px solid var(--velocity-border);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
   border-radius: var(--velocity-radius-lg);
 }
 
 .page-my-events__map-placeholder {
-  color: var(--velocity-text-muted);
+  color: var(--color-text-muted);
 }
 
 .page-my-events__year-title {
-  background: linear-gradient(135deg, var(--velocity-primary) 0%, var(--velocity-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-primary);
   font-weight: 800;
-  border-color: var(--velocity-border);
+  border-color: var(--color-border);
 }
 
 .page-my-events__card {
-  background: var(--velocity-surface);
-  border: 1px solid var(--velocity-border);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
   border-radius: var(--velocity-radius-lg);
   transition: all 0.3s ease;
 }
 
 .page-my-events__card:hover {
-  border-color: var(--velocity-primary);
-  box-shadow: 0 8px 24px color-mix(in srgb, var(--velocity-primary) 15%, transparent);
+  border-color: var(--color-accent);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--color-accent) 15%, transparent);
   transform: translateY(-2px);
 }
 
 .page-my-events__card-title {
-  color: var(--velocity-text);
+  color: var(--color-text-primary);
 }
 
 .page-my-events__card-link:hover {
-  color: var(--velocity-primary);
+  color: var(--color-accent);
 }
 
 .page-my-events__card-meta {
-  color: var(--velocity-text-muted);
+  color: var(--color-text-muted);
 }
 
 .page-my-events__btn--outline {
-  border-color: var(--velocity-border);
-  color: var(--velocity-text-secondary);
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
   border-radius: var(--velocity-radius);
 }
 
 .page-my-events__btn--outline:hover {
-  background: color-mix(in srgb, var(--velocity-primary) 10%, transparent);
-  border-color: var(--velocity-primary);
-  color: var(--color-text-inverse);
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  border-color: var(--color-accent);
+  color: var(--color-text-primary);
 }
 
 .page-my-events__btn--primary {
-  background: linear-gradient(135deg, var(--velocity-primary) 0%, var(--velocity-secondary) 100%);
+  background: var(--color-accent);
   border-color: transparent;
-  color: var(--color-text-inverse);
+  color: #fff;
   border-radius: var(--velocity-radius);
-  box-shadow: 0 4px 15px color-mix(in srgb, var(--velocity-primary) 30%, transparent);
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
 .page-my-events__btn--primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px color-mix(in srgb, var(--velocity-primary) 40%, transparent);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--color-accent) 40%, transparent);
 }
 
 .page-my-events__pagination-link {
-  background: var(--velocity-surface);
-  border: 1px solid var(--velocity-border);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
   border-radius: var(--velocity-radius);
-  color: var(--velocity-primary);
+  color: var(--color-accent);
 }
 
 .page-my-events__pagination-link:hover {
-  background: linear-gradient(135deg, var(--velocity-primary) 0%, var(--velocity-secondary) 100%);
+  background: var(--color-accent);
   border-color: transparent;
-  color: var(--color-text-inverse);
+  color: #fff;
 }
 
 .page-my-events__pagination-info {
-  color: var(--velocity-text-muted);
+  color: var(--color-text-muted);
 }
 
 .page-my-events__empty {
-  background: var(--velocity-surface);
+  background: var(--color-surface-alt);
   border-radius: var(--velocity-radius-lg);
 }
 
@@ -4033,7 +4048,7 @@ a:hover {
 
 .page-payment {
   padding: 5rem 0;
-  background: linear-gradient(180deg, var(--velocity-bg) 0%, var(--velocity-surface) 100%);
+  background: var(--color-surface);
 }
 
 .page-payment__summary {
@@ -4301,119 +4316,165 @@ a:hover {
 /* ── Request Banners ── */
 .request-banner {
   border-radius: var(--velocity-radius-lg);
-  border: 1px solid var(--velocity-border);
-  background: var(--velocity-surface);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-alt);
 }
 .request-banner--pending .request-banner__icon { color: var(--color-secondary); }
 .request-banner--approved { border-color: var(--color-confirmed); }
 .request-banner--approved .request-banner__icon { color: var(--color-confirmed); }
 .request-banner--rejected { border-color: var(--color-danger-dark); }
 .request-banner--rejected .request-banner__icon { color: var(--color-danger-dark); }
-.request-banner__text { color: var(--velocity-text); }
-.request-banner__meta { color: var(--velocity-text-muted); }
-.request-banner__reason { color: var(--velocity-text-soft); }
+.request-banner__text { color: var(--color-text-primary); }
+.request-banner__meta { color: var(--color-text-muted); }
+.request-banner__reason { color: var(--color-text-muted); }
 .request-banner__link {
-  color: var(--velocity-primary);
+  color: var(--color-accent);
   transition: color 0.2s ease;
 }
-.request-banner__link:hover { color: var(--color-text-inverse); }
+.request-banner__link:hover { color: var(--color-primary); }
 
 /* ── Request Cards (list) ── */
 .page-requests {
   padding: 5rem 0;
-  background: linear-gradient(180deg, var(--velocity-bg) 0%, var(--velocity-surface) 100%);
+  background: var(--color-surface);
 }
+.page-requests__header { margin-bottom: 3rem; }
 .page-requests__title {
-  background: linear-gradient(135deg, var(--velocity-primary) 0%, var(--velocity-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 800;
+  color: var(--color-primary);
 }
-.page-requests__section-title { color: var(--velocity-text-secondary); }
+.page-requests__subtitle { font-size: 1.125rem; }
+.page-requests__section-title {
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
 .request-card {
-  background: var(--velocity-surface);
-  border: 1px solid var(--velocity-border);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
   border-radius: var(--velocity-radius-lg);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .request-card:hover {
-  border-color: var(--velocity-primary);
-  box-shadow: 0 8px 24px color-mix(in srgb, var(--velocity-primary) 15%, transparent);
+  border-color: var(--color-accent);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--color-accent) 15%, transparent);
   transform: translateY(-2px);
 }
-.request-card__product { color: var(--velocity-text); }
-.request-card__date { color: var(--velocity-text-muted); }
-.request-card__notes { color: var(--velocity-text-muted); }
-.request-card__arrow { color: var(--velocity-text-dim); }
-.request-card:hover .request-card__arrow { color: var(--velocity-primary); }
+.request-card__product { color: var(--color-text-primary); }
+.request-card__date { color: var(--color-text-muted); }
+.request-card__notes { color: var(--color-text-muted); }
+.request-card__arrow { color: var(--color-text-muted); }
+.request-card:hover .request-card__arrow { color: var(--color-accent); }
 .page-requests__empty {
-  background: var(--velocity-surface);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
   border-radius: var(--velocity-radius-lg);
+  box-shadow: var(--velocity-shadow);
+}
+.page-requests__actions .btn--outline {
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+.page-requests__actions .btn--outline:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 /* ── Request Detail ── */
 .page-request-detail {
   padding: 5rem 0;
-  background: linear-gradient(180deg, var(--velocity-bg) 0%, var(--velocity-surface) 100%);
+  background: var(--color-surface);
 }
 .page-request-detail__title {
-  background: linear-gradient(135deg, var(--velocity-primary) 0%, var(--velocity-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 800;
+  color: var(--color-primary);
 }
-.page-request-detail__subtitle { color: var(--velocity-text-muted); }
+.page-request-detail__subtitle { color: var(--color-text-muted); }
 .request-stepper__indicator {
-  background: var(--velocity-surface);
+  background: var(--color-surface-alt);
   border-radius: 50%;
-  border: 2px solid var(--velocity-border);
+  border: 2px solid var(--color-border);
 }
 .request-stepper__step--done .request-stepper__indicator {
-  background: var(--velocity-primary);
-  border-color: var(--velocity-primary);
-  color: var(--color-text-inverse);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
 }
 .request-stepper__step--rejected .request-stepper__indicator {
   background: var(--color-danger-dark);
   border-color: var(--color-danger-dark);
 }
 .request-stepper__step--cancelled .request-stepper__indicator {
-  background: var(--velocity-text-dim);
-  border-color: var(--velocity-text-dim);
+  background: var(--color-text-muted);
+  border-color: var(--color-text-muted);
 }
 .request-stepper__dot { border-radius: 50%; }
-.request-stepper__label { color: var(--velocity-text-muted); }
-.request-stepper__step--done .request-stepper__label { color: var(--velocity-text); }
+.request-stepper__label { color: var(--color-text-muted); }
+.request-stepper__step--done .request-stepper__label { color: var(--color-text-primary); }
 .request-stepper__step--current .request-stepper__dot {
-  border-color: var(--velocity-primary);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--velocity-primary) 40%, transparent);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 40%, transparent);
 }
 .request-detail-card {
-  background: var(--velocity-surface);
-  border: 1px solid var(--velocity-border);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
   border-radius: var(--velocity-radius-lg);
 }
-.request-detail-card__product-name { color: var(--velocity-text); }
-.request-detail-card__product-price { color: var(--velocity-primary); }
-.request-detail-info__row dt { color: var(--velocity-text-muted); }
-.request-detail-info__row dd { color: var(--velocity-text-secondary); }
+.request-detail-card__product-name { color: var(--color-text-primary); }
+.request-detail-card__product-price { color: var(--color-accent); }
+.request-detail-info__row dt { color: var(--color-text-muted); }
+.request-detail-info__row dd { color: var(--color-text-primary); }
 
 /* ── Contributions Page ── */
 .page-contributions {
   padding: 5rem 0;
-  background: linear-gradient(180deg, var(--velocity-bg) 0%, var(--velocity-surface) 100%);
+  background: var(--color-surface);
+}
+.page-contributions__title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 800;
+  color: var(--color-primary);
+}
+.page-contributions__subtitle { font-size: 1.125rem; }
+.contribution-card {
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--velocity-radius-lg);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.contribution-card:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--color-accent) 15%, transparent);
+  transform: translateY(-2px);
+}
+.contribution-card__note {
+  background: color-mix(in srgb, var(--color-surface) 80%, var(--color-surface-alt));
+  border-radius: var(--velocity-radius);
+}
+.contribution-form {
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--velocity-radius-lg);
+  box-shadow: var(--velocity-shadow);
+}
+.empty-state {
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--velocity-radius-lg);
+  box-shadow: var(--velocity-shadow);
 }
 
 /* ── Membership Request Form ── */
 .page-membership-request {
   padding: 5rem 0;
-  background: linear-gradient(180deg, var(--velocity-bg) 0%, var(--velocity-surface) 100%);
+  background: var(--color-surface);
 }
 
 /* ── Register (event) ── */
 .page-register {
   padding: 5rem 0;
-  background: linear-gradient(180deg, var(--velocity-bg) 0%, var(--velocity-surface) 100%);
+  background: var(--color-surface);
 }
 
 /* ── Account Privacy Settings ── */
@@ -4424,7 +4485,7 @@ a:hover {
 /* ── Mutual Aid Availability (account) ── */
 .page-aid {
   padding: 5rem 0;
-  background: linear-gradient(180deg, var(--velocity-bg) 0%, var(--velocity-surface) 100%);
+  background: var(--color-surface);
 }
 
 /* ── Search Page ── */

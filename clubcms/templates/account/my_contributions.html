@@ -3,7 +3,7 @@
 
 {% block body_class %}page-contributions{% endblock %}
 
-{% block title %}{% trans "My Contributions" %} | {{ block.super }}{% endblock %}
+{% block title %}{{ page.title }} | {{ block.super }}{% endblock %}
 
 {% block content %}
 {% include "includes/breadcrumbs.html" %}
@@ -11,8 +11,10 @@
     <div class="container container--narrow">
         <header class="page-contributions__header">
             <div>
-                <h1 id="contributions-heading" class="page-contributions__title">{% trans "My Contributions" %}</h1>
-                <p class="page-contributions__subtitle">{% trans "Stories, proposals, and announcements you have submitted." %}</p>
+                <h1 id="contributions-heading" class="page-contributions__title">{{ page.title }}</h1>
+                {% if page.intro %}
+                <div class="page-contributions__intro">{{ page.intro|richtext }}</div>
+                {% endif %}
             </div>
             <a href="{% routablepageurl page 'submit_contribution' %}" class="btn btn--primary">
                 <svg class="btn__icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -25,23 +27,25 @@
         {% if contributions %}
         <div class="contributions-list" role="list">
             {% for c in contributions %}
-            <article class="contribution-card contribution-card--{{ c.status }}" role="listitem"
-                     aria-label="{{ c.title }} — {{ c.get_status_display }}">
-                <div class="contribution-card__header">
-                    <span class="contribution-card__type badge badge--{{ c.contribution_type }}">
-                        {{ c.get_contribution_type_display }}
-                    </span>
-                    <span class="contribution-card__status badge badge--{{ c.status }}">
-                        {{ c.get_status_display }}
-                    </span>
-                </div>
-                <h2 class="contribution-card__title">{{ c.title }}</h2>
-                <p class="contribution-card__excerpt">{{ c.body|truncatewords:30 }}</p>
-                <footer class="contribution-card__footer">
-                    <time class="contribution-card__date" datetime="{{ c.created_at|date:'c' }}">
-                        {{ c.created_at|date:"d/m/Y H:i" }}
-                    </time>
-                </footer>
+            <article class="contribution-card contribution-card--{{ c.moderation_status }}" role="listitem"
+                     aria-label="{{ c.title }} — {{ c.get_moderation_status_display }}">
+                <a href="{% if c.live %}{% pageurl c %}{% else %}#{% endif %}" class="contribution-card__link"
+                   {% if not c.live %}aria-disabled="true"{% endif %}>
+                    <div class="contribution-card__header">
+                        <span class="contribution-card__type badge badge--{{ c.contribution_type }}">
+                            {{ c.get_contribution_type_display }}
+                        </span>
+                        <span class="contribution-card__status badge badge--{{ c.moderation_status }}">
+                            {{ c.get_moderation_status_display }}
+                        </span>
+                    </div>
+                    <h2 class="contribution-card__title">{{ c.title }}</h2>
+                    <footer class="contribution-card__footer">
+                        <time class="contribution-card__date" datetime="{{ c.latest_revision_created_at|date:'c' }}">
+                            {{ c.latest_revision_created_at|date:"d/m/Y H:i" }}
+                        </time>
+                    </footer>
+                </a>
                 {% if c.moderation_note %}
                 <div class="contribution-card__note" role="note">
                     <strong>{% trans "Moderator note" %}:</strong> {{ c.moderation_note }}

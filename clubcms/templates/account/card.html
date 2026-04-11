@@ -15,6 +15,8 @@
         </header>
 
         {# ---- Status Banners ---- #}
+        {% if pending_requests or recent_resolved %}
+        <section aria-label="{% trans 'Membership request notifications' %}">
         {% for req in pending_requests %}
         <div class="request-banner request-banner--pending" role="status">
             <div class="request-banner__icon" aria-hidden="true">
@@ -25,10 +27,10 @@
                     {% blocktrans with product=req.product.name %}You have a pending request for <strong>{{ product }}</strong>.{% endblocktrans %}
                 </p>
                 <p class="request-banner__meta">
-                    {% blocktrans with date=req.created_at|date:"d/m/Y" %}Submitted on {{ date }}{% endblocktrans %}
+                    {% blocktrans with date=req.created_at|date:"SHORT_DATE_FORMAT" %}Submitted on {{ date }}{% endblocktrans %}
                 </p>
             </div>
-            <a href="{% routablepageurl page 'request_detail' req.pk %}" class="request-banner__link">{% trans "View" %}</a>
+            <a href="{% routablepageurl page 'request_detail' req.pk %}" class="request-banner__link" aria-label="{% blocktrans with product=req.product.name %}View pending request for {{ product }}{% endblocktrans %}">{% trans "View" %}</a>
         </div>
         {% endfor %}
 
@@ -55,15 +57,18 @@
                 {% endif %}
                 {% endif %}
                 <p class="request-banner__meta">
-                    {{ req.processed_at|date:"d/m/Y" }}
+                    {{ req.processed_at|date:"SHORT_DATE_FORMAT" }}
                 </p>
             </div>
-            <a href="{% routablepageurl page 'request_detail' req.pk %}" class="request-banner__link">{% trans "Details" %}</a>
+            <a href="{% routablepageurl page 'request_detail' req.pk %}" class="request-banner__link" aria-label="{% blocktrans with product=req.product.name %}Details of {{ product }} request{% endblocktrans %}">{% trans "Details" %}</a>
         </div>
         {% endfor %}
+        </section>
+        {% endif %}
 
         {% if user.card_number %}
         {# ---- Digital Card Display ---- #}
+        <div class="page-card__content">
         <article class="membership-card" aria-label="{% trans 'Digital membership card' %}">
             <div class="membership-card__header">
                 <span class="membership-card__logo">{{ club_name }}</span>
@@ -115,14 +120,15 @@
                 {% trans "Barcode" %}
             </a>
         </nav>
+        </div>
 
         {# ---- User's Current Products ---- #}
         {% if user_products %}
         <section class="page-card__plans" aria-labelledby="current-plans-heading">
             <h2 id="current-plans-heading" class="page-card__plans-title">{% trans "Your Membership Products" %}</h2>
-            <div class="pricing-grid" role="list">
+            <div class="pricing-grid">
                 {% for product in user_products %}
-                <article class="pricing-card pricing-card--active" role="listitem">
+                <article class="pricing-card pricing-card--active">
                     <span class="pricing-card__badge">{% trans "Active" %}</span>
                     <h3 class="pricing-card__name">{{ product.name }}</h3>
                     <div class="pricing-card__price" aria-label="{% blocktrans with price=product.price %}{{ price }} euros per year{% endblocktrans %}">&euro;{{ product.price }}<small>/ {% trans "year" %}</small></div>
@@ -137,7 +143,7 @@
 
         {% else %}
         {# ---- No Card Yet ---- #}
-        <div class="page-card__no-card" role="status">
+        <div class="page-card__no-card" role="note">
             <svg class="page-card__no-card-icon" width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
             </svg>
@@ -146,23 +152,13 @@
         </div>
         {% endif %}
 
-        {# ---- Link to My Requests ---- #}
-        <div class="page-card__requests-link">
-            <a href="{% routablepageurl page 'membership_requests' %}" class="btn btn--outline">
-                <svg class="btn__icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-                {% trans "View My Requests" %}
-            </a>
-        </div>
-
         {# ---- Available Products ---- #}
         {% if available_products %}
         <section class="page-card__plans" aria-labelledby="available-plans-heading">
             <h2 id="available-plans-heading" class="page-card__plans-title">{% trans "Available Membership Plans" %}</h2>
-            <div class="pricing-grid" role="list">
+            <div class="pricing-grid">
                 {% for product in available_products %}
-                <article class="pricing-card {% if product in user_products %}pricing-card--active{% endif %}" role="listitem">
+                <article class="pricing-card {% if product in user_products %}pricing-card--active{% endif %}">
                     {% if product in user_products %}
                     <span class="pricing-card__badge">{% trans "Your plan" %}</span>
                     {% endif %}
@@ -171,6 +167,7 @@
                     {% if product.description %}
                     <p class="pricing-card__desc">{{ product.description }}</p>
                     {% endif %}
+                    {% if product.grants_events or product.grants_vote or product.grants_upload or product.grants_discount %}
                     <ul class="pricing-card__features" aria-label="{% trans 'Plan features' %}">
                         {% if product.grants_events %}
                         <li>{% trans "Event registration" %}</li>
@@ -185,6 +182,7 @@
                         <li>{% blocktrans with percent=product.discount_percent %}{{ percent }}% discount on events{% endblocktrans %}</li>
                         {% endif %}
                     </ul>
+                    {% endif %}
                     {% if product not in user_products %}
                     <a href="{% routablepageurl page 'membership_request' product.pk %}" class="btn btn--primary btn--block">
                         {% trans "Request this membership" %}
