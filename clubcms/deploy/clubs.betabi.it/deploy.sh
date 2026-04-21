@@ -24,6 +24,44 @@ SSH_CMD="ssh -p $REMOTE_PORT -i ~/.ssh/id_rsa $REMOTE_HOST"
 echo "=== ClubCMS Deploy → clubs.betabi.it — $TIMESTAMP ==="
 echo "    Server: $REMOTE_HOST (porta $REMOTE_PORT) — bare metal"
 
+# ── Controllo stato git locale ───────────────────────────────────────────────
+if [[ "${1:-}" != "--setup" ]]; then
+    GIT_ROOT="$(git -C "$(dirname "$0")" rev-parse --show-toplevel 2>/dev/null || true)"
+
+    if [[ -n "$GIT_ROOT" ]]; then
+        # File modificati non committati
+        DIRTY=$(git -C "$GIT_ROOT" status --porcelain 2>/dev/null)
+        if [[ -n "$DIRTY" ]]; then
+            echo ""
+            echo "  ATTENZIONE: ci sono modifiche locali non committate:"
+            git -C "$GIT_ROOT" status --short
+            echo ""
+            echo "  Esegui 'git add' + 'git commit' prima del deploy."
+            echo "  Per forzare il deploy comunque: bash $0 --force"
+            [[ "${1:-}" == "--force" ]] || exit 1
+        fi
+
+        # Commit locali non pushati su origin/main
+        LOCAL_HEAD=$(git -C "$GIT_ROOT" rev-parse HEAD 2>/dev/null)
+        REMOTE_HEAD=$(git -C "$GIT_ROOT" ls-remote origin refs/heads/main 2>/dev/null | cut -f1)
+        if [[ -n "$REMOTE_HEAD" && "$LOCAL_HEAD" != "$REMOTE_HEAD" ]]; then
+            UNPUSHED=$(git -C "$GIT_ROOT" log --oneline "origin/main..HEAD" 2>/dev/null)
+            if [[ -n "$UNPUSHED" ]]; then
+                echo ""
+                echo "  ATTENZIONE: i seguenti commit NON sono ancora su origin/main:"
+                echo "$UNPUSHED" | sed 's/^/    /'
+                echo ""
+                echo "  Il server scaricherà la versione precedente."
+                echo "  Esegui 'git push origin main' prima del deploy."
+                echo "  Per forzare il deploy comunque: bash $0 --force"
+                [[ "${1:-}" == "--force" ]] || exit 1
+            fi
+        fi
+
+        echo "    Git: HEAD=$(git -C "$GIT_ROOT" rev-parse --short HEAD) — tutto pushato ✓"
+    fi
+fi
+
 # ── Prima installazione ──────────────────────────────────────────────────────
 if [[ "${1:-}" == "--setup" ]]; then
     echo ""
