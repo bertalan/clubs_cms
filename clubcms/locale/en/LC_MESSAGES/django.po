@@ -100,7 +100,7 @@ msgstr "The full content of your contribution."
 
 #: apps/core/forms.py:85
 msgid "Headline for your article."
-msgstr ""
+msgstr "Headline for your article."
 
 #: apps/core/forms.py:90 apps/website/models/pages.py:493
 #: apps/website/models/pages.py:709
@@ -108,10 +108,8 @@ msgid "Introduction / excerpt"
 msgstr "Introduction / excerpt"
 
 #: apps/core/forms.py:91
-#, fuzzy
-#| msgid "Short summary shown in listings."
 msgid "A short summary shown in news listings."
-msgstr "Short summary shown in listings."
+msgstr "A short summary shown in news listings."
 
 #: apps/core/forms.py:95
 #, fuzzy
@@ -120,11 +118,9 @@ msgid "Article body"
 msgstr "Article gallery"
 
 #: apps/core/forms.py:96
-#, fuzzy
-#| msgid "The full content of your contribution."
 msgid ""
 "The full content of your article. Separate paragraphs with a blank line."
-msgstr "The full content of your contribution."
+msgstr "The full content of your article. Separate paragraphs with a blank line."
 
 #: apps/core/forms.py:102 apps/core/forms.py:173
 #: apps/website/models/newsletter.py:146 apps/website/models/pages.py:531
@@ -137,10 +133,8 @@ msgid "Category"
 msgstr "Category"
 
 #: apps/core/forms.py:103
-#, fuzzy
-#| msgid "Select the category that best matches your need."
 msgid "Select a category for your article."
-msgstr "Select the category that best matches your need."
+msgstr "Select a category for your article."
 
 #: apps/core/forms.py:107 apps/core/forms.py:177
 #: apps/website/models/pages.py:313 apps/website/models/pages.py:488
@@ -150,7 +144,7 @@ msgstr "Cover image"
 
 #: apps/core/forms.py:108
 msgid "An image to display with your article (optional)."
-msgstr ""
+msgstr "An image to display with your article (optional)."
 
 #: apps/core/forms.py:129
 #, fuzzy
@@ -159,10 +153,8 @@ msgid "Event name"
 msgstr "Event page"
 
 #: apps/core/forms.py:130
-#, fuzzy
-#| msgid "Name of the person quoted."
 msgid "Name of the event."
-msgstr "Name of the person quoted."
+msgstr "Name of the event."
 
 #: apps/core/forms.py:135
 #, fuzzy
@@ -171,10 +163,8 @@ msgid "Short description"
 msgstr "Short description text."
 
 #: apps/core/forms.py:136
-#, fuzzy
-#| msgid "Short description shown in listings."
 msgid "A brief description shown in event listings."
-msgstr "Short description shown in listings."
+msgstr "A brief description shown in event listings."
 
 #: apps/core/forms.py:140
 #, fuzzy
@@ -184,7 +174,7 @@ msgstr "PWA description"
 
 #: apps/core/forms.py:141
 msgid "Detailed event description. Separate paragraphs with a blank line."
-msgstr ""
+msgstr "Detailed event description. Separate paragraphs with a blank line."
 
 #: apps/core/forms.py:147 apps/website/models/pages.py:722
 msgid "Start date & time"
@@ -195,10 +185,8 @@ msgid "End date & time"
 msgstr "End date & time"
 
 #: apps/core/forms.py:155
-#, fuzzy
-#| msgid "Leave blank for ongoing partnerships."
 msgid "Leave blank for single-day events."
-msgstr "Leave blank for ongoing partnerships."
+msgstr "Leave blank for single-day events."
 
 #: apps/core/forms.py:161 apps/website/models/pages.py:736
 msgid "Venue name"
@@ -215,7 +203,7 @@ msgstr "Address"
 
 #: apps/core/forms.py:178
 msgid "An image for the event (optional)."
-msgstr ""
+msgstr "An image for the event (optional)."
 
 #: apps/core/models.py:42
 msgid "Upload"
