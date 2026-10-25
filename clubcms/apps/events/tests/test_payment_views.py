@@ -17,6 +17,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from apps.events.models import EventRegistration
+from apps.events.tests.conftest import _create_event_page
 from apps.events.utils import events_area_url
 
 User = get_user_model()
@@ -35,93 +36,9 @@ except ImportError:
 
 
 @pytest.fixture(autouse=True)
-def events_area_page(db):
-    """Create an EventsAreaPage under the default site root for URL resolution."""
-    from wagtail.models import Page, Site
-
-    from apps.website.models.pages import EventsAreaPage
-
-    # Clear Wagtail's Site root paths cache to avoid stale entries from other test classes
-    Site.clear_site_root_paths_cache()
-
-    site = Site.objects.filter(is_default_site=True).first()
-    parent = site.root_page if site else Page.objects.first()
-    page = EventsAreaPage(title="Events Area", slug="events-area")
-    parent.add_child(instance=page)
-    return page
-
-
-def _create_event_page(**kwargs):
-    """Create a minimal EventDetailPage for testing."""
-    from wagtail.models import Page
-
-    from apps.website.models.pages import EventDetailPage
-
-    defaults = {
-        "title": "Paid Event",
-        "start_date": timezone.now() + timedelta(days=30),
-        "base_fee": Decimal("50.00"),
-        "registration_open": True,
-        "max_attendees": 100,
-    }
-    defaults.update(kwargs)
-
-    # Ensure unique slug
-    if "slug" not in defaults:
-        import uuid
-
-        defaults["slug"] = f"paid-event-{uuid.uuid4().hex[:8]}"
-
-    root = Page.objects.first()
-    event = EventDetailPage(**defaults)
-    root.add_child(instance=event)
-    return event
-
-
-@pytest.fixture
-def user(db):
-    return User.objects.create_user(
-        username="paytest", password="testpass123456", email="pay@test.com"
-    )
-
-
-@pytest.fixture
-def event_page(db):
-    return _create_event_page()
-
-
-@pytest.fixture
-def registration(db, user, event_page):
-    with patch("apps.notifications.services.create_notification"):
-        return EventRegistration.objects.create(
-            event=event_page,
-            user=user,
-            payment_amount=Decimal("50.00"),
-            payment_status="pending",
-        )
-
-
-@pytest.fixture
-def payment_settings(db):
-    from wagtail.models import Site
-
-    from apps.website.models.settings import PaymentSettings
-
-    site = Site.objects.get(is_default_site=True)
-    ps, _ = PaymentSettings.objects.get_or_create(site=site)
-    ps.payment_mode = "test"
-    ps.stripe_test_enabled = True
-    ps.stripe_test_public_key = "pk_test_xxx"
-    ps.stripe_test_secret_key = "sk_test_xxx"
-    ps.stripe_test_webhook_secret = "whsec_test_xxx"
-    ps.paypal_test_enabled = True
-    ps.paypal_test_client_id = "paypal_test_id"
-    ps.paypal_test_secret = "paypal_test_secret"
-    ps.bank_transfer_enabled = True
-    ps.bank_iban = "IT60X0542811101000000123456"
-    ps.bank_transfer_expiry_days = 5
-    ps.save()
-    return ps
+def _events_area(events_area_page):
+    """EventsAreaPage for URL resolution (fixture in conftest.py)."""
+    return events_area_page
 
 
 @pytest.fixture
@@ -336,15 +253,21 @@ class TestStripeWebhookView:
                 payment_status="pending",
             )
 
-        mock_construct.return_value = {
-            "type": "checkout.session.completed",
-            "data": {
-                "object": {
-                    "id": "cs_test_webhook",
-                    "payment_intent": "pi_test_123",
-                }
+        # construct_event returns a StripeObject (not a dict) since stripe 15.
+        import stripe
+
+        mock_construct.return_value = stripe.StripeObject.construct_from(
+            {
+                "type": "checkout.session.completed",
+                "data": {
+                    "object": {
+                        "id": "cs_test_webhook",
+                        "payment_intent": "pi_test_123",
+                    }
+                },
             },
-        }
+            "sk_test_xxx",
+        )
 
         url = reverse("events:stripe_webhook")
         response = client.post(

@@ -9,6 +9,8 @@ integration via httpx.
 import hashlib
 import logging
 
+from django.conf import settings
+
 import httpx
 
 try:
@@ -46,6 +48,14 @@ def generate_payment_reference(registration):
 # ---------------------------------------------------------------------------
 
 
+def configure_stripe(secret_key):
+    """Set the Stripe key and the pinned API version (settings.STRIPE_API_VERSION)."""
+    if stripe is None:
+        raise RuntimeError("stripe package is not installed")
+    stripe.api_key = secret_key
+    stripe.api_version = settings.STRIPE_API_VERSION
+
+
 def create_stripe_checkout_session(registration, payment_settings, request):
     """
     Create a Stripe Checkout Session and return the session URL.
@@ -59,13 +69,13 @@ def create_stripe_checkout_session(registration, payment_settings, request):
         str: The Stripe Checkout Session URL for redirect.
 
     Raises:
-        stripe.error.StripeError: On Stripe API failure.
+        stripe.StripeError: On Stripe API failure.
         RuntimeError: If stripe library is not installed.
     """
     if stripe is None:
         raise RuntimeError("stripe package is not installed")
 
-    stripe.api_key = payment_settings.stripe_secret_key
+    configure_stripe(payment_settings.stripe_secret_key)
 
     success_url = request.build_absolute_uri(
         events_area_url("payment_success", args=[registration.pk])
@@ -75,7 +85,7 @@ def create_stripe_checkout_session(registration, payment_settings, request):
     )
 
     session = stripe.checkout.Session.create(
-        payment_method_types=["card"],
+        allowed_payment_method_types=["card"],
         line_items=[
             {
                 "price_data": {

@@ -329,6 +329,11 @@ LOGOUT_REDIRECT_URL = "/"
 # Send origin on cross-origin requests so OSM tile servers receive a Referer.
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
+# Stripe API version, pinned explicitly. Must match the version pinned by the
+# installed stripe-python major (test_stripe_sdk checks it), and the Stripe
+# webhook endpoint should use the same version in the Stripe dashboard.
+STRIPE_API_VERSION = "2026-09-30.endive"
+
 # Reverse proxies allowed to set X-Real-IP (see apps.core.http.get_client_ip).
 TRUSTED_PROXY_IPS = env_list("TRUSTED_PROXY_IPS", "127.0.0.1,::1")
 
