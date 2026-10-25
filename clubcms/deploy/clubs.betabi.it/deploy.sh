@@ -191,7 +191,7 @@ cd "\$DOMAIN_DIR/clubcms/clubcms"
 source "\$DOMAIN_DIR/venv/bin/activate"
 set -a; source "\$DOMAIN_DIR/.env"; set +a
 
-echo "[1/7] Backup database..."
+echo "[1/10] Backup database..."
 mkdir -p "\$DOMAIN_DIR/backups"
 _DB_URL=\$(grep '^DATABASE_URL=' "\$DOMAIN_DIR/.env" | cut -d= -f2-)
 _DB_USER=\$(echo "\$_DB_URL" | sed 's|postgres://||' | cut -d: -f1)
@@ -202,40 +202,50 @@ PGPASSWORD="\$_DB_PASS" pg_dump -U "\$_DB_USER" -h 127.0.0.1 -p 5432 "\$_DB_NAME
     && echo "  Backup OK" \
     || echo "  AVVISO: backup fallito, continuo..."
 
-echo "[2/7] Pull codice..."
+echo "[2/10] Pull codice..."
 cd "\$DOMAIN_DIR/clubcms"
 git pull --ff-only
 cd "\$DOMAIN_DIR/clubcms/clubcms"
 
-echo "[3/7] Aggiornamento dipendenze..."
+echo "[3/10] Aggiornamento dipendenze..."
 pip install -r requirements.txt --quiet
 
-echo "[4/7] Migrazioni database..."
+echo "[4/10] Migrazioni database..."
 python manage.py migrate --noinput
 
-echo "[5/9] Collect static files..."
+echo "[5/10] Collect static files..."
 python manage.py collectstatic --noinput
 
-echo "[6/9] Configurazione dominio Sites..."
+echo "[6/10] Configurazione dominio Sites..."
 python manage.py configure_sites
 
-echo "[7/9] Compilazione traduzioni..."
+echo "[7/10] Compilazione traduzioni..."
 python manage.py compilemessages
 
-echo "[8/9] Correzione permessi..."
+echo "[8/10] Correzione permessi..."
 find "\$DOMAIN_DIR" -not -name '.user.ini' -exec chown www:www {} + 2>/dev/null || true
 echo "  Permessi OK (www:www su \$DOMAIN_DIR)"
 
-echo "[9/9] Riavvio servizi..."
+echo "[9/10] Riavvio servizi..."
 systemctl restart clubcms clubcms-qcluster
+
+echo "[10/10] Verifica frontend nginx..."
+# aaPanel spesso gestisce nginx via init.d; su altri host puo' essere systemd.
+if [ -x /etc/init.d/nginx ]; then
+    /etc/init.d/nginx status >/dev/null 2>&1 || /etc/init.d/nginx start >/dev/null 2>&1 || true
+else
+    systemctl is-active nginx >/dev/null 2>&1 || systemctl restart nginx >/dev/null 2>&1 || true
+fi
 
 # Health check
 sleep 3
 HTTP_CODE=\$(curl -s -o /dev/null -w "%{http_code}" -H "Host: clubs.betabi.it" http://127.0.0.1:8001/it/ || echo "000")
-if [ "\$HTTP_CODE" = "200" ] || [ "\$HTTP_CODE" = "301" ]; then
-    echo "  Health check PASSED (HTTP \$HTTP_CODE)"
+EDGE_CODE=\$(curl -k -s -o /dev/null -w "%{http_code}" --resolve clubs.betabi.it:443:127.0.0.1 https://clubs.betabi.it/it/ || echo "000")
+if { [ "\$HTTP_CODE" = "200" ] || [ "\$HTTP_CODE" = "301" ]; } \
+   && { [ "\$EDGE_CODE" = "200" ] || [ "\$EDGE_CODE" = "301" ] || [ "\$EDGE_CODE" = "302" ]; }; then
+    echo "  Health check PASSED (app=\$HTTP_CODE, edge=\$EDGE_CODE)"
 else
-    echo "  ERRORE: Health check FAILED (HTTP \$HTTP_CODE)"
+    echo "  ERRORE: Health check FAILED (app=\$HTTP_CODE, edge=\$EDGE_CODE)"
     echo "  Log: journalctl -u clubcms --no-pager -n 50"
     exit 1
 fi
