@@ -166,7 +166,7 @@ class PhotoUploadForm(forms.Form):
 
             # Also try mimetypes as a secondary check
             if mime_type not in ALLOWED_MIME_TYPES:
-                guessed, _ = mimetypes.guess_type(f.name)
+                guessed, _encoding = mimetypes.guess_type(f.name)
                 if guessed in ALLOWED_MIME_TYPES:
                     mime_type = guessed
 

@@ -10,7 +10,7 @@ in apps.website.models.newsletter.
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
@@ -18,6 +18,14 @@ from django.views.generic import FormView
 from apps.website.forms import VerificationForm
 from apps.website.models.partners import PartnerPage
 from apps.website.models.verification import VerificationLog
+
+
+def _get_client_ip(request):
+    """Extract the client IP address from the request."""
+    x_forwarded = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded:
+        return x_forwarded.split(",")[0].strip()
+    return request.META.get("REMOTE_ADDR", "0.0.0.0")
 
 
 # ═══════════════════════════════════════════════════════════════════════════
