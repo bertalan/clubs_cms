@@ -11,7 +11,7 @@ Run everything from `clubcms/` through Docker.
 ## 1. Extract
 
 ```bash
-docker compose exec web python manage.py makemessages -l it -l en -l de -l fr -l es --no-wrap
+docker compose exec web python manage.py makemessages -l it -l en -l de -l fr -l es
 ```
 
 ## 2. Find what is missing (do not read whole .po files)
