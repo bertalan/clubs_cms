@@ -33,63 +33,128 @@ class FederatedClub(models.Model):
     """
     A partner club in the federation network.
     Only admins can create/edit these records.
+
+    Both clubs store the same pair: ``api_key`` (public link id, sent as
+    X-Federation-Key) and ``our_key_for_them`` (shared secret that signs
+    every request with HMAC-SHA256).
     """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=255, help_text=_("Display name of the partner club"))
+    name = models.CharField(
+        max_length=255,
+        verbose_name=_("Club name"),
+        help_text=_("Shown to visitors on the federation page and next to every event imported from this club."),
+    )
     short_code = models.CharField(
-        max_length=20, unique=True, help_text=_("URL-safe identifier")
+        max_length=20,
+        unique=True,
+        verbose_name=_("Club code"),
+        help_text=_(
+            "The code the partner uses for itself on its own site "
+            "(its FEDERATION_OUR_CLUB_CODE setting), e.g. MANDELLO. "
+            "Ask the partner's administrator. It labels imported events."
+        ),
     )
     city = models.CharField(
         max_length=100,
         blank=True,
         verbose_name=_("City"),
-        help_text=_("City where the partner club is based."),
+        help_text=_("Shown on the federation page next to the club name, so members know where the club is."),
     )
-    base_url = models.URLField(help_text=_("Partner site base URL"))
+    base_url = models.URLField(
+        verbose_name=_("Partner site address"),
+        help_text=_(
+            "Root address of the partner's ClubCMS site, without any path, "
+            "e.g. https://partner.example. Events are read from "
+            "<address>/api/federation/events/."
+        ),
+    )
     description = models.TextField(
         blank=True,
-        help_text=_("Short description of the partner club (visible on federation page)."),
+        verbose_name=_("Description"),
+        help_text=_("One or two sentences about the club, shown on the public federation page."),
     )
     logo_url = models.CharField(
         max_length=500,
         blank=True,
-        help_text=_("Logo URL (external) or static path (e.g. /static/img/federation/logo.svg)."),
+        verbose_name=_("Logo address"),
+        help_text=_(
+            "Full https:// address of the partner's logo image, or a path "
+            "starting with /static/. Shown on the federation page."
+        ),
     )
     api_key = models.CharField(
-        max_length=64, help_text=_("Their public API key (given to us)")
+        max_length=64,
+        unique=True,
+        verbose_name=_("Link key (public)"),
+        help_text=_(
+            "Starts with pk_. Must be identical on both sites: generate the "
+            "pair once with the button below and send it to the partner, or "
+            "paste the pair the partner sent you. It identifies this link and "
+            "grants no access on its own."
+        ),
     )
     our_key_for_them = models.CharField(
-        max_length=64, blank=True, help_text=_("Our key we gave them (auto-generated)")
+        max_length=64,
+        blank=True,
+        verbose_name=_("Shared secret"),
+        help_text=_(
+            "Starts with sk_. Must be identical on both sites: it signs every "
+            "request between the two clubs. Exchange it over a secure channel "
+            "(phone, encrypted message), never by plain email. While it is "
+            "empty the link does not work."
+        ),
     )
-    is_active = models.BooleanField(default=False,
-        help_text=_("Attiva la connessione con questo club partner."),
+    is_active = models.BooleanField(
+        default=False,
+        verbose_name=_("Active"),
+        help_text=_(
+            "Turns the link on or off without deleting it. Requests are "
+            "accepted only when the club is both approved and active."
+        ),
     )
-    is_approved = models.BooleanField(default=False,
-        help_text=_("Il club partner è stato verificato e approvato."),
+    is_approved = models.BooleanField(
+        default=False,
+        verbose_name=_("Approved"),
+        help_text=_(
+            "Tick after confirming with the partner who runs its site. "
+            "Requests are accepted only when the club is both approved and active."
+        ),
     )
     share_our_events = models.BooleanField(
-        default=False, help_text=_("Share our events with this partner")
+        default=False,
+        verbose_name=_("Share our events"),
+        help_text=_(
+            "Lets this partner read our published events through the "
+            "federation API. Only event data is shared, never member data."
+        ),
     )
     auto_import = models.BooleanField(
-        default=True, help_text=_("Auto-approve imported events")
+        default=True,
+        verbose_name=_("Publish imported events immediately"),
+        help_text=_(
+            "If on, events fetched from this partner are approved "
+            "automatically. If off, they wait in Federation → External "
+            "Events until someone approves them."
+        ),
     )
-    last_sync = models.DateTimeField(null=True, blank=True,
-        help_text=_("Data e ora dell'ultima sincronizzazione eventi."),
+    last_sync = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name=_("Last successful sync"),
     )
-    last_error = models.TextField(blank=True,
-        help_text=_("Ultimo messaggio di errore durante la sincronizzazione."),
+    last_error = models.TextField(
+        blank=True,
+        verbose_name=_("Last sync error"),
     )
-    created_at = models.DateTimeField(auto_now_add=True,
-        help_text=_("Data di creazione del record."),
-    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created"))
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
-        help_text=_("Amministratore che ha aggiunto il club partner."),
+        verbose_name=_("Created by"),
     )
 
     class Meta:

@@ -1,0 +1,30 @@
+{% load i18n %}
+{% with guide=self.guide %}
+<div class="admin-guide">
+    <p class="admin-guide__summary">{{ guide.summary }}</p>
+    <button type="button" class="button button-small button-secondary admin-guide__open"
+            data-admin-guide-open aria-haspopup="dialog" aria-controls="admin-guide-{{ guide.key }}">
+        {% trans "Full guide" %}
+    </button>
+    <dialog id="admin-guide-{{ guide.key }}" class="admin-guide__dialog"
+            aria-labelledby="admin-guide-{{ guide.key }}-title">
+        <div class="admin-guide__header">
+            <h2 id="admin-guide-{{ guide.key }}-title" class="admin-guide__title">{{ guide.title }}</h2>
+            <form method="dialog">
+                <button type="submit" class="button button-small button-secondary" aria-label="{% trans 'Close guide' %}">
+                    {% trans "Close" %}
+                </button>
+            </form>
+        </div>
+        {% for section in guide.sections %}
+            <section class="admin-guide__section">
+                <h3>{{ section.title }}</h3>
+                {% for paragraph in section.paragraphs %}<p>{{ paragraph }}</p>{% endfor %}
+                {% if section.steps %}
+                    <ol>{% for step in section.steps %}<li>{{ step }}</li>{% endfor %}</ol>
+                {% endif %}
+            </section>
+        {% endfor %}
+    </dialog>
+</div>
+{% endwith %}

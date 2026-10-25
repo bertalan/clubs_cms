@@ -37,10 +37,10 @@ def register_reaction_viewset():
 
 
 @hooks.register("insert_global_admin_css")
-def admin_field_help_css():
+def admin_guide_css():
     return format_html(
         '<link rel="stylesheet" href="{}">',
-        static("css/admin_field_help.css"),
+        static("css/admin_guide.css"),
     )
 
 
@@ -53,10 +53,10 @@ def admin_colorpicker_css():
 
 
 @hooks.register("insert_global_admin_js")
-def admin_field_help_js():
+def admin_guide_js():
     return format_html(
         '<script src="{}"></script>',
-        static("js/admin_field_help.js"),
+        static("js/admin_guide.js"),
     )
 
 

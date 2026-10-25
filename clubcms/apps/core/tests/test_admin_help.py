@@ -1,11 +1,12 @@
 """
-T25 — Test copertura help_text per admin Wagtail.
+Admin help policy (rivista il 2026-10-25).
 
 Verifica:
-- Hook CSS/JS registrati correttamente
-- File statici esistono
-- Tutti i Page model hanno help_text sui field editabili
-- Tutti gli snippet registrati hanno help_text sui field editabili
+- Guida di pagina (GuidePanel + modale) caricata nell'admin; il vecchio
+  tooltip che ripeteva il help_text non c'è più
+- Nessun obbligo di help_text: un help serve solo se aggiunge informazione
+  (dove si trova il dato, formato, effetto). Per i modelli già rivisti
+  (REVIEWED_MODELS) gli help non devono ripetere l'etichetta
 - help_text sono stringhe traducibili (LazyString)
 """
 
@@ -18,12 +19,17 @@ from django.utils.functional import Promise
 from wagtail.models import Page
 from wagtail.snippets.models import get_snippet_models
 
+from apps.core.help_quality import is_redundant_help
 from apps.core.wagtail_hooks import (
     admin_colorpicker_css,
     admin_colorpicker_js,
-    admin_field_help_css,
-    admin_field_help_js,
+    admin_guide_css,
+    admin_guide_js,
 )
+from apps.federation.models import FederatedClub
+
+# Models whose help texts have been rewritten: they must stay useful.
+REVIEWED_MODELS = [FederatedClub]
 
 
 # Fields to exclude from help_text checks
@@ -92,17 +98,17 @@ def _get_page_models():
     return page_models
 
 
-class TestAdminFieldHelpHooks(TestCase):
+class TestAdminHelpHooks(TestCase):
     """Hook tests: CSS and JS are registered correctly."""
 
     def test_admin_css_hook_registered(self):
-        result = admin_field_help_css()
-        self.assertIn("admin_field_help.css", str(result))
+        result = admin_guide_css()
+        self.assertIn("admin_guide.css", str(result))
         self.assertIn("<link", str(result))
 
     def test_admin_js_hook_registered(self):
-        result = admin_field_help_js()
-        self.assertIn("admin_field_help.js", str(result))
+        result = admin_guide_js()
+        self.assertIn("admin_guide.js", str(result))
         self.assertIn("<script", str(result))
 
     def test_admin_colorpicker_css_hook_registered(self):
@@ -121,7 +127,8 @@ class TestAdminFieldHelpHooks(TestCase):
         css_hooks = wagtail_hooks.get_hooks("insert_global_admin_css")
         css_results = [fn() for fn in css_hooks]
         css_html = " ".join(str(r) for r in css_results)
-        self.assertIn("admin_field_help.css", css_html)
+        self.assertIn("admin_guide.css", css_html)
+        self.assertNotIn("admin_field_help", css_html)
         self.assertIn("admin_colorpicker.css", css_html)
 
     def test_js_hook_in_wagtail_hooks(self):
@@ -130,7 +137,8 @@ class TestAdminFieldHelpHooks(TestCase):
         js_hooks = wagtail_hooks.get_hooks("insert_global_admin_js")
         js_results = [fn() for fn in js_hooks]
         js_html = " ".join(str(r) for r in js_results)
-        self.assertIn("admin_field_help.js", js_html)
+        self.assertIn("admin_guide.js", js_html)
+        self.assertNotIn("admin_field_help", js_html)
         self.assertIn("admin_colorpicker.js", js_html)
 
 
@@ -140,14 +148,14 @@ class TestStaticFilesExist(TestCase):
     def test_admin_css_file_exists(self):
         css_path = os.path.join(
             os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
-            "static", "css", "admin_field_help.css",
+            "static", "css", "admin_guide.css",
         )
         self.assertTrue(os.path.isfile(css_path), f"Missing: {css_path}")
 
     def test_admin_js_file_exists(self):
         js_path = os.path.join(
             os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))),
-            "static", "js", "admin_field_help.js",
+            "static", "js", "admin_guide.js",
         )
         self.assertTrue(os.path.isfile(js_path), f"Missing: {js_path}")
 
@@ -166,39 +174,32 @@ class TestStaticFilesExist(TestCase):
         self.assertTrue(os.path.isfile(js_path), f"Missing: {js_path}")
 
 
-class TestPageFieldsHaveHelpText(TestCase):
-    """All Page model fields should have help_text."""
+class TestReviewedModelsHaveUsefulHelp(TestCase):
+    """Rewritten help texts must not just restate the field label."""
 
-    def test_all_page_fields_have_help_text(self):
-        missing = []
-        for model in _get_page_models():
+    def test_reviewed_help_texts_add_information(self):
+        redundant = []
+        for model in REVIEWED_MODELS:
             for field in _get_editable_fields(model):
-                if not getattr(field, "help_text", ""):
-                    missing.append(f"{model.__name__}.{field.name}")
-        if missing:
+                help_text = str(getattr(field, "help_text", "") or "")
+                if help_text and is_redundant_help(field, help_text):
+                    redundant.append(f"{model.__name__}.{field.name}: {help_text!r}")
+        if redundant:
             self.fail(
-                f"{len(missing)} page field(s) missing help_text:\n"
-                + "\n".join(f"  - {m}" for m in sorted(missing))
+                f"{len(redundant)} help text(s) only restate the label:\n"
+                + "\n".join(f"  - {r}" for r in sorted(redundant))
             )
 
-
-class TestSnippetFieldsHaveHelpText(TestCase):
-    """All snippet model fields should have help_text."""
-
-    def test_all_snippet_fields_have_help_text(self):
-        missing = []
-        for model in get_snippet_models():
-            # Only check snippets from our apps
-            if not model._meta.app_label.startswith(("website", "core")):
-                continue
-            for field in _get_editable_fields(model):
-                if not getattr(field, "help_text", ""):
-                    missing.append(f"{model.__name__}.{field.name}")
-        if missing:
-            self.fail(
-                f"{len(missing)} snippet field(s) missing help_text:\n"
-                + "\n".join(f"  - {m}" for m in sorted(missing))
+    def test_heuristic_flags_restated_labels(self):
+        field = FederatedClub._meta.get_field("base_url")
+        self.assertTrue(is_redundant_help(field, "Partner site base URL"))
+        self.assertFalse(
+            is_redundant_help(
+                field,
+                "Root address of the partner site without any path, "
+                "e.g. https://partner.example",
             )
+        )
 
 
 class TestHelpTextTranslatable(TestCase):
@@ -208,7 +209,7 @@ class TestHelpTextTranslatable(TestCase):
         not_lazy = []
         all_models = list(_get_page_models()) + [
             m for m in get_snippet_models()
-            if m._meta.app_label.startswith(("website", "core"))
+            if m._meta.app_label.startswith(("website", "core", "federation"))
         ]
         for model in all_models:
             for field in _get_editable_fields(model):
