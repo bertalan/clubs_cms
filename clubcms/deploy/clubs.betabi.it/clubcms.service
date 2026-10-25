@@ -4,7 +4,7 @@ After=network.target postgresql.service
 
 [Service]
 Type=notify
-User=www
+User=clubcms
 Group=www
 WorkingDirectory=/www/wwwroot/clubs.betabi.it/clubcms/clubcms
 EnvironmentFile=/www/wwwroot/clubs.betabi.it/.env

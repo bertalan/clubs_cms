@@ -113,6 +113,18 @@ else
     echo "  .env già presente: $ENV_FILE"
 fi
 
+# ── Utente di servizio ───────────────────────────────────────────────────────
+# L'app NON gira come www: www è riservato al web server (le protezioni
+# del pannello gli vietano di eseguire programmi). www legge static/media
+# tramite il gruppo.
+if ! id clubcms >/dev/null 2>&1; then
+    useradd --system --gid www --home-dir "$DOMAIN_DIR" --no-create-home \
+        --shell /usr/sbin/nologin clubcms
+    echo "  Utente di servizio clubcms creato."
+fi
+chown -R -h clubcms:www "$DOMAIN_DIR/clubcms" "$DOMAIN_DIR/venv" "$DOMAIN_DIR/backups"
+chown clubcms:www "$ENV_FILE"; chmod 600 "$ENV_FILE"
+
 # ── systemd: gunicorn ────────────────────────────────────────────────────────
 cat > /etc/systemd/system/clubcms.service <<SYSTEMD
 [Unit]
@@ -121,7 +133,7 @@ After=network.target postgresql.service
 
 [Service]
 Type=notify
-User=www
+User=clubcms
 Group=www
 WorkingDirectory=$DOMAIN_DIR/clubcms/clubcms
 EnvironmentFile=$DOMAIN_DIR/.env
@@ -147,7 +159,7 @@ After=network.target postgresql.service clubcms.service
 
 [Service]
 Type=simple
-User=www
+User=clubcms
 Group=www
 WorkingDirectory=$DOMAIN_DIR/clubcms/clubcms
 EnvironmentFile=$DOMAIN_DIR/.env
@@ -223,11 +235,35 @@ echo "[7/10] Compilazione traduzioni..."
 python manage.py compilemessages
 
 echo "[8/10] Correzione permessi..."
-find "\$DOMAIN_DIR" -not -name '.user.ini' -exec chown www:www {} + 2>/dev/null || true
-echo "  Permessi OK (www:www su \$DOMAIN_DIR)"
+# Solo i file dell'app: il resto della document root resta al pannello (www).
+chown -R -h clubcms:www "\$DOMAIN_DIR/clubcms" "\$DOMAIN_DIR/venv" "\$DOMAIN_DIR/backups"
+chown clubcms:www "\$DOMAIN_DIR/.env"; chmod 600 "\$DOMAIN_DIR/.env"
+chmod -R o-w "\$DOMAIN_DIR/clubcms" "\$DOMAIN_DIR/venv"
+echo "  Permessi OK (clubcms:www sull'app)"
 
 echo "[9/10] Riavvio servizi..."
+# Prova di avvio nello stesso contesto delle unit (utente, env, cwd) PRIMA
+# di fermare i processi attivi: se un permesso o un plugin di sicurezza
+# blocca l'esecuzione, ci si ferma con il sito ancora su.
+if ! systemd-run --quiet --wait --pipe --uid=clubcms --gid=www \
+        -p EnvironmentFile="\$DOMAIN_DIR/.env" -p WorkingDirectory="\$(pwd)" \
+        "\$DOMAIN_DIR/venv/bin/python" manage.py check; then
+    echo "  ERRORE: l'app non si avvia come clubcms. Servizi NON riavviati."
+    exit 1
+fi
 systemctl restart clubcms clubcms-qcluster
+for _i in \$(seq 1 15); do
+    sleep 2
+    systemctl is-active --quiet clubcms && systemctl is-active --quiet clubcms-qcluster && break
+done
+for _u in clubcms clubcms-qcluster; do
+    if ! systemctl is-active --quiet "\$_u"; then
+        echo "  ERRORE: \$_u non è attivo (\$(systemctl is-active \$_u))."
+        journalctl -u "\$_u" --no-pager -n 20
+        exit 1
+    fi
+done
+echo "  Servizi attivi (utente: \$(ps -o user= -p \$(systemctl show -p MainPID --value clubcms)))"
 
 echo "[10/10] Verifica frontend nginx..."
 # aaPanel spesso gestisce nginx via init.d; su altri host puo' essere systemd.
