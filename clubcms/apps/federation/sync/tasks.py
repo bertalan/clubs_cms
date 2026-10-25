@@ -27,6 +27,29 @@ logger = logging.getLogger(__name__)
 HTTP_TIMEOUT = 30
 
 
+
+def build_events_request(club, from_date):
+    """
+    Signed GET request for the partner's events endpoint.
+
+    Both clubs store the same pair: api_key (public link id, sent as
+    X-Federation-Key) and our_key_for_them (shared secret used for the
+    HMAC signature).
+    """
+    url = f"{club.base_url.rstrip('/')}/api/federation/events/?from_date={from_date}"
+    timestamp = datetime.now(timezone.utc).isoformat()
+    headers = {
+        "X-Federation-Key": club.api_key,
+        "X-Timestamp": timestamp,
+        "X-Signature": sign_request(
+            secret_key=club.our_key_for_them, timestamp=timestamp, body=""
+        ),
+        "Accept": "application/json",
+        "User-Agent": "ClubCMS-Federation/1.0",
+    }
+    return urllib.request.Request(url, headers=headers, method="GET")
+
+
 def sync_all_clubs():
     """
     Django-Q2 task: sync events from all active, approved partner clubs.
@@ -68,30 +91,15 @@ def sync_club_events(club_id):
     """
     club = FederatedClub.objects.get(pk=club_id)
 
-    # Build the URL
-    base = club.base_url.rstrip("/")
+    if not club.our_key_for_them.strip():
+        error_msg = f"Missing shared secret for {club.short_code}: sync skipped"
+        logger.error(error_msg)
+        club.last_error = error_msg
+        club.save(update_fields=["last_error"])
+        raise ValueError(error_msg)
+
     from_date = (dj_tz.now() - timedelta(days=1)).date().isoformat()
-    url = f"{base}/api/federation/events/?from_date={from_date}"
-
-    # Sign the request
-    # When we call their API, we send X-Federation-Key = our_key_for_them
-    # (so they can look us up) and sign with api_key (shared secret).
-    timestamp = datetime.now(timezone.utc).isoformat()
-    signature = sign_request(
-        secret_key=club.our_key_for_them,
-        timestamp=timestamp,
-        body="",
-    )
-
-    headers = {
-        "X-Federation-Key": club.api_key,
-        "X-Timestamp": timestamp,
-        "X-Signature": signature,
-        "Accept": "application/json",
-        "User-Agent": "ClubCMS-Federation/1.0",
-    }
-
-    req = urllib.request.Request(url, headers=headers, method="GET")
+    req = build_events_request(club, from_date)
 
     try:
         with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as response:
@@ -226,6 +234,9 @@ def _post_interest_to_partner(club, event_id, counts, our_code):
     """
     POST interest counts for a single event to a partner club.
     """
+    if not club.our_key_for_them.strip():
+        logger.warning("Missing shared secret for %s: interest push skipped", club.short_code)
+        return
     url = f"{club.base_url.rstrip('/')}/api/federation/interest/"
 
     body_data = {

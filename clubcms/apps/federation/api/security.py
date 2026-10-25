@@ -34,6 +34,10 @@ def verify_request(api_key: str, timestamp: str, signature: str, body: str = "",
     Returns:
         True if the request is valid, False otherwise.
     """
+    # An empty shared secret authenticates nothing.
+    if not api_key or not api_key.strip():
+        return False
+
     # Check timestamp age
     try:
         request_time = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
