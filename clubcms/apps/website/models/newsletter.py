@@ -23,6 +23,7 @@ from wagtail.fields import RichTextField, StreamField
 from wagtail.admin.panels import FieldPanel
 from wagtail.models import Page
 
+from apps.core.http import get_client_ip
 from apps.website.blocks.email import NEWSLETTER_BLOCKS
 
 
@@ -246,14 +247,6 @@ class NewsletterPage(RoutablePageMixin, Page):
             "captcha_site_key": ss.captcha_site_key,
         }
 
-    @staticmethod
-    def _get_client_ip(request):
-        """Extract the client IP address from the request."""
-        x_forwarded = request.META.get("HTTP_X_FORWARDED_FOR")
-        if x_forwarded:
-            return x_forwarded.split(",")[0].strip()
-        return request.META.get("REMOTE_ADDR", "0.0.0.0")
-
     # ------------------------------------------------------------------
     # Route: archive (index)  — default serve
     # ------------------------------------------------------------------
@@ -309,12 +302,12 @@ class NewsletterPage(RoutablePageMixin, Page):
                 categories = form.cleaned_data.get("categories", [])
                 sub, created = NewsletterSubscription.objects.get_or_create(
                     email=email,
-                    defaults={"ip_address": self._get_client_ip(request)},
+                    defaults={"ip_address": get_client_ip(request)},
                 )
                 if not created and not sub.is_active:
                     sub.is_active = True
                     sub.unsubscribed_at = None
-                    sub.ip_address = self._get_client_ip(request)
+                    sub.ip_address = get_client_ip(request)
                     sub.save(
                         update_fields=["is_active", "unsubscribed_at", "ip_address"]
                     )

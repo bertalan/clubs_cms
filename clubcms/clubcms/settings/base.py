@@ -11,6 +11,12 @@ from django.urls import reverse_lazy
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+
+def env_list(name, default=""):
+    """Comma-separated env var as a list, without empty items."""
+    return [v.strip() for v in os.environ.get(name, default).split(",") if v.strip()]
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get(
     "SECRET_KEY", "django-insecure-change-me-in-production"
@@ -19,7 +25,7 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "False").lower() in ("true", "1", "yes")
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = env_list("ALLOWED_HOSTS", "localhost,127.0.0.1")
 
 # --------------------------------------------------------------------------
 # Application definition
@@ -320,3 +326,19 @@ LOGOUT_REDIRECT_URL = "/"
 
 # Send origin on cross-origin requests so OSM tile servers receive a Referer.
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
+# Reverse proxies allowed to set X-Real-IP (see apps.core.http.get_client_ip).
+TRUSTED_PROXY_IPS = env_list("TRUSTED_PROXY_IPS", "127.0.0.1,::1")
+
+# --------------------------------------------------------------------------
+# Cache
+# --------------------------------------------------------------------------
+
+# Shared by all gunicorn workers and qcluster: rate limits and debounces
+# must not live in per-process memory. Table: manage.py createcachetable.
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "django_cache",
+    }
+}

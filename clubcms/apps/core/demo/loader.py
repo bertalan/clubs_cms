@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import io
 import json
+import os
 import sqlite3
 import uuid
 from datetime import date, datetime, timedelta
@@ -137,6 +138,18 @@ CATEGORY_FIELDS = {
 TIMEDELTA_FIELDS = {
     "estimated_duration",  # stored as minutes integer
 }
+
+
+
+def demo_member_password():
+    """
+    Password for demo members, from DEMO_MEMBER_PASSWORD.
+
+    Never hard-coded: the repository is public. Without the env var the
+    demo members get an unusable password (no login).
+    """
+    value = os.environ.get("DEMO_MEMBER_PASSWORD", "").strip()
+    return value or None
 
 
 class DemoLoader:
@@ -963,7 +976,11 @@ class DemoLoader:
                 data[bf] = bool(data[bf])
 
             member = ClubUser(**data)
-            member.set_password("demo2026!")
+            password = demo_member_password()
+            if password:
+                member.set_password(password)
+            else:
+                member.set_unusable_password()
             if image_key and image_key in self.images:
                 member.photo = self.images[image_key]
             member.save()

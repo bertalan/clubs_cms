@@ -224,6 +224,7 @@ pip install -r requirements.txt --quiet
 
 echo "[4/10] Migrazioni database..."
 python manage.py migrate --noinput
+python manage.py createcachetable
 
 echo "[5/10] Collect static files..."
 python manage.py collectstatic --noinput

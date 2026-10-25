@@ -43,3 +43,5 @@ Thumbs.db
 # Local task notes (not for VCS)
 tasks/
 clubcms/backups/
+# Dump locali (mai versionati)
+clubcms/db_export.json

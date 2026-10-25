@@ -5,10 +5,11 @@ Production settings for ClubCMS.
 import os
 
 from .base import *  # noqa: F401, F403
+from .base import env_list
 
 DEBUG = False
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = env_list("ALLOWED_HOSTS")
 
 SECRET_KEY = os.environ["SECRET_KEY"]
 
@@ -27,7 +28,7 @@ SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_AGE = 86400  # 24 hours
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
-CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",")
+CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
 X_FRAME_OPTIONS = "DENY"
 
 # --------------------------------------------------------------------------
