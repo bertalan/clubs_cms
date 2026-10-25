@@ -17,6 +17,7 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.contrib.sitemaps.views import sitemap
 from wagtail.documents import urls as wagtaildocs_urls
 
+from apps.core.sitemaps import MultilingualSitemap
 from apps.core.views import HealthCheckView, PWAManifestView, PWAOfflineView, PWAServiceWorkerView, RobotsTxtView
 
 # Non-i18n URLs (admin, API, documents - no language prefix)
@@ -28,7 +29,12 @@ urlpatterns = [
     path("offline/", PWAOfflineView.as_view(), name="pwa-offline"),
     # SEO: robots.txt and sitemap.xml must be at the root
     path("robots.txt", RobotsTxtView.as_view(), name="robots-txt"),
-    path("sitemap.xml", sitemap, name="sitemap-xml"),
+    path(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": {"pages": MultilingualSitemap}},
+        name="sitemap-xml",
+    ),
     path("django-admin/", admin.site.urls),
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
