@@ -49,7 +49,7 @@ services:
     restart: unless-stopped
 
   db:
-    image: postgres:15-alpine
+    image: postgres:16-alpine
     env_file:
       - .env
     environment:
@@ -57,7 +57,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER:-clubcms}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-change-me}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres16_data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-clubcms} -d ${POSTGRES_DB:-clubcms}"]
@@ -84,7 +84,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  postgres_data:
+  postgres16_data:
   static_data:
   media_data:
   letsencrypt_data:

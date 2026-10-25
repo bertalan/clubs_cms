@@ -39,7 +39,7 @@ This starts two containers:
 | Service | Description                | Port             |
 | ------- | -------------------------- | ---------------- |
 | `web`   | Django/Wagtail dev server  | `localhost:8888` |
-| `db`    | PostgreSQL 15              | internal only    |
+| `db`    | PostgreSQL 16              | internal only    |
 
 ### Run migrations
 
@@ -162,7 +162,7 @@ docker compose -f docker-compose.prod.yml up -d
 | Service    | Description                              |
 | ---------- | ---------------------------------------- |
 | `web`      | Gunicorn (3 workers) behind nginx        |
-| `db`       | PostgreSQL 15 with health checks         |
+| `db`       | PostgreSQL 16 with health checks         |
 | `nginx`    | Reverse proxy with SSL (Let's Encrypt)   |
 | `qcluster` | Django-Q2 task worker (emails, push)     |
 

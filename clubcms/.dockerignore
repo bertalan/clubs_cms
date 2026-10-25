@@ -1,0 +1,24 @@
+# Local environments and secrets
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+!.env.prod.example
+
+# Local data (never bake into the image)
+*.sqlite3
+db_export.json
+media/
+staticfiles/
+backups/
+scripts.zip
+messages.mo
+
+# Caches and tooling
+.git
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.DS_Store

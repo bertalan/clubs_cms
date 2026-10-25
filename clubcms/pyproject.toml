@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "clubcms"
 version = "0.1.0"
 description = "Motorcycle Club CMS built on Django and Wagtail"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
     "django>=5.0,<6.0",
     "wagtail>=7.0,<8.0",
@@ -55,7 +55,7 @@ all = [
 
 [tool.ruff]
 line-length = 88
-target-version = "py311"
+target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]
