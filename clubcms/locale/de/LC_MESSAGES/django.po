@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ClubCMS 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-21 22:31+0200\n"
+"POT-Creation-Date: 2026-10-25 23:09+0100\n"
 "PO-Revision-Date: 2024-01-01 00:00+0000\n"
 "Last-Translator: ClubCMS Team\n"
 "Language-Team: German\n"
@@ -64,14 +64,14 @@ msgstr "Kommende Veranstaltungen"
 #: apps/core/forms.py:37
 #, fuzzy
 #| msgid ""
-#| "You have too many pending contributions. Please wait for moderation "
-#| "before submitting more."
+#| "You have too many pending contributions. Please wait for moderation before "
+#| "submitting more."
 msgid ""
 "You have too many pending submissions. Please wait for moderation before "
 "submitting more."
 msgstr ""
-"Sie haben zu viele ausstehende Beiträge. Bitte warten Sie auf die "
-"Moderation, bevor Sie weitere einreichen."
+"Sie haben zu viele ausstehende Beiträge. Bitte warten Sie auf die Moderation,"
+" bevor Sie weitere einreichen."
 
 #: apps/core/forms.py:53 apps/core/models.py:311 apps/core/models.py:891
 msgid "Type"
@@ -122,10 +122,11 @@ msgstr "Artikelgalerie"
 #: apps/core/forms.py:96
 msgid ""
 "The full content of your article. Separate paragraphs with a blank line."
-msgstr "Der vollständige Inhalt Ihres Artikels. Absätze mit einer Leerzeile trennen."
+msgstr ""
+"Der vollständige Inhalt Ihres Artikels. Absätze mit einer Leerzeile trennen."
 
 #: apps/core/forms.py:102 apps/core/forms.py:173
-#: apps/website/models/newsletter.py:146 apps/website/models/pages.py:531
+#: apps/website/models/newsletter.py:147 apps/website/models/pages.py:531
 #: apps/website/models/pages.py:865 apps/website/models/partners.py:145
 #: apps/website/models/snippets.py:366 apps/website/models/snippets.py:680
 #: apps/website/models/snippets.py:761
@@ -176,7 +177,8 @@ msgstr "PWA-Beschreibung"
 
 #: apps/core/forms.py:141
 msgid "Detailed event description. Separate paragraphs with a blank line."
-msgstr "Detaillierte Veranstaltungsbeschreibung. Absätze mit einer Leerzeile trennen."
+msgstr ""
+"Detaillierte Veranstaltungsbeschreibung. Absätze mit einer Leerzeile trennen."
 
 #: apps/core/forms.py:147 apps/website/models/pages.py:722
 msgid "Start date & time"
@@ -283,7 +285,7 @@ msgid "URL dell'oggetto collegato, se disponibile."
 msgstr "URL des verknüpften Objekts, falls verfügbar."
 
 #: apps/core/models.py:94 apps/core/models.py:158 apps/core/models.py:252
-#: apps/core/models.py:348 apps/website/models/newsletter.py:167
+#: apps/core/models.py:348 apps/website/models/newsletter.py:168
 #: apps/website/models/verification.py:61
 msgid "Created at"
 msgstr "Erstellt am"
@@ -355,8 +357,9 @@ msgid "Pending"
 msgstr "Ausstehend"
 
 #: apps/core/models.py:192 apps/core/models.py:297 apps/core/models.py:884
-#: apps/members/models.py:434 apps/members/models.py:1019
-#: apps/mutual_aid/models.py:895 apps/website/models/uploads.py:52
+#: apps/federation/models.py:118 apps/members/models.py:434
+#: apps/members/models.py:1019 apps/mutual_aid/models.py:895
+#: apps/website/models/uploads.py:52
 #: templates/account/membership_requests.html:56
 #: templates/account/request_detail.html:69
 #: templates/website/uploads/my_uploads.html:48
@@ -397,7 +400,7 @@ msgstr "Übergeordneter Kommentar, falls dies eine Antwort ist."
 
 #: apps/core/models.py:237 apps/core/models.py:328 apps/events/models.py:77
 #: apps/members/models.py:457 apps/mutual_aid/models.py:762
-#: apps/mutual_aid/models.py:916 apps/website/models/newsletter.py:157
+#: apps/mutual_aid/models.py:916 apps/website/models/newsletter.py:158
 #: templates/account/request_detail.html:64
 #: templates/admin/members/panels/request_actions.html:11
 #: templates/admin/members/panels/request_actions.html:58
@@ -501,7 +504,7 @@ msgid "contributions"
 msgstr "Beiträge"
 
 #: apps/core/models.py:411 apps/core/models.py:638
-#: apps/federation/models.py:355 apps/members/models.py:582
+#: apps/federation/models.py:420 apps/members/models.py:582
 #: apps/mutual_aid/models.py:65 apps/website/models/pages.py:304
 #: apps/website/models/pages.py:359 apps/website/models/pages.py:403
 #: apps/website/models/pages.py:598 apps/website/models/pages.py:1369
@@ -543,7 +546,9 @@ msgstr "Bericht / Ankündigung"
 
 #: apps/core/models.py:614
 msgid "Share a story, announce something, or write freely."
-msgstr "Teilen Sie einen Bericht, machen Sie eine Ankündigung oder schreiben Sie frei."
+msgstr ""
+"Teilen Sie einen Bericht, machen Sie eine Ankündigung oder schreiben Sie "
+"frei."
 
 #: apps/core/models.py:649
 msgid "Contributions page"
@@ -567,7 +572,8 @@ msgstr "Veranstaltungsanmeldung bestätigt"
 
 #: apps/core/models.py:859
 #, fuzzy
-#| msgid "Your contribution has been submitted and is awaiting moderation."
+#| msgid ""
+#| "Your contribution has been submitted and is awaiting moderation."
 msgid "Your submission has been received and is awaiting moderation."
 msgstr "Ihr Beitrag wurde eingereicht und wartet auf Moderation."
 
@@ -683,8 +689,8 @@ msgid ""
 "Number of extra people coming with you (not counting yourself or your "
 "passenger). Example: 2"
 msgstr ""
-"Anzahl zusätzlicher Personen (ohne Sie selbst und Ihren Beifahrer). "
-"Beispiel: 2"
+"Anzahl zusätzlicher Personen (ohne Sie selbst und Ihren Beifahrer). Beispiel:"
+" 2"
 
 #: apps/events/forms.py:86
 msgid ""
@@ -698,8 +704,8 @@ msgstr ""
 
 #: apps/events/forms.py:90
 msgid ""
-"Allergies, dietary needs, special requests, or anything the organizers "
-"should know."
+"Allergies, dietary needs, special requests, or anything the organizers should"
+" know."
 msgstr ""
 "Allergien, Ernährungsbedürfnisse, Sonderwünsche oder Informationen für die "
 "Veranstalter."
@@ -863,7 +869,7 @@ msgstr "Banküberweisung"
 msgid "Free"
 msgstr "Kostenlos"
 
-#: apps/events/models.py:61 apps/events/models.py:345 apps/website/forms.py:115
+#: apps/events/models.py:61 apps/events/models.py:345 apps/website/forms.py:136
 #: apps/website/models/uploads.py:39
 #: templates/events/emails/registration_confirmation.html:19
 #: templates/events/my_registrations.html:23 templates/events/register.html:177
@@ -1204,317 +1210,634 @@ msgstr "Bitte warten Sie, bevor Sie erneut umschalten."
 msgid "All Upcoming Events"
 msgstr "Alle kommenden Veranstaltungen"
 
-#: apps/federation/apps.py:8 apps/federation/wagtail_hooks.py:63
+#: apps/federation/admin_guides.py:11
+msgid "Partner clubs: how to set up a link"
+msgstr "Partnerclubs: so richten Sie eine Verbindung ein"
+
+#: apps/federation/admin_guides.py:13
+msgid ""
+"A partner club is another club's ClubCMS site linked to ours: the two sites "
+"exchange events, never member data. The link only works if both "
+"administrators enter the same key pair."
+msgstr ""
+"Ein Partnerclub ist die ClubCMS-Website eines anderen Clubs, die mit unserer "
+"verbunden ist: Die beiden Websites tauschen Veranstaltungen aus, niemals "
+"Mitgliederdaten. Die Verbindung funktioniert nur, wenn beide Administratoren "
+"dasselbe Schlüsselpaar eingeben."
+
+#: apps/federation/admin_guides.py:19
+msgid "What this page is for"
+msgstr "Wozu diese Seite dient"
+
+#: apps/federation/admin_guides.py:22
+msgid ""
+"Each record is a link with one partner club. With an active link our site "
+"reads the partner's upcoming events and shows them among ours, and, if you "
+"allow it, the partner reads our events. Interest counts are exchanged as "
+"totals only."
+msgstr ""
+"Jeder Eintrag ist eine Verbindung mit einem Partnerclub. Bei aktiver "
+"Verbindung liest unsere Website die kommenden Veranstaltungen des Partners "
+"und zeigt sie zusammen mit unseren an; wenn Sie es erlauben, liest der "
+"Partner auch unsere Veranstaltungen. Interessenzahlen werden nur als Summen "
+"ausgetauscht."
+
+#: apps/federation/admin_guides.py:31
+msgid "Before you start"
+msgstr "Bevor Sie beginnen"
+
+#: apps/federation/admin_guides.py:34
+msgid ""
+"Agree on the link with the partner's administrator. You need: the address of "
+"their site, the club code they use for themselves, and a key pair that you "
+"will both enter exactly the same. Federation must be enabled on both servers "
+"(FEDERATION_ENABLED setting)."
+msgstr ""
+"Stimmen Sie die Verbindung mit dem Administrator des Partners ab. Sie "
+"benötigen: die Adresse seiner Website, das Club-Kürzel, das er für sich "
+"selbst verwendet, und ein Schlüsselpaar, das Sie beide exakt gleich eingeben."
+" Der Verband muss auf beiden Servern aktiviert sein (Einstellung "
+"FEDERATION_ENABLED)."
+
+#: apps/federation/admin_guides.py:43
+msgid "Setting up the link"
+msgstr "Die Verbindung einrichten"
+
+#: apps/federation/admin_guides.py:46
+msgid ""
+"One of the two administrators presses \"Generate key pair\": it fills in a "
+"link key (pk_…) and a shared secret (sk_…)."
+msgstr ""
+"Einer der beiden Administratoren klickt auf \"Schlüsselpaar erzeugen\": Damit"
+" werden ein Verbindungsschlüssel (pk_…) und ein gemeinsames Geheimnis (sk_…) "
+"ausgefüllt."
+
+#: apps/federation/admin_guides.py:51
+msgid ""
+"Send both values to the other administrator over a secure channel (phone, "
+"encrypted message), never by plain email."
+msgstr ""
+"Senden Sie beide Werte über einen sicheren Kanal an den anderen Administrator"
+" (Telefon, verschlüsselte Nachricht), niemals per unverschlüsselter E-Mail."
+
+#: apps/federation/admin_guides.py:56
+msgid ""
+"Both sites enter the same two values: pk_… in \"Link key\", sk_… in \"Shared "
+"secret\". They are not one key per side: the pair is shared."
+msgstr ""
+"Beide Websites geben dieselben zwei Werte ein: pk_… in "
+"\"Verbindungsschlüssel\", sk_… in \"Gemeinsames Geheimnis\". Es ist nicht ein"
+" Schlüssel pro Seite: Das Paar wird geteilt."
+
+#: apps/federation/admin_guides.py:61
+msgid ""
+"Club code: the code the partner uses for itself. Partner site address: the "
+"root of their site, e.g. https://partner.example, without any path."
+msgstr ""
+"Club-Kürzel: das Kürzel, das der Partner für sich selbst verwendet. Adresse "
+"der Partnerseite: die Wurzel seiner Website, z. B. https://partner.example, "
+"ohne Pfad."
+
+#: apps/federation/admin_guides.py:66
+msgid ""
+"Tick \"Approved\" once you know who runs the partner site, and \"Active\" to "
+"open the link: both are needed."
+msgstr ""
+"Aktivieren Sie \"Genehmigt\", sobald Sie wissen, wer die Partnerseite "
+"betreibt, und \"Aktiv\", um die Verbindung zu öffnen: Beides ist nötig."
+
+#: apps/federation/admin_guides.py:70
+msgid ""
+"Choose whether to share our events and whether imported events are published "
+"immediately or wait for approval."
+msgstr ""
+"Legen Sie fest, ob unsere Veranstaltungen geteilt werden und ob importierte "
+"Veranstaltungen sofort veröffentlicht werden oder auf Freigabe warten."
+
+#: apps/federation/admin_guides.py:74
+msgid ""
+"Save, then press \"Test connection\": it checks the saved values against the "
+"partner site and explains any error."
+msgstr ""
+"Speichern Sie und klicken Sie dann auf \"Verbindung testen\": Die "
+"gespeicherten Werte werden mit der Partnerseite geprüft und eventuelle Fehler"
+" erklärt."
+
+#: apps/federation/admin_guides.py:80
+msgid "Common problems"
+msgstr "Häufige Probleme"
+
+#: apps/federation/admin_guides.py:83
+msgid ""
+"Error 401: the two sites do not have exactly the same link key and shared "
+"secret, or the partner has not approved and activated our club on its side."
+msgstr ""
+"Fehler 401: Die beiden Websites haben nicht exakt denselben "
+"Verbindungsschlüssel und dasselbe gemeinsame Geheimnis, oder der Partner hat "
+"unseren Club auf seiner Seite nicht genehmigt und aktiviert."
+
+#: apps/federation/admin_guides.py:88
+msgid ""
+"Error 404: the address includes a path, or federation is not enabled on the "
+"partner's server."
+msgstr ""
+"Fehler 404: Die Adresse enthält einen Pfad, oder der Verband ist auf dem "
+"Server des Partners nicht aktiviert."
+
+#: apps/federation/admin_guides.py:92
+msgid ""
+"No events arriving: check \"Last sync error\" at the bottom of this page, and"
+" that the partner has events published in the future."
+msgstr ""
+"Es kommen keine Veranstaltungen an: Prüfen Sie \"Letzter "
+"Synchronisierungsfehler\" unten auf dieser Seite und ob der Partner künftige "
+"Veranstaltungen veröffentlicht hat."
+
+#: apps/federation/admin_guides.py:99
+msgid "After saving"
+msgstr "Nach dem Speichern"
+
+#: apps/federation/admin_guides.py:102
+msgid ""
+"Events are fetched automatically every hour from every partner that is "
+"approved, active and has a shared secret. \"Last successful sync\" and \"Last"
+" sync error\" are filled in by the system. To stop the exchange without "
+"losing the settings, untick \"Active\"."
+msgstr ""
+"Das System ruft jede Stunde die Veranstaltungen aller Partner ab, die "
+"genehmigt und aktiv sind und ein gemeinsames Geheimnis haben, und füllt "
+"\"Letzte erfolgreiche Synchronisierung\" und \"Letzter "
+"Synchronisierungsfehler\" selbst aus. Um den Austausch anzuhalten, ohne die "
+"Einstellungen zu verlieren, deaktivieren Sie \"Aktiv\"."
+
+#: apps/federation/apps.py:37 apps/federation/wagtail_hooks.py:113
 #: templates/includes/footer.html:94
 msgid "Federation"
 msgstr "Verband"
 
-#: apps/federation/models.py:39
-msgid "Display name of the partner club"
-msgstr "Anzeigename des Partnerclubs"
+#: apps/federation/models.py:45
+msgid "Club name"
+msgstr "Clubname"
 
-#: apps/federation/models.py:41
-msgid "URL-safe identifier"
-msgstr "URL-sicherer Bezeichner"
+#: apps/federation/models.py:46
+msgid ""
+"Shown to visitors on the federation page and next to every event imported "
+"from this club."
+msgstr ""
+"Wird Besuchern auf der Verbandsseite und neben jeder von diesem Club "
+"importierten Veranstaltung angezeigt."
 
-#: apps/federation/models.py:46 apps/members/forms.py:267
+#: apps/federation/models.py:51
+msgid "Club code"
+msgstr "Club-Kürzel"
+
+#: apps/federation/models.py:53
+msgid ""
+"The code the partner uses for itself on its own site (its "
+"FEDERATION_OUR_CLUB_CODE setting), e.g. MANDELLO. Ask the partner's "
+"administrator. It labels imported events."
+msgstr ""
+"Das Kürzel, das der Partner auf seiner eigenen Website für sich verwendet "
+"(seine Einstellung FEDERATION_OUR_CLUB_CODE), z. B. MANDELLO. Fragen Sie den "
+"Administrator des Partners. Es kennzeichnet importierte Veranstaltungen."
+
+#: apps/federation/models.py:61 apps/members/forms.py:267
 #: apps/mutual_aid/models.py:1037 apps/website/forms.py:19
 #: apps/website/models/partners.py:186 apps/website/models/verification.py:14
 #: templates/mutual_aid/helper_card.html:118
 msgid "City"
 msgstr "Stadt"
 
-#: apps/federation/models.py:47
-#, fuzzy
-#| msgid "Display name of the partner club"
-msgid "City where the partner club is based."
-msgstr "Anzeigename des Partnerclubs"
-
-#: apps/federation/models.py:49
-msgid "Partner site base URL"
-msgstr "Basis-URL der Partnerseite"
-
-#: apps/federation/models.py:52
-#, fuzzy
-#| msgid "A short description about yourself. Visible on your profile page."
-msgid "Short description of the partner club (visible on federation page)."
-msgstr "Eine kurze Beschreibung über Sie. Sichtbar auf Ihrer Profilseite."
-
-#: apps/federation/models.py:57
+#: apps/federation/models.py:62
 msgid ""
-"Logo URL (external) or static path (e.g. /static/img/federation/logo.svg)."
+"Shown on the federation page next to the club name, so members know where the"
+" club is."
 msgstr ""
+"Wird auf der Verbandsseite neben dem Clubnamen angezeigt, damit Mitglieder "
+"wissen, wo sich der Club befindet."
 
-#: apps/federation/models.py:60
-msgid "Their public API key (given to us)"
-msgstr "Ihr öffentlicher API-Schlüssel (an uns gegeben)"
+#: apps/federation/models.py:65
+msgid "Partner site address"
+msgstr "Adresse der Partnerseite"
 
-#: apps/federation/models.py:63
-msgid "Our key we gave them (auto-generated)"
-msgstr "Unser Schlüssel, den wir ihnen gaben (automatisch generiert)"
+#: apps/federation/models.py:67
+msgid ""
+"Root address of the partner's ClubCMS site, without any path, e.g. "
+"https://partner.example. Events are read from "
+"<address>/api/federation/events/."
+msgstr ""
+"Stammadresse der ClubCMS-Website des Partners, ohne Pfad, z. B. "
+"https://partner.example. Veranstaltungen werden von "
+"<Adresse>/api/federation/events/ gelesen."
 
-#: apps/federation/models.py:66
-msgid "Attiva la connessione con questo club partner."
-msgstr "Verbindung mit diesem Partnerverein aktivieren."
-
-#: apps/federation/models.py:69
-msgid "Il club partner è stato verificato e approvato."
-msgstr "Der Partnerverein wurde verifiziert und genehmigt."
-
-#: apps/federation/models.py:72
-msgid "Share our events with this partner"
-msgstr "Unsere Veranstaltungen mit diesem Partner teilen"
+#: apps/federation/models.py:74 apps/mutual_aid/models.py:742
+#: apps/website/blocks/content.py:505 apps/website/models/newsletter.py:44
+#: apps/website/models/snippets.py:251 apps/website/models/snippets.py:464
+#: apps/website/models/snippets.py:580 apps/website/models/snippets.py:701
+#: apps/website/models/snippets.py:750 apps/website/models/snippets.py:812
+msgid "Description"
+msgstr "Beschreibung"
 
 #: apps/federation/models.py:75
-msgid "Auto-approve imported events"
-msgstr "Importierte Veranstaltungen automatisch genehmigen"
+msgid ""
+"One or two sentences about the club, shown on the public federation page."
+msgstr ""
+"Ein oder zwei Sätze über den Club, angezeigt auf der öffentlichen "
+"Verbandsseite."
 
-#: apps/federation/models.py:78
-msgid "Data e ora dell'ultima sincronizzazione eventi."
-msgstr "Datum und Uhrzeit der letzten Eventsynchronisierung."
+#: apps/federation/models.py:80
+msgid "Logo address"
+msgstr "Logo-Adresse"
 
-#: apps/federation/models.py:81
-msgid "Ultimo messaggio di errore durante la sincronizzazione."
-msgstr "Letzte Fehlermeldung während der Synchronisierung."
+#: apps/federation/models.py:82
+msgid ""
+"Full https:// address of the partner's logo image, or a path starting with "
+"/static/. Shown on the federation page."
+msgstr ""
+"Vollständige https://-Adresse des Logobilds des Partners oder ein Pfad, der "
+"mit /static/ beginnt. Wird auf der Verbandsseite angezeigt."
 
-#: apps/federation/models.py:84
-msgid "Data di creazione del record."
-msgstr "Erstellungsdatum des Datensatzes."
+#: apps/federation/models.py:89
+msgid "Link key (public)"
+msgstr "Verbindungsschlüssel (öffentlich)"
 
-#: apps/federation/models.py:92
-msgid "Amministratore che ha aggiunto il club partner."
-msgstr "Administrator, der den Partnerverein hinzugefügt hat."
+#: apps/federation/models.py:91
+msgid ""
+"Starts with pk_. Must be identical on both sites: generate the pair once with"
+" the button below and send it to the partner, or paste the pair the partner "
+"sent you. It identifies this link and grants no access on its own."
+msgstr ""
+"Beginnt mit pk_. Muss auf beiden Websites identisch sein: Erzeugen Sie das "
+"Paar einmal mit der Schaltfläche unten und senden Sie es dem Partner, oder "
+"fügen Sie das Paar ein, das der Partner Ihnen geschickt hat. Er kennzeichnet "
+"diese Verbindung und gewährt allein keinen Zugriff."
 
-#: apps/federation/models.py:96
+#: apps/federation/models.py:100
+msgid "Shared secret"
+msgstr "Gemeinsames Geheimnis"
+
+#: apps/federation/models.py:102
+msgid ""
+"Starts with sk_. Must be identical on both sites: it signs every request "
+"between the two clubs. Exchange it over a secure channel (phone, encrypted "
+"message), never by plain email. While it is empty the link does not work."
+msgstr ""
+"Beginnt mit sk_. Muss auf beiden Websites identisch sein: Es signiert jede "
+"Anfrage zwischen den beiden Clubs. Tauschen Sie es über einen sicheren Kanal "
+"aus (Telefon, verschlüsselte Nachricht), niemals per unverschlüsselter "
+"E-Mail. Solange es leer ist, funktioniert die Verbindung nicht."
+
+#: apps/federation/models.py:110 apps/members/models.py:123
+#: apps/website/admin_newsletter.py:68 apps/website/models/newsletter.py:75
+#: apps/website/models/snippets.py:820 templates/account/card.html:132
+#: templates/admin/members/panels/card_actions.html:62
+#: templates/admin/members/panels/request_actions.html:60
+msgid "Active"
+msgstr "Aktiv"
+
+#: apps/federation/models.py:112
+msgid ""
+"Turns the link on or off without deleting it. Requests are accepted only when"
+" the club is both approved and active."
+msgstr ""
+"Schaltet die Verbindung ein oder aus, ohne sie zu löschen. Anfragen werden "
+"nur angenommen, wenn der Club sowohl genehmigt als auch aktiv ist."
+
+#: apps/federation/models.py:120
+msgid ""
+"Tick after confirming with the partner who runs its site. Requests are "
+"accepted only when the club is both approved and active."
+msgstr ""
+"Aktivieren, nachdem Sie mit dem Partner geklärt haben, wer seine Website "
+"betreibt. Anfragen werden nur angenommen, wenn der Club sowohl genehmigt als "
+"auch aktiv ist."
+
+#: apps/federation/models.py:126
+msgid "Share our events"
+msgstr "Unsere Veranstaltungen teilen"
+
+#: apps/federation/models.py:128
+msgid ""
+"Lets this partner read our published events through the federation API. Only "
+"event data is shared, never member data."
+msgstr ""
+"Erlaubt diesem Partner, unsere veröffentlichten Veranstaltungen über die "
+"Verbands-API zu lesen. Es werden nur Veranstaltungsdaten geteilt, niemals "
+"Mitgliederdaten."
+
+#: apps/federation/models.py:134
+msgid "Publish imported events immediately"
+msgstr "Importierte Veranstaltungen sofort veröffentlichen"
+
+#: apps/federation/models.py:136
+msgid ""
+"If on, events fetched from this partner are approved automatically. If off, "
+"they wait in Federation → External Events until someone approves them."
+msgstr ""
+"Wenn aktiviert, werden von diesem Partner abgerufene Veranstaltungen "
+"automatisch genehmigt. Wenn deaktiviert, warten sie unter Verband → Externe "
+"Events, bis jemand sie genehmigt."
+
+#: apps/federation/models.py:144
+msgid "Last successful sync"
+msgstr "Letzte erfolgreiche Synchronisierung"
+
+#: apps/federation/models.py:148
+msgid "Last sync error"
+msgstr "Letzter Synchronisierungsfehler"
+
+#: apps/federation/models.py:150 apps/members/models.py:470
+msgid "Created"
+msgstr "Erstellt am"
+
+#: apps/federation/models.py:157
+msgid "Created by"
+msgstr "Erstellt von"
+
+#: apps/federation/models.py:161
 msgid "Federated Club"
 msgstr "Partnerclub"
 
-#: apps/federation/models.py:97
+#: apps/federation/models.py:162
 msgid "Federated Clubs"
 msgstr "Partnerclubs"
 
-#: apps/federation/models.py:108
+#: apps/federation/models.py:173
 msgid "Logo must be a URL (http/https) or a /static/ path."
-msgstr ""
+msgstr "Das Logo muss eine URL (http/https) oder ein /static/-Pfad sein."
 
-#: apps/federation/models.py:131
+#: apps/federation/models.py:196
 msgid "Club partner che ha pubblicato l'evento."
 msgstr "Partnerverein, der das Event veröffentlicht hat."
 
-#: apps/federation/models.py:134
+#: apps/federation/models.py:199
 msgid "ID univoco dell'evento nel sistema del partner."
 msgstr "Eindeutige Event-ID im System des Partners."
 
-#: apps/federation/models.py:137
+#: apps/federation/models.py:202
 msgid "Nome dell'evento come fornito dal partner."
 msgstr "Eventname wie vom Partner angegeben."
 
-#: apps/federation/models.py:140 apps/website/models/pages.py:723
+#: apps/federation/models.py:205 apps/website/models/pages.py:723
 msgid "Data e ora di inizio dell'evento."
 msgstr "Startdatum und -uhrzeit des Events."
 
-#: apps/federation/models.py:143
+#: apps/federation/models.py:208
 msgid "Data e ora di fine dell'evento."
 msgstr "Enddatum und -uhrzeit des Events."
 
-#: apps/federation/models.py:146
+#: apps/federation/models.py:211
 msgid "Nome del luogo dell'evento."
 msgstr "Name des Veranstaltungsortes."
 
-#: apps/federation/models.py:149
+#: apps/federation/models.py:214
 msgid "Indirizzo completo del luogo."
 msgstr "Vollständige Adresse des Ortes."
 
-#: apps/federation/models.py:152
+#: apps/federation/models.py:217
 msgid "Latitudine della posizione."
 msgstr "Breitengrad der Position."
 
-#: apps/federation/models.py:155
+#: apps/federation/models.py:220
 msgid "Longitudine della posizione."
 msgstr "Längengrad der Position."
 
-#: apps/federation/models.py:157
+#: apps/federation/models.py:222
 msgid "Sanitized HTML"
 msgstr "Bereinigtes HTML"
 
-#: apps/federation/models.py:160
+#: apps/federation/models.py:225
 msgid "Stato corrente dell'evento."
 msgstr "Aktueller Eventstatus."
 
-#: apps/federation/models.py:163
+#: apps/federation/models.py:228
 msgid "URL dell'immagine di copertina."
 msgstr "URL des Titelbildes."
 
-#: apps/federation/models.py:166
+#: apps/federation/models.py:231
 msgid "URL della pagina dell'evento sul sito partner."
 msgstr "URL der Eventseite auf der Partnerwebsite."
 
-#: apps/federation/models.py:169
+#: apps/federation/models.py:234
 msgid "L'evento è visibile ai soci."
 msgstr "Das Event ist für Mitglieder sichtbar."
 
-#: apps/federation/models.py:172
+#: apps/federation/models.py:237
 msgid "Nascondi l'evento dall'elenco pubblico."
 msgstr "Event aus der öffentlichen Liste ausblenden."
 
-#: apps/federation/models.py:175
+#: apps/federation/models.py:240
 msgid "Data del primo import dell'evento."
 msgstr "Datum des ersten Event-Imports."
 
-#: apps/federation/models.py:178
+#: apps/federation/models.py:243
 msgid "Data dell'ultimo aggiornamento."
 msgstr "Datum der letzten Aktualisierung."
 
-#: apps/federation/models.py:182
+#: apps/federation/models.py:247
 msgid "External Event"
 msgstr "Externes Event"
 
-#: apps/federation/models.py:183 apps/federation/wagtail_hooks.py:44
+#: apps/federation/models.py:248 apps/federation/wagtail_hooks.py:94
 msgid "External Events"
 msgstr "Externe Events"
 
-#: apps/federation/models.py:211
+#: apps/federation/models.py:276
 msgid "Socio che ha espresso interesse."
 msgstr "Mitglied, das Interesse bekundet hat."
 
-#: apps/federation/models.py:215
+#: apps/federation/models.py:280
 msgid "Evento esterno di interesse."
 msgstr "Veranstaltungs- oder Meilensteintitel."
 
-#: apps/federation/models.py:218
+#: apps/federation/models.py:283
 msgid "Livello di interesse per l'evento."
 msgstr "Interessensgrad für das Event."
 
-#: apps/federation/models.py:221
+#: apps/federation/models.py:286
 msgid "Data di espressione dell'interesse."
 msgstr "Datum der Interessenbekundung."
 
-#: apps/federation/models.py:224 apps/federation/models.py:263
+#: apps/federation/models.py:289 apps/federation/models.py:328
 msgid "Data dell'ultima modifica."
 msgstr "Datum der letzten Änderung."
 
-#: apps/federation/models.py:228
+#: apps/federation/models.py:293
 msgid "External Event Interest"
 msgstr "Interesse an externem Event"
 
-#: apps/federation/models.py:229
+#: apps/federation/models.py:294
 msgid "External Event Interests"
 msgstr "Interessen an externen Events"
 
-#: apps/federation/models.py:250
+#: apps/federation/models.py:315
 msgid "Socio autore del commento."
 msgstr "Mitglied, das den Kommentar verfasst hat."
 
-#: apps/federation/models.py:254
+#: apps/federation/models.py:319
 msgid "Evento esterno commentato."
 msgstr "Kommentiertes externes Event."
 
-#: apps/federation/models.py:257
+#: apps/federation/models.py:322
 msgid "Testo del commento (non condiviso col partner)."
 msgstr "Kommentartext (wird nicht mit dem Partner geteilt)."
 
-#: apps/federation/models.py:260
+#: apps/federation/models.py:325
 msgid "Data di creazione del commento."
 msgstr "Erstellungsdatum des Kommentars."
 
-#: apps/federation/models.py:266
+#: apps/federation/models.py:331
 msgid "Il commento è stato cancellato (soft delete)."
 msgstr "Der Kommentar wurde gelöscht (Soft Delete)."
 
-#: apps/federation/models.py:270
+#: apps/federation/models.py:335
 msgid "External Event Comment"
 msgstr "Kommentar zu externem Event"
 
-#: apps/federation/models.py:271
+#: apps/federation/models.py:336
 msgid "External Event Comments"
 msgstr "Kommentare zu externen Events"
 
-#: apps/federation/models.py:356
-#, fuzzy
-#| msgid "Introductory text displayed above the helpers map."
+#: apps/federation/models.py:421
 msgid "Introductory text displayed below the page title."
-msgstr "Einleitungstext, der über der Helferkarte angezeigt wird."
+msgstr "Einleitungstext unter dem Seitentitel."
 
-#: apps/federation/models.py:362
+#: apps/federation/models.py:427
 msgid "How it works"
-msgstr ""
+msgstr "So funktioniert es"
 
-#: apps/federation/models.py:363
+#: apps/federation/models.py:428
 msgid "Steps explaining the federation process."
-msgstr ""
+msgstr "Schritte, die den Ablauf des Verbands erklären."
 
-#: apps/federation/models.py:369 apps/website/blocks/content.py:766
+#: apps/federation/models.py:434 apps/website/blocks/content.py:766
 #: apps/website/models/snippets.py:383
 msgid "FAQ"
 msgstr "FAQ"
 
-#: apps/federation/models.py:375
-#, fuzzy
-#| msgid "Additional guests"
+#: apps/federation/models.py:440
 msgid "Additional content"
-msgstr "Zusätzliche Gäste"
+msgstr "Zusätzlicher Inhalt"
 
-#: apps/federation/models.py:380
-#, fuzzy
-#| msgid "Membership CTA button text"
+#: apps/federation/models.py:445
 msgid "CTA button text"
-msgstr "Mitgliedschaftshinweise"
+msgstr "Text der Aktionsschaltfläche"
 
-#: apps/federation/models.py:381
-#, fuzzy
-#| msgid "Call-to-action buttons"
+#: apps/federation/models.py:446
 msgid "Label for the call-to-action button."
-msgstr "Handlungsaufforderungs-Schaltflächen"
+msgstr "Beschriftung der Aktionsschaltfläche."
 
-#: apps/federation/models.py:385
-#, fuzzy
-#| msgid "Event Registration"
+#: apps/federation/models.py:450
 msgid "Events page introduction"
-msgstr "Veranstaltungsanmeldung"
+msgstr "Einleitung der Veranstaltungsseite"
 
-#: apps/federation/models.py:386
-#, fuzzy
-#| msgid "Introductory text displayed above the helpers map."
+#: apps/federation/models.py:451
 msgid "Introductory text for the partner events listing page."
-msgstr "Einleitungstext, der über der Helferkarte angezeigt wird."
+msgstr "Einleitungstext für die Liste der Partnerveranstaltungen."
 
-#: apps/federation/models.py:390
-#, fuzzy
-#| msgid "Events page"
+#: apps/federation/models.py:455
 msgid "Events per page"
-msgstr "Veranstaltungsseite"
+msgstr "Veranstaltungen pro Seite"
 
-#: apps/federation/models.py:391
-#, fuzzy
-#| msgid "Maximum number of posts to display."
+#: apps/federation/models.py:456
 msgid "Number of events to display per page."
-msgstr "Maximale Anzahl anzuzeigender Beiträge."
+msgstr "Anzahl der Veranstaltungen pro Seite."
 
-#: apps/federation/models.py:403
-#, fuzzy
-#| msgid "Events navigation"
+#: apps/federation/models.py:468
 msgid "Events Section"
-msgstr "Hauptnavigation"
+msgstr "Veranstaltungsbereich"
 
-#: apps/federation/models.py:415
+#: apps/federation/models.py:480
 #, fuzzy
 #| msgid "Federation access"
 msgid "Federation Info Page"
 msgstr "Verbandszugang"
 
-#: apps/federation/models.py:416
+#: apps/federation/models.py:481
 #, fuzzy
 #| msgid "Federation access"
 msgid "Federation Info Pages"
 msgstr "Verbandszugang"
 
-#: apps/federation/wagtail_hooks.py:22
+#: apps/federation/views_admin.py:44
+msgid ""
+"The partner answered 401 (not authenticated). Check that both sites have "
+"exactly the same link key and shared secret, and that the partner has marked "
+"this club as approved and active."
+msgstr ""
+"Der Partner hat mit 401 (nicht authentifiziert) geantwortet. Prüfen Sie, dass"
+" beide Websites exakt denselben Verbindungsschlüssel und dasselbe gemeinsame "
+"Geheimnis haben und dass der Partner diesen Club als genehmigt und aktiv "
+"markiert hat."
+
+#: apps/federation/views_admin.py:50
+msgid ""
+"The partner answered 404. Check the site address (root only, no path) and "
+"that federation is enabled on the partner site."
+msgstr ""
+"Der Partner hat mit 404 geantwortet. Prüfen Sie die Adresse der Website (nur "
+"die Wurzel, ohne Pfad) und dass der Verband auf der Partnerseite aktiviert "
+"ist."
+
+#: apps/federation/views_admin.py:54
+msgid "The partner answered 429: too many requests. Try again in an hour."
+msgstr ""
+"Der Partner hat mit 429 geantwortet: zu viele Anfragen. Versuchen Sie es in "
+"einer Stunde erneut."
+
+#: apps/federation/views_admin.py:55
+#, python-format
+msgid "The partner answered with HTTP error %(code)s."
+msgstr "Der Partner hat mit dem HTTP-Fehler %(code)s geantwortet."
+
+#: apps/federation/views_admin.py:57
+#, python-format
+msgid "Could not reach %(url)s: %(reason)s. Check the address."
+msgstr "%(url)s ist nicht erreichbar: %(reason)s. Prüfen Sie die Adresse."
+
+#: apps/federation/views_admin.py:62
+msgid ""
+"The partner answered, but not with federation data. Check that the address "
+"points to a ClubCMS site."
+msgstr ""
+"Der Partner hat geantwortet, aber nicht mit Verbandsdaten. Prüfen Sie, ob die"
+" Adresse auf eine ClubCMS-Website verweist."
+
+#: apps/federation/views_admin.py:78
+msgid ""
+"Link key and shared secret are both required. Save them, then test again."
+msgstr ""
+"Verbindungsschlüssel und gemeinsames Geheimnis sind beide erforderlich. "
+"Speichern Sie sie und testen Sie dann erneut."
+
+#: apps/federation/views_admin.py:94
+#, python-format
+msgid "Connection OK: %(club)s answered and shares %(count)d upcoming events."
+msgstr ""
+"Verbindung OK: %(club)s hat geantwortet und teilt %(count)d kommende "
+"Veranstaltungen."
+
+#: apps/federation/wagtail_hooks.py:35
 #: templates/federation/federation_info_page.html:26
 #: templates/federation/federation_info_page.html:59
-#, fuzzy
-#| msgid "Partner Club"
 msgid "Partner Clubs"
+msgstr "Partnerclubs"
+
+#: apps/federation/wagtail_hooks.py:62
+msgid "Partner club"
 msgstr "Partnerclub"
+
+#: apps/federation/wagtail_hooks.py:66
+msgid "Link keys (identical on both sites)"
+msgstr "Verbindungsschlüssel (auf beiden Websites identisch)"
+
+#: apps/federation/wagtail_hooks.py:75
+msgid "Status and exchange"
+msgstr "Status und Austausch"
+
+#: apps/federation/wagtail_hooks.py:84
+msgid "Filled in by the system"
+msgstr "Vom System ausgefüllt"
 
 #: apps/members/admin.py:26 apps/members/apps.py:8
 #: templates/website/pages/event_detail_page.html:104
@@ -1746,14 +2069,6 @@ msgstr "Datum der Erstanmeldung im Verein."
 msgid "Data di scadenza della tessera."
 msgstr "Ablaufdatum der Mitgliedskarte."
 
-#: apps/members/models.py:123 apps/website/admin_newsletter.py:68
-#: apps/website/models/newsletter.py:74 apps/website/models/snippets.py:820
-#: templates/account/card.html:132
-#: templates/admin/members/panels/card_actions.html:62
-#: templates/admin/members/panels/request_actions.html:60
-msgid "Active"
-msgstr "Aktiv"
-
 #: apps/members/models.py:124
 #: templates/admin/members/panels/card_actions.html:71
 msgid "Suspended"
@@ -1843,8 +2158,8 @@ msgstr "Benachrichtigung bei neuen Artikeln oder Ankündigungen."
 #: apps/members/models.py:198
 msgid "Get notified about new events and changes to events you registered for."
 msgstr ""
-"Benachrichtigung über neue Veranstaltungen und Änderungen an "
-"Veranstaltungen, für die Sie angemeldet sind."
+"Benachrichtigung über neue Veranstaltungen und Änderungen an Veranstaltungen,"
+" für die Sie angemeldet sind."
 
 #: apps/members/models.py:202
 msgid "Receive a reminder before events you are registered for."
@@ -1934,10 +2249,6 @@ msgstr "Notizen"
 #: apps/members/models.py:468
 msgid "Internal notes for administrators."
 msgstr "Interne Notizen für Administratoren."
-
-#: apps/members/models.py:470
-msgid "Created"
-msgstr "Erstellt am"
 
 #: apps/members/models.py:471 apps/mutual_aid/models.py:783
 #: apps/mutual_aid/models.py:935
@@ -2236,8 +2547,8 @@ msgstr "Ihr Name"
 msgid "Phone number"
 msgstr "Telefonnummer"
 
-#: apps/mutual_aid/forms.py:39 apps/website/forms.py:194
-#: apps/website/forms.py:220 apps/website/models/newsletter.py:70
+#: apps/mutual_aid/forms.py:39 apps/website/forms.py:191
+#: apps/website/forms.py:217 apps/website/models/newsletter.py:71
 #: templates/website/newsletter_subscribe.html:33
 #: templates/website/newsletter_unsubscribe.html:33
 msgid "Email address"
@@ -2350,7 +2661,7 @@ msgstr "Ort"
 msgid "City or address…"
 msgstr "Suchen"
 
-#: apps/mutual_aid/models.py:40 apps/website/models/newsletter.py:34
+#: apps/mutual_aid/models.py:40 apps/website/models/newsletter.py:35
 #: apps/website/models/snippets.py:42 apps/website/models/snippets.py:137
 #: apps/website/models/snippets.py:247 apps/website/models/snippets.py:458
 #: apps/website/models/snippets.py:506 apps/website/models/snippets.py:544
@@ -2615,14 +2926,6 @@ msgstr "Problemtyp"
 #: apps/mutual_aid/models.py:739
 msgid "Tipo di problema riscontrato."
 msgstr "Art des aufgetretenen Problems."
-
-#: apps/mutual_aid/models.py:742 apps/website/blocks/content.py:505
-#: apps/website/models/newsletter.py:43 apps/website/models/snippets.py:251
-#: apps/website/models/snippets.py:464 apps/website/models/snippets.py:580
-#: apps/website/models/snippets.py:701 apps/website/models/snippets.py:750
-#: apps/website/models/snippets.py:812
-msgid "Description"
-msgstr "Beschreibung"
 
 #: apps/mutual_aid/models.py:743
 msgid "Describe what you need help with."
@@ -2958,7 +3261,7 @@ msgid "In-app notification"
 msgstr "In-App-Benachrichtigung"
 
 #: apps/notifications/models.py:66 apps/website/admin_newsletter.py:96
-#: apps/website/models/newsletter.py:126
+#: apps/website/models/newsletter.py:127
 msgid "Sent"
 msgstr "Gesendet"
 
@@ -3180,7 +3483,7 @@ msgstr "Abmeldetoken"
 msgid "unsubscribe tokens"
 msgstr "Abmeldetokens"
 
-#: apps/notifications/models.py:296 apps/website/models/newsletter.py:210
+#: apps/notifications/models.py:296 apps/website/models/newsletter.py:211
 #, fuzzy
 #| msgid "CTA text"
 msgid "Intro text"
@@ -3498,7 +3801,7 @@ msgstr "Etappen der Route"
 msgid "Scarica traccia GPX"
 msgstr "GPX-Spur herunterladen"
 
-#: apps/website/admin_newsletter.py:29 apps/website/models/newsletter.py:80
+#: apps/website/admin_newsletter.py:29 apps/website/models/newsletter.py:81
 #, fuzzy
 #| msgid "Category"
 msgid "Categories"
@@ -3510,19 +3813,19 @@ msgstr "Kategorie"
 msgid "Subscribers"
 msgstr "Abonnieren"
 
-#: apps/website/admin_newsletter.py:69 apps/website/models/newsletter.py:85
+#: apps/website/admin_newsletter.py:69 apps/website/models/newsletter.py:86
 #, fuzzy
 #| msgid "Subscribe"
 msgid "Subscribed at"
 msgstr "Abonnieren"
 
-#: apps/website/admin_newsletter.py:70 apps/website/models/newsletter.py:90
+#: apps/website/admin_newsletter.py:70 apps/website/models/newsletter.py:91
 #, fuzzy
 #| msgid "Unsubscribed"
 msgid "Unsubscribed at"
 msgstr "Abgemeldet"
 
-#: apps/website/admin_newsletter.py:71 apps/website/models/newsletter.py:95
+#: apps/website/admin_newsletter.py:71 apps/website/models/newsletter.py:96
 #: apps/website/models/verification.py:57
 msgid "IP address"
 msgstr "IP-Adresse"
@@ -3534,7 +3837,7 @@ msgstr "IP-Adresse"
 msgid "Preview"
 msgstr "Vorschaubild"
 
-#: apps/website/admin_newsletter.py:102 apps/website/models/newsletter.py:125
+#: apps/website/admin_newsletter.py:102 apps/website/models/newsletter.py:126
 #, fuzzy
 #| msgid "Schedule"
 msgid "Scheduled"
@@ -3573,7 +3876,7 @@ msgstr "Veranstaltungsort-Karte"
 #: apps/website/blocks/common.py:14 apps/website/blocks/content.py:106
 #: apps/website/blocks/content.py:157 apps/website/blocks/content.py:225
 #: apps/website/blocks/content.py:424 apps/website/blocks/content.py:884
-#: apps/website/blocks/layout.py:170 apps/website/models/newsletter.py:48
+#: apps/website/blocks/layout.py:170 apps/website/models/newsletter.py:49
 msgid "Default"
 msgstr "Standard"
 
@@ -4839,35 +5142,35 @@ msgstr "Überprüfungswert"
 msgid "Enter the value to verify"
 msgstr "Wert zur Überprüfung eingeben"
 
-#: apps/website/forms.py:99
+#: apps/website/forms.py:120
 msgid "Photos"
 msgstr "Fotos"
 
-#: apps/website/forms.py:100
+#: apps/website/forms.py:121
 msgid "Select up to 20 images (JPG, PNG, or WebP, max 10 MB each)."
 msgstr "Wählen Sie bis zu 20 Bilder (JPG, PNG oder WebP, max. 10 MB pro Bild)."
 
-#: apps/website/forms.py:106
+#: apps/website/forms.py:127
 msgid "Title prefix"
 msgstr "Titelpräfix"
 
-#: apps/website/forms.py:107
+#: apps/website/forms.py:128
 msgid "Optional prefix added to each photo title."
 msgstr "Optionaler Präfix, der jedem Fototitel hinzugefügt wird."
 
-#: apps/website/forms.py:109
+#: apps/website/forms.py:130
 msgid "e.g. Summer Rally 2025"
 msgstr "z.B. Sommerrallye 2025"
 
-#: apps/website/forms.py:116
+#: apps/website/forms.py:137
 msgid "Optionally link photos to an event."
 msgstr "Fotos optional mit einer Veranstaltung verknüpfen."
 
-#: apps/website/forms.py:117
+#: apps/website/forms.py:138
 msgid "-- No event --"
 msgstr "-- Keine Veranstaltung --"
 
-#: apps/website/forms.py:122 apps/website/models/pages.py:522
+#: apps/website/forms.py:143 apps/website/models/pages.py:522
 #: apps/website/models/pages.py:857 apps/website/models/uploads.py:46
 #: templates/website/pages/event_detail_page.html:198
 #: templates/website/pages/event_detail_page.html:199
@@ -4875,17 +5178,17 @@ msgstr "-- Keine Veranstaltung --"
 msgid "Tags"
 msgstr "Schlagwörter"
 
-#: apps/website/forms.py:131
+#: apps/website/forms.py:152
 #, python-format
 msgid "You can upload a maximum of %(max)d files at a time."
 msgstr "Sie können maximal %(max)d Dateien gleichzeitig hochladen."
 
-#: apps/website/forms.py:142
+#: apps/website/forms.py:161
 #, python-format
 msgid "File '%(name)s' exceeds the maximum size of 10 MB."
 msgstr "Datei '%(name)s' überschreitet die Maximalgröße von 10 MB."
 
-#: apps/website/forms.py:176
+#: apps/website/forms.py:173
 #, python-format
 msgid ""
 "File '%(name)s' is not an allowed format. Only JPG, PNG, and WebP are "
@@ -4894,7 +5197,7 @@ msgstr ""
 "Datei '%(name)s' hat kein erlaubtes Format. Nur JPG, PNG und WebP werden "
 "akzeptiert."
 
-#: apps/website/forms.py:196 apps/website/forms.py:222
+#: apps/website/forms.py:193 apps/website/forms.py:219
 #: templates/website/newsletter_subscribe.html:34
 #: templates/website/newsletter_unsubscribe.html:34
 #, fuzzy
@@ -4902,73 +5205,73 @@ msgstr ""
 msgid "Enter your email"
 msgstr "Inhaber-E-Mail"
 
-#: apps/website/forms.py:204 templates/website/newsletter_subscribe.html:42
+#: apps/website/forms.py:201 templates/website/newsletter_subscribe.html:42
 msgid "Topics of interest"
 msgstr ""
 
-#: apps/website/forms.py:206
+#: apps/website/forms.py:203
 #, fuzzy
 #| msgid "Select the category that best matches your need."
 msgid "Select the categories you are interested in."
 msgstr "Wählen Sie die Kategorie, die am besten zu Ihrem Bedarf passt."
 
-#: apps/website/models/newsletter.py:38 apps/website/models/snippets.py:461
+#: apps/website/models/newsletter.py:39 apps/website/models/snippets.py:461
 #: apps/website/models/snippets.py:509 apps/website/models/snippets.py:547
 #: apps/website/models/snippets.py:577 apps/website/models/snippets.py:747
 #: apps/website/models/snippets.py:809
 msgid "Slug"
 msgstr "Slug"
 
-#: apps/website/models/newsletter.py:44
+#: apps/website/models/newsletter.py:45
 msgid "Shown to subscribers when choosing categories."
 msgstr ""
 
-#: apps/website/models/newsletter.py:49
+#: apps/website/models/newsletter.py:50
 #, fuzzy
 #| msgid "Subscribe"
 msgid "Auto-selected for new subscribers."
 msgstr "Abonnieren"
 
-#: apps/website/models/newsletter.py:53
+#: apps/website/models/newsletter.py:54
 msgid "Sort order"
 msgstr ""
 
-#: apps/website/models/newsletter.py:57
+#: apps/website/models/newsletter.py:58
 #, fuzzy
 #| msgid "news category"
 msgid "Newsletter category"
 msgstr "Nachrichtenkategorie"
 
-#: apps/website/models/newsletter.py:58
+#: apps/website/models/newsletter.py:59
 #: templates/website/newsletter_archive.html:22
 #, fuzzy
 #| msgid "news categories"
 msgid "Newsletter categories"
 msgstr "Nachrichtenkategorien"
 
-#: apps/website/models/newsletter.py:81
+#: apps/website/models/newsletter.py:82
 #, fuzzy
 #| msgid "push subscription"
 msgid "Newsletter categories this subscriber opted into."
 msgstr "Push-Abonnement"
 
-#: apps/website/models/newsletter.py:99
+#: apps/website/models/newsletter.py:100
 #, fuzzy
 #| msgid "push subscription"
 msgid "Newsletter subscription"
 msgstr "Push-Abonnement"
 
-#: apps/website/models/newsletter.py:100
+#: apps/website/models/newsletter.py:101
 #, fuzzy
 #| msgid "push subscriptions"
 msgid "Newsletter subscriptions"
 msgstr "Push-Abonnements"
 
-#: apps/website/models/newsletter.py:124
+#: apps/website/models/newsletter.py:125
 msgid "Draft"
 msgstr ""
 
-#: apps/website/models/newsletter.py:131
+#: apps/website/models/newsletter.py:132
 #: templates/website/admin/preview_newsletter.html:15
 #: templates/website/admin/send_newsletter.html:21
 #: templates/website/admin/send_newsletter.html:35
@@ -4976,7 +5279,7 @@ msgstr ""
 msgid "Subject"
 msgstr "Betreff"
 
-#: apps/website/models/newsletter.py:135 apps/website/models/pages.py:148
+#: apps/website/models/newsletter.py:136 apps/website/models/pages.py:148
 #: apps/website/models/pages.py:320 apps/website/models/pages.py:366
 #: apps/website/models/pages.py:410 apps/website/models/pages.py:500
 #: apps/website/models/pages.py:605 apps/website/models/pages.py:716
@@ -4987,93 +5290,93 @@ msgstr "Betreff"
 msgid "Body"
 msgstr "Inhalt"
 
-#: apps/website/models/newsletter.py:136
+#: apps/website/models/newsletter.py:137
 msgid "Compose the newsletter using the available blocks."
 msgstr ""
 
-#: apps/website/models/newsletter.py:150
+#: apps/website/models/newsletter.py:151
 #: templates/website/admin/preview_newsletter.html:23
 msgid "Public"
 msgstr ""
 
-#: apps/website/models/newsletter.py:151
+#: apps/website/models/newsletter.py:152
 msgid "If checked, this newsletter is visible in the public archive."
 msgstr ""
 
-#: apps/website/models/newsletter.py:162
+#: apps/website/models/newsletter.py:163
 #: templates/website/admin/send_newsletter.html:44
 #, fuzzy
 #| msgid "scheduled for"
 msgid "Scheduled for"
 msgstr "geplant für"
 
-#: apps/website/models/newsletter.py:163
+#: apps/website/models/newsletter.py:164
 msgid ""
 "If set, the newsletter will be sent automatically at this date and time."
 msgstr ""
 
-#: apps/website/models/newsletter.py:172
+#: apps/website/models/newsletter.py:173
 #: templates/website/admin/send_newsletter.html:23
 #, fuzzy
 #| msgid "sent at"
 msgid "Sent at"
 msgstr "gesendet am"
 
-#: apps/website/models/newsletter.py:179
+#: apps/website/models/newsletter.py:180
 #, fuzzy
 #| msgid "Sent"
 msgid "Sent by"
 msgstr "Gesendet"
 
-#: apps/website/models/newsletter.py:183
+#: apps/website/models/newsletter.py:184
 #: templates/website/admin/send_newsletter.html:25
 #, fuzzy
 #| msgid "recipient"
 msgid "Recipients"
 msgstr "Empfänger"
 
-#: apps/website/models/newsletter.py:187 apps/website/wagtail_hooks.py:67
+#: apps/website/models/newsletter.py:188 apps/website/wagtail_hooks.py:67
 #: templates/website/newsletter_subscribe.html:4
 #, fuzzy
 #| msgid "Newsletter signup"
 msgid "Newsletter"
 msgstr "Newsletter-Anmeldung"
 
-#: apps/website/models/newsletter.py:188
+#: apps/website/models/newsletter.py:189
 #, fuzzy
 #| msgid "Newsletter signup"
 msgid "Newsletters"
 msgstr "Newsletter-Anmeldung"
 
-#: apps/website/models/newsletter.py:211
+#: apps/website/models/newsletter.py:212
 #, fuzzy
 #| msgid "Introductory text displayed above the helpers map."
 msgid "Introductory text shown on the subscribe page."
 msgstr "Einleitungstext, der über der Helferkarte angezeigt wird."
 
-#: apps/website/models/newsletter.py:224
+#: apps/website/models/newsletter.py:225
 #, fuzzy
 #| msgid "Newsletter signup"
 msgid "Newsletter page"
 msgstr "Newsletter-Anmeldung"
 
-#: apps/website/models/newsletter.py:225
+#: apps/website/models/newsletter.py:226
 #, fuzzy
 #| msgid "Newsletter signup"
 msgid "Newsletter pages"
 msgstr "Newsletter-Anmeldung"
 
-#: apps/website/models/newsletter.py:329
+#: apps/website/models/newsletter.py:322
 msgid "Thanks for subscribing!"
 msgstr ""
 
-#: apps/website/models/newsletter.py:362
+#: apps/website/models/newsletter.py:355
 #, fuzzy
 #| msgid "Confirm unsubscribe"
 msgid "You have been unsubscribed."
 msgstr "Abmeldung bestätigen"
 
-#: apps/website/models/newsletter.py:367
+#: apps/website/models/newsletter.py:360
 #, fuzzy
 #| msgid "Subscribe to newsletter"
 msgid "This email is not subscribed to our newsletter."
@@ -6652,8 +6955,8 @@ msgstr "Überweisungsanweisungen"
 
 #: apps/website/models/settings.py:697
 msgid ""
-"Additional instructions shown to the user (e.g. 'Include the reference in "
-"the description')."
+"Additional instructions shown to the user (e.g. 'Include the reference in the"
+" description')."
 msgstr ""
 "Zusätzliche Anweisungen für den Benutzer (z.B. 'Referenz im Verwendungszweck "
 "angeben')."
@@ -7427,41 +7730,41 @@ msgstr ""
 msgid "partners/verify-member/"
 msgstr ""
 
-#: apps/website/views.py:54
+#: apps/website/views.py:55
 msgid "Access denied. Only partner owners and staff can verify members."
 msgstr ""
 "Zugriff verweigert. Nur Partnerinhaber und Mitarbeiter können Mitglieder "
 "verifizieren."
 
-#: apps/website/views.py:78
+#: apps/website/views.py:79
 msgid "Rate limit exceeded. Maximum 20 verification attempts per hour."
 msgstr "Ratenlimit überschritten. Maximal 20 Überprüfungsversuche pro Stunde."
 
-#: apps/website/views.py:94
+#: apps/website/views.py:95
 msgid ""
-"Account temporarily locked. Too many failed verification attempts. Please "
-"try again in 15 minutes."
+"Account temporarily locked. Too many failed verification attempts. Please try"
+" again in 15 minutes."
 msgstr ""
 "Konto vorübergehend gesperrt. Zu viele fehlgeschlagene Überprüfungsversuche. "
 "Bitte versuchen Sie es in 15 Minuten erneut."
 
-#: apps/website/views.py:138
+#: apps/website/views.py:139
 msgid "No member found with this card number."
 msgstr "Kein Mitglied mit dieser Kartennummer gefunden."
 
-#: apps/website/views.py:156
+#: apps/website/views.py:157
 msgid "This member's membership has expired."
 msgstr "Die Mitgliedschaft dieses Mitglieds ist abgelaufen."
 
-#: apps/website/views.py:195
+#: apps/website/views.py:196
 msgid "Member verified successfully."
 msgstr "Mitglied erfolgreich verifiziert."
 
-#: apps/website/views.py:196
+#: apps/website/views.py:197
 msgid "N/A"
 msgstr "K.A."
 
-#: apps/website/views.py:215
+#: apps/website/views.py:216
 msgid ""
 "Verification failed. The provided information does not match our records."
 msgstr ""
@@ -7559,9 +7862,8 @@ msgstr "Verfügbarkeit für gegenseitige Hilfe"
 
 #: templates/account/aid.html:18
 msgid ""
-"Set your availability for the mutual aid network. When enabled, other "
-"members in need can see you are available to help within your specified "
-"radius."
+"Set your availability for the mutual aid network. When enabled, other members"
+" in need can see you are available to help within your specified radius."
 msgstr ""
 "Legen Sie Ihre Verfügbarkeit für das Netzwerk gegenseitiger Hilfe fest. Wenn "
 "aktiviert, können andere Mitglieder in Not sehen, dass Sie innerhalb Ihres "
@@ -8230,8 +8532,8 @@ msgstr "Konto erstellen"
 #: templates/account/signup.html:11
 msgid "Join the club and access events, member directory, and more."
 msgstr ""
-"Treten Sie dem Club bei und nutzen Sie Veranstaltungen, "
-"Mitgliederverzeichnis und mehr."
+"Treten Sie dem Club bei und nutzen Sie Veranstaltungen, Mitgliederverzeichnis"
+" und mehr."
 
 #: templates/account/signup.html:36
 msgid "Already have an account?"
@@ -8269,10 +8571,64 @@ msgstr "E-Mail-Adresse"
 #: templates/account/verification_sent.html:12
 msgid ""
 "We have sent an email to you for verification. Follow the link provided to "
-"finalize the signup process. If you do not see the verification email in "
-"your main inbox, check your spam folder. Please contact us if you do not "
-"receive the verification email within a few minutes."
+"finalize the signup process. If you do not see the verification email in your"
+" main inbox, check your spam folder. Please contact us if you do not receive "
+"the verification email within a few minutes."
 msgstr ""
+
+#: templates/admin/federation/key_tools_panel.html:4
+msgid ""
+"Replace the current link key and shared secret? The partner will need the new"
+" pair too."
+msgstr ""
+"Aktuellen Verbindungsschlüssel und gemeinsames Geheimnis ersetzen? Auch der "
+"Partner braucht dann das neue Paar."
+
+#: templates/admin/federation/key_tools_panel.html:5
+msgid ""
+"New pair generated. Save the page, then send both values to the partner over "
+"a secure channel."
+msgstr ""
+"Neues Paar erzeugt. Speichern Sie die Seite und senden Sie dann beide Werte "
+"über einen sicheren Kanal an den Partner."
+
+#: templates/admin/federation/key_tools_panel.html:6
+msgid "Could not generate the keys. Reload the page and try again."
+msgstr ""
+"Die Schlüssel konnten nicht erzeugt werden. Laden Sie die Seite neu und "
+"versuchen Sie es erneut."
+
+#: templates/admin/federation/key_tools_panel.html:8
+msgid "Generate key pair"
+msgstr "Schlüsselpaar erzeugen"
+
+#: templates/admin/federation/key_tools_panel.html:13
+msgid "Test connection"
+msgstr "Verbindung testen"
+
+#: templates/admin/federation/key_tools_panel.html:15
+msgid "The test uses the saved values: save your changes first."
+msgstr ""
+"Der Test verwendet die gespeicherten Werte: Speichern Sie zuerst Ihre "
+"Änderungen."
+
+#: templates/admin/federation/key_tools_panel.html:17
+msgid "Save the club first, then you can test the connection."
+msgstr "Speichern Sie zuerst den Club, dann können Sie die Verbindung testen."
+
+#: templates/admin/guide_panel.html:7
+msgid "Full guide"
+msgstr "Vollständige Anleitung"
+
+#: templates/admin/guide_panel.html:14
+msgid "Close guide"
+msgstr "Anleitung schließen"
+
+#: templates/admin/guide_panel.html:15
+#: templates/includes/_field_help_modal.html:7
+#: templates/website/pages/gallery_page.html:117
+msgid "Close"
+msgstr "Schließen"
 
 #: templates/admin/members/panels/card_actions.html:23
 msgid "Membership Summary"
@@ -8376,7 +8732,8 @@ msgstr "Diese Karte ist bereits beendet."
 
 #: templates/admin/members/panels/card_actions.html:173
 #, fuzzy
-#| msgid "This card is terminated. To restore membership, issue a new card."
+#| msgid ""
+#| "This card is terminated. To restore membership, issue a new card."
 msgid "To restore membership, issue a new card."
 msgstr ""
 "Diese Karte ist beendet. Um die Mitgliedschaft wiederherzustellen, stellen "
@@ -8420,11 +8777,11 @@ msgstr "Diese Aktion ist dauerhaft."
 
 #: templates/admin/members/panels/card_actions.html:216
 msgid ""
-"The card cannot be reactivated. A new card must be issued if the member "
-"wants to rejoin."
+"The card cannot be reactivated. A new card must be issued if the member wants"
+" to rejoin."
 msgstr ""
-"Die Karte kann nicht reaktiviert werden. Bei erneutem Beitritt muss eine "
-"neue Karte ausgestellt werden."
+"Die Karte kann nicht reaktiviert werden. Bei erneutem Beitritt muss eine neue"
+" Karte ausgestellt werden."
 
 #: templates/admin/members/panels/card_actions.html:219
 msgid "E.g., resignation, expulsion, deceased..."
@@ -9029,11 +9386,6 @@ msgstr ""
 msgid "Field help"
 msgstr "Feldhilfe"
 
-#: templates/includes/_field_help_modal.html:7
-#: templates/website/pages/gallery_page.html:117
-msgid "Close"
-msgstr "Schließen"
-
 #: templates/includes/_form_field.html:10
 #: templates/includes/_form_field.html:18
 msgid "Help"
@@ -9152,8 +9504,8 @@ msgstr "Zugang zur Gegenseitigen Hilfe anfordern"
 
 #: templates/mutual_aid/access_request.html:16
 msgid ""
-"As a member of a federated partner club, you can request access to our "
-"mutual aid helpers directory."
+"As a member of a federated partner club, you can request access to our mutual"
+" aid helpers directory."
 msgstr ""
 "Als Mitglied eines Partnerclubs können Sie Zugang zu unserem Verzeichnis der "
 "Hilfeleistenden beantragen."
@@ -9490,8 +9842,7 @@ msgstr "Benachrichtigungen abbestellen"
 #| "            "
 msgid ""
 "\n"
-"                You are about to unsubscribe <strong>%(email)s</strong> "
-"from\n"
+"                You are about to unsubscribe <strong>%(email)s</strong> from\n"
 "                <strong>%(type)s</strong> notifications.\n"
 "                "
 msgstr ""
@@ -9542,8 +9893,8 @@ msgstr ""
 #: templates/notifications/unsubscribe_success.html:20
 msgid "If you change your mind, you can re-enable notifications from your"
 msgstr ""
-"Wenn Sie Ihre Meinung ändern, können Sie Benachrichtigungen wieder "
-"aktivieren in Ihren"
+"Wenn Sie Ihre Meinung ändern, können Sie Benachrichtigungen wieder aktivieren"
+" in Ihren"
 
 #: templates/notifications/unsubscribe_success.html:23
 #: templates/notifications/unsubscribe_success.html:25
@@ -9777,8 +10128,7 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"        This will send the newsletter to %(count)s active subscriber(s) via "
-"email.\n"
+"        This will send the newsletter to %(count)s active subscriber(s) via email.\n"
 "        The emails will be dispatched in background.\n"
 "        "
 msgstr ""
@@ -10446,8 +10796,8 @@ msgstr "Mitglied verifizieren"
 
 #: templates/website/verification/verify_member.html:12
 msgid ""
-"Enter the member's card number and a secondary piece of information to "
-"verify their membership status."
+"Enter the member's card number and a secondary piece of information to verify"
+" their membership status."
 msgstr ""
 "Geben Sie die Mitgliedskartennummer und eine zweite Information ein, um den "
 "Mitgliedsstatus zu überprüfen."
@@ -10502,6 +10852,50 @@ msgstr ""
 msgid "Verify Another Member"
 msgstr ""
 
+#~ msgid "Display name of the partner club"
+#~ msgstr "Anzeigename des Partnerclubs"
+
+#~ msgid "URL-safe identifier"
+#~ msgstr "URL-sicherer Bezeichner"
+
+#, fuzzy
+#~ msgid "City where the partner club is based."
+#~ msgstr "Anzeigename des Partnerclubs"
+
+#, fuzzy
+#~ msgid "Short description of the partner club (visible on federation page)."
+#~ msgstr "Eine kurze Beschreibung über Sie. Sichtbar auf Ihrer Profilseite."
+
+#~ msgid "Their public API key (given to us)"
+#~ msgstr "Ihr öffentlicher API-Schlüssel (an uns gegeben)"
+
+#~ msgid "Our key we gave them (auto-generated)"
+#~ msgstr "Unser Schlüssel, den wir ihnen gaben (automatisch generiert)"
+
+#~ msgid "Attiva la connessione con questo club partner."
+#~ msgstr "Verbindung mit diesem Partnerverein aktivieren."
+
+#~ msgid "Il club partner è stato verificato e approvato."
+#~ msgstr "Der Partnerverein wurde verifiziert und genehmigt."
+
+#~ msgid "Share our events with this partner"
+#~ msgstr "Unsere Veranstaltungen mit diesem Partner teilen"
+
+#~ msgid "Auto-approve imported events"
+#~ msgstr "Importierte Veranstaltungen automatisch genehmigen"
+
+#~ msgid "Data e ora dell'ultima sincronizzazione eventi."
+#~ msgstr "Datum und Uhrzeit der letzten Eventsynchronisierung."
+
+#~ msgid "Ultimo messaggio di errore durante la sincronizzazione."
+#~ msgstr "Letzte Fehlermeldung während der Synchronisierung."
+
+#~ msgid "Data di creazione del record."
+#~ msgstr "Erstellungsdatum des Datensatzes."
+
+#~ msgid "Amministratore che ha aggiunto il club partner."
+#~ msgstr "Administrator, der den Partnerverein hinzugefügt hat."
+
 #~ msgid "View My Requests"
 #~ msgstr "Meine Anfragen anzeigen"
 
@@ -10519,96 +10913,78 @@ msgstr ""
 
 #~ msgid "Share a story, propose an event, or post an announcement."
 #~ msgstr ""
-#~ "Teilen Sie eine Geschichte, schlagen Sie ein Event vor oder "
-#~ "veröffentlichen Sie eine Ankündigung."
+#~ "Teilen Sie eine Geschichte, schlagen Sie ein Event vor oder veröffentlichen "
+#~ "Sie eine Ankündigung."
 
 #, fuzzy
-#~| msgid "Search"
 #~ msgid "search/"
 #~ msgstr "Suchen"
 
 #, fuzzy
-#~| msgid "My Registrations"
 #~ msgid "my-registrations/"
 #~ msgstr "Meine Anmeldungen"
 
 #, fuzzy
-#~| msgid "Events"
 #~ msgid "my-events/"
 #~ msgstr "Veranstaltungen"
 
 #, fuzzy
-#~| msgid "Events Archive"
 #~ msgid "my-events/archive/"
 #~ msgstr "Veranstaltungsarchiv"
 
 #, fuzzy
-#~| msgid "CTA page link"
 #~ msgid "CTA link"
 #~ msgstr "CTA-Seitenlink"
 
 #, fuzzy
-#~| msgid "Call to action"
 #~ msgid "Call to Action"
 #~ msgstr "Handlungsaufforderung"
 
 #, fuzzy
-#~| msgid "My profile"
 #~ msgid "profile/"
 #~ msgstr "Mein Profil"
 
 #, fuzzy
-#~| msgid "Privacy"
 #~ msgid "privacy/"
 #~ msgstr "Datenschutz"
 
 #, fuzzy
-#~| msgid "My Membership Requests"
 #~ msgid "membership-requests/"
 #~ msgstr "Mitgliedschaftshinweise"
 
 #, fuzzy
-#~| msgid "Member directory"
 #~ msgid "directory/"
 #~ msgstr "Mitgliederverzeichnis"
 
 #, fuzzy
-#~| msgid "contributions"
 #~ msgid "contributions/"
 #~ msgstr "Einleitung"
 
 #, fuzzy
-#~| msgid "contributions"
 #~ msgid "contributions/submit/"
 #~ msgstr "Einleitung"
 
 #, fuzzy
-#~| msgid "Request Access"
 #~ msgid "request-access/"
 #~ msgstr "Zugang anfordern"
 
 #, fuzzy
-#~| msgid "Story"
 #~ msgid "history/"
 #~ msgstr "Geschichte"
 
 #, fuzzy
-#~| msgid "Uploaded at"
 #~ msgid "upload-photo/"
 #~ msgstr "Hochgeladen am"
 
 #, fuzzy
-#~| msgid "Upload"
 #~ msgid "my-uploads/"
 #~ msgstr "Hochgeladen von"
 
 #, fuzzy
-#~| msgid "Mutual Aid"
 #~ msgid "mutual-aid/"
 #~ msgstr "Gegenseitige Hilfe"
 
 #, fuzzy
-#~| msgid "event category"
 #~ msgid "events/partner/"
 #~ msgstr "Veranstaltungskategorie"
 
@@ -10616,17 +10992,14 @@ msgstr ""
 #~ msgstr "Biografie anzeigen"
 
 #, fuzzy
-#~| msgid "Subscribe to newsletter"
 #~ msgid "Sent newsletter"
 #~ msgstr "Newsletter abonnieren"
 
 #, fuzzy
-#~| msgid "Subscribe to newsletter"
 #~ msgid "Sent newsletters"
 #~ msgstr "Newsletter abonnieren"
 
 #, fuzzy
-#~| msgid "Instagram"
 #~ msgid "Install"
 #~ msgstr "Instagram"
 
@@ -10644,12 +11017,10 @@ msgstr ""
 #~ "                "
 
 #, fuzzy
-#~| msgid "Phone"
 #~ msgid "Phone:"
 #~ msgstr "Telefon"
 
 #, fuzzy
-#~| msgid "Email"
 #~ msgid "Email:"
 #~ msgstr "E-Mail"
 
@@ -10660,12 +11031,10 @@ msgstr ""
 #~ msgstr "1 Jahr zum Ablaufdatum hinzufügen"
 
 #, fuzzy
-#~| msgid "LinkedIn"
 #~ msgid "Links"
 #~ msgstr "LinkedIn"
 
 #, fuzzy
-#~| msgid "Address"
 #~ msgid "Address:"
 #~ msgstr "Adresse"
 
@@ -10673,8 +11042,8 @@ msgstr ""
 #~ "Choose the membership plan that best fits your needs. Combine multiple "
 #~ "products to customize your experience."
 #~ msgstr ""
-#~ "Wählen Sie den Mitgliedschaftsplan, der am besten zu Ihnen passt. "
-#~ "Kombinieren Sie mehrere Produkte, um Ihr Erlebnis anzupassen."
+#~ "Wählen Sie den Mitgliedschaftsplan, der am besten zu Ihnen passt. Kombinieren"
+#~ " Sie mehrere Produkte, um Ihr Erlebnis anzupassen."
 
 #~ msgid "Send message"
 #~ msgstr "Nachricht senden"
@@ -10689,8 +11058,8 @@ msgstr ""
 #~ "No membership card has been issued yet. Please contact the club "
 #~ "administration."
 #~ msgstr ""
-#~ "Es wurde noch keine Mitgliedskarte ausgestellt. Bitte kontaktieren Sie "
-#~ "die Clubverwaltung."
+#~ "Es wurde noch keine Mitgliedskarte ausgestellt. Bitte kontaktieren Sie die "
+#~ "Clubverwaltung."
 
 #, python-format
 #~ msgid ""
