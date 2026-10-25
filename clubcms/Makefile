@@ -1,4 +1,4 @@
-.PHONY: build up down logs shell migrate test superuser collectstatic demo
+.PHONY: build up down logs shell migrate test ci superuser collectstatic demo
 
 build:
 	docker compose build
@@ -20,6 +20,9 @@ migrate:
 
 test:
 	docker compose exec web pytest
+
+ci:
+	bash scripts/ci.sh
 
 superuser:
 	docker compose exec web python manage.py createsuperuser
