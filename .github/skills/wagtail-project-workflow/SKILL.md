@@ -60,7 +60,7 @@ Run from the clubcms directory unless specified otherwise.
 - Tests:
   - docker compose exec web pytest apps/ -v
 - i18n:
-  - docker compose exec web python manage.py makemessages -l it -l en -l de -l fr -l es --no-wrap
+  - docker compose exec web python manage.py makemessages -l it -l en -l de -l fr -l es
   - docker compose exec web python manage.py compilemessages
 - Production stack:
   - docker compose -f docker-compose.prod.yml up -d
@@ -72,6 +72,14 @@ Run from the clubcms directory unless specified otherwise.
 - Keep comments short and only where logic is not obvious.
 - Do not reformat unrelated files.
 - Favor explicit, readable code over compact one-liners in business logic.
+
+## Admin Help Rules
+
+- `help_text` only when it adds information: where the value comes from, its format (with an example) or its effect. Never restate the label; if there is nothing to add, leave it empty.
+- msgids in English; translations in the `.po` files (pass them through the humanizer skill).
+- Pages that need context or an external procedure get a page guide: `GuidePanel(GUIDE)` first in `panels`, with the guide defined in `apps/<app>/admin_guides.py` (`AdminGuide` / `GuideSection`, lazy strings).
+- System-filled fields: `FieldPanel(..., read_only=True)`, no help text.
+- After reviewing a model, add it to `REVIEWED_MODELS` in `apps/core/tests/test_admin_help.py`.
 
 ## Wagtail/Django Change Checklist
 
