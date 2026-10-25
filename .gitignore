@@ -25,7 +25,8 @@ media-items/
 .pytest_cache/
 
 # AI / IDE / editor
-.claude/
+.claude/settings.local.json*
+.claude/worktrees/
 .idea/
 .vscode/
 *.swp
