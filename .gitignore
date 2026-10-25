@@ -45,3 +45,6 @@ tasks/
 clubcms/backups/
 # Dump locali (mai versionati)
 clubcms/db_export.json
+
+# Log di deploy locali
+clubcms/deploy/*/logs/
