@@ -22,7 +22,7 @@
 
 ## 1. Getting Started
 
-ClubCMS is a content management system built on Wagtail 7.x and Django 5.x, designed specifically for motorcycle clubs. It provides:
+ClubCMS is a content management system built on Wagtail 8 and Django 6.1, designed specifically for motorcycle clubs. It provides:
 
 - **Page management**: Homepage, About, News, Events, Gallery, Contact, Privacy, Transparency, Press, Partners
 - **Member management**: Registration, membership cards with QR/barcode, profiles

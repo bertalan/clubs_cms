@@ -1,7 +1,7 @@
 # ClubCMS — Development Guide
 
 ## Stack
-Django 5.2 + Wagtail 7.x, 8 apps in `clubcms/apps/`: `core`, `website`, `members`, `events`, `federation`, `notifications`, `mutual_aid`, `places`.
+Django 6.1 + Wagtail 8.0 (Python 3.12, versioni esatte in `clubcms/requirements.lock`), 8 apps in `clubcms/apps/`: `core`, `website`, `members`, `events`, `federation`, `notifications`, `mutual_aid`, `places`.
 Custom user model: `ClubUser`. Task queue: Django-Q2. Dev via Docker, TDD.
 
 ## Ripresa del lavoro (obbligatorio)
