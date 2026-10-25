@@ -10,7 +10,7 @@ Live = bare metal, venv + gunicorn + systemd (`clubcms`, `clubcms-qcluster`), ng
 
 ## Before asking for confirmation
 
-1. Working tree clean and `main` pushed (the script refuses otherwise).
+1. On `main`, aligned with `origin/main`, working tree clean. The script refuses any other branch or a diverged `main`; `--force` only accepts uncommitted local changes.
 2. `bash clubcms/scripts/ci.sh` prints `CI OK` (ruff, system checks incl. `--deploy`, missing migrations, `.po`, tests, `bash -n` on deploy scripts).
 3. GitHub Actions `CI` is green on the commit being deployed.
 4. If requirements changed: check they install on Python 3.12.
@@ -26,6 +26,12 @@ cd clubcms && bash deploy/clubs.betabi.it/deploy.sh
 ## Script rule
 
 The remote part is an unquoted heredoc (`$SSH_CMD bash <<EOF`). Every variable or `$(...)` meant to run on the server must be escaped as `\$`. Unescaped ones expand on the local machine.
+
+## Logs
+
+- Local: `clubcms/deploy/clubs.betabi.it/logs/deploy-<timestamp>.log` (not versioned).
+- Server: `/var/log/clubcms/deploy-<timestamp>.log` (root only, last 50 kept).
+- On failure the script prints `DEPLOY FALLITO (exit N) — log: …`. Read the log before doing anything else.
 
 ## After
 

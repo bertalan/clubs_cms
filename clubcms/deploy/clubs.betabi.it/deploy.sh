@@ -21,44 +21,61 @@ BACKUP_DIR="$DOMAIN_DIR/backups"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 SSH_CMD="ssh -p $REMOTE_PORT -i ~/.ssh/id_rsa $REMOTE_HOST"
 
+# ── Log ─────────────────────────────────────────────────────────────────────
+# Tutto l'output (locale e remoto) va anche in deploy/clubs.betabi.it/logs/
+# (non versionato). Il server tiene una copia in /var/log/clubcms/.
+LOG_DIR="$(cd "$(dirname "$0")" && pwd)/logs"
+mkdir -p "$LOG_DIR"
+LOG_FILE="$LOG_DIR/deploy-$TIMESTAMP.log"
+exec > >(tee -a "$LOG_FILE") 2>&1
+trap 'rc=$?; if [[ $rc -ne 0 ]]; then echo ""; echo "=== DEPLOY FALLITO (exit $rc) — log: $LOG_FILE ==="; fi' EXIT
+
 echo "=== ClubCMS Deploy → clubs.betabi.it — $TIMESTAMP ==="
 echo "    Server: $REMOTE_HOST (porta $REMOTE_PORT) — bare metal"
+echo "    Avviato da: $(whoami)@$(hostname -s)  argomenti: ${*:-(nessuno)}"
+echo "    Log: $LOG_FILE"
 
 # ── Controllo stato git locale ───────────────────────────────────────────────
+# Lo script esegue sul server la SUA copia dei comandi, ma il server scarica
+# sempre origin/main: si deploya solo da main allineato a origin/main.
+# --force permette soltanto modifiche locali non committate.
 if [[ "${1:-}" != "--setup" ]]; then
     GIT_ROOT="$(git -C "$(dirname "$0")" rev-parse --show-toplevel 2>/dev/null || true)"
 
     if [[ -n "$GIT_ROOT" ]]; then
-        # File modificati non committati
+        git -C "$GIT_ROOT" fetch -q origin main
+        BRANCH=$(git -C "$GIT_ROOT" rev-parse --abbrev-ref HEAD)
+        LOCAL_HEAD=$(git -C "$GIT_ROOT" rev-parse HEAD)
+        REMOTE_HEAD=$(git -C "$GIT_ROOT" rev-parse origin/main)
+
+        if [[ "$BRANCH" != "main" || "$LOCAL_HEAD" != "$REMOTE_HEAD" ]]; then
+            echo ""
+            echo "  ERRORE: il deploy parte solo da 'main' allineato a origin/main."
+            echo "    branch locale: $BRANCH ($(git -C "$GIT_ROOT" rev-parse --short HEAD))"
+            echo "    origin/main:   $(git -C "$GIT_ROOT" rev-parse --short origin/main)"
+            AHEAD=$(git -C "$GIT_ROOT" log --oneline origin/main..HEAD)
+            BEHIND=$(git -C "$GIT_ROOT" log --oneline HEAD..origin/main)
+            [[ -n "$AHEAD" ]] && { echo "  Commit locali non su origin/main:"; echo "$AHEAD" | sed 's/^/    /'; }
+            [[ -n "$BEHIND" ]] && { echo "  Commit di origin/main mancanti in locale:"; echo "$BEHIND" | sed 's/^/    /'; }
+            echo "  Fai merge su main, 'git switch main && git pull', poi rilancia."
+            exit 1
+        fi
+
         DIRTY=$(git -C "$GIT_ROOT" status --porcelain 2>/dev/null)
         if [[ -n "$DIRTY" ]]; then
             echo ""
             echo "  ATTENZIONE: ci sono modifiche locali non committate:"
             git -C "$GIT_ROOT" status --short
-            echo ""
-            echo "  Esegui 'git add' + 'git commit' prima del deploy."
-            echo "  Per forzare il deploy comunque: bash $0 --force"
-            [[ "${1:-}" == "--force" ]] || exit 1
-        fi
-
-        # Commit locali non pushati su origin/main
-        LOCAL_HEAD=$(git -C "$GIT_ROOT" rev-parse HEAD 2>/dev/null)
-        REMOTE_HEAD=$(git -C "$GIT_ROOT" ls-remote origin refs/heads/main 2>/dev/null | cut -f1)
-        if [[ -n "$REMOTE_HEAD" && "$LOCAL_HEAD" != "$REMOTE_HEAD" ]]; then
-            UNPUSHED=$(git -C "$GIT_ROOT" log --oneline "origin/main..HEAD" 2>/dev/null)
-            if [[ -n "$UNPUSHED" ]]; then
-                echo ""
-                echo "  ATTENZIONE: i seguenti commit NON sono ancora su origin/main:"
-                echo "$UNPUSHED" | sed 's/^/    /'
-                echo ""
-                echo "  Il server scaricherà la versione precedente."
-                echo "  Esegui 'git push origin main' prima del deploy."
-                echo "  Per forzare il deploy comunque: bash $0 --force"
-                [[ "${1:-}" == "--force" ]] || exit 1
+            echo "  Il server riceve solo origin/main, ma le modifiche a questo script"
+            echo "  verrebbero eseguite comunque sul server."
+            if [[ "${1:-}" != "--force" ]]; then
+                echo "  Esegui 'git add' + 'git commit' prima del deploy (o: bash $0 --force)."
+                exit 1
             fi
+            echo "  --force: proseguo con il working tree non pulito."
         fi
 
-        echo "    Git: HEAD=$(git -C "$GIT_ROOT" rev-parse --short HEAD) — tutto pushato ✓"
+        echo "    Git: main @ $(git -C "$GIT_ROOT" rev-parse --short HEAD) = origin/main ✓"
     fi
 fi
 
@@ -198,6 +215,11 @@ fi
 $SSH_CMD bash <<EOF
 set -euo pipefail
 
+mkdir -p /var/log/clubcms && chmod 700 /var/log/clubcms
+REMOTE_LOG="/var/log/clubcms/deploy-${TIMESTAMP}.log"
+exec > >(tee -a "\$REMOTE_LOG") 2>&1
+echo "  Log sul server: \$REMOTE_LOG (commit in arrivo: $(git -C "$(dirname "$0")" rev-parse --short origin/main 2>/dev/null || echo '?'))"
+
 DOMAIN_DIR="/www/wwwroot/clubs.betabi.it"
 cd "\$DOMAIN_DIR/clubcms/clubcms"
 source "\$DOMAIN_DIR/venv/bin/activate"
@@ -289,6 +311,8 @@ fi
 
 # Pulizia backup vecchi (mantieni ultimi 30)
 find "\$DOMAIN_DIR/backups" -name "db_*.sql.gz" -mtime +30 -delete 2>/dev/null || true
+# Log di deploy sul server: tieni gli ultimi 50
+ls -1t /var/log/clubcms/deploy-*.log 2>/dev/null | tail -n +51 | xargs -r rm -f
 EOF
 
 echo ""
