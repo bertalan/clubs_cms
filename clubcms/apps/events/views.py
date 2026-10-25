@@ -250,7 +250,7 @@ class StripeWebhookView(View):
             event = stripe_lib.Webhook.construct_event(
                 payload, sig_header, payment_settings.stripe_webhook_secret
             )
-        except (ValueError, stripe_lib.error.SignatureVerificationError):
+        except (ValueError, stripe_lib.SignatureVerificationError):
             return HttpResponse(status=400)
 
         if event["type"] == "checkout.session.completed":
@@ -264,7 +264,8 @@ class StripeWebhookView(View):
                 )
                 if registration.payment_status != "paid":
                     registration.payment_status = "paid"
-                    registration.payment_id = session.get("payment_intent", "")
+                    # StripeObject has no .get() since stripe 15
+                    registration.payment_id = getattr(session, "payment_intent", None) or ""
                     registration.save(
                         update_fields=["payment_status", "payment_id"]
                     )

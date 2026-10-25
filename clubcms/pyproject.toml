@@ -34,7 +34,7 @@ federation = [
     "django-ratelimit>=4.1",
 ]
 payments = [
-    "stripe>=8.0,<10.0",
+    "stripe>=16.0,<17.0",
 ]
 prod = [
     "gunicorn>=21.0",

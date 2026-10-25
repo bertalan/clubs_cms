@@ -1803,7 +1803,9 @@ class EventsAreaPage(RoutablePageMixin, Page):
 
                 site = Site.objects.get(is_default_site=True)
                 payment_settings = PaymentSettings.for_site(site)
-                stripe_lib.api_key = payment_settings.stripe_secret_key
+                from apps.events.payment import configure_stripe
+
+                configure_stripe(payment_settings.stripe_secret_key)
 
                 session = stripe_lib.checkout.Session.retrieve(
                     registration.payment_session_id
