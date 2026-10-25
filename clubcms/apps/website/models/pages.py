@@ -217,15 +217,15 @@ class HomePage(Page):
         promoted_indices = []
         promoted_raw_values = {}
 
-        for index, block in enumerate(self.body):
+        for idx, block in enumerate(self.body):
             if block.block_type not in opening_block_types:
                 break
             if block.block_type in promoted_blocks:
                 break
 
             promoted_blocks[block.block_type] = block
-            promoted_indices.append(index)
-            promoted_raw_values[block.block_type] = self.body.raw_data[index].get("value", {})
+            promoted_indices.append(idx)
+            promoted_raw_values[block.block_type] = self.body.raw_data[idx].get("value", {})
 
             if len(promoted_blocks) == len(opening_block_types):
                 break
