@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sitemaps",  # template sitemap.xml used by wagtail.contrib.sitemaps
     # Wagtail
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
