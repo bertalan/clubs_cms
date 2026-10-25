@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",  # template sitemap.xml used by wagtail.contrib.sitemaps
+    "django.contrib.postgres",  # required by wagtailsearch (SearchVectorField/GinIndex)
     # Wagtail
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",

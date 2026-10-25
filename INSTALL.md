@@ -1,7 +1,7 @@
 # ClubCMS — Installation Guide
 
 ClubCMS is a multilingual CMS for clubs and associations, built on
-**Django 5.x** and **Wagtail 7.x**. It provides membership management,
+**Django 6.1** and **Wagtail 8**. It provides membership management,
 event registration with payments (Stripe/PayPal), 6 switchable themes,
 a mutual-aid network, inter-club event federation, and push notifications.
 

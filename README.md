@@ -1,10 +1,10 @@
 # Club Website - Documentation Repository
 
-> **Documentation for a complete Wagtail 7.x CMS for clubs and associations**
+> **Documentation for a complete Wagtail 8 CMS for clubs and associations**
 
 **[Installation Guide](INSTALL.md)** — Step-by-step setup for development and production environments.
 
-This repository contains comprehensive documentation for building a feature-rich motorcycle club website using **Wagtail 7.x** and **Django 5.x**.
+This repository contains comprehensive documentation for building a feature-rich motorcycle club website using **Wagtail 8** and **Django 5.x**.
 
 ## 📂 Repository Structure
 
@@ -134,8 +134,8 @@ All themes are fully responsive and include complete implementations for all pag
 - **Partner Events**: See events from federated clubs
 
 ### Technical Excellence
-- **Wagtail 7.x**: Latest CMS with StreamField blocks
-- **Django 5.x**: Modern Python web framework
+- **Wagtail 8**: Latest CMS with StreamField blocks
+- **Django 6.1**: Modern Python web framework
 - **Docker Ready**: Production-ready containers
 - **SEO Optimized**: Schema.org JSON-LD, meta tags
 - **Secure**: Captcha, rate limiting, HTTPS/SSL

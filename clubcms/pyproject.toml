@@ -8,9 +8,9 @@ version = "0.1.0"
 description = "Motorcycle Club CMS built on Django and Wagtail"
 requires-python = ">=3.12"
 dependencies = [
-    "django>=5.0,<6.0",
-    "wagtail>=7.0,<8.0",
-    "wagtail-localize>=1.9",
+    "django>=6.1,<6.2",
+    "wagtail>=8.0,<8.1",
+    "wagtail-localize>=1.14",
     "psycopg[binary]>=3.0",
     "pillow>=10.0",
     "django-taggit>=5.0",

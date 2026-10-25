@@ -95,7 +95,7 @@ if [ ! -d "$DOMAIN_DIR/venv" ]; then
 fi
 source "$DOMAIN_DIR/venv/bin/activate"
 pip install --upgrade pip
-pip install -r "$DOMAIN_DIR/clubcms/clubcms/requirements.txt"
+pip install -r "$DOMAIN_DIR/clubcms/clubcms/requirements.lock"
 echo "  Dipendenze installate."
 
 # ── .env ─────────────────────────────────────────────────────────────────────
@@ -220,7 +220,7 @@ git pull --ff-only
 cd "\$DOMAIN_DIR/clubcms/clubcms"
 
 echo "[3/10] Aggiornamento dipendenze..."
-pip install -r requirements.txt --quiet
+pip install -r requirements.lock --quiet
 
 echo "[4/10] Migrazioni database..."
 python manage.py migrate --noinput

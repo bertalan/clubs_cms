@@ -1,6 +1,6 @@
 ---
 name: wagtail-project-workflow
-description: "Use when working on ClubCMS features, bugs, refactors, or releases in Django 5 + Wagtail 7. Covers project conventions, safe workflow, migrations, i18n, tests, Docker deploy, and acceptance checks for this repository."
+description: "Use when working on ClubCMS features, bugs, refactors, or releases in Django 6.1 + Wagtail 8. Covers project conventions, safe workflow, migrations, i18n, tests, Docker deploy, and acceptance checks for this repository."
 ---
 
 # Wagtail Project Workflow (ClubCMS)
@@ -11,7 +11,8 @@ This skill defines how the agent should plan, implement, and validate changes in
 
 ## Tech Context
 
-- Stack: Django 5.x, Wagtail 7.x, PostgreSQL, docker compose.
+- Stack: Django 6.1, Wagtail 8.0, Python 3.12, PostgreSQL 16, docker compose.
+- Dependencies: edit ranges in `requirements.txt`, then regenerate `requirements.lock` with `bash clubcms/scripts/lock.sh`; Dockerfile and deploy install from the lock.
 - App root: clubcms.
 - Main app modules: apps/core, apps/website, apps/members, apps/events, apps/federation, apps/notifications, apps/mutual_aid.
 - Settings modules: clubcms.settings.dev and clubcms.settings.prod.
