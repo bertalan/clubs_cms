@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(docker compose:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(bash -n:*)"
+    ],
+    "ask": [
+      "Bash(ssh:*)",
+      "Bash(scp:*)",
+      "Bash(rsync:*)",
+      "Bash(bash deploy/:*)",
+      "Bash(bash clubcms/deploy/:*)",
+      "Bash(git push:*)"
+    ],
+    "deny": [
+      "Read(./clubcms/.venv/**)",
+      "Read(./clubcms.tgz)",
+      "Read(./clubcms/scripts.zip)",
+      "Read(./clubcms/db.sqlite3)",
+      "Read(./clubcms/messages.mo)",
+      "Read(./clubcms/staticfiles/**)",
+      "Read(./clubcms/backups/**)",
+      "Read(./clubcms/.env)",
+      "Read(./media-items/**)"
+    ]
+  }
+}
