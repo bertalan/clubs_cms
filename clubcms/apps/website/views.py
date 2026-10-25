@@ -15,17 +15,10 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
 
+from apps.core.http import get_client_ip
 from apps.website.forms import VerificationForm
 from apps.website.models.partners import PartnerPage
 from apps.website.models.verification import VerificationLog
-
-
-def _get_client_ip(request):
-    """Extract the client IP address from the request."""
-    x_forwarded = request.META.get("HTTP_X_FORWARDED_FOR")
-    if x_forwarded:
-        return x_forwarded.split(",")[0].strip()
-    return request.META.get("REMOTE_ADDR", "0.0.0.0")
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -123,7 +116,7 @@ class VerifyMemberView(LoginRequiredMixin, FormView):
         card_number = request_form.cleaned_data["card_number"]
         v_type = request_form.cleaned_data["verification_type"]
         v_value = request_form.cleaned_data["verification_value"]
-        ip_address = _get_client_ip(self.request)
+        ip_address = get_client_ip(self.request)
 
         # Look up the member by card number
         from apps.members.models import ClubUser

@@ -86,6 +86,27 @@ ALLOWED_MIME_TYPES = {
 }
 MAX_BATCH_SIZE = 20
 
+_PIL_FORMAT_TO_MIME = {
+    "JPEG": "image/jpeg",
+    "PNG": "image/png",
+    "WEBP": "image/webp",
+}
+
+
+def _detect_image_mime(uploaded_file):
+    """Return the MIME type detected by Pillow, or None if not an image."""
+    from PIL import Image
+
+    try:
+        uploaded_file.seek(0)
+        with Image.open(uploaded_file) as img:
+            img.verify()
+            return _PIL_FORMAT_TO_MIME.get(img.format)
+    except Exception:  # not an image, truncated, decompression bomb, ...
+        return None
+    finally:
+        uploaded_file.seek(0)
+
 
 class PhotoUploadForm(forms.Form):
     """
@@ -132,8 +153,6 @@ class PhotoUploadForm(forms.Form):
                 params={"max": MAX_BATCH_SIZE},
             )
 
-        import mimetypes
-
         for f in files:
             # Size check
             if f.size > MAX_UPLOAD_SIZE:
@@ -144,31 +163,9 @@ class PhotoUploadForm(forms.Form):
                     params={"name": f.name},
                 )
 
-            # MIME type validation - read file header, don't trust extension
-            mime_type = None
-
-            # Try to detect from content
-            try:
-                import imghdr
-                header = f.read(32)
-                f.seek(0)
-                img_type = imghdr.what(None, h=header)
-                if img_type:
-                    mime_type = f"image/{img_type}"
-                    if mime_type == "image/jpeg":
-                        mime_type = "image/jpeg"
-            except Exception:
-                pass
-
-            # Fall back to content_type from upload
-            if mime_type is None:
-                mime_type = f.content_type
-
-            # Also try mimetypes as a secondary check
-            if mime_type not in ALLOWED_MIME_TYPES:
-                guessed, _encoding = mimetypes.guess_type(f.name)
-                if guessed in ALLOWED_MIME_TYPES:
-                    mime_type = guessed
+            # Format from the file content only: never trust the declared
+            # content type or the extension.
+            mime_type = _detect_image_mime(f)
 
             if mime_type not in ALLOWED_MIME_TYPES:
                 raise forms.ValidationError(
