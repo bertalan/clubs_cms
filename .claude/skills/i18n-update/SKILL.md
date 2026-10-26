@@ -32,7 +32,7 @@ docker compose exec web msgattrib --only-fuzzy --no-obsolete locale/de/LC_MESSAG
 
 ```bash
 docker compose exec web sh -c 'for l in it en de fr es; do msgfmt --check -o /dev/null locale/$l/LC_MESSAGES/django.po || exit 1; done'
-docker compose exec web python manage.py compilemessages
+docker compose exec web python manage.py compilemessages --ignore=.venv
 docker compose exec web pytest apps/core/tests/test_i18n_coverage.py apps/core/tests/test_i18n_e2e.py -q
 ```
 
