@@ -37,21 +37,30 @@ class NewsletterCategory(models.Model):
     slug = models.SlugField(
         unique=True,
         verbose_name=_("Slug"),
+        help_text=_(
+            "Appears in the archive filter address, for example "
+            "?category=club-news. Use lowercase letters, numbers and hyphens."
+        ),
     )
     description = models.CharField(
         max_length=255,
         blank=True,
         verbose_name=_("Description"),
-        help_text=_("Shown to subscribers when choosing categories."),
     )
     is_default = models.BooleanField(
         default=False,
         verbose_name=_("Default"),
-        help_text=_("Auto-selected for new subscribers."),
+        help_text=_(
+            "New subscribers who tick no category are subscribed to all "
+            "default categories."
+        ),
     )
     sort_order = models.PositiveIntegerField(
         default=0,
         verbose_name=_("Sort order"),
+        help_text=_(
+            "Lower numbers come first in the archive filters and the subscribe form."
+        ),
     )
 
     class Meta:
@@ -73,13 +82,17 @@ class NewsletterSubscription(models.Model):
     is_active = models.BooleanField(
         default=True,
         verbose_name=_("Active"),
+        help_text=_("If off, no newsletters are sent to this address."),
     )
     categories = models.ManyToManyField(
         NewsletterCategory,
         blank=True,
         related_name="subscriptions",
         verbose_name=_("Categories"),
-        help_text=_("Newsletter categories this subscriber opted into."),
+        help_text=_(
+            "The subscriber receives newsletters of these categories, plus "
+            "every newsletter sent without a category."
+        ),
     )
     subscribed_at = models.DateTimeField(
         default=timezone.now,
@@ -134,7 +147,6 @@ class SentNewsletter(models.Model):
     body = StreamField(
         NEWSLETTER_BLOCKS,
         verbose_name=_("Body"),
-        help_text=_("Compose the newsletter using the available blocks."),
         blank=True,
         use_json_field=True,
     )
@@ -145,23 +157,36 @@ class SentNewsletter(models.Model):
         on_delete=models.SET_NULL,
         related_name="newsletters",
         verbose_name=_("Category"),
+        help_text=_(
+            "If set, only subscribers of this category receive it. Leave "
+            "empty to send it to all active subscribers."
+        ),
     )
     is_public = models.BooleanField(
         default=False,
         verbose_name=_("Public"),
-        help_text=_("If checked, this newsletter is visible in the public archive."),
+        help_text=_(
+            "If on, anyone can read it in the online archive. If off, only "
+            "logged-in subscribers can."
+        ),
     )
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
         default="draft",
         verbose_name=_("Status"),
+        help_text=_(
+            "Choose Scheduled to send it automatically at the date and time "
+            "below. After sending, the system sets it to Sent."
+        ),
     )
     scheduled_at = models.DateTimeField(
         null=True,
         blank=True,
         verbose_name=_("Scheduled for"),
-        help_text=_("If set, the newsletter will be sent automatically at this date and time."),
+        help_text=_(
+            "Checked every 5 minutes, so sending may start up to 5 minutes later."
+        ),
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -209,7 +234,6 @@ class NewsletterPage(RoutablePageMixin, Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Intro text"),
-        help_text=_("Introductory text shown on the subscribe page."),
     )
 
     content_panels = Page.content_panels + [

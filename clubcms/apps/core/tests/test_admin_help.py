@@ -5,13 +5,15 @@ Verifica:
 - Guida di pagina (GuidePanel + modale) caricata nell'admin; il vecchio
   tooltip che ripeteva il help_text non c'è più
 - Nessun obbligo di help_text: un help serve solo se aggiunge informazione
-  (dove si trova il dato, formato, effetto). Per i modelli già rivisti
-  (REVIEWED_MODELS) gli help non devono ripetere l'etichetta
+  (dove si trova il dato, formato, effetto). In tutti i modelli del
+  progetto (rivisti il 2026-10-26) gli help non devono ripetere l'etichetta
+- Ogni campo ha un'etichetta traducibile (verbose_name con gettext_lazy)
 - help_text sono stringhe traducibili (LazyString)
 """
 
 import os
 
+from django.apps import apps as django_apps
 from django.db import models
 from django.test import TestCase
 from django.utils.functional import Promise
@@ -28,8 +30,10 @@ from apps.core.wagtail_hooks import (
 )
 from apps.federation.models import FederatedClub
 
-# Models whose help texts have been rewritten: they must stay useful.
-REVIEWED_MODELS = [FederatedClub]
+# Every model of the project: help texts were reviewed on 2026-10-26.
+REVIEWED_MODELS = [
+    m for m in django_apps.get_models() if m.__module__.startswith("apps.") and not m._meta.abstract
+]
 
 
 # Fields to exclude from help_text checks
@@ -79,6 +83,18 @@ def _get_editable_fields(model):
             pass
         fields.append(field)
     return fields
+
+
+def _from_third_party_base(model, field):
+    """True if the field is defined by an abstract base outside the project
+    (AbstractUser, taggit's TaggedItemBase, ...): its label is not ours."""
+    for base in model.__mro__[1:]:
+        meta = getattr(base, "_meta", None)
+        if meta is None or not meta.abstract or base.__module__.startswith("apps."):
+            continue
+        if field.name in {f.name for f in meta.local_fields + meta.local_many_to_many}:
+            return True
+    return False
 
 
 def _get_page_models():
@@ -181,6 +197,8 @@ class TestReviewedModelsHaveUsefulHelp(TestCase):
         redundant = []
         for model in REVIEWED_MODELS:
             for field in _get_editable_fields(model):
+                if _from_third_party_base(model, field):
+                    continue
                 help_text = str(getattr(field, "help_text", "") or "")
                 if help_text and is_redundant_help(field, help_text):
                     redundant.append(f"{model.__name__}.{field.name}: {help_text!r}")
@@ -188,6 +206,20 @@ class TestReviewedModelsHaveUsefulHelp(TestCase):
             self.fail(
                 f"{len(redundant)} help text(s) only restate the label:\n"
                 + "\n".join(f"  - {r}" for r in sorted(redundant))
+            )
+
+    def test_every_field_has_a_translatable_label(self):
+        missing = []
+        for model in REVIEWED_MODELS:
+            for field in _get_editable_fields(model):
+                if _from_third_party_base(model, field):
+                    continue
+                if not isinstance(field.verbose_name, Promise):
+                    missing.append(f"{model.__name__}.{field.name}")
+        if missing:
+            self.fail(
+                f"{len(missing)} field(s) without verbose_name=_(...):\n"
+                + "\n".join(f"  - {m}" for m in sorted(missing))
             )
 
     def test_heuristic_flags_restated_labels(self):

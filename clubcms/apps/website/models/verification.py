@@ -36,7 +36,6 @@ class VerificationLog(models.Model):
         on_delete=models.CASCADE,
         related_name="verification_logs",
         verbose_name=_("Partner user"),
-        help_text=_("The partner owner who performed this verification."),
     )
     card_number = models.CharField(
         max_length=50,
@@ -46,7 +45,6 @@ class VerificationLog(models.Model):
         max_length=20,
         choices=VERIFICATION_TYPE_CHOICES,
         verbose_name=_("Verification type"),
-        help_text=_("Which secondary factor was used for verification."),
     )
     result = models.CharField(
         max_length=20,

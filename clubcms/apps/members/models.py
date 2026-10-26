@@ -33,29 +33,45 @@ class ClubUser(AbstractUser):
     # ---- Display name system ----
     display_name = models.CharField(
         max_length=100, blank=True,
-        help_text=_("Choose a nickname that will be shown publicly instead of your real name."),
+        verbose_name=_("Display name"),
+        help_text=_(
+            "Nickname shown on the site instead of the real name. "
+            "If empty, the site shows the first name and last initial."
+        ),
     )
     show_real_name_to_members = models.BooleanField(
         default=False,
-        help_text=_("When enabled, active members can see your real first and last name."),
+        verbose_name=_("Show real name to members"),
+        help_text=_(
+            "If on, active members see the full name instead of the display name. "
+            "Staff always see the full name."
+        ),
     )
 
     # ---- Personal data ----
     phone = models.CharField(
         max_length=30, blank=True,
-        help_text=_("Landline number with country prefix. Example: +39 02 1234567"),
+        verbose_name=_("Phone"),
+        help_text=_(
+            "Landline with country prefix, for example +39 02 1234567. "
+            "Partner clubs can use it to verify the membership card."
+        ),
     )
     mobile = models.CharField(
         max_length=30, blank=True,
-        help_text=_("Mobile number with country prefix. Example: +39 333 1234567"),
+        verbose_name=_("Mobile phone"),
+        help_text=_(
+            "With country prefix, for example +39 333 1234567. Prefilled as the "
+            "contact number when the member asks for mutual aid."
+        ),
     )
     birth_date = models.DateField(
         null=True, blank=True,
-        help_text=_("Your date of birth. Used for birthday greetings and age-restricted events."),
+        verbose_name=_("Date of birth"),
     )
     birth_place = models.CharField(
         max_length=100, blank=True,
-        help_text=_("City or town where you were born."),
+        verbose_name=_("Place of birth"),
     )
     photo = models.ForeignKey(
         "wagtailimages.Image",
@@ -63,62 +79,77 @@ class ClubUser(AbstractUser):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
-        help_text=_("Foto profilo del socio."),
+        verbose_name=_("Photo"),
+        help_text=_("Shown next to the member's name in the member directory."),
     )
 
     # ---- Identity document ----
     fiscal_code = models.CharField(max_length=16, blank=True,
-        help_text=_("Codice fiscale italiano (16 caratteri)."),
+        verbose_name=_("Fiscal code"),
+        help_text=_("Italian tax code, 16 characters. Example: RSSMRA85M01H501Z"),
     )
     DOCUMENT_TYPES = [
-        ("id_card", "ID Card"),
-        ("license", "Driver's License"),
-        ("passport", "Passport"),
+        ("id_card", _("ID card")),
+        ("license", _("Driving licence")),
+        ("passport", _("Passport")),
     ]
     document_type = models.CharField(
         max_length=20, choices=DOCUMENT_TYPES, blank=True,
-        help_text=_("Tipo di documento di identità."),
+        verbose_name=_("Document type"),
     )
     document_number = models.CharField(max_length=50, blank=True,
-        help_text=_("Numero del documento di identità."),
+        verbose_name=_("Document number"),
     )
     document_expiry = models.DateField(null=True, blank=True,
-        help_text=_("Data di scadenza del documento."),
+        verbose_name=_("Document expiry date"),
     )
 
     # ---- Address ----
     address = models.CharField(
         max_length=255, blank=True,
-        help_text=_("Street address. Example: Via Roma 42"),
+        verbose_name=_("Address"),
+        help_text=_("Street and house number. Example: Via Roma 42"),
     )
     city = models.CharField(
         max_length=100, blank=True,
-        help_text=_("City or town of residence."),
+        verbose_name=_("City"),
+        help_text=_(
+            "Shown in the member directory and on the public profile. "
+            "Partner clubs can use it to verify the membership card."
+        ),
     )
     province = models.CharField(
         max_length=2, blank=True,
-        help_text=_("Two-letter province code. Example: MI"),
+        verbose_name=_("Province"),
+        help_text=_(
+            "Two-letter code, shown after the city on the public profile. "
+            "Example: MI"
+        ),
     )
     postal_code = models.CharField(
         max_length=5, blank=True,
-        help_text=_("5-digit postal code. Example: 20100"),
+        verbose_name=_("Postal code"),
     )
     country = models.CharField(
         max_length=2, default="IT",
-        help_text=_("Two-letter country code (ISO 3166-1). Example: IT"),
+        verbose_name=_("Country"),
+        help_text=_(
+            "Two-letter ISO 3166-1 code, for example IT for Italy "
+            "or CH for Switzerland."
+        ),
     )
 
     # ---- Membership card ----
     card_number = models.CharField(max_length=50, blank=True, unique=True, null=True,
-        help_text=_("Numero tessera socio (generato automaticamente)."),
+        verbose_name=_("Card number"),
     )
     membership_date = models.DateField(null=True, blank=True,
-        help_text=_("Data di prima iscrizione al club."),
+        verbose_name=_("Member since"),
     )
     membership_expiry = models.DateField(null=True, blank=True,
-        help_text=_("Data di scadenza della tessera."),
+        verbose_name=_("Membership expiry"),
     )
-    
+
     CARD_STATUS_CHOICES = [
         ("active", _("Active")),
         ("suspended", _("Suspended")),
@@ -128,98 +159,148 @@ class ClubUser(AbstractUser):
         max_length=20,
         choices=CARD_STATUS_CHOICES,
         default="active",
-        help_text=_("Status of the membership card. Suspended cards can be reactivated."),
+        verbose_name=_("Card status"),
     )
     card_status_reason = models.TextField(
         blank=True,
-        help_text=_("Reason for suspension or termination."),
+        verbose_name=_("Card status reason"),
     )
     card_status_changed = models.DateTimeField(
         null=True,
         blank=True,
-        help_text=_("When the card status was last changed."),
+        verbose_name=_("Card status changed at"),
     )
 
     # ---- Preferences ----
     newsletter = models.BooleanField(
         default=False,
-        help_text=_("Receive our periodic newsletter with club news and upcoming events."),
+        verbose_name=_("Newsletter"),
+        help_text=_("Set by the member at sign-up or in their privacy settings."),
     )
     show_in_directory = models.BooleanField(
         default=False,
-        help_text=_("When enabled, your display name appears in the member directory visible to other members."),
+        verbose_name=_("Show in member directory"),
+        help_text=_(
+            "If on, the member appears in the member directory, "
+            "which only logged-in users can see."
+        ),
     )
     public_profile = models.BooleanField(
         default=False,
-        help_text=_("When enabled, your profile page is visible to anyone, including non-members."),
+        verbose_name=_("Public profile"),
+        help_text=_(
+            "If on, anyone can open the member's profile page without logging in. "
+            "It shows the display name, city, bio and member since date."
+        ),
     )
     bio = models.TextField(
         blank=True,
-        help_text=_("A short description about yourself. Visible on your profile page."),
+        verbose_name=_("Bio"),
+        help_text=_("Shown on the member's profile page when Public profile is on."),
     )
 
     # ---- Mutual aid ----
     aid_available = models.BooleanField(
         default=False,
-        help_text=_("Enable this to appear in the mutual aid helper directory."),
+        verbose_name=_("Available for mutual aid"),
+        help_text=_(
+            "If on, the member is listed as a helper in the mutual aid "
+            "directory and map."
+        ),
     )
     aid_radius_km = models.PositiveIntegerField(
         default=25,
-        help_text=_("Maximum distance in km you are willing to travel to help. Example: 25"),
+        verbose_name=_("Mutual aid radius (km)"),
+        help_text=_(
+            "How far the member is willing to travel. Shown on their helper card."
+        ),
     )
     aid_location_city = models.CharField(
         max_length=100, blank=True,
-        help_text=_("The city where you are usually based for mutual aid."),
+        verbose_name=_("Mutual aid city"),
+        help_text=_(
+            "Shown on the helper card. Helpers without a city do not appear "
+            "on the mutual aid map."
+        ),
     )
     aid_coordinates = models.CharField(
         max_length=50, blank=True,
-        help_text=_("Latitude and longitude, comma-separated. Example: 45.4642,9.1900"),
+        verbose_name=_("Mutual aid coordinates"),
+        help_text=_(
+            "Latitude and longitude, filled by the location picker on the member's "
+            "mutual aid page and used for distance search. Example: 45.4642,9.1900"
+        ),
     )
     aid_notes = models.TextField(
         blank=True,
-        help_text=_("Additional information: tools, skills, vehicle type, availability hours."),
+        verbose_name=_("Mutual aid notes"),
+        help_text=_(
+            "Tools, skills, vehicle or hours. Shown on the helper card only if the "
+            "member turns on \"Show helper notes\" in their mutual aid privacy settings."
+        ),
     )
 
     # ---- Notification preferences ----
     email_notifications = models.BooleanField(
         default=True,
-        help_text=_("Receive notifications via email."),
+        verbose_name=_("Email notifications"),
+        help_text=_(
+            "Master switch for email. If off, the member gets no notification "
+            "emails, whatever the topic settings say."
+        ),
     )
     push_notifications = models.BooleanField(
         default=False,
-        help_text=_("Receive push notifications in your browser (requires PWA support)."),
+        verbose_name=_("Push notifications"),
+        help_text=_(
+            "Master switch for browser push notifications. If off, no push "
+            "notifications are sent to the member."
+        ),
     )
     news_updates = models.BooleanField(
         default=True,
-        help_text=_("Get notified when new articles or announcements are published."),
+        verbose_name=_("News updates"),
+        help_text=_(
+            "Notifies the member when a news article is published on the site."
+        ),
     )
     event_updates = models.BooleanField(
         default=True,
-        help_text=_("Get notified about new events and changes to events you registered for."),
+        verbose_name=_("Event updates"),
+        help_text=_(
+            "Covers the member's own event registrations: confirmation, payment "
+            "instructions, payment expiry and waitlist promotion."
+        ),
     )
     event_reminders = models.BooleanField(
         default=True,
-        help_text=_("Receive a reminder before events you are registered for."),
+        verbose_name=_("Event reminders"),
     )
     membership_alerts = models.BooleanField(
         default=True,
-        help_text=_("Alerts about membership expiry, renewal, and card updates."),
+        verbose_name=_("Membership alerts"),
+        help_text=_("Reminders sent 30 days and 7 days before the membership expires."),
     )
     partner_updates = models.BooleanField(
         default=False,
-        help_text=_("News and promotions from partner clubs."),
+        verbose_name=_("Partner updates"),
     )
     aid_requests = models.BooleanField(
         default=True,
-        help_text=_("Notifications when someone nearby requests mutual aid."),
+        verbose_name=_("Mutual aid requests"),
+        help_text=_("Notifies the member when someone asks them for mutual aid."),
     )
     partner_events = models.BooleanField(
         default=True,
-        help_text=_("Events published by federated partner clubs."),
+        verbose_name=_("Partner events"),
     )
     partner_event_comments = models.BooleanField(
         default=True,
-        help_text=_("Comments on partner events you showed interest in."),
+        verbose_name=_("Partner event comments"),
+        help_text=_(
+            "Notifies the member when someone else comments on a partner event "
+            "they have commented on."
+        ),
     )
 
     DIGEST_FREQUENCY_CHOICES = [
@@ -229,7 +310,11 @@ class ClubUser(AbstractUser):
     ]
     digest_frequency = models.CharField(
         max_length=10, choices=DIGEST_FREQUENCY_CHOICES, default="daily",
-        help_text=_("How often to receive a digest email summarising your notifications."),
+        verbose_name=_("Digest frequency"),
+        help_text=_(
+            "Daily sends one summary at 07:00 the next day, weekly on Monday at "
+            "07:00. Immediate sends each notification right away."
+        ),
     )
 
     # ---- Products (composable membership) ----
@@ -238,7 +323,10 @@ class ClubUser(AbstractUser):
         blank=True,
         related_name="members",
         verbose_name=_("Products"),
-        help_text=_("Prodotti/abbonamenti acquistati dal socio."),
+        help_text=_(
+            "Products grant voting, uploads, event registration and discounts. "
+            "A member with no products has no restrictions and no discount."
+        ),
     )
 
     class Meta:
@@ -441,42 +529,41 @@ class MembershipRequest(models.Model):
         on_delete=models.CASCADE,
         related_name="membership_requests",
         verbose_name=_("User"),
-        help_text=_("Socio che ha inviato la richiesta."),
     )
     product = models.ForeignKey(
         "website.Product",
         on_delete=models.CASCADE,
         related_name="membership_requests",
         verbose_name=_("Product"),
-        help_text=_("Prodotto/abbonamento richiesto."),
+        help_text=_(
+            "Approving the request adds this product to the member and extends "
+            "the membership by the product's validity days."
+        ),
     )
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
         default="pending",
         verbose_name=_("Status"),
-        help_text=_("Stato della richiesta di adesione."),
     )
     notes = models.TextField(
         blank=True,
         verbose_name=_("Notes"),
-        help_text=_("Any additional information or requests."),
+        help_text=_("Written by the member when sending the request."),
     )
     admin_notes = models.TextField(
         blank=True,
-        verbose_name=_("Admin Notes"),
-        help_text=_("Internal notes for administrators."),
+        verbose_name=_("Response to the member"),
+        help_text=_(
+            "Shown on the member's request page. A reason entered when rejecting "
+            "the request replaces this text."
+        ),
     )
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created"),
-        help_text=_("Data e ora di invio della richiesta."),
-    )
-    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated"),
-        help_text=_("Data e ora dell'ultimo aggiornamento."),
-    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created"))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated"))
     processed_at = models.DateTimeField(
         null=True, blank=True,
         verbose_name=_("Processed at"),
-        help_text=_("Data e ora di elaborazione da parte dell'admin."),
     )
     processed_by = models.ForeignKey(
         ClubUser,
@@ -484,7 +571,6 @@ class MembershipRequest(models.Model):
         null=True, blank=True,
         related_name="processed_requests",
         verbose_name=_("Processed by"),
-        help_text=_("Amministratore che ha gestito la richiesta."),
     )
 
     class Meta:
@@ -580,17 +666,15 @@ class MembersAreaPage(RoutablePageMixin, Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
-        help_text=_("Introductory text displayed on the members area landing page."),
+        help_text=_("Shown at the top of the members area landing page."),
     )
     directory_intro = RichTextField(
         blank=True,
         verbose_name=_("Directory introduction"),
-        help_text=_("Text shown at the top of the member directory."),
     )
     card_help_text = RichTextField(
         blank=True,
         verbose_name=_("Card help text"),
-        help_text=_("Help text displayed on the membership card page."),
     )
 
     max_count = 1

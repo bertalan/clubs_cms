@@ -85,11 +85,10 @@ class ClubUserViewSet(ModelViewSet):
         FieldPanel("country"),
     ]
 
+    # CardActionsPanel already shows card number, member since date,
+    # expiry and card status: no read-only duplicates of those fields.
     membership_panels = [
         CardActionsPanel(),
-        FieldPanel("card_number", read_only=True),
-        FieldPanel("membership_date", read_only=True),
-        FieldPanel("membership_expiry", read_only=True),
         FieldPanel("is_active"),
         FieldPanel("products"),
     ]

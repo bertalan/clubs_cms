@@ -39,14 +39,14 @@ class PartnerIndexPage(Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
-        help_text=_("Testo introduttivo sopra l'elenco dei partner."),
+        help_text=_("Shown at the top of the page, above the list of partners."),
     )
     body = StreamField(
         BODY_BLOCKS,
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
-        help_text=_("Contenuto aggiuntivo sotto l'introduzione."),
+        help_text=_("Extra content shown below the list of partners."),
     )
 
     # --- Wagtail config ---
@@ -125,7 +125,10 @@ class PartnerPage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Logo"),
-        help_text=_("Logo del partner, mostrato nei listing e nella pagina."),
+        help_text=_(
+            "Shown on the partner card in the list, on the home page and on the partner"
+            " page."
+        ),
     )
     cover_image = models.ForeignKey(
         "wagtailimages.Image",
@@ -134,7 +137,7 @@ class PartnerPage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Cover image"),
-        help_text=_("Immagine di copertina mostrata tra il titolo e il contenuto."),
+        help_text=_("Wide image between the title and the content, cropped to 16:9."),
     )
     category = models.ForeignKey(
         "website.PartnerCategory",
@@ -143,93 +146,86 @@ class PartnerPage(Page):
         on_delete=models.SET_NULL,
         related_name="partner_pages",
         verbose_name=_("Category"),
-        help_text=_("Categoria del partner (es. Sponsor, Tecnico)."),
+        help_text=_(
+            "Used to filter the partner list and shown as a ribbon on the partner card."
+        ),
     )
     intro = models.TextField(
         blank=True,
         verbose_name=_("Introduction"),
-        help_text=_("Short description shown in listings."),
+        help_text=_(
+            "Shown under the title and on the partner card in the list, cut to 20 "
+            "words."
+        ),
     )
     body = StreamField(
         BODY_BLOCKS,
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
-        help_text=_("Descrizione completa del partner."),
     )
 
     # --- Contact fields ---
     website = models.URLField(
         blank=True,
         verbose_name=_("Website"),
-        help_text=_("Sito web del partner."),
     )
     email = models.EmailField(
         blank=True,
         verbose_name=_("Email"),
-        help_text=_("Email di contatto del partner."),
     )
     phone = models.CharField(
         max_length=30,
         blank=True,
         verbose_name=_("Phone"),
-        help_text=_("Numero di telefono del partner."),
     )
     address = models.TextField(
         blank=True,
         verbose_name=_("Address"),
-        help_text=_("Indirizzo fisico del partner."),
     )
     contact_city = models.CharField(
         max_length=100,
         blank=True,
         verbose_name=_("City"),
-        help_text=_("Città di riferimento del partner."),
+        help_text=_("Shown with the address and on the partner card in the list."),
     )
     country = models.CharField(
         max_length=2,
         default="IT",
         verbose_name=_("Country"),
-        help_text=_("ISO 3166-1 alpha-2 country code."),
+        help_text=_("Two-letter country code, for example IT or DE."),
     )
     latitude = models.FloatField(
         null=True,
         blank=True,
         verbose_name=_("Latitude"),
-        help_text=_("Latitudine per la mappa (es. 45.6950)."),
     )
     longitude = models.FloatField(
         null=True,
         blank=True,
         verbose_name=_("Longitude"),
-        help_text=_("Longitudine per la mappa (es. 9.6700)."),
     )
 
     # --- Social fields ---
     facebook_url = models.URLField(
         blank=True,
         verbose_name=_("Facebook URL"),
-        help_text=_("URL pagina Facebook del partner."),
     )
     instagram_url = models.URLField(
         blank=True,
         verbose_name=_("Instagram URL"),
-        help_text=_("URL profilo Instagram del partner."),
     )
     linkedin_url = models.URLField(
         blank=True,
         verbose_name=_("LinkedIn URL"),
-        help_text=_("URL pagina LinkedIn del partner."),
     )
     youtube_url = models.URLField(
         blank=True,
         verbose_name=_("YouTube URL"),
-        help_text=_("URL canale YouTube del partner."),
     )
     twitter_url = models.URLField(
         blank=True,
         verbose_name=_("Twitter / X URL"),
-        help_text=_("URL profilo Twitter/X del partner."),
     )
 
     # --- Ownership fields ---
@@ -240,41 +236,50 @@ class PartnerPage(Page):
         on_delete=models.SET_NULL,
         related_name="owned_partner_pages",
         verbose_name=_("Partner owner"),
-        help_text=_("User account that manages this partner page."),
     )
     owner_email = models.EmailField(
         blank=True,
         verbose_name=_("Owner email"),
-        help_text=_("Contact email for the partner owner."),
     )
 
     # --- Display fields ---
     is_featured = models.BooleanField(
         default=False,
         verbose_name=_("Featured"),
-        help_text=_("Show this partner prominently."),
+        help_text=_(
+            "Adds a Featured badge on the partner page and a star on the "
+            "partner card. Used on the home page when no partner has Show on "
+            "homepage turned on."
+        ),
     )
     display_order = models.IntegerField(
         default=0,
         verbose_name=_("Display order"),
-        help_text=_("Lower numbers appear first."),
+        help_text=_(
+            "Lower numbers appear first in the partner list and on the home page."
+        ),
     )
     show_on_homepage = models.BooleanField(
         default=False,
         verbose_name=_("Show on homepage"),
-        help_text=_("Mostra il logo del partner nella homepage."),
+        help_text=_(
+            "Shows the partner in the partner section of the home page, up to 6 "
+            "partners."
+        ),
     )
     partnership_start = models.DateField(
         null=True,
         blank=True,
         verbose_name=_("Partnership start"),
-        help_text=_("Data di inizio della partnership."),
+        help_text=_("Shown on the partner page as month and year."),
     )
     partnership_end = models.DateField(
         null=True,
         blank=True,
         verbose_name=_("Partnership end"),
-        help_text=_("Leave blank for ongoing partnerships."),
+        help_text=_(
+            "Shown on the partner page. Leave empty for an ongoing partnership."
+        ),
     )
 
     # --- Wagtail config ---
@@ -304,7 +309,11 @@ class PartnerPage(Page):
                     [
                         FieldPanel("latitude"),
                         FieldPanel("longitude"),
-                    ]
+                    ],
+                    help_text=_(
+                        "Fill in both to show the partner on a map, for "
+                        "example 45.6950 and 9.6700."
+                    ),
                 ),
             ],
             heading=_("Contact information"),
@@ -321,6 +330,10 @@ class PartnerPage(Page):
                 FieldPanel("twitter_url"),
             ],
             heading=_("Social media"),
+            help_text=_(
+                "Full addresses starting with https://. Each one becomes an "
+                "icon on the partner page."
+            ),
         ),
     ]
 

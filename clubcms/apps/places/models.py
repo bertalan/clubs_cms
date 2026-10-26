@@ -17,13 +17,13 @@ from wagtail.snippets.models import register_snippet
 # ---------------------------------------------------------------------------
 
 class PlaceType(models.TextChoices):
-    CLUBHOUSE = "clubhouse", _("Sede Club")
-    MONUMENT = "monument", _("Monumento")
-    SQUARE = "square", _("Piazza")
-    POI = "poi", _("Punto di Interesse")
-    EVENT_VENUE = "event_venue", _("Luogo Eventi")
-    ACCOMMODATION = "accommodation", _("Alloggio")
-    RESTAURANT = "restaurant", _("Ristorante")
+    CLUBHOUSE = "clubhouse", _("Clubhouse")
+    MONUMENT = "monument", _("Monument")
+    SQUARE = "square", _("Square")
+    POI = "poi", _("Point of interest")
+    EVENT_VENUE = "event_venue", _("Event venue")
+    ACCOMMODATION = "accommodation", _("Accommodation")
+    RESTAURANT = "restaurant", _("Restaurant")
 
 
 SCHEMA_TYPE_MAP = {
@@ -53,8 +53,16 @@ MAP_ICON_MAP = {
 
 @register_snippet
 class PlaceTag(models.Model):
-    name = models.CharField(max_length=50, unique=True, verbose_name=_("Nome"))
-    slug = models.SlugField(max_length=50, unique=True)
+    name = models.CharField(max_length=50, unique=True, verbose_name=_("Name"))
+    slug = models.SlugField(
+        max_length=50,
+        unique=True,
+        verbose_name=_("Slug"),
+        help_text=_(
+            "Appears in the link that lists every place with this tag, "
+            "e.g. ?tag=castles. Lowercase letters, numbers and hyphens only."
+        ),
+    )
 
     panels = [
         FieldPanel("name"),
@@ -62,8 +70,8 @@ class PlaceTag(models.Model):
     ]
 
     class Meta:
-        verbose_name = _("Tag Luogo")
-        verbose_name_plural = _("Tag Luoghi")
+        verbose_name = _("Place tag")
+        verbose_name_plural = _("Place tags")
         ordering = ["name"]
 
     def __str__(self):
@@ -77,7 +85,7 @@ class PlaceTag(models.Model):
 class PlaceIndexPage(Page):
     """Pagina indice che elenca tutti i luoghi con mappa globale."""
 
-    intro = RichTextField(blank=True, verbose_name=_("Introduzione"))
+    intro = RichTextField(blank=True, verbose_name=_("Introduction"))
 
     content_panels = Page.content_panels + [
         FieldPanel("intro"),
@@ -89,8 +97,8 @@ class PlaceIndexPage(Page):
     template = "places/place_index_page.html"
 
     class Meta:
-        verbose_name = _("Indice Luoghi")
-        verbose_name_plural = _("Indici Luoghi")
+        verbose_name = _("Places index")
+        verbose_name_plural = _("Places indexes")
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
@@ -156,7 +164,11 @@ class PlacePage(Page):
         max_length=20,
         choices=PlaceType.choices,
         default=PlaceType.POI,
-        verbose_name=_("Tipo di luogo"),
+        verbose_name=_("Place type"),
+        help_text=_(
+            "Sets the map icon and the type reported to search engines. "
+            "Visitors can also filter the places list by type."
+        ),
     )
 
     # Geolocalizzazione
@@ -165,64 +177,105 @@ class PlacePage(Page):
         decimal_places=6,
         null=True,
         blank=True,
-        verbose_name=_("Latitudine"),
+        verbose_name=_("Latitude"),
+        help_text=_(
+            "Decimal degrees, e.g. 45.916700. Without both coordinates the "
+            "place gets no map and no pin on the places map."
+        ),
     )
     longitude = models.DecimalField(
         max_digits=9,
         decimal_places=6,
         null=True,
         blank=True,
-        verbose_name=_("Longitudine"),
+        verbose_name=_("Longitude"),
+        help_text=_("Decimal degrees, e.g. 9.316700. Copy it from a map app together with the latitude."),
     )
     address = models.CharField(
-        max_length=255, blank=True, verbose_name=_("Indirizzo")
+        max_length=255,
+        blank=True,
+        verbose_name=_("Street address"),
+        help_text=_(
+            "Street and number, e.g. Via Roma 12. Postal code, city and "
+            "province have their own fields."
+        ),
     )
     city = models.CharField(
-        max_length=100, blank=True, verbose_name=_("Città")
+        max_length=100,
+        blank=True,
+        verbose_name=_("City"),
+        help_text=_("Shown on the place card and searchable from the site search."),
     )
     province = models.CharField(
-        max_length=5, blank=True, verbose_name=_("Provincia")
+        max_length=5,
+        blank=True,
+        verbose_name=_("Province"),
+        help_text=_("Abbreviation, e.g. LC. Shown in brackets after the city on the place card."),
     )
     postal_code = models.CharField(
-        max_length=10, blank=True, verbose_name=_("CAP")
+        max_length=10, blank=True, verbose_name=_("Postal code")
     )
     country = models.CharField(
-        max_length=2, default="IT", verbose_name=_("Paese (ISO 3166-1)")
+        max_length=2,
+        default="IT",
+        verbose_name=_("Country code"),
+        help_text=_("Two-letter ISO code, e.g. IT for Italy or CH for Switzerland."),
     )
 
     # Contenuto
     short_description = models.CharField(
         max_length=300,
         blank=True,
-        verbose_name=_("Descrizione breve"),
-        help_text=_("Usata nelle card e nei risultati di ricerca."),
+        verbose_name=_("Short description"),
+        help_text=_(
+            "Shown on the place card and under the title of the place page. "
+            "Search engines also use it as the page description."
+        ),
     )
-    description = RichTextField(blank=True, verbose_name=_("Descrizione"))
+    description = RichTextField(blank=True, verbose_name=_("Description"))
     cover_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
-        verbose_name=_("Immagine di copertina"),
+        verbose_name=_("Cover image"),
+        help_text=_("Shown at the top of the place page and on the place card."),
     )
 
     # Contatti & orari (dati pubblici del luogo, non dati personali utente)
     opening_hours = models.CharField(
         max_length=255,
         blank=True,
-        verbose_name=_("Orari di apertura"),
-        help_text=_("Formato: Mo-Fr 09:00-18:00, Sa 10:00-14:00"),
+        verbose_name=_("Opening hours"),
+        help_text=_(
+            "Use the format search engines read, e.g. Mo-Fr 09:00-18:00, "
+            "Sa 10:00-14:00. Visitors see it as written."
+        ),
     )
     phone = models.CharField(
-        max_length=30, blank=True, verbose_name=_("Telefono")
+        max_length=30,
+        blank=True,
+        verbose_name=_("Phone"),
+        help_text=_("Public number of the place, never a member's. Visitors can tap it to call."),
     )
-    email = models.EmailField(blank=True, verbose_name=_("Email"))
-    website_url = models.URLField(blank=True, verbose_name=_("Sito web"))
+    email = models.EmailField(
+        blank=True,
+        verbose_name=_("Email"),
+        help_text=_("Public address of the place, never a member's. Shown on the place page."),
+    )
+    website_url = models.URLField(
+        blank=True,
+        verbose_name=_("Website"),
+        help_text=_("Full address starting with https://, shown as a link on the place page."),
+    )
 
     # Tags
     tags = ParentalManyToManyField(
-        "places.PlaceTag", blank=True, verbose_name=_("Tag")
+        "places.PlaceTag",
+        blank=True,
+        verbose_name=_("Tags"),
+        help_text=_("Visitors can click a tag on the place page to list every place with the same tag."),
     )
 
     # ------------------------------------------------------------------
@@ -243,7 +296,7 @@ class PlacePage(Page):
                 FieldPanel("postal_code"),
                 FieldPanel("country"),
             ],
-            heading=_("Geolocalizzazione"),
+            heading=_("Location"),
         ),
         MultiFieldPanel(
             [
@@ -252,10 +305,10 @@ class PlacePage(Page):
                 FieldPanel("email"),
                 FieldPanel("website_url"),
             ],
-            heading=_("Contatti e Orari"),
+            heading=_("Contacts and opening hours"),
         ),
         FieldPanel("tags"),
-        InlinePanel("gallery_images", label=_("Galleria immagini")),
+        InlinePanel("gallery_images", label=_("Gallery images")),
     ]
 
     # ------------------------------------------------------------------
@@ -290,8 +343,8 @@ class PlacePage(Page):
     template = "places/place_page.html"
 
     class Meta:
-        verbose_name = _("Luogo")
-        verbose_name_plural = _("Luoghi")
+        verbose_name = _("Place")
+        verbose_name_plural = _("Places")
 
     def __str__(self):
         return self.title
@@ -334,10 +387,16 @@ class PlaceGalleryImage(Orderable):
         "wagtailimages.Image",
         on_delete=models.CASCADE,
         related_name="+",
-        verbose_name=_("Immagine"),
+        verbose_name=_("Image"),
     )
     caption = models.CharField(
-        max_length=250, blank=True, verbose_name=_("Didascalia")
+        max_length=250,
+        blank=True,
+        verbose_name=_("Caption"),
+        help_text=_(
+            "Shown under the photo and read aloud by screen readers. "
+            "If empty, the image title is used."
+        ),
     )
 
     panels = [
@@ -346,8 +405,8 @@ class PlaceGalleryImage(Orderable):
     ]
 
     class Meta(Orderable.Meta):
-        verbose_name = _("Immagine galleria")
-        verbose_name_plural = _("Immagini galleria")
+        verbose_name = _("Gallery image")
+        verbose_name_plural = _("Gallery images")
 
 
 # ---------------------------------------------------------------------------
@@ -358,42 +417,54 @@ class RoutePage(Page):
     """Percorso turistico = sequenza ordinata di PlacePage."""
 
     short_description = models.CharField(
-        max_length=300, blank=True, verbose_name=_("Descrizione breve")
+        max_length=300,
+        blank=True,
+        verbose_name=_("Short description"),
+        help_text=_(
+            "Shown under the title of the route page. Search engines also "
+            "use it as the page description."
+        ),
     )
-    description = RichTextField(blank=True, verbose_name=_("Descrizione"))
+    description = RichTextField(blank=True, verbose_name=_("Description"))
     cover_image = models.ForeignKey(
         "wagtailimages.Image",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
-        verbose_name=_("Immagine di copertina"),
+        verbose_name=_("Cover image"),
     )
     distance_km = models.DecimalField(
         max_digits=7,
         decimal_places=1,
         null=True,
         blank=True,
-        verbose_name=_("Distanza (km)"),
+        verbose_name=_("Distance (km)"),
     )
     estimated_duration = models.DurationField(
-        null=True, blank=True, verbose_name=_("Durata stimata")
+        null=True,
+        blank=True,
+        verbose_name=_("Estimated duration"),
+        help_text=_("Hours, minutes and seconds, e.g. 2:30:00 for two and a half hours."),
     )
     difficulty = models.CharField(
         max_length=20,
         choices=[
-            ("easy", _("Facile")),
-            ("medium", _("Media")),
-            ("hard", _("Difficile")),
+            ("easy", _("Easy")),
+            ("medium", _("Medium")),
+            ("hard", _("Hard")),
         ],
         default="medium",
-        verbose_name=_("Difficoltà"),
+        verbose_name=_("Difficulty"),
     )
     gpx_file = models.FileField(
         upload_to="routes/gpx/",
         blank=True,
-        verbose_name=_("File GPX"),
-        help_text=_("Traccia GPX del percorso"),
+        verbose_name=_("GPX file"),
+        help_text=_(
+            "Track exported from a GPS device or route planner. Visitors can "
+            "download it from the route page."
+        ),
     )
 
     content_panels = Page.content_panels + [
@@ -407,9 +478,9 @@ class RoutePage(Page):
                 FieldPanel("difficulty"),
                 FieldPanel("gpx_file"),
             ],
-            heading=_("Dettagli Percorso"),
+            heading=_("Route details"),
         ),
-        InlinePanel("route_stops", label=_("Tappe"), min_num=2),
+        InlinePanel("route_stops", label=_("Stops"), min_num=2),
     ]
 
     search_fields = Page.search_fields + [
@@ -423,8 +494,8 @@ class RoutePage(Page):
     template = "places/route_page.html"
 
     class Meta:
-        verbose_name = _("Percorso")
-        verbose_name_plural = _("Percorsi")
+        verbose_name = _("Route")
+        verbose_name_plural = _("Routes")
 
     def get_ordered_stops(self):
         return self.route_stops.select_related("place").order_by("sort_order")
@@ -457,10 +528,13 @@ class RouteStop(Orderable):
         "places.PlacePage",
         on_delete=models.CASCADE,
         related_name="route_appearances",
-        verbose_name=_("Luogo"),
+        verbose_name=_("Place"),
     )
     note = models.CharField(
-        max_length=255, blank=True, verbose_name=_("Nota tappa")
+        max_length=255,
+        blank=True,
+        verbose_name=_("Note"),
+        help_text=_("Shown next to the stop in the route's list of stops, e.g. Coffee break."),
     )
 
     panels = [
@@ -469,8 +543,8 @@ class RouteStop(Orderable):
     ]
 
     class Meta(Orderable.Meta):
-        verbose_name = _("Tappa")
-        verbose_name_plural = _("Tappe")
+        verbose_name = _("Stop")
+        verbose_name_plural = _("Stops")
 
     def __str__(self):
         return f"{self.sort_order}. {self.place.title}"

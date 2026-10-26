@@ -31,11 +31,12 @@ class AccordionItemBlock(StructBlock):
     title = CharBlock(
         max_length=255,
         required=True,
-        help_text=_("Accordion panel header."),
+        label=_("Title"),
     )
     content = RichTextBlock(
         required=True,
-        help_text=_("Panel content revealed when expanded."),
+        label=_("Content"),
+        help_text=_("Hidden until the visitor clicks the title."),
     )
 
     class Meta:
@@ -52,14 +53,14 @@ class AccordionBlock(StructBlock):
     title = CharBlock(
         max_length=255,
         required=False,
-        help_text=_("Optional section title above the accordion."),
+        label=_("Section title"),
     )
     items = ListBlock(
         AccordionItemBlock(),
         min_num=1,
         label=_("Panels"),
     )
-    settings = BlockSettings(required=False)
+    settings = BlockSettings(required=False, label=_("Advanced settings"))
 
     class Meta:
         template = "website/blocks/accordion_block.html"
@@ -78,11 +79,12 @@ class TabItemBlock(StructBlock):
     title = CharBlock(
         max_length=255,
         required=True,
-        help_text=_("Tab label."),
+        label=_("Tab title"),
+        help_text=_("Keep it short so that all the tabs fit on one row."),
     )
     content = RichTextBlock(
         required=True,
-        help_text=_("Tab panel content."),
+        label=_("Content"),
     )
 
     class Meta:
@@ -99,8 +101,9 @@ class TabsBlock(StructBlock):
         TabItemBlock(),
         min_num=2,
         label=_("Tabs"),
+        help_text=_("Add at least 2 tabs. The first tab is open when the page loads."),
     )
-    settings = BlockSettings(required=False)
+    settings = BlockSettings(required=False, label=_("Advanced settings"))
 
     class Meta:
         template = "website/blocks/tabs_block.html"
@@ -135,9 +138,10 @@ class TwoColumnBlock(StructBlock):
             ("75-25", _("75 / 25")),
         ],
         default="50-50",
-        help_text=_("Column width ratio."),
+        label=_("Column widths"),
+        help_text=_("Share of the width in percent, left column first."),
     )
-    settings = BlockSettings(required=False)
+    settings = BlockSettings(required=False, label=_("Advanced settings"))
 
     class Meta:
         template = "website/blocks/two_column_block.html"
@@ -159,11 +163,11 @@ class SectionBlock(StructBlock):
     title = CharBlock(
         max_length=255,
         required=False,
-        help_text=_("Optional section heading."),
+        label=_("Title"),
     )
     content = RichTextBlock(
         required=True,
-        help_text=_("Section body content."),
+        label=_("Content"),
     )
     background = ChoiceBlock(
         choices=[
@@ -175,11 +179,15 @@ class SectionBlock(StructBlock):
             ("image", _("Image background")),
         ],
         default="default",
-        help_text=_("Background style."),
+        label=_("Background"),
     )
     background_image = ImageChooserBlock(
         required=False,
-        help_text=_("Background image (only used with 'Image background' style)."),
+        label=_("Background image"),
+        help_text=_(
+            "Cropped to 1920 x 900 pixels and shown faintly behind the "
+            "content, whatever background you choose above."
+        ),
     )
     padding = ChoiceBlock(
         choices=[
@@ -189,9 +197,10 @@ class SectionBlock(StructBlock):
             ("xl", _("Extra large")),
         ],
         default="md",
-        help_text=_("Vertical padding."),
+        label=_("Padding"),
+        help_text=_("Empty space above and below the content."),
     )
-    settings = BlockSettings(required=False)
+    settings = BlockSettings(required=False, label=_("Advanced settings"))
 
     class Meta:
         template = "website/blocks/section_block.html"
@@ -216,9 +225,9 @@ class DividerBlock(StructBlock):
             ("space", _("Blank space")),
         ],
         default="line",
-        help_text=_("Separator visual style."),
+        label=_("Style"),
     )
-    settings = BlockSettings(required=False)
+    settings = BlockSettings(required=False, label=_("Advanced settings"))
 
     class Meta:
         template = "website/blocks/divider_block.html"
@@ -244,9 +253,9 @@ class SpacerBlock(StructBlock):
             ("xl", _("Extra large (6rem)")),
         ],
         default="md",
-        help_text=_("Amount of vertical space."),
+        label=_("Size"),
     )
-    settings = BlockSettings(required=False)
+    settings = BlockSettings(required=False, label=_("Advanced settings"))
 
     class Meta:
         template = "website/blocks/spacer_block.html"

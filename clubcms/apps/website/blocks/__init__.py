@@ -97,7 +97,7 @@ HERO_BLOCKS = [
 ]
 
 CONTENT_BLOCKS = [
-    ("rich_text", RichTextBlock(icon="pilcrow")),
+    ("rich_text", RichTextBlock(icon="pilcrow", label=_("Text"))),
     ("cards_grid", CardsGridBlock()),
     ("cta", CTABlock()),
     ("stats", StatsBlock()),
