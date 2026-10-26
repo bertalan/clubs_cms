@@ -40,4 +40,4 @@ makemessages:
 	docker compose exec web python manage.py makemessages -l it -l en -l de -l fr -l es
 
 compilemessages:
-	docker compose exec web python manage.py compilemessages
+	docker compose exec web python manage.py compilemessages --ignore=.venv
