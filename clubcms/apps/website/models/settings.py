@@ -54,15 +54,23 @@ class SiteSettings(BaseSiteSetting):
     # -- General tab --------------------------------------------------------
     site_name = models.CharField(
         max_length=200, blank=True, verbose_name=_("Site name"),
-        help_text=_("Human-readable name shown in the header / meta tags."),
+        help_text=_(
+            "Shown in the browser tab after each page title, in the footer "
+            "and in search engine results."
+        ),
     )
     tagline = models.CharField(
         max_length=255, blank=True, verbose_name=_("Tagline"),
-        help_text=_("Breve slogan mostrato sotto il nome del sito."),
+        help_text=_(
+            "Shown in the footer when the footer has no description of its own."
+        ),
     )
     description = models.TextField(
         blank=True, verbose_name=_("Site description"),
-        help_text=_("Default meta description for SEO."),
+        help_text=_(
+            "Used by search engines for pages that have no search "
+            "description of their own."
+        ),
     )
 
     # -- Theme tab ----------------------------------------------------------
@@ -71,7 +79,7 @@ class SiteSettings(BaseSiteSetting):
         choices=THEME_CHOICES,
         default="velocity",
         verbose_name=_("Theme"),
-        help_text=_("Tema grafico applicato al sito pubblico."),
+        help_text=_("Visual style of the public site. The admin keeps its own look."),
     )
     color_scheme = models.ForeignKey(
         "website.ColorScheme",
@@ -80,7 +88,10 @@ class SiteSettings(BaseSiteSetting):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Colour scheme"),
-        help_text=_("Schema colore personalizzato da applicare al tema."),
+        help_text=_(
+            "Replaces the theme colours with your own palette. "
+            "Leave empty to keep the theme's default colours."
+        ),
     )
 
     # -- Branding tab -------------------------------------------------------
@@ -91,7 +102,11 @@ class SiteSettings(BaseSiteSetting):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Logo"),
-        help_text=_("Logo principale del sito, mostrato nella navbar."),
+        help_text=_(
+            "Shown in the navigation bar, on the home page and in search "
+            "engine data. A logo set on the navbar takes priority in the "
+            "navigation bar."
+        ),
     )
     logo_dark = models.ForeignKey(
         "wagtailimages.Image",
@@ -100,7 +115,6 @@ class SiteSettings(BaseSiteSetting):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Logo (dark variant)"),
-        help_text=_("Optional dark-background version of the logo."),
     )
     favicon = models.ForeignKey(
         "wagtailimages.Image",
@@ -109,49 +123,36 @@ class SiteSettings(BaseSiteSetting):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Favicon"),
-        help_text=_("Icona del sito mostrata nella scheda del browser."),
+        help_text=_(
+            "Small icon shown in the browser tab. Ignored when a PWA name "
+            "is set, because the app icons are used instead."
+        ),
     )
     logo_text = models.TextField(
         blank=True,
         default="",
         verbose_name=_("Logo text"),
-        help_text=_("Testo mostrato accanto al logo nella navbar. Gli accapi vengono rispettati."),
+        help_text=_(
+            "Shown next to the logo in the navigation bar. Line breaks are kept."
+        ),
     )
 
     # -- Contact tab --------------------------------------------------------
-    phone = models.CharField(max_length=30, blank=True, verbose_name=_("Phone"),
-        help_text=_("Numero di telefono del club."),
-    )
-    email = models.EmailField(blank=True, verbose_name=_("Email"),
-        help_text=_("Email principale del club."),
-    )
-    address = models.TextField(blank=True, verbose_name=_("Address"),
-        help_text=_("Indirizzo fisico della sede."),
-    )
+    phone = models.CharField(max_length=30, blank=True, verbose_name=_("Phone"))
+    email = models.EmailField(blank=True, verbose_name=_("Email"))
+    address = models.TextField(blank=True, verbose_name=_("Address"))
     hours = models.CharField(
         max_length=255, blank=True, verbose_name=_("Opening hours"),
-        help_text=_("Orari di apertura (es. 'Lun-Ven 9-18')."),
+        help_text=_("Shown on the contact page only, for example Mon-Fri 9:00-18:00."),
     )
 
     # -- Social tab ---------------------------------------------------------
-    facebook_url = models.URLField(blank=True, verbose_name=_("Facebook URL"),
-        help_text=_("URL della pagina Facebook del club."),
-    )
-    instagram_url = models.URLField(blank=True, verbose_name=_("Instagram URL"),
-        help_text=_("URL del profilo Instagram del club."),
-    )
-    twitter_url = models.URLField(blank=True, verbose_name=_("Twitter / X URL"),
-        help_text=_("URL del profilo Twitter/X del club."),
-    )
-    youtube_url = models.URLField(blank=True, verbose_name=_("YouTube URL"),
-        help_text=_("URL del canale YouTube del club."),
-    )
-    linkedin_url = models.URLField(blank=True, verbose_name=_("LinkedIn URL"),
-        help_text=_("URL della pagina LinkedIn del club."),
-    )
-    tiktok_url = models.URLField(blank=True, verbose_name=_("TikTok URL"),
-        help_text=_("URL del profilo TikTok del club."),
-    )
+    facebook_url = models.URLField(blank=True, verbose_name=_("Facebook URL"))
+    instagram_url = models.URLField(blank=True, verbose_name=_("Instagram URL"))
+    twitter_url = models.URLField(blank=True, verbose_name=_("Twitter / X URL"))
+    youtube_url = models.URLField(blank=True, verbose_name=_("YouTube URL"))
+    linkedin_url = models.URLField(blank=True, verbose_name=_("LinkedIn URL"))
+    tiktok_url = models.URLField(blank=True, verbose_name=_("TikTok URL"))
 
     # -- Navigation tab -----------------------------------------------------
     navbar = models.ForeignKey(
@@ -161,7 +162,9 @@ class SiteSettings(BaseSiteSetting):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Navbar"),
-        help_text=_("Barra di navigazione attiva per questo sito."),
+        help_text=_(
+            "Menu shown at the top of every page. Menus are edited under Snippets."
+        ),
     )
     footer = models.ForeignKey(
         "website.Footer",
@@ -170,21 +173,31 @@ class SiteSettings(BaseSiteSetting):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Footer"),
-        help_text=_("Footer attivo per questo sito."),
+        help_text=_(
+            "Shown at the bottom of every page. Footers are edited under Snippets."
+        ),
     )
 
     # -- PWA tab ------------------------------------------------------------
     pwa_name = models.CharField(
         max_length=200, blank=True, verbose_name=_("PWA name"),
-        help_text=_("Nome completo dell'app (es. 'Moto Club Aquile Rosse')."),
+        help_text=_(
+            "If filled, visitors can install the site as an app on their "
+            "phone. Example: Moto Club Aquile Rosse."
+        ),
     )
     pwa_short_name = models.CharField(
         max_length=50, blank=True, verbose_name=_("PWA short name"),
-        help_text=_("Nome breve per l'icona home screen (max 12 caratteri)."),
+        help_text=_(
+            "Shown under the app icon on the home screen; keep it within "
+            "12 characters. If empty, the PWA name is used."
+        ),
     )
     pwa_description = models.TextField(
         blank=True, verbose_name=_("PWA description"),
-        help_text=_("Descrizione dell'app per l'installazione PWA."),
+        help_text=_(
+            "Included in the app manifest; some phones show it while installing."
+        ),
     )
     pwa_icon_192 = models.ForeignKey(
         "wagtailimages.Image",
@@ -193,7 +206,7 @@ class SiteSettings(BaseSiteSetting):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("PWA icon 192x192"),
-        help_text=_("Icona PWA 192x192px (PNG, sfondo trasparente)."),
+        help_text=_("Square PNG of 192 x 192 pixels with a transparent background."),
     )
     pwa_icon_512 = models.ForeignKey(
         "wagtailimages.Image",
@@ -202,7 +215,7 @@ class SiteSettings(BaseSiteSetting):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("PWA icon 512x512"),
-        help_text=_("Icona PWA 512x512px (PNG, sfondo trasparente)."),
+        help_text=_("Square PNG of 512 x 512 pixels with a transparent background."),
     )
     pwa_icon_180 = models.ForeignKey(
         "wagtailimages.Image",
@@ -211,15 +224,18 @@ class SiteSettings(BaseSiteSetting):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Apple touch icon 180x180"),
-        help_text=_("Icona per iOS home screen 180x180px (PNG)."),
+        help_text=_("Square PNG of 180 x 180 pixels, the size Apple devices expect."),
     )
     pwa_theme_color = models.CharField(
         max_length=7, default="#0F172A", verbose_name=_("PWA theme colour"),
-        help_text=_("Colore tema della barra del browser (hex)."),
+        help_text=_("Colour of the browser bar on phones, as a hex code like #0F172A."),
     )
     pwa_background_color = models.CharField(
         max_length=7, default="#FFFFFF", verbose_name=_("PWA background colour"),
-        help_text=_("Colore di sfondo della splash screen (hex)."),
+        help_text=_(
+            "Colour of the splash screen while the installed app opens, "
+            "as a hex code like #FFFFFF."
+        ),
     )
 
     # -- Forms tab ----------------------------------------------------------
@@ -228,45 +244,55 @@ class SiteSettings(BaseSiteSetting):
         choices=CAPTCHA_PROVIDER_CHOICES,
         default="honeypot",
         verbose_name=_("CAPTCHA provider"),
-        help_text=_("Sistema anti-spam per i form del sito."),
+        help_text=_(
+            "Used on the newsletter subscribe and unsubscribe forms. "
+            "Honeypot needs no keys."
+        ),
     )
     captcha_site_key = models.CharField(
         max_length=255, blank=True, verbose_name=_("CAPTCHA site key"),
-        help_text=_("Chiave pubblica del servizio CAPTCHA."),
+        help_text=_(
+            "Copy it from the Cloudflare Turnstile or hCaptcha dashboard "
+            "after adding this site there."
+        ),
     )
     captcha_secret_key = models.CharField(
         max_length=255, blank=True, verbose_name=_("CAPTCHA secret key"),
-        help_text=_("Chiave segreta del servizio CAPTCHA."),
+        help_text=_(
+            "Found in the same Turnstile or hCaptcha dashboard as the site "
+            "key. Never share it."
+        ),
     )
 
     # -- SEO tab ------------------------------------------------------------
     seo_indexing = models.BooleanField(
         default=True, verbose_name=_("Allow search engine indexing"),
         help_text=_(
-            "Se disattivato, tutte le pagine avranno il meta tag "
-            "'noindex, nofollow'. Utile per siti in staging/anteprima."
+            "If off, every page gets a noindex tag and robots.txt blocks all "
+            "crawlers. Useful for test or preview sites."
         ),
     )
     allow_ai_bots = models.BooleanField(
         default=False, verbose_name=_("Allow AI bot crawling"),
         help_text=_(
-            "Se disattivato, robots.txt bloccherà i bot AI "
-            "(GPTBot, ChatGPT-User, Google-Extended, CCBot, "
-            "Anthropic, Meta, Bytespider, PerplexityBot)."
+            "If off, robots.txt asks AI crawlers (GPTBot, ChatGPT-User, "
+            "Google-Extended, CCBot, Anthropic, Meta, Bytespider, "
+            "PerplexityBot) to stay away."
         ),
     )
     robots_txt_extra = models.TextField(
         blank=True, verbose_name=_("Additional robots.txt rules"),
         help_text=_(
-            "Regole aggiuntive per robots.txt (es. 'Disallow: /private/'). "
-            "Verranno aggiunte dopo le regole di base."
+            "Added after the standard rules. For example, Disallow: /private/ "
+            "asks search engines to skip that folder."
         ),
     )
     canonical_domain = models.URLField(
         blank=True, verbose_name=_("Canonical domain"),
         help_text=_(
-            "Dominio canonico del sito (es. 'https://www.example.com'). "
-            "Se vuoto il canonical URL usa il dominio della richiesta."
+            "Main address of the site, like https://www.example.com, used in "
+            "the canonical link of every page. If empty, the address the "
+            "visitor typed is used."
         ),
     )
 
@@ -274,15 +300,18 @@ class SiteSettings(BaseSiteSetting):
     tracking_code = models.TextField(
         blank=True, verbose_name=_("Tracking code"),
         help_text=_(
-            "Codice di monitoraggio statistiche (es. Matomo, Google Analytics). "
-            "Verrà inserito prima della chiusura </body>."
+            "Paste the full snippet from Matomo, Google Analytics or similar. "
+            "It is added to every page just before the closing body tag."
         ),
     )
 
     # -- GitHub tab ---------------------------------------------------------
     github_url = models.URLField(
         blank=True, verbose_name=_("GitHub repository URL"),
-        help_text=_("URL del repository GitHub. Se compilato, mostra un badge 'Fork me on GitHub' nell'angolo in alto a destra."),
+        help_text=_(
+            "If filled, a 'Fork me on GitHub' ribbon appears in the top right "
+            "corner and a GitHub link appears in the footer."
+        ),
     )
 
     # -- Map tab ------------------------------------------------------------
@@ -291,19 +320,19 @@ class SiteSettings(BaseSiteSetting):
         choices=MAP_ROUTING_CHOICES,
         default="openstreetmap",
         verbose_name=_("Map routing service"),
-        help_text=_("Servizio mappe per le pagine eventi."),
     )
     map_api_key = models.CharField(
         max_length=255, blank=True, verbose_name=_("Map API key"),
-        help_text=_("Required for Google Maps / Mapbox."),
     )
     map_default_center = models.CharField(
         max_length=100, blank=True, verbose_name=_("Default map centre"),
-        help_text=_("Latitude,Longitude (e.g. '45.4642,9.1900')."),
+        help_text=_(
+            "Club location for the map on the contact page, as "
+            "latitude,longitude. Example: 45.4642,9.1900."
+        ),
     )
     map_default_zoom = models.IntegerField(
         default=10, verbose_name=_("Default map zoom"),
-        help_text=_("Livello di zoom iniziale della mappa (1-18)."),
     )
 
     # -- Computed helpers ---------------------------------------------------
@@ -415,6 +444,11 @@ class SiteSettings(BaseSiteSetting):
                     FieldPanel("hours"),
                 ],
                 heading=_("Contact"),
+                help_text=_(
+                    "Phone, email and address appear on the contact page and "
+                    "the membership card, and in the footer unless the footer "
+                    "has its own contact details."
+                ),
             ),
         ],
         heading=_("Contact"),
@@ -432,6 +466,11 @@ class SiteSettings(BaseSiteSetting):
                     FieldPanel("tiktok_url"),
                 ],
                 heading=_("Social media"),
+                help_text=_(
+                    "Full profile addresses starting with https://. Search "
+                    "engines use them to link the profiles to the club; the "
+                    "footer icons are set in the footer snippet."
+                ),
             ),
         ],
         heading=_("Social"),
@@ -603,103 +642,155 @@ class PaymentSettings(BaseSiteSetting):
         choices=PAYMENT_MODE_CHOICES,
         default="test",
         verbose_name=_("Payment mode"),
-        help_text=_("Only credentials for the selected mode are used at runtime."),
+        help_text=_(
+            "Test uses the test keys and the PayPal sandbox, so no real money "
+            "moves. Switch to Live only after filling in the live keys."
+        ),
     )
 
     # -- Stripe test --------------------------------------------------------
     stripe_test_enabled = models.BooleanField(
         default=False, verbose_name=_("Stripe enabled (test)"),
-        help_text=_("Abilita Stripe in modalità test."),
+        help_text=_("If on, members can pay event fees by card through Stripe."),
     )
     stripe_test_public_key = models.CharField(
         max_length=255, blank=True, verbose_name=_("Stripe public key (test)"),
-        help_text=_("Chiave pubblica Stripe test (pk_test_...)."),
+        help_text=_(
+            "In the Stripe Dashboard, turn on test mode and open Developers > "
+            "API keys. Copy the publishable key (pk_test_...)."
+        ),
     )
     stripe_test_secret_key = models.CharField(
         max_length=255, blank=True, verbose_name=_("Stripe secret key (test)"),
-        help_text=_("Chiave segreta Stripe test (sk_test_...)."),
+        help_text=_(
+            "In the Stripe Dashboard, turn on test mode and open Developers > "
+            "API keys. Copy the secret key (sk_test_...) and never share it."
+        ),
     )
     stripe_test_webhook_secret = models.CharField(
         max_length=255, blank=True, verbose_name=_("Stripe webhook secret (test)"),
-        help_text=_("Secret del webhook Stripe test (whsec_...)."),
+        help_text=_(
+            "In test mode, open Developers > Webhooks and add the endpoint "
+            "https://your-domain/en/events/payment/webhook/stripe/ with the "
+            "event checkout.session.completed, then copy its signing secret "
+            "(whsec_...). It confirms payments even when the member does not "
+            "come back to the site after paying."
+        ),
     )
 
     # -- PayPal test --------------------------------------------------------
     paypal_test_enabled = models.BooleanField(
         default=False, verbose_name=_("PayPal enabled (test)"),
-        help_text=_("Abilita PayPal in modalità sandbox."),
+        help_text=_("If on, members can pay event fees with PayPal."),
     )
     paypal_test_client_id = models.CharField(
         max_length=255, blank=True, verbose_name=_("PayPal client ID (test)"),
-        help_text=_("Client ID PayPal sandbox."),
+        help_text=_(
+            "In the PayPal Developer dashboard open Apps & Credentials, choose "
+            "Sandbox and copy the Client ID of your app."
+        ),
     )
     paypal_test_secret = models.CharField(
         max_length=255, blank=True, verbose_name=_("PayPal secret (test)"),
-        help_text=_("Secret PayPal sandbox."),
+        help_text=_(
+            "Shown next to the Client ID of the same Sandbox app in PayPal "
+            "Developer > Apps & Credentials. Never share it."
+        ),
     )
 
     # -- Stripe live --------------------------------------------------------
     stripe_live_enabled = models.BooleanField(
         default=False, verbose_name=_("Stripe enabled (live)"),
-        help_text=_("Abilita Stripe in modalità produzione."),
+        help_text=_("If on, members can pay event fees by card through Stripe."),
     )
     stripe_live_public_key = models.CharField(
         max_length=255, blank=True, verbose_name=_("Stripe public key (live)"),
-        help_text=_("Chiave pubblica Stripe live (pk_live_...)."),
+        help_text=_(
+            "In the Stripe Dashboard, turn off test mode and open Developers > "
+            "API keys. Copy the publishable key (pk_live_...)."
+        ),
     )
     stripe_live_secret_key = models.CharField(
         max_length=255, blank=True, verbose_name=_("Stripe secret key (live)"),
-        help_text=_("Chiave segreta Stripe live (sk_live_...)."),
+        help_text=_(
+            "In the Stripe Dashboard, turn off test mode and open Developers > "
+            "API keys. Copy the secret key (sk_live_...) and never share it."
+        ),
     )
     stripe_live_webhook_secret = models.CharField(
         max_length=255, blank=True, verbose_name=_("Stripe webhook secret (live)"),
-        help_text=_("Secret del webhook Stripe live (whsec_...)."),
+        help_text=_(
+            "With test mode off, open Developers > Webhooks and add the endpoint "
+            "https://your-domain/en/events/payment/webhook/stripe/ with the "
+            "event checkout.session.completed, then copy its signing secret "
+            "(whsec_...). It confirms payments even when the member does not "
+            "come back to the site after paying."
+        ),
     )
 
     # -- PayPal live --------------------------------------------------------
     paypal_live_enabled = models.BooleanField(
         default=False, verbose_name=_("PayPal enabled (live)"),
-        help_text=_("Abilita PayPal in modalità produzione."),
+        help_text=_("If on, members can pay event fees with PayPal."),
     )
     paypal_live_client_id = models.CharField(
         max_length=255, blank=True, verbose_name=_("PayPal client ID (live)"),
-        help_text=_("Client ID PayPal produzione."),
+        help_text=_(
+            "In the PayPal Developer dashboard open Apps & Credentials, choose "
+            "Live and copy the Client ID of your app."
+        ),
     )
     paypal_live_secret = models.CharField(
         max_length=255, blank=True, verbose_name=_("PayPal secret (live)"),
-        help_text=_("Secret PayPal produzione."),
+        help_text=_(
+            "Shown next to the Client ID of the same Live app in PayPal "
+            "Developer > Apps & Credentials. Never share it."
+        ),
     )
 
     # -- Bank transfer ------------------------------------------------------
     bank_transfer_enabled = models.BooleanField(
         default=False, verbose_name=_("Bank transfer enabled"),
-        help_text=_("Abilita il pagamento tramite bonifico bancario."),
+        help_text=_(
+            "If on, members can pay event fees by bank transfer. They get the "
+            "account details on screen and by email."
+        ),
     )
     bank_account_holder = models.CharField(
         max_length=255, blank=True, verbose_name=_("Account holder"),
-        help_text=_("Intestatario del conto corrente."),
     )
     bank_iban = models.CharField(
         max_length=34, blank=True, verbose_name=_("IBAN"),
-        help_text=_("Codice IBAN del conto corrente."),
+        help_text=_(
+            "Up to 34 characters without spaces, for example "
+            "IT60X0542811101000000123456."
+        ),
     )
     bank_bic = models.CharField(
         max_length=11, blank=True, verbose_name=_("BIC / SWIFT"),
-        help_text=_("Codice BIC/SWIFT della banca."),
+        help_text=_(
+            "Bank identifier code of 8 or 11 characters, for example BCITITMM."
+        ),
     )
     bank_name = models.CharField(
         max_length=255, blank=True, verbose_name=_("Bank name"),
-        help_text=_("Nome della banca (es. 'Banca Intesa')."),
     )
     bank_transfer_instructions = RichTextField(
         blank=True,
         verbose_name=_("Bank transfer instructions"),
-        help_text=_("Additional instructions shown to the user (e.g. 'Include the reference in the description')."),
+        help_text=_(
+            "Extra text below the account details, for example a reminder to "
+            "put the payment reference in the transfer description."
+        ),
     )
     bank_transfer_expiry_days = models.PositiveIntegerField(
         default=5,
         verbose_name=_("Bank transfer expiry (days)"),
-        help_text=_("Days allowed for the user to complete the bank transfer."),
+        help_text=_(
+            "Days the member has to pay, but never later than the day before "
+            "the event. Unpaid registrations then expire and the place goes "
+            "to the waiting list."
+        ),
     )
 
     # -- Computed helpers ---------------------------------------------------
@@ -801,6 +892,7 @@ class PaymentSettings(BaseSiteSetting):
             ),
         ],
         heading=_("Test configuration"),
+        help_text=_("Used only while the payment mode is Test."),
     )
 
     live_panels = ObjectList(
@@ -824,6 +916,7 @@ class PaymentSettings(BaseSiteSetting):
             ),
         ],
         heading=_("Live configuration"),
+        help_text=_("Used only while the payment mode is Live. Real money is charged."),
     )
 
     bank_transfer_panels = ObjectList(
@@ -839,6 +932,10 @@ class PaymentSettings(BaseSiteSetting):
                     FieldPanel("bank_transfer_expiry_days"),
                 ],
                 heading=_("Bank transfer"),
+                help_text=_(
+                    "Members see these details on the payment instructions "
+                    "page after choosing bank transfer."
+                ),
             ),
         ],
         heading=_("Bank transfer"),

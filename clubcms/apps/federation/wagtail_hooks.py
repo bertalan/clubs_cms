@@ -6,11 +6,14 @@ a "Federation" menu group in the Wagtail sidebar.
 """
 
 from django import forms
+from django.contrib.auth import get_user_model
 from django.urls import path
 from django.utils.translation import gettext_lazy as _
 
 from wagtail import hooks
 from wagtail.admin.panels import FieldPanel, HelpPanel, MultiFieldPanel
+from wagtail.permission_policies import ModelPermissionPolicy
+from wagtail.permissions import register_permission_policy
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet, SnippetViewSetGroup
 
@@ -120,6 +123,26 @@ class FederatedClubViewSet(SnippetViewSet):
     ]
 
 
+class ImportedEventPermissionPolicy(ModelPermissionPolicy):
+    """External events arrive only through the partner sync: no manual add."""
+
+    def user_has_permission(self, user, action):
+        if action == "add":
+            return False
+        return super().user_has_permission(user, action)
+
+    def users_with_any_permission(self, actions):
+        actions = [action for action in actions if action != "add"]
+        if not actions:
+            return get_user_model().objects.none()
+        return super().users_with_any_permission(actions)
+
+
+register_permission_policy(
+    ExternalEvent, ImportedEventPermissionPolicy(ExternalEvent), exact_class=True
+)
+
+
 class ExternalEventViewSet(SnippetViewSet):
     """Admin interface for viewing imported external events."""
 
@@ -138,6 +161,44 @@ class ExternalEventViewSet(SnippetViewSet):
     ]
     list_filter = ["source_club", "is_approved", "is_hidden", "event_status"]
     search_fields = ["event_name", "location_name"]
+
+    panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel("is_approved"),
+                FieldPanel("is_hidden"),
+            ],
+            heading=_("Decided by our club"),
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel(name, read_only=True)
+                for name in (
+                    "source_club",
+                    "event_name",
+                    "event_status",
+                    "start_date",
+                    "end_date",
+                    "location_name",
+                    "location_address",
+                    "location_lat",
+                    "location_lon",
+                    "description",
+                    "image_url",
+                    "detail_url",
+                    "external_id",
+                )
+            ],
+            heading=_("Imported from the partner"),
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("fetched_at", read_only=True),
+                FieldPanel("updated_at", read_only=True),
+            ],
+            heading=_("Filled in by the system"),
+        ),
+    ]
 
 
 class FederationViewSetGroup(SnippetViewSetGroup):

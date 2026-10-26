@@ -167,6 +167,28 @@ class ProfileForm(forms.ModelForm):
             "postal_code": forms.TextInput(attrs={"maxlength": 5}),
             "country": forms.TextInput(attrs={"maxlength": 2}),
         }
+        # Member-facing help, kept here so the model help can address staff.
+        help_texts = {
+            "display_name": _(
+                "Choose a nickname that will be shown publicly instead of your real "
+                "name."
+            ),
+            "phone": _("Landline number with country prefix. Example: +39 02 1234567"),
+            "mobile": _("Mobile number with country prefix. Example: +39 333 1234567"),
+            "birth_date": _(
+                "Your date of birth. Used for birthday greetings and age-restricted "
+                "events."
+            ),
+            "birth_place": _("City or town where you were born."),
+            "bio": _(
+                "A short description about yourself. Visible on your profile page."
+            ),
+            "address": _("Street address. Example: Via Roma 42"),
+            "city": _("City or town of residence."),
+            "province": _("Two-letter province code. Example: MI"),
+            "postal_code": _("5-digit postal code. Example: 20100"),
+            "country": _("Two-letter country code (ISO 3166-1). Example: IT"),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -188,6 +210,23 @@ class PrivacySettingsForm(forms.ModelForm):
             "show_real_name_to_members",
             "newsletter",
         ]
+        # Member-facing help, kept here so the model help can address staff.
+        help_texts = {
+            "show_in_directory": _(
+                "When enabled, your display name appears in the member directory "
+                "visible to other members."
+            ),
+            "public_profile": _(
+                "When enabled, your profile page is visible to anyone, including "
+                "non-members."
+            ),
+            "show_real_name_to_members": _(
+                "When enabled, active members can see your real first and last name."
+            ),
+            "newsletter": _(
+                "Receive our periodic newsletter with club news and upcoming events."
+            ),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -222,6 +261,35 @@ class NotificationPreferencesForm(forms.ModelForm):
             "partner_event_comments",
             "digest_frequency",
         ]
+        # Member-facing help, kept here so the model help can address staff.
+        help_texts = {
+            "email_notifications": _("Receive notifications via email."),
+            "push_notifications": _(
+                "Receive push notifications in your browser (requires PWA support)."
+            ),
+            "news_updates": _(
+                "Get notified when new articles or announcements are published."
+            ),
+            "event_updates": _(
+                "Get notified about new events and changes to events you registered "
+                "for."
+            ),
+            "event_reminders": _(
+                "Receive a reminder before events you are registered for."
+            ),
+            "membership_alerts": _(
+                "Alerts about membership expiry, renewal, and card updates."
+            ),
+            "partner_updates": _("News and promotions from partner clubs."),
+            "aid_requests": _("Notifications when someone nearby requests mutual aid."),
+            "partner_events": _("Events published by federated partner clubs."),
+            "partner_event_comments": _(
+                "Comments on partner events you showed interest in."
+            ),
+            "digest_frequency": _(
+                "How often to receive a digest email summarising your notifications."
+            ),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -258,6 +326,26 @@ class AidAvailabilityForm(forms.ModelForm):
         widgets = {
             "aid_notes": forms.Textarea(attrs={"rows": 3}),
             "aid_coordinates": forms.HiddenInput(),
+        }
+        # Member-facing help, kept here so the model help can address staff.
+        help_texts = {
+            "aid_available": _(
+                "Enable this to appear in the mutual aid helper directory."
+            ),
+            "aid_radius_km": _(
+                "Maximum distance in km you are willing to travel to help. Example: "
+                "25"
+            ),
+            "aid_location_city": _(
+                "The city where you are usually based for mutual aid."
+            ),
+            "aid_coordinates": _(
+                "Latitude and longitude, comma-separated. Example: 45.4642,9.1900"
+            ),
+            "aid_notes": _(
+                "Additional information: tools, skills, vehicle type, availability "
+                "hours."
+            ),
         }
 
     def __init__(self, *args, **kwargs):

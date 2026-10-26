@@ -36,11 +36,16 @@ class GalleryImageBlock(StructBlock):
 
     image = ImageChooserBlock(
         required=True,
+        label=_("Image"),
     )
     caption = CharBlock(
         max_length=255,
         required=False,
-        help_text=_("Optional caption displayed below the image."),
+        label=_("Caption"),
+        help_text=_(
+            "Shown under the image and read out by screen readers. If empty, "
+            "the image title is read out instead."
+        ),
     )
 
     class Meta:
@@ -56,7 +61,7 @@ class GalleryBlock(StructBlock):
     title = CharBlock(
         max_length=255,
         required=False,
-        help_text=_("Optional gallery title."),
+        label=_("Title"),
     )
     images = ListBlock(
         GalleryImageBlock(),
@@ -71,12 +76,13 @@ class GalleryBlock(StructBlock):
             ("6", _("6 columns")),
         ],
         default="3",
-        help_text=_("Number of columns on desktop."),
+        label=_("Columns"),
     )
     lightbox = BooleanBlock(
         default=True,
         required=False,
-        help_text=_("Enable lightbox for full-size image viewing."),
+        label=_("Link to large version"),
+        help_text=_("Each thumbnail links to the image at up to 1600 x 1200 pixels."),
     )
     aspect_ratio = ChoiceBlock(
         choices=[
@@ -87,9 +93,9 @@ class GalleryBlock(StructBlock):
             ("3x4", _("Portrait (3:4)")),
         ],
         default="auto",
-        help_text=_("Thumbnail aspect ratio."),
+        label=_("Thumbnail shape"),
     )
-    settings = BlockSettings(required=False)
+    settings = BlockSettings(required=False, label=_("Advanced settings"))
 
     class Meta:
         template = "website/blocks/gallery_block.html"
@@ -109,19 +115,23 @@ class VideoEmbedBlock(StructBlock):
 
     video = EmbedBlock(
         required=True,
-        help_text=_("Paste a video URL (YouTube, Vimeo, etc.)."),
+        label=_("Video link"),
+        help_text=_(
+            "Paste the address of the video page, for example "
+            "https://www.youtube.com/watch?v=abc123 or a Vimeo link."
+        ),
     )
     caption = CharBlock(
         max_length=255,
         required=False,
-        help_text=_("Optional caption displayed below the video."),
+        label=_("Caption"),
     )
     autoplay = BooleanBlock(
         default=False,
         required=False,
-        help_text=_("Autoplay the video (muted)."),
+        label=_("Autoplay"),
     )
-    settings = BlockSettings(required=False)
+    settings = BlockSettings(required=False, label=_("Advanced settings"))
 
     class Meta:
         template = "website/blocks/video_embed_block.html"
@@ -141,10 +151,20 @@ class ImageBlock(StructBlock):
 
     image = ImageChooserBlock(
         required=True,
+        label=_("Image"),
+        help_text=_(
+            "Resized, not cropped: 1200 pixels wide at full width, 800 when "
+            "centred, 600 when floated."
+        ),
     )
     caption = CharBlock(
         max_length=255,
         required=False,
+        label=_("Caption"),
+        help_text=_(
+            "Shown under the image and read out "
+            "by screen readers as its description."
+        ),
     )
     alignment = ChoiceBlock(
         choices=[
@@ -154,9 +174,9 @@ class ImageBlock(StructBlock):
             ("right", _("Float right")),
         ],
         default="full",
-        help_text=_("Image alignment within the content area."),
+        label=_("Alignment"),
     )
-    settings = BlockSettings(required=False)
+    settings = BlockSettings(required=False, label=_("Advanced settings"))
 
     class Meta:
         template = "website/blocks/image_block.html"
@@ -176,10 +196,13 @@ class DocumentBlock(StructBlock):
 
     document = DocumentChooserBlock(
         required=True,
+        label=_("Document"),
+        help_text=_("Visitors see the document title as the download link."),
     )
     description = TextBlock(
         required=False,
-        help_text=_("Optional description of the document."),
+        label=_("Description"),
+        help_text=_("Shown under the download link."),
     )
 
     class Meta:
@@ -196,14 +219,14 @@ class DocumentListBlock(StructBlock):
     title = CharBlock(
         max_length=255,
         required=False,
-        help_text=_("Section title for the document list."),
+        label=_("Title"),
     )
     documents = ListBlock(
         DocumentBlock(),
         min_num=1,
         label=_("Documents"),
     )
-    settings = BlockSettings(required=False)
+    settings = BlockSettings(required=False, label=_("Advanced settings"))
 
     class Meta:
         template = "website/blocks/document_list_block.html"
@@ -225,29 +248,37 @@ class MapBlock(StructBlock):
     address = CharBlock(
         max_length=500,
         required=False,
-        help_text=_("Display address (shown in the info popup)."),
+        label=_("Address"),
+        help_text=_("Shown as text under the map."),
     )
     coordinates = CharBlock(
         max_length=100,
         required=True,
-        help_text=_("Latitude,Longitude (e.g. '45.4642,9.1900')."),
+        label=_("Coordinates"),
+        help_text=_(
+            "Latitude and longitude separated by a comma, for example "
+            "45.4642,9.1900."
+        ),
     )
     zoom = IntegerBlock(
         default=14,
         min_value=1,
         max_value=20,
-        help_text=_("Map zoom level (1-20)."),
+        label=_("Zoom level"),
+        help_text=_("Higher numbers zoom in closer, for example 14 for a town."),
     )
     height = IntegerBlock(
         default=400,
-        help_text=_("Map height in pixels."),
+        label=_("Map height"),
+        help_text=_("In pixels, for example 400."),
     )
     title = CharBlock(
         max_length=255,
         required=False,
-        help_text=_("Optional marker label."),
+        label=_("Title"),
+        help_text=_("Shown as a heading above the map."),
     )
-    settings = BlockSettings(required=False)
+    settings = BlockSettings(required=False, label=_("Advanced settings"))
 
     class Meta:
         template = "website/blocks/map_block.html"

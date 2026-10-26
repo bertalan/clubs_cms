@@ -36,14 +36,21 @@ class BlockSettings(StructBlock):
     custom_id = CharBlock(
         max_length=100,
         required=False,
-        label=_("Custom ID"),
-        help_text=_("HTML id attribute (for anchor links)."),
+        label=_("Anchor ID"),
+        help_text=_(
+            "Lets you link straight to this section, for example "
+            "/about/#opening-hours. Use only letters, numbers, hyphens "
+            "and underscores."
+        ),
     )
     custom_class = CharBlock(
         max_length=255,
         required=False,
-        label=_("Custom CSS class"),
-        help_text=_("Extra CSS classes separated by spaces."),
+        label=_("Extra CSS classes"),
+        help_text=_(
+            "Leave empty unless your web designer gives you a class name. "
+            "Separate several classes with spaces."
+        ),
     )
     background = ChoiceBlock(
         choices=BACKGROUND_CHOICES,
@@ -58,5 +65,5 @@ class BlockSettings(StructBlock):
 
     class Meta:
         icon = "cog"
-        label = _("Settings")
+        label = _("Advanced settings")
         form_classname = "struct-block block-settings collapsed"

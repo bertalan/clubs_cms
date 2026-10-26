@@ -209,7 +209,8 @@ class FederatedClub(models.Model):
 class ExternalEvent(models.Model):
     """
     An event fetched from a partner club.
-    Read-only: never editable by admin, only updated via sync.
+    Imported fields are read-only in the admin and updated only via sync;
+    staff decide locally only ``is_approved`` and ``is_hidden``.
     """
 
     EVENT_STATUS_CHOICES = [
@@ -221,56 +222,48 @@ class ExternalEvent(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     source_club = models.ForeignKey(
-        FederatedClub, on_delete=models.CASCADE, related_name="external_events",
-        help_text=_("Club partner che ha pubblicato l'evento."),
+        FederatedClub,
+        on_delete=models.CASCADE,
+        related_name="external_events",
+        verbose_name=_("Partner club"),
     )
-    external_id = models.CharField(max_length=100,
-        help_text=_("ID univoco dell'evento nel sistema del partner."),
-    )
-    event_name = models.CharField(max_length=255,
-        help_text=_("Nome dell'evento come fornito dal partner."),
-    )
-    start_date = models.DateTimeField(
-        help_text=_("Data e ora di inizio dell'evento."),
-    )
-    end_date = models.DateTimeField(null=True, blank=True,
-        help_text=_("Data e ora di fine dell'evento."),
-    )
-    location_name = models.CharField(max_length=255, blank=True,
-        help_text=_("Nome del luogo dell'evento."),
-    )
-    location_address = models.CharField(max_length=500, blank=True,
-        help_text=_("Indirizzo completo del luogo."),
-    )
-    location_lat = models.FloatField(null=True, blank=True,
-        help_text=_("Latitudine della posizione."),
-    )
-    location_lon = models.FloatField(null=True, blank=True,
-        help_text=_("Longitudine della posizione."),
-    )
-    description = models.TextField(blank=True, help_text=_("Sanitized HTML"))
+    external_id = models.CharField(max_length=100, verbose_name=_("ID at the partner"))
+    event_name = models.CharField(max_length=255, verbose_name=_("Event name"))
+    start_date = models.DateTimeField(verbose_name=_("Start"))
+    end_date = models.DateTimeField(null=True, blank=True, verbose_name=_("End"))
+    location_name = models.CharField(max_length=255, blank=True, verbose_name=_("Venue"))
+    location_address = models.CharField(max_length=500, blank=True, verbose_name=_("Address"))
+    location_lat = models.FloatField(null=True, blank=True, verbose_name=_("Latitude"))
+    location_lon = models.FloatField(null=True, blank=True, verbose_name=_("Longitude"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
     event_status = models.CharField(
-        max_length=20, choices=EVENT_STATUS_CHOICES, default="EventScheduled",
-        help_text=_("Stato corrente dell'evento."),
+        max_length=20,
+        choices=EVENT_STATUS_CHOICES,
+        default="EventScheduled",
+        verbose_name=_("Status"),
     )
-    image_url = models.URLField(blank=True,
-        help_text=_("URL dell'immagine di copertina."),
+    image_url = models.URLField(blank=True, verbose_name=_("Image address"))
+    detail_url = models.URLField(blank=True, verbose_name=_("Event page on the partner site"))
+    is_approved = models.BooleanField(
+        default=True,
+        verbose_name=_("Approved"),
+        help_text=_(
+            "The event appears in the partner events list and in site search "
+            "only if it is approved and not hidden. Every sync resets "
+            "this box to the partner club's \"Publish imported events "
+            "immediately\" setting."
+        ),
     )
-    detail_url = models.URLField(blank=True,
-        help_text=_("URL della pagina dell'evento sul sito partner."),
+    is_hidden = models.BooleanField(
+        default=False,
+        verbose_name=_("Hidden"),
+        help_text=_(
+            "Keeps the event off our site even when it is approved. "
+            "The sync never changes it, so use this to remove an event for good."
+        ),
     )
-    is_approved = models.BooleanField(default=True,
-        help_text=_("L'evento è visibile ai soci."),
-    )
-    is_hidden = models.BooleanField(default=False,
-        help_text=_("Nascondi l'evento dall'elenco pubblico."),
-    )
-    fetched_at = models.DateTimeField(auto_now_add=True,
-        help_text=_("Data del primo import dell'evento."),
-    )
-    updated_at = models.DateTimeField(auto_now=True,
-        help_text=_("Data dell'ultimo aggiornamento."),
-    )
+    fetched_at = models.DateTimeField(auto_now_add=True, verbose_name=_("First imported"))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Last updated"))
 
     class Meta:
         verbose_name = _("External Event")
@@ -302,21 +295,19 @@ class ExternalEventInterest(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="event_interests",
-        help_text=_("Socio che ha espresso interesse."),
+        verbose_name=_("Member"),
     )
     external_event = models.ForeignKey(
-        ExternalEvent, on_delete=models.CASCADE, related_name="interests",
-        help_text=_("Evento esterno di interesse."),
+        ExternalEvent,
+        on_delete=models.CASCADE,
+        related_name="interests",
+        verbose_name=_("Partner event"),
     )
-    interest_level = models.CharField(max_length=20, choices=INTEREST_CHOICES,
-        help_text=_("Livello di interesse per l'evento."),
+    interest_level = models.CharField(
+        max_length=20, choices=INTEREST_CHOICES, verbose_name=_("Interest")
     )
-    created_at = models.DateTimeField(auto_now_add=True,
-        help_text=_("Data di espressione dell'interesse."),
-    )
-    updated_at = models.DateTimeField(auto_now=True,
-        help_text=_("Data dell'ultima modifica."),
-    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created"))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Last updated"))
 
     class Meta:
         verbose_name = _("External Event Interest")
@@ -341,23 +332,30 @@ class ExternalEventComment(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="event_comments",
-        help_text=_("Socio autore del commento."),
+        verbose_name=_("Author"),
     )
     external_event = models.ForeignKey(
-        ExternalEvent, on_delete=models.CASCADE, related_name="comments",
-        help_text=_("Evento esterno commentato."),
+        ExternalEvent,
+        on_delete=models.CASCADE,
+        related_name="comments",
+        verbose_name=_("Partner event"),
     )
     content = models.TextField(
-        help_text=_("Testo del commento (non condiviso col partner)."),
+        verbose_name=_("Comment"),
+        help_text=_(
+            "Shown on the event page to signed-in users of our site. "
+            "It is never sent to the partner club."
+        ),
     )
-    created_at = models.DateTimeField(auto_now_add=True,
-        help_text=_("Data di creazione del commento."),
-    )
-    updated_at = models.DateTimeField(auto_now=True,
-        help_text=_("Data dell'ultima modifica."),
-    )
-    is_deleted = models.BooleanField(default=False,
-        help_text=_("Il commento è stato cancellato (soft delete)."),
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created"))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Last updated"))
+    is_deleted = models.BooleanField(
+        default=False,
+        verbose_name=_("Deleted"),
+        help_text=_(
+            "If on, the comment no longer appears on the event page but stays "
+            "in the database. Members turn it on when they delete their own comment."
+        ),
     )
 
     class Meta:
@@ -447,14 +445,14 @@ class FederationInfoPage(RoutablePageMixin, Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
-        help_text=_("Introductory text displayed below the page title."),
+        help_text=_("Shown under the page title, before the partner club statistics."),
     )
     how_it_works = StreamField(
         [("step", TimelineBlock())],
         blank=True,
         use_json_field=True,
         verbose_name=_("How it works"),
-        help_text=_("Steps explaining the federation process."),
+        help_text=_('One block per step, shown in order under the heading "How It Works".'),
     )
     faq = StreamField(
         [("faq", FAQBlock())],
@@ -467,22 +465,25 @@ class FederationInfoPage(RoutablePageMixin, Page):
         blank=True,
         use_json_field=True,
         verbose_name=_("Additional content"),
+        help_text=_("Shown at the bottom of the page, after the FAQ."),
     )
     cta_text = models.CharField(
         max_length=100,
         blank=True,
-        verbose_name=_("CTA button text"),
-        help_text=_("Label for the call-to-action button."),
+        verbose_name=_("Events button text"),
+        help_text=_(
+            'Button that opens the partner events list, e.g. "See partner events". '
+            "Leave empty to hide the button."
+        ),
     )
     events_intro = RichTextField(
         blank=True,
         verbose_name=_("Events page introduction"),
-        help_text=_("Introductory text for the partner events listing page."),
     )
     events_per_page = models.PositiveIntegerField(
         default=12,
         verbose_name=_("Events per page"),
-        help_text=_("Number of events to display per page."),
+        help_text=_("Applies to the partner events list. Further events move to the next pages."),
     )
 
     content_panels = Page.content_panels + [

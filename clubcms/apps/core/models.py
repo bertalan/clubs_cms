@@ -52,13 +52,11 @@ class Activity(models.Model):
         on_delete=models.CASCADE,
         related_name="activities",
         verbose_name=_("User"),
-        help_text=_("Utente che ha eseguito l'azione."),
     )
     action = models.CharField(
         max_length=30,
         choices=ACTION_CHOICES,
         verbose_name=_("Action"),
-        help_text=_("Tipo di azione registrata nel log attività."),
     )
 
     # Generic target (page, event, photo, etc.)
@@ -68,31 +66,26 @@ class Activity(models.Model):
         null=True,
         blank=True,
         verbose_name=_("Target content type"),
-        help_text=_("Tipo di contenuto dell'oggetto collegato."),
     )
     target_id = models.PositiveIntegerField(
         null=True,
         blank=True,
         verbose_name=_("Target ID"),
-        help_text=_("ID dell'oggetto collegato a questa attività."),
     )
     target = GenericForeignKey("target_content_type", "target_id")
     target_title = models.CharField(
         max_length=255,
         blank=True,
         verbose_name=_("Target title"),
-        help_text=_("Titolo dell'oggetto collegato, salvato per riferimento rapido."),
     )
     target_url = models.URLField(
         blank=True,
         verbose_name=_("Target URL"),
-        help_text=_("URL dell'oggetto collegato, se disponibile."),
     )
 
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name=_("Created at"),
-        help_text=_("Data e ora di registrazione dell'attività."),
     )
 
     class Meta:
@@ -130,14 +123,12 @@ class Reaction(models.Model):
         on_delete=models.CASCADE,
         related_name="reactions",
         verbose_name=_("User"),
-        help_text=_("Utente che ha lasciato la reazione."),
     )
     reaction_type = models.CharField(
         max_length=10,
         choices=REACTION_CHOICES,
         default="like",
         verbose_name=_("Reaction"),
-        help_text=_("Tipo di reazione: Like o Love."),
     )
 
     # Generic target
@@ -145,18 +136,15 @@ class Reaction(models.Model):
         ContentType,
         on_delete=models.CASCADE,
         verbose_name=_("Content type"),
-        help_text=_("Tipo di contenuto dell'oggetto a cui è associata la reazione."),
     )
     object_id = models.PositiveIntegerField(
         verbose_name=_("Object ID"),
-        help_text=_("ID dell'oggetto a cui è associata la reazione."),
     )
     content_object = GenericForeignKey("content_type", "object_id")
 
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name=_("Created at"),
-        help_text=_("Data e ora in cui è stata lasciata la reazione."),
     )
 
     class Meta:
@@ -198,11 +186,9 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name="user_comments",
         verbose_name=_("User"),
-        help_text=_("Utente autore del commento."),
     )
     content = models.TextField(
         verbose_name=_("Content"),
-        help_text=_("Testo del commento."),
     )
 
     # Generic target
@@ -210,11 +196,9 @@ class Comment(models.Model):
         ContentType,
         on_delete=models.CASCADE,
         verbose_name=_("Content type"),
-        help_text=_("Tipo di contenuto dell'oggetto commentato."),
     )
     object_id = models.PositiveIntegerField(
         verbose_name=_("Object ID"),
-        help_text=_("ID dell'oggetto commentato."),
     )
     content_object = GenericForeignKey("content_type", "object_id")
 
@@ -226,7 +210,6 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name="replies",
         verbose_name=_("Reply to"),
-        help_text=_("Commento genitore, se questo è una risposta."),
     )
 
     # Moderation
@@ -235,7 +218,6 @@ class Comment(models.Model):
         choices=STATUS_CHOICES,
         default="pending",
         verbose_name=_("Status"),
-        help_text=_("Stato di moderazione: in attesa, approvato o rifiutato."),
     )
     moderated_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -244,18 +226,15 @@ class Comment(models.Model):
         on_delete=models.SET_NULL,
         related_name="moderated_comments",
         verbose_name=_("Moderated by"),
-        help_text=_("Moderatore che ha revisionato il commento."),
     )
 
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name=_("Created at"),
-        help_text=_("Data e ora di creazione del commento."),
     )
     updated_at = models.DateTimeField(
         auto_now=True,
         verbose_name=_("Updated at"),
-        help_text=_("Data e ora dell'ultima modifica."),
     )
 
     class Meta:
@@ -303,22 +282,18 @@ class Contribution(models.Model):
         on_delete=models.CASCADE,
         related_name="contributions",
         verbose_name=_("Author"),
-        help_text=_("Utente autore del contributo."),
     )
     contribution_type = models.CharField(
         max_length=20,
         choices=TYPE_CHOICES,
         verbose_name=_("Type"),
-        help_text=_("Tipo di contributo: storia, proposta evento o annuncio."),
     )
     title = models.CharField(
         max_length=255,
         verbose_name=_("Title"),
-        help_text=_("Titolo del contributo (max 255 caratteri)."),
     )
     body = models.TextField(
         verbose_name=_("Content"),
-        help_text=_("Corpo del contributo. Supporta testo semplice."),
     )
     status = models.CharField(
         max_length=10,
@@ -326,7 +301,6 @@ class Contribution(models.Model):
         default="pending",
         db_index=True,
         verbose_name=_("Status"),
-        help_text=_("Stato di moderazione del contributo."),
     )
     moderated_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -335,23 +309,19 @@ class Contribution(models.Model):
         on_delete=models.SET_NULL,
         related_name="moderated_contributions",
         verbose_name=_("Moderated by"),
-        help_text=_("Moderatore che ha revisionato il contributo."),
     )
     moderation_note = models.TextField(
         blank=True,
         null=True,
         verbose_name=_("Moderation note"),
-        help_text=_("Nota del moderatore visibile all'autore."),
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name=_("Created at"),
-        help_text=_("Data e ora di invio del contributo."),
     )
     updated_at = models.DateTimeField(
         auto_now=True,
         verbose_name=_("Updated at"),
-        help_text=_("Data e ora dell'ultima modifica."),
     )
 
     class Meta:

@@ -35,32 +35,38 @@ class HeroSlideBlock(StructBlock):
 
     image = ImageChooserBlock(
         required=True,
-        help_text=_("Slide background image."),
+        label=_("Background image"),
+        help_text=_("Cropped to 1920 x 900 pixels, so use a wide landscape image."),
     )
     title = CharBlock(
         max_length=255,
         required=False,
-        help_text=_("Slide headline."),
+        label=_("Title"),
+        help_text=_("Also read out by screen readers as the description of the image."),
     )
     subtitle = CharBlock(
         max_length=255,
         required=False,
-        help_text=_("Optional subtitle text."),
+        label=_("Subtitle"),
     )
     cta_text = CharBlock(
         max_length=120,
         required=False,
-        label=_("CTA text"),
-        help_text=_("Button label."),
+        label=_("Button text"),
+        help_text=_(
+            "The button appears only when you "
+            "also choose a page or enter a link."
+        ),
     )
     cta_link = PageChooserBlock(
         required=False,
-        label=_("CTA page link"),
+        label=_("Button link to page"),
+        help_text=_("Takes priority over the external link."),
     )
     cta_url = URLBlock(
         required=False,
-        label=_("CTA external URL"),
-        help_text=_("Used only if no internal page is selected."),
+        label=_("Button external link"),
+        help_text=_("Used only when no page is selected. Opens in a new tab."),
     )
 
     class Meta:
@@ -82,11 +88,12 @@ class HeroSliderBlock(StructBlock):
     autoplay = BooleanBlock(
         default=True,
         required=False,
-        help_text=_("Automatically advance slides."),
+        label=_("Autoplay"),
     )
     interval = IntegerBlock(
         default=5000,
-        help_text=_("Time between slides in milliseconds."),
+        label=_("Time per slide"),
+        help_text=_("In milliseconds: 5000 means 5 seconds."),
     )
     height = ChoiceBlock(
         choices=[
@@ -96,19 +103,19 @@ class HeroSliderBlock(StructBlock):
             ("100vh", _("Full screen")),
         ],
         default="75vh",
-        help_text=_("Slider height."),
+        label=_("Height"),
     )
     show_arrows = BooleanBlock(
         default=True,
         required=False,
-        help_text=_("Show navigation arrows."),
+        label=_("Show arrows"),
     )
     show_dots = BooleanBlock(
         default=True,
         required=False,
-        help_text=_("Show dot indicators."),
+        label=_("Show dots"),
     )
-    settings = BlockSettings(required=False)
+    settings = BlockSettings(required=False, label=_("Advanced settings"))
 
     class Meta:
         template = "website/blocks/hero_slider_block.html"
@@ -128,49 +135,62 @@ class HeroBannerBlock(StructBlock):
 
     image = ImageChooserBlock(
         required=True,
-        help_text=_("Hero background image."),
+        label=_("Background image"),
+        help_text=_("Cropped to 1920 x 900 pixels, so use a wide landscape image."),
     )
     badge = CharBlock(
         max_length=100,
         required=False,
-        help_text=_("Small badge text above the title (e.g. 'Est. 2010')."),
+        label=_("Badge"),
+        help_text=_("Small text above the title, for example Est. 2010."),
     )
     title = CharBlock(
         max_length=255,
         required=False,
-        help_text=_("Main headline."),
+        label=_("Title"),
+        help_text=_("Also read out by screen readers as the description of the image."),
     )
     subtitle = TextBlock(
         required=False,
-        help_text=_("Supporting text below the title."),
+        label=_("Subtitle"),
     )
     cta_text = CharBlock(
         max_length=120,
         required=False,
-        label=_("CTA text"),
+        label=_("Button text"),
+        help_text=_(
+            "The button appears only when you "
+            "also choose a page or enter a link."
+        ),
     )
     cta_link = PageChooserBlock(
         required=False,
-        label=_("CTA page link"),
+        label=_("Button link to page"),
+        help_text=_("Takes priority over the external link."),
     )
     cta_url = URLBlock(
         required=False,
-        label=_("CTA external URL"),
+        label=_("Button external link"),
+        help_text=_("Used only when no page is selected. Opens in a new tab."),
     )
     secondary_cta_text = CharBlock(
         max_length=120,
         required=False,
-        label=_("Secondary CTA text"),
-        help_text=_("Optional secondary button label."),
+        label=_("Second button text"),
+        help_text=_(
+            "Shown as an outlined button after the first one. It also needs "
+            "a page or a link."
+        ),
     )
     secondary_cta_link = PageChooserBlock(
         required=False,
-        label=_("Secondary CTA page link"),
+        label=_("Second button link to page"),
+        help_text=_("Takes priority over the external link."),
     )
     secondary_cta_url = URLBlock(
         required=False,
-        label=_("Secondary CTA external URL"),
-        help_text=_("Used only if no internal page is selected."),
+        label=_("Second button external link"),
+        help_text=_("Used only when no page is selected. Opens in a new tab."),
     )
     overlay = ChoiceBlock(
         choices=[
@@ -180,7 +200,7 @@ class HeroBannerBlock(StructBlock):
             ("gradient", _("Gradient overlay")),
         ],
         default="dark",
-        help_text=_("Overlay style over the background image."),
+        label=_("Overlay"),
     )
     text_position = ChoiceBlock(
         choices=[
@@ -191,7 +211,7 @@ class HeroBannerBlock(StructBlock):
             ("bottom-right", _("Bottom right")),
         ],
         default="center",
-        help_text=_("Position of the text overlay."),
+        label=_("Text position"),
     )
     height = ChoiceBlock(
         choices=[
@@ -201,8 +221,9 @@ class HeroBannerBlock(StructBlock):
             ("100vh", _("Full screen")),
         ],
         default="75vh",
+        label=_("Height"),
     )
-    settings = BlockSettings(required=False)
+    settings = BlockSettings(required=False, label=_("Advanced settings"))
 
     class Meta:
         template = "website/blocks/hero_banner_block.html"
@@ -224,23 +245,30 @@ class HeroCountdownBlock(StructBlock):
     event = PageChooserBlock(
         page_type="website.EventDetailPage",
         required=True,
-        help_text=_("Select an event to count down to."),
+        label=_("Event"),
+        help_text=_("The countdown runs to the start date and time of this event."),
     )
     background_image = ImageChooserBlock(
         required=False,
-        help_text=_("Optional background image. Falls back to event cover image."),
+        label=_("Background image"),
+        help_text=_("Cropped to 1920 x 700 pixels. If empty, no image is shown."),
     )
     title_override = CharBlock(
         max_length=255,
         required=False,
-        help_text=_("Override the event title in the hero."),
+        label=_("Custom title"),
+        help_text=_("If empty, the event title is used."),
     )
     show_registration_button = BooleanBlock(
         default=True,
         required=False,
-        help_text=_("Show a registration CTA button if registration is open."),
+        label=_("Show registration button"),
+        help_text=_(
+            "Shows Register now while registration is open. Otherwise the "
+            "button reads View details."
+        ),
     )
-    settings = BlockSettings(required=False)
+    settings = BlockSettings(required=False, label=_("Advanced settings"))
 
     class Meta:
         template = "website/blocks/hero_countdown_block.html"
@@ -261,43 +289,57 @@ class HeroVideoBlock(StructBlock):
 
     video_url = URLBlock(
         required=True,
-        help_text=_("URL to the video file (MP4 recommended)."),
+        label=_("Video file link"),
+        help_text=_(
+            "Direct link to an MP4 file, for example "
+            "https://example.com/ride.mp4. YouTube and Vimeo links do not work here."
+        ),
     )
     fallback_image = ImageChooserBlock(
         required=True,
-        help_text=_("Displayed on mobile or when video cannot play."),
+        label=_("Fallback image"),
+        help_text=_("Cropped to 1920 x 900 pixels, so use a wide landscape image."),
     )
     title = CharBlock(
         max_length=255,
         required=False,
+        label=_("Title"),
     )
     subtitle = TextBlock(
         required=False,
+        label=_("Subtitle"),
     )
     cta_text = CharBlock(
         max_length=120,
         required=False,
-        label=_("CTA text"),
+        label=_("Button text"),
+        help_text=_(
+            "The button appears only when you "
+            "also choose a page or enter a link."
+        ),
     )
     cta_link = PageChooserBlock(
         required=False,
-        label=_("CTA page link"),
+        label=_("Button link to page"),
+        help_text=_("Takes priority over the external link."),
     )
     cta_url = URLBlock(
         required=False,
-        label=_("CTA external URL"),
+        label=_("Button external link"),
+        help_text=_("Used only when no page is selected. Opens in a new tab."),
     )
     muted = BooleanBlock(
         default=True,
         required=False,
-        help_text=_("Mute the video (required for autoplay on most browsers)."),
+        label=_("Mute video"),
+        help_text=_("Most browsers start a video on their own only when it is muted."),
     )
     loop = BooleanBlock(
         default=True,
         required=False,
-        help_text=_("Loop the video."),
+        label=_("Loop video"),
     )
-    settings = BlockSettings(required=False)
+    settings = BlockSettings(required=False, label=_("Advanced settings"))
 
     class Meta:
         template = "website/blocks/hero_video_block.html"

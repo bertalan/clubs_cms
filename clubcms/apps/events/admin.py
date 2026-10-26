@@ -7,7 +7,7 @@ list/filter/search capabilities for the Wagtail admin sidebar.
 
 from django.utils.translation import gettext_lazy as _
 
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel, TabbedInterface, ObjectList
+from wagtail.admin.panels import FieldPanel, TabbedInterface, ObjectList
 from wagtail.admin.viewsets.model import ModelViewSet
 
 from apps.events.models import EventRegistration
@@ -93,10 +93,10 @@ class EventRegistrationViewSet(ModelViewSet):
 
     edit_handler = TabbedInterface(
         [
-            ObjectList(registration_panels, heading="Registration"),
-            ObjectList(payment_panels, heading="Payment"),
-            ObjectList(guest_panels, heading="Guest Info"),
-            ObjectList(passenger_panels, heading="Passenger"),
+            ObjectList(registration_panels, heading=_("Registration")),
+            ObjectList(payment_panels, heading=_("Payment")),
+            ObjectList(guest_panels, heading=_("Guest info")),
+            ObjectList(passenger_panels, heading=_("Passenger")),
         ]
     )
 

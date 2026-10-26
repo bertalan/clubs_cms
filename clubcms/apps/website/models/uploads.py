@@ -37,7 +37,6 @@ class PhotoUpload(models.Model):
         on_delete=models.SET_NULL,
         related_name="photo_uploads",
         verbose_name=_("Event"),
-        help_text=_("Optionally link this photo to an event."),
     )
     tags = models.ManyToManyField(
         "website.PhotoTag",
@@ -67,6 +66,10 @@ class PhotoUpload(models.Model):
     rejection_reason = models.TextField(
         blank=True,
         verbose_name=_("Rejection reason"),
+        help_text=_(
+            "Shown to the member on their uploads page. A photo that is not "
+            "approved and has a reason counts as rejected."
+        ),
     )
 
     # --- Timestamps ---

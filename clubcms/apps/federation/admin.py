@@ -21,7 +21,28 @@ class ExternalEventAdmin(admin.ModelAdmin):
     list_display = ["event_name", "source_club", "start_date", "is_approved", "is_hidden"]
     list_filter = ["source_club", "is_approved", "is_hidden"]
     search_fields = ["event_name"]
-    readonly_fields = ["id", "fetched_at", "updated_at"]
+    # Only approval and visibility are decided locally: the rest comes from the partner sync.
+    readonly_fields = [
+        "id",
+        "source_club",
+        "external_id",
+        "event_name",
+        "start_date",
+        "end_date",
+        "location_name",
+        "location_address",
+        "location_lat",
+        "location_lon",
+        "description",
+        "event_status",
+        "image_url",
+        "detail_url",
+        "fetched_at",
+        "updated_at",
+    ]
+
+    def has_add_permission(self, request):
+        return False
 
 
 @admin.register(ExternalEventInterest)

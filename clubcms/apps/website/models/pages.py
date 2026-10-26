@@ -48,6 +48,7 @@ class NewsPageTag(TaggedItemBase):
         "website.NewsPage",
         related_name="tagged_items",
         on_delete=models.CASCADE,
+        verbose_name=_("News page"),
     )
 
 
@@ -58,6 +59,7 @@ class EventPageTag(TaggedItemBase):
         "website.EventDetailPage",
         related_name="tagged_items",
         on_delete=models.CASCADE,
+        verbose_name=_("Event page"),
     )
 
 
@@ -76,19 +78,21 @@ class HomePage(Page):
         max_length=120,
         blank=True,
         verbose_name=_("Hero badge"),
-        help_text=_("Pre-title text displayed above hero title, e.g. 'Since 1985'."),
+        help_text=_("Short text above the hero title, e.g. Since 1985."),
     )
     hero_title = models.CharField(
         max_length=255,
         blank=True,
         verbose_name=_("Hero title"),
-        help_text=_("Main headline displayed in the hero section."),
+        help_text=_(
+            "Main headline at the top of the homepage. If empty, the hero shows no headline."
+        ),
     )
     hero_subtitle = models.CharField(
         max_length=255,
         blank=True,
         verbose_name=_("Hero subtitle"),
-        help_text=_("Testo secondario mostrato sotto il titolo hero."),
+        help_text=_("One line of text shown under the hero title."),
     )
     hero_image = models.ForeignKey(
         "wagtailimages.Image",
@@ -97,13 +101,15 @@ class HomePage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Hero background image"),
-        help_text=_("Immagine di sfondo della hero section."),
+        help_text=_(
+            "Shown behind the hero text, cropped to 1920 x 800 pixels. "
+            "Also used as the preview image when the page is shared on social media."
+        ),
     )
     primary_cta_text = models.CharField(
         max_length=120,
         blank=True,
-        verbose_name=_("Primary CTA text"),
-        help_text=_("Testo del pulsante principale (es. 'Scopri di più')."),
+        verbose_name=_("Primary button text"),
     )
     primary_cta_link = models.ForeignKey(
         "wagtailcore.Page",
@@ -111,19 +117,16 @@ class HomePage(Page):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
-        verbose_name=_("Primary CTA link"),
-        help_text=_("Pagina interna per il pulsante principale."),
+        verbose_name=_("Primary button page"),
     )
     primary_cta_url = models.URLField(
         blank=True,
-        verbose_name=_("Primary CTA external URL"),
-        help_text=_("Used only if no internal page is selected."),
+        verbose_name=_("Primary button external URL"),
     )
     secondary_cta_text = models.CharField(
         max_length=120,
         blank=True,
-        verbose_name=_("Secondary CTA text"),
-        help_text=_("Testo del pulsante secondario (es. 'Contattaci')."),
+        verbose_name=_("Secondary button text"),
     )
     secondary_cta_link = models.ForeignKey(
         "wagtailcore.Page",
@@ -131,13 +134,11 @@ class HomePage(Page):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="+",
-        verbose_name=_("Secondary CTA link"),
-        help_text=_("Pagina interna per il pulsante secondario."),
+        verbose_name=_("Secondary button page"),
     )
     secondary_cta_url = models.URLField(
         blank=True,
-        verbose_name=_("Secondary CTA external URL"),
-        help_text=_("Used only if no internal page is selected."),
+        verbose_name=_("Secondary button external URL"),
     )
 
     # --- StreamField body ---
@@ -146,7 +147,10 @@ class HomePage(Page):
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
-        help_text=_("Contenuto principale della homepage sotto la hero section."),
+        help_text=_(
+            "Shown below the upcoming events. If it opens with a Rich text block "
+            "plus Statistics or Call to action, they are laid out side by side."
+        ),
     )
 
     # --- Featured content ---
@@ -157,7 +161,6 @@ class HomePage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Featured event"),
-        help_text=_("Select an EventDetailPage to highlight on the homepage."),
     )
 
     # --- Wagtail config ---
@@ -186,6 +189,10 @@ class HomePage(Page):
                 FieldPanel("secondary_cta_url"),
             ],
             heading=_("Call-to-action buttons"),
+            help_text=_(
+                "A button appears only when its text is filled in. It opens the chosen "
+                "page or, if no page is chosen, the external URL in a new tab."
+            ),
         ),
         FieldPanel("body"),
         MultiFieldPanel(
@@ -302,7 +309,6 @@ class AboutPage(Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
-        help_text=_("Displayed below the page title."),
     )
     cover_image = models.ForeignKey(
         "wagtailimages.Image",
@@ -311,14 +317,16 @@ class AboutPage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Cover image"),
-        help_text=_("Immagine di copertina mostrata in alto nella pagina."),
+        help_text=_(
+            "Wide image under the page title, cropped to 1200 x 500 pixels. "
+            "Also used as the preview image when the page is shared on social media."
+        ),
     )
     body = StreamField(
         BODY_BLOCKS,
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
-        help_text=_("Contenuto principale della pagina Chi Siamo."),
     )
 
     # --- Wagtail config ---
@@ -357,14 +365,13 @@ class BoardPage(Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
-        help_text=_("Testo introduttivo per la pagina del direttivo."),
     )
     body = StreamField(
         BODY_BLOCKS,
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
-        help_text=_("Use team-member blocks here."),
+        help_text=_("Add a Team grid block to list the board members with photo and role."),
     )
 
     # --- Wagtail config ---
@@ -401,14 +408,14 @@ class NewsIndexPage(Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
-        help_text=_("Testo introduttivo mostrato sopra l'elenco delle notizie."),
+        help_text=_("Shown at the top of the page, above the list of articles."),
     )
     body = StreamField(
         BODY_BLOCKS,
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
-        help_text=_("Optional content displayed above the article listing."),
+        help_text=_("Shown below the list of articles and the page numbers."),
     )
 
     # --- Wagtail config ---
@@ -486,24 +493,28 @@ class NewsPage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Cover image"),
-        help_text=_("Immagine di copertina per l'articolo, usata anche nelle anteprime."),
+        help_text=_(
+            "Shown at the top of the article and on its card in the news list. "
+            "Also used as the preview image on social media."
+        ),
     )
     intro = models.TextField(
         blank=True,
         verbose_name=_("Introduction / excerpt"),
-        help_text=_("Short summary shown in listings."),
+        help_text=_(
+            "Shown at the top of the article and, cut to 25 words, on its card in the news list."
+        ),
     )
     body = StreamField(
         NEWS_BLOCKS,
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
-        help_text=_("Contenuto completo dell'articolo."),
     )
     display_date = models.DateField(
         default=timezone.now,
         verbose_name=_("Display date"),
-        help_text=_("Publication date shown to readers."),
+        help_text=_("Shown on the article and used to sort the news list, newest first."),
     )
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -512,7 +523,10 @@ class NewsPage(Page):
         on_delete=models.SET_NULL,
         related_name="news_articles",
         verbose_name=_("Author"),
-        help_text=_("Autore dell'articolo, mostrato nella pagina e nei listing."),
+        help_text=_(
+            "Shown by name on the article and on its card in the news list. "
+            "Leave empty for no byline."
+        ),
     )
 
     # Tags and categories
@@ -520,7 +534,7 @@ class NewsPage(Page):
         through="website.NewsPageTag",
         blank=True,
         verbose_name=_("Tags"),
-        help_text=_("Tag per classificare e filtrare l'articolo."),
+        help_text=_("Visitors can click a tag to see all articles with the same tag."),
     )
     category = models.ForeignKey(
         "website.NewsCategory",
@@ -529,7 +543,10 @@ class NewsPage(Page):
         on_delete=models.SET_NULL,
         related_name="news_pages",
         verbose_name=_("Category"),
-        help_text=_("Categoria principale dell'articolo."),
+        help_text=_(
+            "Visitors can filter the news list by category. "
+            "Categories are managed under Snippets."
+        ),
     )
 
     # --- Wagtail config ---
@@ -596,14 +613,14 @@ class EventsPage(Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
-        help_text=_("Testo introduttivo mostrato sopra l'elenco degli eventi."),
+        help_text=_("Shown at the top of the page, above the list of events."),
     )
     body = StreamField(
         BODY_BLOCKS,
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
-        help_text=_("Optional content above the event listing."),
+        help_text=_("Shown below the list of events and the page numbers."),
     )
 
     # --- Wagtail config ---
@@ -702,31 +719,33 @@ class EventDetailPage(RoutablePageMixin, Page):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Cover image"),
-        help_text=_("Immagine di copertina per l'evento, usata anche nei listing."),
+        help_text=_(
+            "Shown at the top of the event page and on its card in the events list. "
+            "Also used as the preview image on social media."
+        ),
     )
     intro = models.TextField(
         blank=True,
         verbose_name=_("Introduction / excerpt"),
-        help_text=_("Short description shown in listings."),
+        help_text=_("Shown at the top of the event page and on its card in the events list."),
     )
     body = StreamField(
         EVENT_BLOCKS,
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
-        help_text=_("Descrizione completa dell'evento con blocchi multimediali."),
     )
 
     # --- Date/Time ---
     start_date = models.DateTimeField(
         verbose_name=_("Start date & time"),
-        help_text=_("Data e ora di inizio dell'evento."),
+        help_text=_("After this moment the event moves to the past events list."),
     )
     end_date = models.DateTimeField(
         null=True,
         blank=True,
         verbose_name=_("End date & time"),
-        help_text=_("Data e ora di fine. Lasciare vuoto per eventi di un giorno."),
+        help_text=_("Leave empty if the event has no set end time."),
     )
 
     # --- Location ---
@@ -734,51 +753,58 @@ class EventDetailPage(RoutablePageMixin, Page):
         max_length=255,
         blank=True,
         verbose_name=_("Venue name"),
-        help_text=_("Nome del luogo o struttura che ospita l'evento."),
     )
     location_address = models.CharField(
         max_length=500,
         blank=True,
         verbose_name=_("Address"),
-        help_text=_("Indirizzo completo del luogo dell'evento."),
+        help_text=_("Shown under the venue name, and hidden if the venue name is empty."),
     )
     location_coordinates = models.CharField(
         max_length=100,
         blank=True,
         verbose_name=_("Coordinates"),
-        help_text=_("Latitude,Longitude (e.g. '45.4642,9.1900')"),
+        help_text=_(
+            "Latitude and longitude separated by a comma, e.g. 45.4642,9.1900. "
+            "When filled in, the event page shows a map."
+        ),
     )
     latitude = models.FloatField(
         null=True,
         blank=True,
         editable=False,
         verbose_name=_("Latitude"),
-        help_text=_("Auto-populated from coordinates."),
     )
     longitude = models.FloatField(
         null=True,
         blank=True,
         editable=False,
         verbose_name=_("Longitude"),
-        help_text=_("Auto-populated from coordinates."),
     )
 
     # --- Registration ---
     registration_open = models.BooleanField(
         default=False,
         verbose_name=_("Registration open"),
-        help_text=_("Attiva per accettare le iscrizioni all'evento."),
+        help_text=_(
+            "If off, the event page shows registration as closed, even before the deadline."
+        ),
     )
     registration_deadline = models.DateTimeField(
         null=True,
         blank=True,
         verbose_name=_("Registration deadline"),
-        help_text=_("Termine ultimo per le iscrizioni."),
+        help_text=_(
+            "Must be before the event start. A pricing tier marked as "
+            "registration deadline takes priority over this date."
+        ),
     )
     max_attendees = models.PositiveIntegerField(
         default=0,
         verbose_name=_("Max attendees"),
-        help_text=_("0 = unlimited."),
+        help_text=_(
+            "Leave 0 for no limit. When the limit is reached, registration shows as closed."
+        ),
     )
 
     # --- Pricing ---
@@ -787,47 +813,52 @@ class EventDetailPage(RoutablePageMixin, Page):
         decimal_places=2,
         default=0,
         verbose_name=_("Base fee"),
-        help_text=_("Event participation cost in EUR.  0 = free."),
+        help_text=_("Price per person in euros, e.g. 25.00. Leave 0 for a free event."),
     )
     early_bird_discount = models.PositiveIntegerField(
         default=0,
         verbose_name=_("Early-bird discount (%)"),
-        help_text=_("Sconto percentuale per le iscrizioni anticipate."),
+        help_text=_(
+            "Shown on the event page until the early-bird deadline. "
+            "The amount charged at registration follows the pricing tiers instead."
+        ),
     )
     early_bird_deadline = models.DateTimeField(
         null=True,
         blank=True,
         verbose_name=_("Early-bird deadline"),
-        help_text=_("Termine per usufruire dello sconto early-bird."),
+        help_text=_("After this moment the event page shows the full price again."),
     )
     member_discount_percent = models.PositiveIntegerField(
         default=0,
         verbose_name=_("Member discount (%)"),
-        help_text=_("Percentage discount for active members."),
+        help_text=_(
+            "Applies to active members. If a member's plan gives a higher "
+            "discount, that one is used instead."
+        ),
     )
 
     # --- Guest & Passenger ---
     allow_guests = models.BooleanField(
         default=True,
         verbose_name=_("Allow guest registration"),
-        help_text=_("If checked, non-logged-in users can register via the guest form."),
     )
     passenger_fee = models.DecimalField(
         max_digits=8,
         decimal_places=2,
         default=0,
         verbose_name=_("Passenger fee"),
-        help_text=_("Additional cost for a passenger/companion. 0 = same as base."),
+        help_text=_("Price for a passenger. Leave 0 to charge the same as the base fee."),
     )
     passenger_member_discount_percent = models.PositiveIntegerField(
         default=0,
         verbose_name=_("Passenger member discount (%)"),
-        help_text=_("Percentage discount on passenger fee for active members."),
+        help_text=_("Applies when the person registering is an active member."),
     )
     passenger_included = models.BooleanField(
         default=False,
         verbose_name=_("Passenger included in base fee"),
-        help_text=_("If checked, passenger rides for free with the main registrant."),
+        help_text=_("If on, passengers ride for free and the passenger fee is ignored."),
     )
 
     # --- Route / Logistics ---
@@ -835,7 +866,6 @@ class EventDetailPage(RoutablePageMixin, Page):
         max_length=500,
         blank=True,
         verbose_name=_("Meeting point"),
-        help_text=_("Where participants should gather before the event start."),
     )
     difficulty_level = models.CharField(
         max_length=20,
@@ -847,7 +877,6 @@ class EventDetailPage(RoutablePageMixin, Page):
             ("expert", _("Expert")),
         ],
         verbose_name=_("Difficulty level"),
-        help_text=_("Livello di difficoltà del percorso."),
     )
 
     # --- Tags and categories ---
@@ -855,6 +884,7 @@ class EventDetailPage(RoutablePageMixin, Page):
         through="website.EventPageTag",
         blank=True,
         verbose_name=_("Tags"),
+        help_text=_("Visitors can click a tag to see all events with the same tag."),
     )
     category = models.ForeignKey(
         "website.EventCategory",
@@ -863,7 +893,10 @@ class EventDetailPage(RoutablePageMixin, Page):
         on_delete=models.SET_NULL,
         related_name="events",
         verbose_name=_("Category"),
-        help_text=_("Categoria principale dell'evento."),
+        help_text=_(
+            "Visitors can filter the events list by category. "
+            "Categories are managed under Snippets."
+        ),
     )
 
     # --- Organizer ---
@@ -871,12 +904,15 @@ class EventDetailPage(RoutablePageMixin, Page):
         max_length=255,
         blank=True,
         verbose_name=_("Organizer name"),
-        help_text=_("Nome del Club o ente organizzatore dell'evento."),
+        help_text=_(
+            "Not shown on the page; used only in the event data read by search "
+            "engines. If empty, the club name is used."
+        ),
     )
     organizer_url = models.URLField(
         blank=True,
         verbose_name=_("Organizer URL"),
-        help_text=_("Sito web del Club federato dove l'evento è pubblicato."),
+        help_text=_("Used only in search engine data, and only if an organizer name is set."),
     )
 
     # --- Wagtail config ---
@@ -1367,7 +1403,6 @@ class EventsAreaPage(RoutablePageMixin, Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
-        help_text=_("Introductory text for the events area landing page."),
     )
 
     max_count = 1
@@ -1876,7 +1911,7 @@ class GalleryPage(RoutablePageMixin, Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
-        help_text=_("Testo introduttivo mostrato sopra le gallerie."),
+        help_text=_("Shown at the top of the page, above the albums."),
     )
     root_collection = models.ForeignKey(
         Collection,
@@ -1885,14 +1920,17 @@ class GalleryPage(RoutablePageMixin, Page):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Root collection"),
-        help_text=_("Starting collection for gallery display.  Sub-collections become albums."),
+        help_text=_(
+            "Each sub-collection with at least one image becomes an album. "
+            "If empty, the main Root collection is used."
+        ),
     )
     body = StreamField(
         BODY_BLOCKS,
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
-        help_text=_("Contenuto aggiuntivo sotto la galleria."),
+        help_text=_("Shown at the bottom of the page, below the albums."),
     )
 
     # --- Wagtail config ---
@@ -2239,45 +2277,49 @@ class ContactPage(Page):
         on_delete=models.SET_NULL,
         related_name="+",
         verbose_name=_("Hero image"),
-        help_text=_("Optional background image for the page header."),
+        help_text=_(
+            "Not shown on the contact page. Used only as the preview image "
+            "when the page is shared on social media."
+        ),
     )
     hero_badge = models.CharField(
         max_length=50,
         blank=True,
         verbose_name=_("Hero badge"),
-        help_text=_("Small text above the title (e.g. 'Let's Talk')."),
     )
 
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
-        help_text=_("Testo introduttivo mostrato sopra il form di contatto."),
     )
     form_title = models.CharField(
         max_length=255,
         blank=True,
         default=_("Contact us"),
         verbose_name=_("Form title"),
-        help_text=_("Titolo mostrato sopra il form di contatto."),
+        help_text=_("Heading above the contact form. Leave empty to show no heading."),
     )
     success_message = RichTextField(
         blank=True,
         verbose_name=_("Success message"),
-        help_text=_("Confirmation shown after form submission."),
+        help_text=_(
+            "Shown in place of the form after a message is sent. "
+            "If empty, a standard thank-you text is used."
+        ),
     )
     body = StreamField(
         BODY_BLOCKS,
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
-        help_text=_("Contenuto aggiuntivo sotto il form."),
+        help_text=_("Shown in the side column, below the membership box."),
     )
 
     # Captcha / anti-spam settings (stored per page for flexibility)
     captcha_enabled = models.BooleanField(
         default=True,
         verbose_name=_("Enable captcha"),
-        help_text=_("Attiva la protezione anti-spam sul form."),
+        help_text=_("If off, the contact form has no spam protection."),
     )
     captcha_provider = models.CharField(
         max_length=30,
@@ -2289,49 +2331,48 @@ class ContactPage(Page):
             ("hcaptcha", _("hCaptcha")),
         ],
         verbose_name=_("Captcha provider"),
-        help_text=_("Servizio anti-spam da utilizzare."),
     )
     captcha_site_key = models.CharField(
         max_length=255,
         blank=True,
         verbose_name=_("Captcha site key"),
-        help_text=_("Chiave pubblica del servizio CAPTCHA."),
     )
     captcha_secret_key = models.CharField(
         max_length=255,
         blank=True,
         verbose_name=_("Captcha secret key"),
-        help_text=_("Chiave segreta del servizio CAPTCHA."),
     )
 
     # Membership CTA (translatable - shown in sidebar)
     membership_title = models.CharField(
         max_length=100,
         blank=True,
-        verbose_name=_("Membership CTA title"),
-        help_text=_("E.g. 'Become a Member'"),
+        verbose_name=_("Membership box title"),
+        help_text=_(
+            "Heading of the membership box in the side column, e.g. Become a member. "
+            "If empty, the box is hidden."
+        ),
     )
     membership_description = models.TextField(
         blank=True,
-        verbose_name=_("Membership CTA description"),
-        help_text=_("Brief description of membership benefits."),
+        verbose_name=_("Membership box text"),
     )
     membership_price = models.CharField(
         max_length=50,
         blank=True,
         verbose_name=_("Membership price"),
-        help_text=_("E.g. 'Annual fee €80'"),
+        help_text=_("Shown as written, e.g. Annual fee 80 euros."),
     )
     membership_cta_text = models.CharField(
         max_length=50,
         blank=True,
-        verbose_name=_("Membership CTA button text"),
-        help_text=_("E.g. 'Request Form'"),
+        verbose_name=_("Membership button text"),
+        help_text=_("If empty, the button says Learn more."),
     )
     membership_cta_url = models.URLField(
         blank=True,
-        verbose_name=_("Membership CTA URL"),
-        help_text=_("Link to membership form or page."),
+        verbose_name=_("Membership button link"),
+        help_text=_("Without a link, the box shows no button."),
     )
 
     # --- Wagtail config ---
@@ -2359,7 +2400,7 @@ class ContactPage(Page):
                 FieldPanel("membership_cta_text"),
                 FieldPanel("membership_cta_url"),
             ],
-            heading=_("Membership CTA"),
+            heading=_("Membership box"),
         ),
     ]
 
@@ -2372,6 +2413,10 @@ class ContactPage(Page):
                 FieldPanel("captcha_secret_key"),
             ],
             heading=_("Anti-spam settings"),
+            help_text=_(
+                "Honeypot works without an account. Turnstile and hCaptcha need a "
+                "site key and a secret key from your account with that service."
+            ),
         ),
     ]
 
@@ -2410,13 +2455,12 @@ class PrivacyPage(Page):
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
-        help_text=_("Contenuto della pagina privacy/informativa."),
     )
     last_updated = models.DateField(
         null=True,
         blank=True,
         verbose_name=_("Last updated"),
-        help_text=_("Date the policy was last revised."),
+        help_text=_("Shown under the page title. Change it every time the policy is revised."),
     )
 
     # --- Wagtail config ---
@@ -2452,14 +2496,16 @@ class TransparencyPage(Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
-        help_text=_("Testo introduttivo per la sezione trasparenza."),
     )
     body = StreamField(
         BODY_BLOCKS,
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
-        help_text=_("Use document-list and accordion blocks for organising documents."),
+        help_text=_(
+            "Use Document list and Accordion blocks to publish statutes, budgets "
+            "and annual reports."
+        ),
     )
 
     # --- Wagtail config ---
@@ -2496,31 +2542,35 @@ class PressPage(Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
-        help_text=_("Testo introduttivo per l'ufficio stampa."),
     )
     press_email = models.EmailField(
         blank=True,
         verbose_name=_("Press email"),
-        help_text=_("Email dedicata per i contatti stampa."),
+        help_text=_("Shown publicly on the press page as a clickable link."),
     )
     press_phone = models.CharField(
         max_length=30,
         blank=True,
         verbose_name=_("Press phone"),
-        help_text=_("Telefono dedicato per i contatti stampa."),
+        help_text=_(
+            "Shown publicly on the press page. Include the country code, e.g. +39 02 1234567."
+        ),
     )
     press_contact = models.CharField(
         max_length=255,
         blank=True,
         verbose_name=_("Press contact person"),
-        help_text=_("Nome del referente stampa."),
+        help_text=_("Name shown publicly in the press contact box."),
     )
     body = StreamField(
         BODY_BLOCKS,
         blank=True,
         use_json_field=True,
         verbose_name=_("Body"),
-        help_text=_("Contenuto aggiuntivo per la pagina stampa."),
+        help_text=_(
+            "Shown at the bottom, after the press releases and brand assets, "
+            "which are managed under Snippets."
+        ),
     )
 
     # --- Wagtail config ---
@@ -2580,7 +2630,10 @@ class MembershipPlansPage(Page):
     intro = RichTextField(
         blank=True,
         verbose_name=_("Introduction"),
-        help_text=_("Displayed below the page title."),
+        help_text=_(
+            "Shown above the plans. The plans listed are the active Products "
+            "under Snippets in this page's language."
+        ),
     )
 
     # --- Wagtail config ---

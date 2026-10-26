@@ -33,17 +33,25 @@ class WaypointBlock(StructBlock):
     name = CharBlock(
         max_length=255,
         required=True,
-        help_text=_("Waypoint name (e.g. 'Passo dello Stelvio')."),
+        label=_("Name"),
+        help_text=_(
+            "For example Passo dello Stelvio. Shown in the list under the map "
+            "and when a visitor clicks the marker."
+        ),
     )
     address = CharBlock(
         max_length=500,
         required=False,
-        help_text=_("Optional address or location description."),
+        label=_("Address"),
     )
     coordinates = CharBlock(
         max_length=100,
         required=True,
-        help_text=_("Latitude,Longitude (e.g. '46.5287,10.4531')."),
+        label=_("Coordinates"),
+        help_text=_(
+            "Latitude and longitude separated by a comma, for example "
+            "46.5287,10.4531."
+        ),
     )
     icon_type = ChoiceBlock(
         choices=[
@@ -56,11 +64,15 @@ class WaypointBlock(StructBlock):
             ("end", _("End")),
         ],
         default="waypoint",
-        help_text=_("Marker icon type on the map."),
+        label=_("Point type"),
     )
     notes = TextBlock(
         required=False,
-        help_text=_("Optional notes about this waypoint."),
+        label=_("Notes"),
+        help_text=_(
+            "Shown in the list under the map and "
+            "when a visitor clicks the marker."
+        ),
     )
 
     class Meta:
@@ -82,17 +94,20 @@ class RouteBlock(StructBlock):
     title = CharBlock(
         max_length=255,
         required=True,
-        help_text=_("Route name."),
+        label=_("Route name"),
     )
     description = TextBlock(
         required=False,
-        help_text=_("Brief route description."),
+        label=_("Description"),
     )
     waypoints = ListBlock(
         WaypointBlock(),
         min_num=2,
         label=_("Waypoints"),
-        help_text=_("At least two waypoints (start and end) are required."),
+        help_text=_(
+            "Add at least 2, from start to finish. The map joins them with "
+            "a line in this order."
+        ),
     )
     route_type = ChoiceBlock(
         choices=[
@@ -103,22 +118,25 @@ class RouteBlock(StructBlock):
             ("commute", _("Commute / practical")),
         ],
         default="touring",
-        help_text=_("Type of route."),
+        label=_("Route type"),
     )
     distance = CharBlock(
         max_length=50,
         required=False,
-        help_text=_("Approximate distance (e.g. '320 km')."),
+        label=_("Distance"),
+        help_text=_("Shown exactly as written, for example 320 km."),
     )
     elevation = CharBlock(
         max_length=50,
         required=False,
-        help_text=_("Elevation gain (e.g. '2500 m')."),
+        label=_("Elevation gain"),
+        help_text=_("Shown exactly as written, for example 2500 m."),
     )
     estimated_duration = CharBlock(
         max_length=50,
         required=False,
-        help_text=_("Estimated riding time (e.g. '5-6 hours')."),
+        label=_("Riding time"),
+        help_text=_("Shown exactly as written, for example 5-6 hours."),
     )
     difficulty = ChoiceBlock(
         choices=[
@@ -128,13 +146,14 @@ class RouteBlock(StructBlock):
             ("expert", _("Expert")),
         ],
         default="moderate",
-        help_text=_("Route difficulty level."),
+        label=_("Difficulty"),
     )
     map_height = IntegerBlock(
         default=500,
-        help_text=_("Map height in pixels."),
+        label=_("Map height"),
+        help_text=_("In pixels, for example 500."),
     )
-    settings = BlockSettings(required=False)
+    settings = BlockSettings(required=False, label=_("Advanced settings"))
 
     class Meta:
         template = "website/blocks/route_block.html"
