@@ -200,3 +200,19 @@ def events_area_url(route_name, *args):
         return "#"
     str_args = [str(a) for a in args] if args else None
     return page.url + page.reverse_subpage(route_name, args=str_args)
+
+
+@register.filter
+def visible_name(user, viewer=None):
+    """
+    Name of ``user`` as ``viewer`` may see it (``ClubUser.get_visible_name``).
+
+    Usage: ``{{ page.author|visible_name:request.user }}``. Never use
+    ``get_full_name`` in public templates: it ignores the member's privacy
+    choices.
+    """
+    if not user:
+        return ""
+    if hasattr(user, "get_visible_name"):
+        return user.get_visible_name(viewer=viewer)
+    return getattr(user, "username", "")

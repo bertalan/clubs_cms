@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n wagtailcore_tags %}
+{% load i18n wagtailcore_tags website_tags %}
 
 {% block body_class %}page-contribution-detail{% endblock %}
 
@@ -18,7 +18,7 @@
             <div class="page-contribution-detail__meta">
                 {% if page.author %}
                 <span class="page-contribution-detail__author" itemprop="author" itemscope itemtype="https://schema.org/Person">
-                    <span itemprop="name">{{ page.author.get_full_name|default:page.author.username }}</span>
+                    <span itemprop="name">{{ page.author|visible_name:request.user }}</span>
                 </span>
                 {% endif %}
                 {% if page.first_published_at %}

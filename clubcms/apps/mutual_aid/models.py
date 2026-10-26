@@ -232,13 +232,14 @@ class MutualAidPage(RoutablePageMixin, Page):
         # Build unified list
         all_helpers = []
         for h in helpers_list:
+            privacy = self._get_privacy(h)
             all_helpers.append({
                 "type": "local",
                 "pk": h.pk,
-                "display_name": h.get_visible_name(),
+                "display_name": h.get_visible_name(viewer=request.user),
                 "city": h.aid_location_city,
                 "radius_km": h.aid_radius_km,
-                "notes": h.aid_notes,
+                "notes": h.aid_notes if privacy.show_bio_on_aid else "",
                 "distance_km": getattr(h, "distance_km", None),
             })
         for fh in federated_helpers:

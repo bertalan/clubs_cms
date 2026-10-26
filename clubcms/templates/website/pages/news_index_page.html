@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags i18n %}
+{% load wagtailcore_tags wagtailimages_tags i18n website_tags %}
 
 {% block body_class %}page-news-index{% endblock %}
 
@@ -61,7 +61,7 @@
                             {{ post.display_date|date:"F j, Y" }}
                         </time>
                         {% if post.author %}
-                        <span class="news-card__author" itemprop="author">{{ post.author.get_full_name|default:post.author.username }}</span>
+                        <span class="news-card__author" itemprop="author">{{ post.author|visible_name:request.user }}</span>
                         {% endif %}
                         {% if post.reading_time %}
                         <span class="news-card__reading-time">{% blocktrans with mins=post.reading_time %}{{ mins }} min read{% endblocktrans %}</span>
