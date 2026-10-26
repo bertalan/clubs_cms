@@ -17,7 +17,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
-from apps.federation.api.security import verify_request
+from apps.federation.api.security import claim_nonce, verify_request
 from apps.federation.models import FederatedClub
 
 logger = logging.getLogger(__name__)
@@ -46,9 +46,9 @@ def _authenticate_partner(request):
     """
     Authenticate a federation API request.
 
-    Reads X-Federation-Key, X-Timestamp, X-Signature headers,
-    looks up the partner club, checks rate limits, and verifies
-    the HMAC signature.
+    Reads X-Federation-Key, X-Timestamp, X-Nonce and X-Signature, looks up
+    the partner by the access key we issued it, verifies the HMAC signature
+    with the paired secret, rejects reused nonces and checks rate limits.
 
     Returns
     -------
@@ -57,45 +57,47 @@ def _authenticate_partner(request):
     """
     federation_key = request.headers.get("X-Federation-Key", "")
     timestamp = request.headers.get("X-Timestamp", "")
+    nonce = request.headers.get("X-Nonce", "")
     signature = request.headers.get("X-Signature", "")
+    auth_failed = JsonResponse({"error": "Authentication failed"}, status=401)
 
-    if not federation_key or not timestamp or not signature:
+    if not federation_key or not timestamp or not nonce or not signature:
         return None, JsonResponse(
             {"error": "Missing authentication headers"}, status=401
         )
 
-    # Look up the partner by their public key
     try:
         club = FederatedClub.objects.get(
-            api_key=federation_key,
+            inbound_key=federation_key,
             is_active=True,
             is_approved=True,
         )
     except FederatedClub.DoesNotExist:
         logger.warning("Federation auth failed: unknown key %s...", federation_key[:8])
-        return None, JsonResponse(
-            {"error": "Authentication failed"}, status=401
-        )
+        return None, auth_failed
 
-    # Rate limit check
+    if not verify_request(
+        secret=club.inbound_secret,
+        method=request.method,
+        path=request.get_full_path(),
+        timestamp=timestamp,
+        nonce=nonce,
+        signature=signature,
+        body=request.body,
+    ):
+        logger.warning("Federation HMAC verification failed for %s", club.short_code)
+        return None, auth_failed
+
+    if not claim_nonce(club.pk, nonce):
+        logger.warning("Federation nonce reused by %s", club.short_code)
+        return None, auth_failed
+
+    # Counted only after authentication, so a stranger who knows the key
+    # cannot use up the partner's quota.
     if _rate_limit_check(club):
         logger.warning("Federation rate limit exceeded for %s", club.short_code)
         return None, JsonResponse(
             {"error": "Rate limit exceeded"}, status=429
-        )
-
-    # Verify HMAC signature
-    # The partner signed using our_key_for_them as the shared secret.
-    body = request.body.decode("utf-8") if request.body else ""
-    if not verify_request(
-        api_key=club.our_key_for_them,
-        timestamp=timestamp,
-        signature=signature,
-        body=body,
-    ):
-        logger.warning("Federation HMAC verification failed for %s", club.short_code)
-        return None, JsonResponse(
-            {"error": "Authentication failed"}, status=401
         )
 
     return club, None

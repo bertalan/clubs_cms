@@ -1,9 +1,11 @@
 """
 Admin-only helpers for the partner club edit page.
 
-- generate_keys: a fresh pk_/sk_ pair, to be copied to both sites.
-- test_connection: signed request to the partner's events endpoint, with
-  an explanation of the most common failures.
+- regenerate_inbound: replaces the access credential we issued to the
+  partner; the old one stops working at once.
+- test_connection: request to the partner's events endpoint, signed with
+  the credential the partner issued us, with an explanation of the most
+  common failures.
 """
 
 import json
@@ -12,7 +14,7 @@ import urllib.request
 
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import HttpResponseForbidden, JsonResponse
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -21,29 +23,46 @@ from django.views.decorators.http import require_POST
 
 from apps.federation.models import FederatedClub
 from apps.federation.sync.tasks import build_events_request
-from apps.federation.utils import generate_api_key_pair
 
 TEST_TIMEOUT = 10  # seconds
 
 
+def _edit_url(club):
+    return reverse("wagtailsnippets_federation_federatedclub:edit", args=[club.pk])
+
+
 @require_POST
 @staff_member_required
-def generate_keys(request):
-    if not request.user.has_perm("federation.change_federatedclub") and not request.user.has_perm(
-        "federation.add_federatedclub"
-    ):
+def regenerate_inbound(request, pk):
+    if not request.user.has_perm("federation.change_federatedclub"):
         return HttpResponseForbidden()
-    api_key, shared_secret = generate_api_key_pair()
-    return JsonResponse({"api_key": api_key, "shared_secret": shared_secret})
+    club = get_object_or_404(FederatedClub, pk=pk)
+    club.regenerate_inbound_credential()
+    messages.success(
+        request,
+        _(
+            "New access key and secret created for %(club)s. The old ones no "
+            "longer work: send the new values to the partner's administrator."
+        )
+        % {"club": club.name},
+    )
+    return redirect(_edit_url(club))
 
 
 def _connection_error_message(club, exc):
     if isinstance(exc, urllib.error.HTTPError):
         if exc.code == 401:
             return _(
-                "The partner answered 401 (not authenticated). Check that both "
-                "sites have exactly the same link key and shared secret, and that "
-                "the partner has marked this club as approved and active."
+                "The partner answered 401 (not authenticated). Check that you "
+                "pasted exactly the access key and secret the partner issued to "
+                "us, and that the partner has marked our club as approved and "
+                "active on its site."
+            )
+        if exc.code == 403:
+            return _(
+                "The partner answered 403: it recognised us but does not share "
+                "its events with us. Ask them to tick \"Share our events\" in "
+                "the record for our club."
             )
         if exc.code == 404:
             return _(
@@ -70,12 +89,15 @@ def test_connection(request, pk):
     if not request.user.has_perm("federation.change_federatedclub"):
         return HttpResponseForbidden()
     club = get_object_or_404(FederatedClub, pk=pk)
-    edit_url = reverse("wagtailsnippets_federation_federatedclub:edit", args=[club.pk])
+    edit_url = _edit_url(club)
 
-    if not club.our_key_for_them.strip() or not club.api_key.strip():
+    if not club.has_outbound_credential:
         messages.error(
             request,
-            _("Link key and shared secret are both required. Save them, then test again."),
+            _(
+                "Paste the access key and secret the partner issued to us, "
+                "save, then test again."
+            ),
         )
         return redirect(edit_url)
 

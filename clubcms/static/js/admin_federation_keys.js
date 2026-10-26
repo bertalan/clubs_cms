@@ -1,43 +1,49 @@
 /**
- * Partner club edit page: "Generate key pair" fills the link key and the
- * shared secret with a fresh pair from the server.
+ * Partner club edit page: copy and show the access credential we issued,
+ * and confirm before replacing it.
  */
 (function () {
     "use strict";
 
+    function announce(button, message) {
+        var box = button.closest("[data-federation-tools]");
+        var status = box && box.querySelector("[data-federation-status]");
+        if (status) status.textContent = message;
+    }
+
+    function valueInput(button) {
+        return button.closest(".federation-tools__row").querySelector("[data-federation-value]");
+    }
+
     document.addEventListener("click", function (event) {
-        var button = event.target.closest("[data-federation-generate]");
-        if (!button) return;
-
-        var box = button.closest("[data-federation-key-tools]");
-        var form = button.closest("form");
-        var status = box.querySelector("[data-federation-status]");
-        var keyInput = form.querySelector('[name="api_key"]');
-        var secretInput = form.querySelector('[name="our_key_for_them"]');
-        var csrf = form.querySelector('[name="csrfmiddlewaretoken"]');
-
-        if ((keyInput.value || secretInput.value) && !window.confirm(box.dataset.confirmReplace)) {
+        var copy = event.target.closest("[data-federation-copy]");
+        if (copy) {
+            var box = copy.closest("[data-federation-tools]");
+            var value = valueInput(copy).value;
+            if (!navigator.clipboard) {
+                announce(copy, box.dataset.msgCopyFailed);
+                return;
+            }
+            navigator.clipboard.writeText(value).then(
+                function () { announce(copy, box.dataset.msgCopied); },
+                function () { announce(copy, box.dataset.msgCopyFailed); }
+            );
             return;
         }
 
-        fetch(box.dataset.generateUrl, {
-            method: "POST",
-            credentials: "same-origin",
-            headers: { "X-CSRFToken": csrf ? csrf.value : "" },
-        })
-            .then(function (response) {
-                if (!response.ok) throw new Error(String(response.status));
-                return response.json();
-            })
-            .then(function (data) {
-                [[keyInput, data.api_key], [secretInput, data.shared_secret]].forEach(function (pair) {
-                    pair[0].value = pair[1];
-                    pair[0].dispatchEvent(new Event("change", { bubbles: true }));
-                });
-                status.textContent = box.dataset.msgDone;
-            })
-            .catch(function () {
-                status.textContent = box.dataset.msgError;
-            });
+        var reveal = event.target.closest("[data-federation-reveal]");
+        if (reveal) {
+            var input = valueInput(reveal);
+            var shown = input.type === "password";
+            input.type = shown ? "text" : "password";
+            reveal.setAttribute("aria-pressed", shown ? "true" : "false");
+            reveal.textContent = shown ? reveal.dataset.labelHide : reveal.dataset.labelShow;
+            return;
+        }
+
+        var confirmButton = event.target.closest("[data-federation-confirm]");
+        if (confirmButton && !window.confirm(confirmButton.dataset.federationConfirm)) {
+            event.preventDefault();
+        }
     });
 })();

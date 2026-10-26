@@ -1,0 +1,12 @@
+{% load i18n %}
+<div class="federation-tools">
+    {% if saved %}
+        <button type="submit" class="button button-small button-secondary" formnovalidate
+                formaction="{% url 'federation_test_connection' self.instance.pk %}">
+            {% trans "Test connection" %}
+        </button>
+        <p class="help">{% trans "The test uses the saved values: save your changes first." %}</p>
+    {% else %}
+        <p class="help">{% trans "Save the club first, then you can test the connection." %}</p>
+    {% endif %}
+</div>

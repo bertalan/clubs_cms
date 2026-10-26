@@ -1,0 +1,19 @@
+/* Partner club edit page: credential rows (value, show, copy). */
+.federation-tools__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-block-end: 0.75rem;
+}
+
+.federation-tools__label {
+    flex: 0 0 9rem;
+    font-weight: 600;
+}
+
+.federation-tools__value {
+    flex: 1 1 20rem;
+    min-width: 0;
+    font-family: var(--w-font-mono, ui-monospace, monospace);
+}

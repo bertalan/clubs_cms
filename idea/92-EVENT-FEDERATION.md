@@ -67,8 +67,10 @@ Partner club configuration. Only admin can create/edit.
 | short_code | CharField(20) | URL-safe code ("partnerclub") |
 | base_url | URLField | Partner site URL ("https://partnerclub.example.com") |
 | logo_url | URLField | Optional logo URL for display |
-| api_key | CharField(64) | Their public API key (given to us) |
-| our_key_for_them | CharField(64) | Our key we gave them |
+| inbound_key | CharField(64) | Access key we issued to them (pk_…, unique, generated, read-only) |
+| inbound_secret | CharField(128) | Secret paired with inbound_key (sk_…, generated, read-only) |
+| outbound_key | CharField(64) | Access key they issued to us (pasted) |
+| outbound_secret | CharField(128) | Secret paired with outbound_key (pasted) |
 | is_active | Boolean | Enable sync |
 | is_approved | Boolean | Admin approved this partner |
 | share_our_events | Boolean | Share our events with them |
@@ -173,15 +175,17 @@ Returns our public events. Requires valid API key.
 
 | Header | Required | Description |
 |--------|----------|-------------|
-| X-Federation-Key | Yes | Partner's API key for us |
+| X-Federation-Key | Yes | Access key the receiving club issued to the caller |
 | X-Timestamp | Yes | ISO 8601 timestamp |
-| X-Signature | Yes | HMAC-SHA256 signature |
+| X-Nonce | Yes | Random value (16–64 URL-safe chars), accepted once |
+| X-Signature | Yes | HMAC-SHA256 signature (see Security) |
 
 **Request:**
 ```http
-GET /api/federation/events/
+GET /api/federation/events/?from_date=2026-01-20
 X-Federation-Key: pk_abc123...
 X-Timestamp: 2026-01-20T10:30:00Z
+X-Nonce: 4vJ0p3cQe8h1sYxk2mZt9w
 X-Signature: sha256=abcdef123...
 ```
 
@@ -277,40 +281,31 @@ Secret key:  sk_[64 random chars]
 
 Every API request must be signed:
 
-```python
-# Signing
-import hmac
-import hashlib
-from datetime import datetime
+Each direction of a link has its own credential, issued by the club that
+grants the access: club A creates `inbound_key`/`inbound_secret` for B and
+sends them to B, who stores them as `outbound_key`/`outbound_secret`; B does
+the same for A. Implementation: `apps/federation/api/security.py`.
 
-def sign_request(secret_key: str, timestamp: str, body: str = "") -> str:
-    message = f"{timestamp}:{body}"
-    signature = hmac.new(
-        secret_key.encode(),
-        message.encode(),
-        hashlib.sha256
-    ).hexdigest()
-    return f"sha256={signature}"
+```python
+# Canonical string, signed with the secret paired to X-Federation-Key
+message = "\n".join([
+    method.upper(),                 # GET / POST
+    path_with_query,                # /api/federation/events/?from_date=…
+    timestamp,                      # X-Timestamp
+    nonce,                          # X-Nonce
+    hashlib.sha256(body).hexdigest(),
+])
+signature = "sha256=" + hmac.new(secret.encode(), message.encode(), hashlib.sha256).hexdigest()
 ```
 
 ### Verification
 
-```python
-def verify_request(request, partner: FederatedClub) -> bool:
-    # Check timestamp not older than 5 minutes
-    timestamp = request.headers.get('X-Timestamp')
-    if is_too_old(timestamp, max_age=300):
-        return False
-    
-    # Verify signature
-    provided_sig = request.headers.get('X-Signature')
-    expected_sig = sign_request(
-        partner.our_key_for_them,
-        timestamp,
-        request.body.decode()
-    )
-    return hmac.compare_digest(provided_sig, expected_sig)
-```
+1. Look up the partner by `X-Federation-Key` among *our* `inbound_key`s
+   (active and approved only).
+2. Timestamp within ±5 minutes, nonce well-formed, signature matches
+   (`hmac.compare_digest`) with that partner's `inbound_secret`.
+3. Nonce not seen before for that partner (shared cache, 10 minutes).
+4. Only then count the request against the rate limit.
 
 ### Rate Limiting
 
@@ -326,7 +321,9 @@ def verify_request(request, partner: FederatedClub) -> bool:
 |-------|-------------|
 | ✅ HTTPS only | Reject non-SSL requests |
 | ✅ Timestamp check | Max 5 minutes clock drift |
-| ✅ HMAC signature | Verify every request |
+| ✅ HMAC signature | Verify every request; method, path, query and body are signed |
+| ✅ Nonce | A signed request is accepted once |
+| ✅ One credential per direction | Each club issues and revokes access to its own site |
 | ✅ Rate limiting | Prevent abuse |
 | ✅ Input sanitization | Strip scripts from descriptions |
 | ✅ Admin approval | Partners must be pre-approved |
@@ -355,14 +352,14 @@ def verify_request(request, partner: FederatedClub) -> bool:
 | Section | Fields |
 |---------|--------|
 | Basic Info | name, short_code, base_url, logo_url |
-| API Keys | api_key (theirs), our_key_for_them (readonly, generated) |
+| Access we grant to this partner | inbound_key, inbound_secret (read-only, copy buttons) |
+| Access this partner grants us | outbound_key, outbound_secret (pasted) + Test connection |
 | Permissions | is_active, is_approved, share_our_events, auto_import |
 | Status | last_sync, last_error (readonly) |
 
-**Generate Key Button:**
-- Creates new `our_key_for_them`
-- Shows it once with "Copy to clipboard"
-- Admin must send this to partner
+**Create a new key and secret:**
+- Replaces `inbound_key`/`inbound_secret`; the old pair stops working at once
+- Admin must send the new values to the partner
 
 ### External Events (Read-Only Panel)
 
