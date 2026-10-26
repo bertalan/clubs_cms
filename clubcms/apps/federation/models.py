@@ -24,6 +24,7 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Page
 
+from apps.federation.utils import generate_public_key, generate_secret_key
 from apps.website.blocks import BODY_BLOCKS, FAQBlock, TimelineBlock
 
 logger = logging.getLogger(__name__)
@@ -34,9 +35,14 @@ class FederatedClub(models.Model):
     A partner club in the federation network.
     Only admins can create/edit these records.
 
-    Both clubs store the same pair: ``api_key`` (public link id, sent as
-    X-Federation-Key) and ``our_key_for_them`` (shared secret that signs
-    every request with HMAC-SHA256).
+    Each direction of the link has its own credential, issued by the club
+    that grants the access:
+
+    - ``inbound_key`` / ``inbound_secret``: generated here and handed to the
+      partner; requests the partner sends us must carry this key and be
+      signed with this secret.
+    - ``outbound_key`` / ``outbound_secret``: issued by the partner on its
+      own site and pasted here; we use them to call the partner.
     """
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -83,26 +89,38 @@ class FederatedClub(models.Model):
             "starting with /static/. Shown on the federation page."
         ),
     )
-    api_key = models.CharField(
+    inbound_key = models.CharField(
         max_length=64,
         unique=True,
-        verbose_name=_("Link key (public)"),
-        help_text=_(
-            "Starts with pk_. Must be identical on both sites: generate the "
-            "pair once with the button below and send it to the partner, or "
-            "paste the pair the partner sent you. It identifies this link and "
-            "grants no access on its own."
-        ),
+        default=generate_public_key,
+        editable=False,
+        verbose_name=_("Access key we issued"),
     )
-    our_key_for_them = models.CharField(
+    inbound_secret = models.CharField(
+        max_length=128,
+        default=generate_secret_key,
+        editable=False,
+        verbose_name=_("Access secret we issued"),
+    )
+    outbound_key = models.CharField(
         max_length=64,
         blank=True,
-        verbose_name=_("Shared secret"),
+        verbose_name=_("Partner's access key"),
         help_text=_(
-            "Starts with sk_. Must be identical on both sites: it signs every "
-            "request between the two clubs. Exchange it over a secure channel "
-            "(phone, encrypted message), never by plain email. While it is "
-            "empty the link does not work."
+            "Starts with pk_. The partner's administrator creates it on their "
+            "own site, in the record for our club, and sends it to you. Paste "
+            "it exactly as received."
+        ),
+    )
+    outbound_secret = models.CharField(
+        max_length=128,
+        blank=True,
+        verbose_name=_("Partner's access secret"),
+        help_text=_(
+            "Starts with sk_. Sent by the partner together with the key, "
+            "ideally over a different channel (phone, encrypted message). "
+            "Until both values are filled in, we cannot read the partner's "
+            "events."
         ),
     )
     is_active = models.BooleanField(
@@ -172,6 +190,17 @@ class FederatedClub(models.Model):
             raise ValidationError(
                 {"logo_url": _("Logo must be a URL (http/https) or a /static/ path.")}
             )
+
+    @property
+    def has_outbound_credential(self):
+        """True when the partner's key and secret for us are both filled in."""
+        return bool(self.outbound_key.strip() and self.outbound_secret.strip())
+
+    def regenerate_inbound_credential(self):
+        """Replace the credential we issued: the old one stops working."""
+        self.inbound_key = generate_public_key()
+        self.inbound_secret = generate_secret_key()
+        self.save(update_fields=["inbound_key", "inbound_secret"])
 
     def __str__(self):
         return self.name

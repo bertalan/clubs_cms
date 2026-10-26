@@ -1,5 +1,5 @@
 """
-Tests for federation API security (HMAC signing/verification),
+Tests for federation API security (HMAC signing/verification, v2),
 HTML sanitization (bleach), and API key generation.
 
 These are unit tests — no Django database required.
@@ -9,13 +9,19 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from apps.federation.api.security import sign_request, verify_request
+from apps.federation.api.security import build_signed_request, sign_request, verify_request
 from apps.federation.utils import (
-    generate_api_key_pair,
     generate_public_key,
     generate_secret_key,
     sanitize_html,
 )
+
+PATH = "/api/federation/events/?from_date=2026-01-01"
+NONCE = "n" * 24
+
+
+def _ts(seconds=0):
+    return (datetime.now(timezone.utc) + timedelta(seconds=seconds)).isoformat()
 
 
 # ──────────────────────────────────────────────────────────────────────
@@ -27,30 +33,30 @@ class TestSignRequest:
     """Tests for HMAC-SHA256 request signing."""
 
     def test_produces_sha256_prefix(self):
-        sig = sign_request("secret", "2025-01-01T00:00:00Z")
-        assert sig.startswith("sha256=")
+        assert sign_request("secret", "GET", PATH, _ts(), NONCE).startswith("sha256=")
 
     def test_deterministic(self):
-        sig1 = sign_request("key", "2025-06-01T12:00:00Z", "body")
-        sig2 = sign_request("key", "2025-06-01T12:00:00Z", "body")
-        assert sig1 == sig2
+        ts = _ts()
+        assert sign_request("k", "POST", PATH, ts, NONCE, b"x") == sign_request(
+            "k", "POST", PATH, ts, NONCE, b"x"
+        )
 
-    def test_different_keys_different_sigs(self):
-        ts = "2025-06-01T12:00:00Z"
-        sig_a = sign_request("alpha", ts)
-        sig_b = sign_request("bravo", ts)
-        assert sig_a != sig_b
-
-    def test_with_body(self):
-        ts = "2025-06-01T12:00:00Z"
-        sig_empty = sign_request("key", ts, "")
-        sig_body = sign_request("key", ts, '{"event_id":"1"}')
-        assert sig_empty != sig_body
-
-    def test_empty_body(self):
-        sig = sign_request("key", "2025-06-01T00:00:00Z", "")
-        assert isinstance(sig, str)
-        assert len(sig) > len("sha256=")
+    @pytest.mark.parametrize(
+        "changed",
+        [
+            {"secret": "other"},
+            {"method": "POST"},
+            {"path": "/api/federation/interest/"},
+            {"path": "/api/federation/events/?from_date=2020-01-01"},
+            {"nonce": "m" * 24},
+            {"body": b"{}"},
+        ],
+    )
+    def test_every_part_is_signed(self, changed):
+        ts = _ts()
+        base = {"secret": "k", "method": "GET", "path": PATH, "nonce": NONCE, "body": b""}
+        other = {**base, **changed}
+        assert sign_request(timestamp=ts, **base) != sign_request(timestamp=ts, **other)
 
 
 # ──────────────────────────────────────────────────────────────────────
@@ -61,62 +67,80 @@ class TestSignRequest:
 class TestVerifyRequest:
     """Tests for HMAC-SHA256 request verification."""
 
-    def _fresh_ts(self):
-        """Return a current UTC ISO timestamp."""
-        return datetime.now(timezone.utc).isoformat()
+    def _verify(self, secret="secret", method="GET", path=PATH, ts=None, nonce=NONCE,
+                body=b"", sig=None, **kwargs):
+        ts = ts or _ts()
+        sig = sig or sign_request("secret", "GET", PATH, ts, NONCE, b"")
+        return verify_request(secret, method, path, ts, nonce, sig, body, **kwargs)
 
     def test_valid(self):
-        key = "test-secret-key"
-        ts = self._fresh_ts()
-        body = '{"hello":"world"}'
-        sig = sign_request(key, ts, body)
-        assert verify_request(key, ts, sig, body) is True
+        assert self._verify() is True
 
-    def test_wrong_key(self):
-        ts = self._fresh_ts()
-        sig = sign_request("correct-key", ts)
-        assert verify_request("wrong-key", ts, sig) is False
+    def test_wrong_secret(self):
+        assert self._verify(secret="wrong") is False
 
     def test_wrong_signature(self):
-        ts = self._fresh_ts()
-        assert verify_request("key", ts, "sha256=0000bad") is False
+        assert self._verify(sig="sha256=0000bad") is False
+
+    def test_signature_bound_to_path(self):
+        assert self._verify(path="/api/federation/interest/") is False
+
+    def test_signature_bound_to_method(self):
+        assert self._verify(method="POST") is False
 
     def test_tampered_body(self):
-        key = "secret"
-        ts = self._fresh_ts()
-        sig = sign_request(key, ts, '{"ok":true}')
-        assert verify_request(key, ts, sig, '{"ok":false}') is False
+        assert self._verify(body=b'{"ok":false}') is False
 
     def test_expired_timestamp(self):
-        key = "secret"
-        old_ts = (datetime.now(timezone.utc) - timedelta(seconds=600)).isoformat()
-        sig = sign_request(key, old_ts)
-        assert verify_request(key, old_ts, sig, max_age=300) is False
+        ts = _ts(-600)
+        sig = sign_request("secret", "GET", PATH, ts, NONCE)
+        assert self._verify(ts=ts, sig=sig) is False
 
     def test_future_timestamp(self):
-        key = "secret"
-        future_ts = (datetime.now(timezone.utc) + timedelta(seconds=600)).isoformat()
-        sig = sign_request(key, future_ts)
-        assert verify_request(key, future_ts, sig, max_age=300) is False
+        ts = _ts(600)
+        sig = sign_request("secret", "GET", PATH, ts, NONCE)
+        assert self._verify(ts=ts, sig=sig) is False
 
     def test_invalid_timestamp_format(self):
-        assert verify_request("key", "not-a-date", "sha256=abc") is False
+        assert self._verify(ts="not-a-date") is False
 
-    def test_replay_attack(self):
-        """Same signature cannot authenticate a different body."""
-        key = "secret"
-        ts = self._fresh_ts()
-        sig = sign_request(key, ts, "legit-body")
-        assert verify_request(key, ts, sig, "evil-body") is False
+    @pytest.mark.parametrize("nonce", ["", "short", "x" * 65, "bad nonce with spaces!"])
+    def test_malformed_nonce(self, nonce):
+        ts = _ts()
+        sig = sign_request("secret", "GET", PATH, ts, nonce)
+        assert self._verify(ts=ts, nonce=nonce, sig=sig) is False
+
+    @pytest.mark.parametrize("secret", ["", "   "])
+    def test_empty_secret_never_authenticates(self, secret):
+        ts = _ts()
+        sig = sign_request(secret, "GET", PATH, ts, NONCE)
+        assert verify_request(secret, "GET", PATH, ts, NONCE, sig) is False
 
     def test_custom_max_age(self):
-        key = "secret"
-        ts = (datetime.now(timezone.utc) - timedelta(seconds=10)).isoformat()
-        sig = sign_request(key, ts)
-        # Should pass with large max_age
-        assert verify_request(key, ts, sig, max_age=60) is True
-        # Should fail with tiny max_age
-        assert verify_request(key, ts, sig, max_age=1) is False
+        ts = _ts(-10)
+        sig = sign_request("secret", "GET", PATH, ts, NONCE)
+        assert self._verify(ts=ts, sig=sig, max_age=60) is True
+        assert self._verify(ts=ts, sig=sig, max_age=1) is False
+
+
+class TestBuildSignedRequest:
+    def test_round_trip(self):
+        req = build_signed_request(
+            "https://partner.example" + PATH, "pk_x", "sk_x", method="POST", body=b'{"a":1}'
+        )
+        assert req.get_header("X-federation-key") == "pk_x"
+        assert req.get_header("Content-type") == "application/json"
+        assert verify_request(
+            "sk_x", "POST", PATH,
+            req.get_header("X-timestamp"), req.get_header("X-nonce"),
+            req.get_header("X-signature"), b'{"a":1}',
+        )
+
+    def test_nonce_changes_every_request(self):
+        url = "https://partner.example" + PATH
+        first = build_signed_request(url, "pk_x", "sk_x").get_header("X-nonce")
+        second = build_signed_request(url, "pk_x", "sk_x").get_header("X-nonce")
+        assert first != second
 
 
 # ──────────────────────────────────────────────────────────────────────
@@ -222,10 +246,13 @@ class TestKeyGeneration:
         sk = generate_secret_key()
         assert len(sk) > len(pk)
 
-    def test_api_key_pair_returns_tuple(self):
-        pair = generate_api_key_pair()
-        assert isinstance(pair, tuple)
-        assert len(pair) == 2
-        pk, sk = pair
-        assert pk.startswith("pk_")
-        assert sk.startswith("sk_")
+    def test_generated_values_fit_the_model_fields(self):
+        from apps.federation.models import FederatedClub
+
+        for name, value in [
+            ("inbound_key", generate_public_key()),
+            ("outbound_key", generate_public_key()),
+            ("inbound_secret", generate_secret_key()),
+            ("outbound_secret", generate_secret_key()),
+        ]:
+            assert len(value) <= FederatedClub._meta.get_field(name).max_length, name

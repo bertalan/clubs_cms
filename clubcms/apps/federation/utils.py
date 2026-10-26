@@ -1,7 +1,7 @@
 """
 Federation utility functions.
 
-Key generation for federation API key pairs and HTML sanitization
+Key generation for federation access credentials and HTML sanitization
 for external content received from partner clubs.
 """
 
@@ -26,18 +26,6 @@ def generate_secret_key():
     Format: ``sk_`` + 48-byte URL-safe token (~64 chars).
     """
     return f"sk_{secrets.token_urlsafe(48)}"
-
-
-def generate_api_key_pair():
-    """
-    Generate a (public_key, secret_key) tuple for federation.
-
-    Returns
-    -------
-    tuple[str, str]
-        ``(public_key, secret_key)``
-    """
-    return generate_public_key(), generate_secret_key()
 
 
 # Allowlisted HTML tags and attributes for external content sanitisation.

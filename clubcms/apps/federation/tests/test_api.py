@@ -19,6 +19,8 @@ from django.urls import reverse
 from django.utils import timezone
 from wagtail.models import Page, Site
 
+import secrets
+
 from apps.federation.api.security import sign_request
 from apps.federation.api.views import FederationEventsAPIView, FederationInterestAPIView
 from apps.federation.models import FederatedClub
@@ -27,6 +29,18 @@ from apps.website.models.pages import EventDetailPage, EventsPage, HomePage
 # Direct URL paths since FEDERATION_ENABLED may be False in test settings
 EVENTS_URL = "/api/federation/events/"
 INTEREST_URL = "/api/federation/interest/"
+
+
+def signed_headers(key, secret, method="GET", path=EVENTS_URL, body=b"", ts=None, nonce=None):
+    """Test-client headers for a v2-signed federation request."""
+    ts = ts or timezone.now().isoformat()
+    nonce = nonce or secrets.token_urlsafe(18)
+    return {
+        "HTTP_X_FEDERATION_KEY": key,
+        "HTTP_X_TIMESTAMP": ts,
+        "HTTP_X_NONCE": nonce,
+        "HTTP_X_SIGNATURE": sign_request(secret, method, path, ts, nonce, body),
+    }
 
 
 @pytest.mark.django_db
@@ -76,8 +90,10 @@ class FederationAPIBase(TestCase):
             name="Partner Club",
             short_code="PARTNER",
             base_url="https://partner.example.com",
-            api_key="pk_test_partner_key",
-            our_key_for_them=cls.shared_secret,
+            inbound_key="pk_test_partner_key",
+            inbound_secret=cls.shared_secret,
+            outbound_key="pk_issued_by_partner",
+            outbound_secret="sk_issued_by_partner_secret",
             is_active=True,
             is_approved=True,
             share_our_events=True,
@@ -86,16 +102,14 @@ class FederationAPIBase(TestCase):
     def setUp(self):
         cache.clear()
 
-    def _sign_headers(self, body="", secret=None):
-        """Generate valid HMAC authentication headers."""
-        ts = timezone.now().isoformat()
-        secret = secret or self.shared_secret
-        sig = sign_request(secret, ts, body)
-        return {
-            "HTTP_X_FEDERATION_KEY": self.partner.api_key,
-            "HTTP_X_TIMESTAMP": ts,
-            "HTTP_X_SIGNATURE": sig,
-        }
+    def _sign_headers(self, body="", secret=None, method=None, path=None, **kwargs):
+        """Valid headers: GET on the events URL, or POST on interest with a body."""
+        method = method or ("POST" if body else "GET")
+        path = path or (INTEREST_URL if method == "POST" else EVENTS_URL)
+        return signed_headers(
+            self.partner.inbound_key, secret or self.shared_secret,
+            method, path, body.encode() if isinstance(body, str) else body, **kwargs,
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -156,36 +170,57 @@ class TestEventsAPI(FederationAPIBase):
         self.assertIn("error", resp.json())
 
     def test_invalid_key_returns_401(self):
-        ts = timezone.now().isoformat()
-        sig = sign_request(self.shared_secret, ts)
-        resp = self.client.get(
-            EVENTS_URL,
-            HTTP_X_FEDERATION_KEY="pk_invalid_key",
-            HTTP_X_TIMESTAMP=ts,
-            HTTP_X_SIGNATURE=sig,
-        )
+        headers = signed_headers("pk_invalid_key", self.shared_secret)
+        resp = self.client.get(EVENTS_URL, **headers)
         self.assertEqual(resp.status_code, 401)
 
     def test_wrong_signature_returns_401(self):
-        ts = timezone.now().isoformat()
-        resp = self.client.get(
-            EVENTS_URL,
-            HTTP_X_FEDERATION_KEY=self.partner.api_key,
-            HTTP_X_TIMESTAMP=ts,
-            HTTP_X_SIGNATURE="sha256=wrong_signature",
-        )
+        headers = self._sign_headers()
+        headers["HTTP_X_SIGNATURE"] = "sha256=wrong_signature"
+        resp = self.client.get(EVENTS_URL, **headers)
         self.assertEqual(resp.status_code, 401)
 
     def test_expired_timestamp_returns_401(self):
         old_ts = (timezone.now() - timedelta(seconds=600)).isoformat()
-        sig = sign_request(self.shared_secret, old_ts)
-        resp = self.client.get(
-            EVENTS_URL,
-            HTTP_X_FEDERATION_KEY=self.partner.api_key,
-            HTTP_X_TIMESTAMP=old_ts,
-            HTTP_X_SIGNATURE=sig,
-        )
+        resp = self.client.get(EVENTS_URL, **self._sign_headers(ts=old_ts))
         self.assertEqual(resp.status_code, 401)
+
+    def test_missing_nonce_returns_401(self):
+        headers = self._sign_headers()
+        del headers["HTTP_X_NONCE"]
+        resp = self.client.get(EVENTS_URL, **headers)
+        self.assertEqual(resp.status_code, 401)
+
+    def test_replayed_request_returns_401(self):
+        headers = self._sign_headers()
+        self.assertEqual(self.client.get(EVENTS_URL, **headers).status_code, 200)
+        self.assertEqual(self.client.get(EVENTS_URL, **headers).status_code, 401)
+
+    def test_signature_is_bound_to_the_query_string(self):
+        headers = self._sign_headers(path=EVENTS_URL + "?from_date=2030-01-01")
+        resp = self.client.get(EVENTS_URL, {"from_date": "2000-01-01"}, **headers)
+        self.assertEqual(resp.status_code, 401)
+        headers = self._sign_headers(path=EVENTS_URL + "?from_date=2030-01-01")
+        resp = self.client.get(EVENTS_URL, {"from_date": "2030-01-01"}, **headers)
+        self.assertEqual(resp.status_code, 200)
+
+    def test_signature_for_another_endpoint_is_rejected(self):
+        headers = self._sign_headers(method="GET", path=INTEREST_URL)
+        resp = self.client.get(EVENTS_URL, **headers)
+        self.assertEqual(resp.status_code, 401)
+
+    def test_credential_the_partner_issued_us_does_not_open_our_api(self):
+        headers = signed_headers(self.partner.outbound_key, self.partner.outbound_secret)
+        resp = self.client.get(EVENTS_URL, **headers)
+        self.assertEqual(resp.status_code, 401)
+
+    def test_failed_requests_do_not_use_up_the_quota(self):
+        for _ in range(70):
+            headers = self._sign_headers()
+            headers["HTTP_X_SIGNATURE"] = "sha256=bad"
+            self.client.get(EVENTS_URL, **headers)
+        resp = self.client.get(EVENTS_URL, **self._sign_headers())
+        self.assertEqual(resp.status_code, 200)
 
     def test_inactive_partner_returns_401(self):
         self.partner.is_active = False

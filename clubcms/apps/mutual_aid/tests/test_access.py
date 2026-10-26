@@ -36,7 +36,7 @@ class TestContactUnlockLimits:
             name="Test Club",
             short_code="TST",
             base_url="https://example.com",
-            api_key="test_api_key_12345",
+            inbound_key="test_api_key_12345",
             is_active=True,
             is_approved=True,
         )
@@ -55,7 +55,7 @@ class TestContactUnlockLimits:
             name="Test Club",
             short_code="TST2",
             base_url="https://example.com",
-            api_key="test_api_key_12345",
+            inbound_key="test_api_key_12345",
             is_active=True,
             is_approved=True,
         )
@@ -82,7 +82,7 @@ class TestContactUnlockLimits:
             name="Test Club",
             short_code="TST3",
             base_url="https://example.com",
-            api_key="test_api_key_12345",
+            inbound_key="test_api_key_12345",
             is_active=True,
             is_approved=True,
         )
@@ -111,7 +111,7 @@ class TestContactUnlockLimits:
             name="Test Club",
             short_code="TST4",
             base_url="https://example.com",
-            api_key="test_api_key_12345",
+            inbound_key="test_api_key_12345",
             is_active=True,
             is_approved=True,
         )
@@ -164,7 +164,7 @@ class TestFederatedAidAccess:
             name="Test Club",
             short_code="TST5",
             base_url="https://example.com",
-            api_key="test_api_key_12345",
+            inbound_key="test_api_key_12345",
             is_active=True,
             is_approved=True,
         )
@@ -197,7 +197,7 @@ class TestFederatedAidAccess:
             name="Test Club",
             short_code="TST6",
             base_url="https://example.com",
-            api_key="test_api_key_12345",
+            inbound_key="test_api_key_12345",
             is_active=True,
             is_approved=True,
         )
@@ -221,7 +221,7 @@ class TestFederatedAidAccess:
             name="Test Club",
             short_code="TST7",
             base_url="https://example.com",
-            api_key="test_api_key_12345",
+            inbound_key="test_api_key_12345",
             is_active=True,
             is_approved=True,
         )

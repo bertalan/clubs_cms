@@ -1266,7 +1266,7 @@ class DemoLoader:
                 base_url=row["base_url"],
                 logo_url=row["logo_url"],
                 description=row["description"],
-                api_key=row["api_key"],
+                inbound_key=row["api_key"],
                 is_active=bool(row["is_active"]),
                 is_approved=bool(row["is_approved"]),
                 share_our_events=bool(row["share_our_events"]),

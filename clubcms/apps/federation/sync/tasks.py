@@ -17,7 +17,7 @@ from django.core.cache import cache
 from django.db.models import Count
 from django.utils import timezone as dj_tz
 
-from apps.federation.api.security import sign_request
+from apps.federation.api.security import build_signed_request
 from apps.federation.models import ExternalEvent, ExternalEventInterest, FederatedClub
 from apps.federation.utils import sanitize_html
 
@@ -29,25 +29,9 @@ HTTP_TIMEOUT = 30
 
 
 def build_events_request(club, from_date):
-    """
-    Signed GET request for the partner's events endpoint.
-
-    Both clubs store the same pair: api_key (public link id, sent as
-    X-Federation-Key) and our_key_for_them (shared secret used for the
-    HMAC signature).
-    """
+    """Signed GET for the partner's events, with the credential it issued us."""
     url = f"{club.base_url.rstrip('/')}/api/federation/events/?from_date={from_date}"
-    timestamp = datetime.now(timezone.utc).isoformat()
-    headers = {
-        "X-Federation-Key": club.api_key,
-        "X-Timestamp": timestamp,
-        "X-Signature": sign_request(
-            secret_key=club.our_key_for_them, timestamp=timestamp, body=""
-        ),
-        "Accept": "application/json",
-        "User-Agent": "ClubCMS-Federation/1.0",
-    }
-    return urllib.request.Request(url, headers=headers, method="GET")
+    return build_signed_request(url, club.outbound_key, club.outbound_secret)
 
 
 def sync_all_clubs():
@@ -91,8 +75,8 @@ def sync_club_events(club_id):
     """
     club = FederatedClub.objects.get(pk=club_id)
 
-    if not club.our_key_for_them.strip():
-        error_msg = f"Missing shared secret for {club.short_code}: sync skipped"
+    if not club.has_outbound_credential:
+        error_msg = f"Missing the partner's access key or secret for {club.short_code}: sync skipped"
         logger.error(error_msg)
         club.last_error = error_msg
         club.save(update_fields=["last_error"])
@@ -234,8 +218,8 @@ def _post_interest_to_partner(club, event_id, counts, our_code):
     """
     POST interest counts for a single event to a partner club.
     """
-    if not club.our_key_for_them.strip():
-        logger.warning("Missing shared secret for %s: interest push skipped", club.short_code)
+    if not club.has_outbound_credential:
+        logger.warning("Missing the partner's access key or secret for %s: interest push skipped", club.short_code)
         return
     url = f"{club.base_url.rstrip('/')}/api/federation/interest/"
 
@@ -245,25 +229,9 @@ def _post_interest_to_partner(club, event_id, counts, our_code):
         "counts": counts,
     }
     body_bytes = json.dumps(body_data).encode("utf-8")
-    body_str = body_bytes.decode("utf-8")
-
-    timestamp = datetime.now(timezone.utc).isoformat()
-    signature = sign_request(
-        secret_key=club.our_key_for_them,
-        timestamp=timestamp,
-        body=body_str,
+    req = build_signed_request(
+        url, club.outbound_key, club.outbound_secret, method="POST", body=body_bytes
     )
-
-    headers = {
-        "X-Federation-Key": club.api_key,
-        "X-Timestamp": timestamp,
-        "X-Signature": signature,
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "User-Agent": "ClubCMS-Federation/1.0",
-    }
-
-    req = urllib.request.Request(url, data=body_bytes, headers=headers, method="POST")
 
     try:
         with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as response:
