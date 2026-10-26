@@ -6,28 +6,28 @@
 
     {% for slide in self.slides %}
     <div class="block-hero-slider__slide{% if forloop.first %} active{% endif %}" role="group" aria-roledescription="slide" aria-label="{% blocktrans with num=forloop.counter total=self.slides|length %}Slide {{ num }} of {{ total }}{% endblocktrans %}">
-        {% if slide.value.image %}
-            {% image slide.value.image fill-1920x900 as slide_img %}
-            <img src="{{ slide_img.url }}" alt="{{ slide.value.title|default:'' }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" width="{{ slide_img.width }}" height="{{ slide_img.height }}">
+        {% if slide.image %}
+            {% image slide.image fill-1920x900 as slide_img %}
+            <img src="{{ slide_img.url }}" alt="{{ slide.title|default:'' }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" width="{{ slide_img.width }}" height="{{ slide_img.height }}">
         {% endif %}
         <div class="block-hero-slider__overlay">
             <div class="container">
                 <div class="block-hero-slider__content">
-                    {% if slide.value.badge %}
-                    <span class="block-hero-slider__badge">{{ slide.value.badge }}</span>
+                    {% if slide.badge %}
+                    <span class="block-hero-slider__badge">{{ slide.badge }}</span>
                     {% endif %}
-                    {% if slide.value.title %}
-                    <h2 class="block-hero-slider__title">{{ slide.value.title }}</h2>
+                    {% if slide.title %}
+                    <h2 class="block-hero-slider__title">{{ slide.title }}</h2>
                     {% endif %}
-                    {% if slide.value.subtitle %}
-                    <p class="block-hero-slider__subtitle">{{ slide.value.subtitle }}</p>
+                    {% if slide.subtitle %}
+                    <p class="block-hero-slider__subtitle">{{ slide.subtitle }}</p>
                     {% endif %}
-                    {% if slide.value.cta_text %}
+                    {% if slide.cta_text %}
                     <div class="block-hero-slider__actions">
-                        {% if slide.value.cta_link %}
-                        <a href="{% pageurl slide.value.cta_link %}" class="btn btn-primary">{{ slide.value.cta_text }}</a>
-                        {% elif slide.value.cta_url %}
-                        <a href="{{ slide.value.cta_url }}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">{{ slide.value.cta_text }}</a>
+                        {% if slide.cta_link %}
+                        <a href="{% pageurl slide.cta_link %}" class="btn btn-primary">{{ slide.cta_text }}</a>
+                        {% elif slide.cta_url %}
+                        <a href="{{ slide.cta_url }}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">{{ slide.cta_text }}</a>
                         {% endif %}
                     </div>
                     {% endif %}

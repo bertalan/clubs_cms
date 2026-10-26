@@ -8,14 +8,14 @@
         <div class="block-counter-up__grid">
             {% for counter in self.counters %}
             <div class="block-counter-up__item">
-                {% if counter.value.icon %}
-                <span class="block-counter-up__icon {{ counter.value.icon }}"></span>
+                {% if counter.icon %}
+                <span class="block-counter-up__icon {{ counter.icon }}"></span>
                 {% endif %}
-                <span class="block-counter-up__value" data-target="{{ counter.value.value }}">0</span>
-                {% if counter.value.suffix %}
-                <span class="block-counter-up__suffix">{{ counter.value.suffix }}</span>
+                <span class="block-counter-up__value" data-target="{{ counter.value }}">0</span>
+                {% if counter.suffix %}
+                <span class="block-counter-up__suffix">{{ counter.suffix }}</span>
                 {% endif %}
-                <span class="block-counter-up__label">{{ counter.value.label }}</span>
+                <span class="block-counter-up__label">{{ counter.label }}</span>
             </div>
             {% endfor %}
         </div>

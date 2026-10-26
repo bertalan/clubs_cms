@@ -5,12 +5,12 @@
     {% for item in self.items %}
     <div class="block-accordion__item">
         <button class="block-accordion__header" type="button" aria-expanded="false" aria-controls="accordion-{{ block.id }}-{{ forloop.counter }}" id="accordion-{{ block.id }}-{{ forloop.counter }}-header">
-            {{ item.value.title }}
+            {{ item.title }}
             <span class="block-accordion__icon" aria-hidden="true"></span>
         </button>
         <div class="block-accordion__body" id="accordion-{{ block.id }}-{{ forloop.counter }}" role="region" aria-labelledby="accordion-{{ block.id }}-{{ forloop.counter }}-header">
             <div class="block-accordion__body-inner">
-                {{ item.value.content }}
+                {{ item.content }}
             </div>
         </div>
     </div>
