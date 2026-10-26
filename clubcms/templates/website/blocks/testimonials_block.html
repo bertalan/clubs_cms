@@ -8,14 +8,14 @@
         <div class="block-testimonials__list">
             {% for item in self.testimonials %}
             <div class="block-testimonials__item">
-                {% if item.value.avatar %}
-                    {% image item.value.avatar fill-80x80 as avatar_img %}
-                    <img class="block-testimonials__avatar" src="{{ avatar_img.url }}" alt="{{ item.value.name }}" loading="lazy">
+                {% if item.avatar %}
+                    {% image item.avatar fill-80x80 as avatar_img %}
+                    <img class="block-testimonials__avatar" src="{{ avatar_img.url }}" alt="{{ item.name }}" loading="lazy">
                 {% endif %}
-                <blockquote class="block-testimonials__quote">{{ item.value.quote }}</blockquote>
+                <blockquote class="block-testimonials__quote">{{ item.quote }}</blockquote>
                 <cite class="block-testimonials__cite">
-                    <strong>{{ item.value.name }}</strong>
-                    {% if item.value.role %}<span>{{ item.value.role }}</span>{% endif %}
+                    <strong>{{ item.name }}</strong>
+                    {% if item.role %}<span>{{ item.role }}</span>{% endif %}
                 </cite>
             </div>
             {% endfor %}

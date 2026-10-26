@@ -27,7 +27,7 @@
 
     {# Route map #}
     <div class="block-route__map" id="route-map-{{ block.id }}" style="height: {{ self.map_height|default:'500' }}px;"
-        data-waypoints='[{% for wp in self.waypoints %}{"name":"{{ wp.value.name }}","coordinates":"{{ wp.value.coordinates }}","icon_type":"{{ wp.value.icon_type }}","notes":"{{ wp.value.notes|default:'' }}"}{% if not forloop.last %},{% endif %}{% endfor %}]'>
+        data-waypoints='[{% for wp in self.waypoints %}{"name":"{{ wp.name }}","coordinates":"{{ wp.coordinates }}","icon_type":"{{ wp.icon_type }}","notes":"{{ wp.notes|default:'' }}"}{% if not forloop.last %},{% endif %}{% endfor %}]'>
         <noscript>
             <p>Enable JavaScript to view the interactive route map.</p>
         </noscript>
@@ -38,9 +38,9 @@
         {% for wp in self.waypoints %}
         <div class="block-route__waypoint">
             <span class="block-route__waypoint-marker">{{ forloop.counter }}</span>
-            <span class="block-route__waypoint-name">{{ wp.value.name }}</span>
-            {% if wp.value.notes %}
-            <p class="block-route__waypoint-notes">{{ wp.value.notes }}</p>
+            <span class="block-route__waypoint-name">{{ wp.name }}</span>
+            {% if wp.notes %}
+            <p class="block-route__waypoint-notes">{{ wp.notes }}</p>
             {% endif %}
         </div>
         {% endfor %}

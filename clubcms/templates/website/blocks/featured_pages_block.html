@@ -7,14 +7,14 @@
         {% endif %}
         <div class="block-featured-pages__grid">
             {% for item in self.pages %}
-            {% with page=item.value.page %}
+            {% with page=item.page %}
             <a class="block-featured-pages__card" href="{% pageurl page %}">
-                {% if item.value.override_image %}
-                    {% image item.value.override_image fill-400x250 as card_img %}
+                {% if item.override_image %}
+                    {% image item.override_image fill-400x250 as card_img %}
                     <img class="block-featured-pages__image" src="{{ card_img.url }}" alt="" loading="lazy">
                 {% endif %}
                 <h3 class="block-featured-pages__card-title">
-                    {% if item.value.override_title %}{{ item.value.override_title }}{% else %}{{ page.title }}{% endif %}
+                    {% if item.override_title %}{{ item.override_title }}{% else %}{{ page.title }}{% endif %}
                 </h3>
             </a>
             {% endwith %}
