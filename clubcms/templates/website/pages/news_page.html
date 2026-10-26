@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n wagtailcore_tags wagtailimages_tags %}
+{% load i18n wagtailcore_tags wagtailimages_tags website_tags %}
 
 {% block body_class %}page-news-detail{% endblock %}
 
@@ -33,7 +33,7 @@
 
                 {% if page.author %}
                 <span class="page-news-detail__author" itemprop="author" itemscope itemtype="https://schema.org/Person">
-                    <span itemprop="name">{{ page.author.get_full_name|default:page.author.username }}</span>
+                    <span itemprop="name">{{ page.author|visible_name:request.user }}</span>
                 </span>
                 {% endif %}
 
